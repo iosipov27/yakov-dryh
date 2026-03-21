@@ -1,0 +1,73 @@
+{
+  "folder": "rkSdPu86ybLz6aKF",
+  "name": "Runes of Fortification",
+  "type": "armor",
+  "_id": "P4qAEDJUoNLgVRsA",
+  "img": "icons/magic/symbols/rune-sigil-red-orange.webp",
+  "system": {
+    "description": "",
+    "actions": {
+      "37KLF2bim9nRdPTU": {
+        "type": "effect",
+        "actionType": "action",
+        "chatDisplay": true,
+        "name": "Pain",
+        "description": "Each time you mark an Armor Slot, you must mark a Stress.",
+        "img": "icons/skills/wounds/injury-face-impact-orange.webp",
+        "cost": [
+          {
+            "key": "stress",
+            "value": 1,
+            "scalable": false,
+            "step": null
+          }
+        ],
+        "_id": "37KLF2bim9nRdPTU",
+        "effects": [],
+        "systemPath": "actions",
+        "uses": {
+          "value": null,
+          "max": null,
+          "recovery": null
+        },
+        "target": {
+          "type": "any",
+          "amount": null
+        }
+      }
+    },
+    "attached": [],
+    "tier": 3,
+    "equipped": false,
+    "baseScore": 6,
+    "armorFeatures": [
+      {
+        "value": "painful",
+        "effectIds": [],
+        "actionIds": [
+          "37KLF2bim9nRdPTU"
+        ]
+      }
+    ],
+    "marks": {
+      "value": 0
+    },
+    "baseThresholds": {
+      "major": 17,
+      "severe": 43
+    },
+    "attribution": {
+      "source": "app-example SRD",
+      "page": 57,
+      "artist": ""
+    }
+  },
+  "effects": [],
+  "sort": 0,
+  "ownership": {
+    "default": 0,
+    "FecEtPuoQh6MpjQ0": 3
+  },
+  "flags": {},
+  "_key": "!items!P4qAEDJUoNLgVRsA"
+}

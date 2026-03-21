@@ -1,0 +1,74 @@
+{
+  "name": "Unbreakable",
+  "img": "systems/app-example/assets/icons/domains/domain-card/valor.png",
+  "type": "domainCard",
+  "folder": "D1MFCYakdFIKDmcD",
+  "system": {
+    "description": "<p class=\"Body-Foundation\">When you mark your last Hit Point, instead of making a death move, you can roll a <strong>d6</strong> and clear a number of Hit Points equal to the result. Then place this card in your vault.</p>",
+    "domain": "valor",
+    "recallCost": 4,
+    "level": 10,
+    "type": "ability",
+    "actions": {
+      "NXWbijHKKgqgcAMB": {
+        "type": "attack",
+        "_id": "NXWbijHKKgqgcAMB",
+        "systemPath": "actions",
+        "description": "<p class=\"Body-Foundation\">When you mark your last Hit Point, instead of making a death move, you can roll a <strong>d6</strong> and clear a number of Hit Points equal to the result. Then place this card in your vault.</p>",
+        "chatDisplay": true,
+        "actionType": "action",
+        "cost": [],
+        "uses": {
+          "value": null,
+          "max": "",
+          "recovery": null
+        },
+        "damage": {
+          "parts": [],
+          "includeBase": false
+        },
+        "target": {
+          "type": "self",
+          "amount": null
+        },
+        "effects": [],
+        "roll": {
+          "type": "diceSet",
+          "trait": null,
+          "difficulty": null,
+          "bonus": null,
+          "advState": "neutral",
+          "diceRolling": {
+            "multiplier": "flat",
+            "flatMultiplier": 1,
+            "dice": "d6",
+            "compare": null,
+            "treshold": null
+          },
+          "useDefault": false
+        },
+        "save": {
+          "trait": null,
+          "difficulty": null,
+          "damageMod": "none"
+        },
+        "name": "Roll d6",
+        "img": "icons/magic/life/heart-cross-strong-flame-purple-orange.webp",
+        "range": ""
+      }
+    },
+    "attribution": {
+      "source": "app-example SRD",
+      "page": 135,
+      "artist": ""
+    }
+  },
+  "flags": {},
+  "_id": "CUIQmrPjf9VCHmwJ",
+  "sort": 3400000,
+  "effects": [],
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!CUIQmrPjf9VCHmwJ"
+}

@@ -1,0 +1,59 @@
+{
+  "name": "Whirlwind",
+  "img": "systems/app-example/assets/icons/domains/domain-card/blade.png",
+  "type": "domainCard",
+  "folder": "9Xc6KzNyjDtTGZkp",
+  "system": {
+    "description": "<p class=\"Body-Foundation\">When you make a successful attack against a target within Very Close range, you can <strong>spend a Hope</strong> to use the attack against all other targets within Very Close range. All additional adversaries you succeed against with this ability take half damage.</p><p>@Template[type:emanation|range:vc]</p>",
+    "domain": "blade",
+    "recallCost": 0,
+    "level": 1,
+    "type": "ability",
+    "actions": {
+      "g9X0wRuCtAYzF576": {
+        "type": "effect",
+        "_id": "g9X0wRuCtAYzF576",
+        "systemPath": "actions",
+        "description": "<p class=\"Body-Foundation\">When you make a successful attack against a target within Very Close range, you can <strong>spend a Hope</strong> to use the attack against all other targets within Very Close range. All additional adversaries you succeed against with this ability take half damage.</p><p>@Template[type:emanation|range:vc]</p>",
+        "chatDisplay": true,
+        "actionType": "action",
+        "cost": [
+          {
+            "key": "hope",
+            "value": 1,
+            "scalable": false,
+            "step": null,
+            "consumeOnSuccess": false
+          }
+        ],
+        "uses": {
+          "value": null,
+          "max": "",
+          "recovery": null,
+          "consumeOnSuccess": false
+        },
+        "effects": [],
+        "target": {
+          "type": "any",
+          "amount": null
+        },
+        "name": "Spend a Hope",
+        "img": "icons/magic/control/buff-flight-wings-runes-purple-orange.webp",
+        "range": ""
+      }
+    },
+    "attribution": {
+      "source": "app-example SRD",
+      "page": 121,
+      "artist": ""
+    }
+  },
+  "flags": {},
+  "_id": "anO0arioUy7I5zBg",
+  "sort": 3400000,
+  "effects": [],
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!anO0arioUy7I5zBg"
+}

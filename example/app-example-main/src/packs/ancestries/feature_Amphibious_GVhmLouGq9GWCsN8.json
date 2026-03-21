@@ -1,0 +1,28 @@
+{
+  "folder": "dSAccOl5ccgXPyje",
+  "name": "Amphibious",
+  "type": "feature",
+  "_id": "GVhmLouGq9GWCsN8",
+  "img": "icons/magic/water/bubbles-air-water-light.webp",
+  "system": {
+    "description": "<p>You can breathe and move naturally underwater.</p>",
+    "resource": null,
+    "actions": {},
+    "originItemType": null,
+    "subType": null,
+    "originId": null,
+    "attribution": {
+      "source": "app-example SRD",
+      "page": 31,
+      "artist": ""
+    }
+  },
+  "effects": [],
+  "sort": 0,
+  "ownership": {
+    "default": 0,
+    "MQSznptE5yLT7kj8": 3
+  },
+  "flags": {},
+  "_key": "!items!GVhmLouGq9GWCsN8"
+}

@@ -1,0 +1,25 @@
+{
+  "name": "Empty Chest",
+  "type": "loot",
+  "_id": "p2yy61uKsyIsl8cU",
+  "img": "icons/containers/chest/chest-simple-box-gold-brown.webp",
+  "system": {
+    "description": "<p>This magical chest appears empty. When you speak a specific trigger word or action and open the chest, you can see the items stored within it.</p>",
+    "quantity": 1,
+    "actions": {},
+    "attribution": {
+      "source": "app-example SRD",
+      "page": 58,
+      "artist": ""
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0,
+    "OFxauskoxcvVTVNA": 3
+  },
+  "flags": {},
+  "_key": "!items!p2yy61uKsyIsl8cU"
+}

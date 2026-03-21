@@ -1,0 +1,20 @@
+{
+  "folder": "ZTh1tNA9cAwDhaJD",
+  "name": "Family Heirloom",
+  "type": "loot",
+  "_id": "Yum0uBtnEtTBcpax",
+  "img": "icons/commodities/treasure/trinket-totem-bone-green.webp",
+  "system": {
+    "description": "",
+    "quantity": 1,
+    "actions": {}
+  },
+  "effects": [],
+  "sort": 0,
+  "ownership": {
+    "default": 0,
+    "Q9NoTaEarn3VMS6Z": 3
+  },
+  "flags": {},
+  "_key": "!items!Yum0uBtnEtTBcpax"
+}

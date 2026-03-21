@@ -1,0 +1,26 @@
+import postcss from 'rollup-plugin-postcss';
+import commonjs from '@rollup/plugin-commonjs';
+import resolve from '@rollup/plugin-node-resolve';
+
+export default {
+    input: 'app-example.mjs',
+    output: {
+        file: 'build/app-example.js',
+        format: 'cjs',
+        sourcemap: true
+    },
+    plugins: [
+        postcss({
+            config: {
+                path: './postcss.config.js'
+            },
+            extensions: ['.css'],
+            extract: 'tagify.css'
+        }),
+        commonjs({
+            include: /node_modules/,
+            requireReturnsDefault: 'auto'
+        }),
+        resolve()
+    ]
+};

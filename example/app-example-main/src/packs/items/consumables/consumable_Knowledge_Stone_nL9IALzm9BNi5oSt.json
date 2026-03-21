@@ -1,0 +1,59 @@
+{
+  "name": "Knowledge Stone",
+  "type": "consumable",
+  "_id": "nL9IALzm9BNi5oSt",
+  "img": "icons/commodities/treasure/token-engraved-blue-glowing.webp",
+  "system": {
+    "description": "<p>If you die while holding this stone, an ally can take a card from your loadout to place in their loadout or vault. After they take this knowledge, the stone crumbles.</p>",
+    "quantity": 1,
+    "actions": {
+      "We38aIuxBrv8zhfr": {
+        "type": "effect",
+        "_id": "We38aIuxBrv8zhfr",
+        "systemPath": "actions",
+        "description": "<p>If you die while holding this stone, an ally can take a card from your loadout to place in their loadout or vault. After they take this knowledge, the stone crumbles.</p>",
+        "chatDisplay": true,
+        "actionType": "action",
+        "cost": [
+          {
+            "scalable": false,
+            "key": "quantity",
+            "value": 1,
+            "itemId": "nL9IALzm9BNi5oSt",
+            "step": null,
+            "consumeOnSuccess": false
+          }
+        ],
+        "uses": {
+          "value": null,
+          "max": "",
+          "recovery": null
+        },
+        "effects": [],
+        "target": {
+          "type": "any",
+          "amount": null
+        },
+        "name": "Use",
+        "img": "icons/commodities/treasure/token-engraved-blue-glowing.webp",
+        "range": ""
+      }
+    },
+    "consumeOnUse": true,
+    "destroyOnEmpty": true,
+    "attribution": {
+      "source": "app-example SRD",
+      "page": 62,
+      "artist": ""
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0,
+    "OFxauskoxcvVTVNA": 3
+  },
+  "flags": {},
+  "_key": "!items!nL9IALzm9BNi5oSt"
+}

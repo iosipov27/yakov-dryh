@@ -1,0 +1,57 @@
+{
+  "name": "Astral Projection",
+  "img": "systems/app-example/assets/icons/domains/domain-card/grace.png",
+  "type": "domainCard",
+  "folder": "7O1tTswJMNdPgLsx",
+  "system": {
+    "description": "<p class=\"Body-Foundation\">Once per long rest, <strong>mark a Stress</strong> to create a projected copy of yourself that can appear anywhere you’ve been before.</p><p class=\"Body-Foundation\">You can see and hear through the projection as though it were you and affect the world as though you were there. A creature investigating the projection can tell it’s of magical origin. This effect lasts until your next rest or your projection takes any damage.</p>",
+    "domain": "grace",
+    "recallCost": 0,
+    "level": 8,
+    "type": "spell",
+    "actions": {
+      "jhEOXtmSiwm4AX1R": {
+        "type": "effect",
+        "_id": "jhEOXtmSiwm4AX1R",
+        "systemPath": "actions",
+        "description": "<p class=\"Body-Foundation\">Once per long rest, <strong>mark a Stress</strong> to create a projected copy of yourself that can appear anywhere you’ve been before.</p><p class=\"Body-Foundation\">You can see and hear through the projection as though it were you and affect the world as though you were there. A creature investigating the projection can tell it’s of magical origin. This effect lasts until your next rest or your projection takes any damage.</p>",
+        "chatDisplay": true,
+        "actionType": "action",
+        "cost": [
+          {
+            "scalable": false,
+            "key": "stress",
+            "value": 1,
+            "step": null
+          }
+        ],
+        "uses": {
+          "value": null,
+          "max": "1",
+          "recovery": "longRest"
+        },
+        "effects": [],
+        "target": {
+          "type": "any",
+          "amount": null
+        },
+        "name": "Project",
+        "img": "icons/magic/perception/orb-crystal-ball-scrying.webp",
+        "range": ""
+      }
+    },
+    "attribution": {
+      "source": "app-example SRD",
+      "page": 127,
+      "artist": ""
+    }
+  },
+  "flags": {},
+  "_id": "YNOCNmZ96sCp9NEr",
+  "sort": 3400000,
+  "effects": [],
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!YNOCNmZ96sCp9NEr"
+}

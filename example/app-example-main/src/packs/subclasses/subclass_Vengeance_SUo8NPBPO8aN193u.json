@@ -1,0 +1,45 @@
+{
+  "folder": "WMlU3baiUdMgfuak",
+  "name": "Vengeance",
+  "type": "subclass",
+  "_id": "SUo8NPBPO8aN193u",
+  "img": "icons/magic/unholy/silhouette-evil-horned-giant.webp",
+  "system": {
+    "description": "<p>You wish to strike down enemies who harm you or your allies.</p>",
+    "spellcastingTrait": null,
+    "features": [
+      {
+        "type": "foundation",
+        "item": "Compendium.app-example.subclasses.Item.xPWFvGvtUjIcqgJq"
+      },
+      {
+        "type": "foundation",
+        "item": "Compendium.app-example.subclasses.Item.oNfA5F9cKwNR7joq"
+      },
+      {
+        "type": "specialization",
+        "item": "Compendium.app-example.subclasses.Item.k7vvMJtEcxMWUUrW"
+      },
+      {
+        "type": "mastery",
+        "item": "Compendium.app-example.subclasses.Item.DPKmipNRlSAMs2Cg"
+      }
+    ],
+    "featureState": 1,
+    "isMulticlass": false,
+    "attribution": {
+      "source": "app-example SRD",
+      "page": 16,
+      "artist": ""
+    },
+    "linkedClass": "Compendium.app-example.classes.Item.nRAyoC0fOzXPDa4z"
+  },
+  "effects": [],
+  "sort": 0,
+  "ownership": {
+    "default": 0,
+    "LgnbNMLaxandgMQq": 3
+  },
+  "flags": {},
+  "_key": "!items!SUo8NPBPO8aN193u"
+}

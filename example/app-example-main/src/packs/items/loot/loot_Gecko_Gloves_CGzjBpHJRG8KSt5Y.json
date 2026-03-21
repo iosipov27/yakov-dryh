@@ -1,0 +1,25 @@
+{
+  "name": "Gecko Gloves",
+  "type": "loot",
+  "_id": "CGzjBpHJRG8KSt5Y",
+  "img": "icons/equipment/hand/glove-ring-leather-green.webp",
+  "system": {
+    "description": "<p>You can climb up vertical surfaces and across ceilings.</p>",
+    "quantity": 1,
+    "actions": {},
+    "attribution": {
+      "source": "app-example SRD",
+      "page": 58,
+      "artist": ""
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0,
+    "OFxauskoxcvVTVNA": 3
+  },
+  "flags": {},
+  "_key": "!items!CGzjBpHJRG8KSt5Y"
+}

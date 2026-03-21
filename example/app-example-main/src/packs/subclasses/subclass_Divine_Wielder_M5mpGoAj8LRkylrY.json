@@ -1,0 +1,45 @@
+{
+  "folder": "RZOEu0ZYQNPs6O2c",
+  "name": "Divine Wielder",
+  "type": "subclass",
+  "_id": "M5mpGoAj8LRkylrY",
+  "img": "icons/weapons/swords/sword-gold-holy.webp",
+  "system": {
+    "description": "<p>Play the Divine Wielder if you want to dominate the battlefield with a legendary weapon.</p>",
+    "spellcastingTrait": "strength",
+    "features": [
+      {
+        "type": "foundation",
+        "item": "Compendium.app-example.subclasses.Item.McoS0RxNLOg3SfSt"
+      },
+      {
+        "type": "foundation",
+        "item": "Compendium.app-example.subclasses.Item.GfOSgVJW8bS1OjNq"
+      },
+      {
+        "type": "specialization",
+        "item": "Compendium.app-example.subclasses.Item.J3A7ycmj65hlhWnI"
+      },
+      {
+        "type": "mastery",
+        "item": "Compendium.app-example.subclasses.Item.DxOAkDBfIMpXxAUD"
+      }
+    ],
+    "featureState": 1,
+    "isMulticlass": false,
+    "attribution": {
+      "source": "app-example SRD",
+      "page": 21,
+      "artist": ""
+    },
+    "linkedClass": "Compendium.app-example.classes.Item.5ZnlJ5bEoyOTkUJv"
+  },
+  "effects": [],
+  "sort": 0,
+  "ownership": {
+    "default": 0,
+    "Q9NoTaEarn3VMS6Z": 3
+  },
+  "flags": {},
+  "_key": "!items!M5mpGoAj8LRkylrY"
+}

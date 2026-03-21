@@ -1,0 +1,13 @@
+<section
+    class='tab {{tabs.actions.cssClass}} {{tabs.actions.id}}'
+    data-tab='{{tabs.actions.id}}'
+    data-group='{{tabs.actions.group}}'
+>
+
+{{> 'app-example.inventory-items'
+    title='APP_EXAMPLE.GENERAL.Action.plural'
+    collection=document.system.actions
+    type='action'
+    canCreate=true
+}}
+</section>

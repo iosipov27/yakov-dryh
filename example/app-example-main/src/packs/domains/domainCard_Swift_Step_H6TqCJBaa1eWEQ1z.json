@@ -1,0 +1,164 @@
+{
+  "name": "Swift Step",
+  "img": "systems/app-example/assets/icons/domains/domain-card/bone.png",
+  "type": "domainCard",
+  "folder": "Hs6POmXKThDXQJBn",
+  "system": {
+    "description": "<p class=\"Body-Foundation\">When an attack made against you fails, clear a Stress. If you can’t clear a Stress, gain a Hope.</p>",
+    "domain": "bone",
+    "recallCost": 2,
+    "level": 10,
+    "type": "ability",
+    "actions": {
+      "Yqyfl459M3q3TACB": {
+        "type": "healing",
+        "_id": "Yqyfl459M3q3TACB",
+        "systemPath": "actions",
+        "description": "<p class=\"Body-Foundation\">When an attack made against you fails, clear a Stress. If you can’t clear a Stress, gain a Hope.</p>",
+        "chatDisplay": true,
+        "actionType": "action",
+        "cost": [],
+        "uses": {
+          "value": null,
+          "max": "",
+          "recovery": null,
+          "consumeOnSuccess": false
+        },
+        "damage": {
+          "parts": [
+            {
+              "value": {
+                "custom": {
+                  "enabled": true,
+                  "formula": "1"
+                },
+                "multiplier": "prof",
+                "flatMultiplier": 1,
+                "dice": "d6",
+                "bonus": null
+              },
+              "applyTo": "stress",
+              "base": false,
+              "resultBased": false,
+              "valueAlt": {
+                "multiplier": "prof",
+                "flatMultiplier": 1,
+                "dice": "d6",
+                "bonus": null,
+                "custom": {
+                  "enabled": false
+                }
+              },
+              "type": []
+            }
+          ],
+          "includeBase": false
+        },
+        "target": {
+          "type": "self",
+          "amount": null
+        },
+        "effects": [],
+        "roll": {
+          "type": null,
+          "trait": null,
+          "difficulty": null,
+          "bonus": null,
+          "advState": "neutral",
+          "diceRolling": {
+            "multiplier": "prof",
+            "flatMultiplier": 1,
+            "dice": "d6",
+            "compare": null,
+            "treshold": null
+          },
+          "useDefault": false
+        },
+        "name": "Clear Stress",
+        "img": "icons/magic/life/cross-beam-green.webp",
+        "range": ""
+      },
+      "Py9Mx4nMfCRr4tpk": {
+        "type": "healing",
+        "_id": "Py9Mx4nMfCRr4tpk",
+        "systemPath": "actions",
+        "description": "<p class=\"Body-Foundation\">When an attack made against you fails, clear a Stress. If you can’t clear a Stress, gain a Hope.</p>",
+        "chatDisplay": true,
+        "actionType": "action",
+        "cost": [],
+        "uses": {
+          "value": null,
+          "max": "",
+          "recovery": null,
+          "consumeOnSuccess": false
+        },
+        "damage": {
+          "parts": [
+            {
+              "value": {
+                "custom": {
+                  "enabled": true,
+                  "formula": "1"
+                },
+                "multiplier": "prof",
+                "flatMultiplier": 1,
+                "dice": "d6",
+                "bonus": null
+              },
+              "applyTo": "hope",
+              "base": false,
+              "resultBased": false,
+              "valueAlt": {
+                "multiplier": "prof",
+                "flatMultiplier": 1,
+                "dice": "d6",
+                "bonus": null,
+                "custom": {
+                  "enabled": false
+                }
+              },
+              "type": []
+            }
+          ],
+          "includeBase": false
+        },
+        "target": {
+          "type": "any",
+          "amount": null
+        },
+        "effects": [],
+        "roll": {
+          "type": null,
+          "trait": null,
+          "difficulty": null,
+          "bonus": null,
+          "advState": "neutral",
+          "diceRolling": {
+            "multiplier": "prof",
+            "flatMultiplier": 1,
+            "dice": "d6",
+            "compare": null,
+            "treshold": null
+          },
+          "useDefault": false
+        },
+        "name": "Gain Hope",
+        "img": "icons/magic/life/cross-beam-green.webp",
+        "range": ""
+      }
+    },
+    "attribution": {
+      "source": "app-example SRD",
+      "page": 123,
+      "artist": ""
+    }
+  },
+  "flags": {},
+  "_id": "H6TqCJBaa1eWEQ1z",
+  "sort": 3400000,
+  "effects": [],
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!H6TqCJBaa1eWEQ1z"
+}

@@ -1,0 +1,63 @@
+@import '../../utils/colors.less';
+@import '../../utils/fonts.less';
+@import '../../utils/spacing.less';
+
+.app-example.chat-sidebar.theme-light,
+#interface.theme-light {
+    .app-example.chat.action {
+        .action-move .action-section {
+            border-bottom: 1px solid @dark-blue;
+
+            &:hover {
+                background: @dark-blue-10;
+            }
+
+            .action-header {
+                .title {
+                    color: @dark-blue;
+                }
+                .label {
+                    color: @dark;
+                }
+            }
+
+            .fa-chevron-down {
+                color: @dark-blue;
+            }
+        }
+
+        .description {
+            color: @dark;
+        }
+    }
+}
+
+.app-example.chat {
+    &.action {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        .ability-card-footer {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            width: 100%;
+            padding: 0 8px;
+
+            button {
+                height: 40px;
+                flex: 1 1 calc(50% - 5px);
+
+                &:nth-last-child(1):nth-child(odd) {
+                    flex-basis: 100%;
+                }
+            }
+
+            .ability-card-action-cost {
+                margin: auto;
+                font-size: 1.5em;
+            }
+        }
+    }
+}

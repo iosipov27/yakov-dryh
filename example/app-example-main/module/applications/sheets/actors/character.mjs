@@ -1,0 +1,1097 @@
+import DHBaseActorSheet from '../api/base-actor.mjs';
+import DhDeathMove from '../../dialogs/deathMove.mjs';
+import { abilities } from '../../../config/actorConfig.mjs';
+import { CharacterLevelup, LevelupViewMode } from '../../levelup/_module.mjs';
+import DhCharacterCreation from '../../characterCreation/characterCreation.mjs';
+import FilterMenu from '../../ux/filter-menu.mjs';
+import { getDocFromElement, getDocFromElementSync } from '../../../helpers/utils.mjs';
+
+/**@typedef {import('@client/applications/_types.mjs').ApplicationClickAction} ApplicationClickAction */
+
+export default class CharacterSheet extends DHBaseActorSheet {
+    /**@inheritdoc */
+    static DEFAULT_OPTIONS = {
+        classes: ['character'],
+        position: { width: 850, height: 800 },
+        /* Foundry adds disabled to all buttons and inputs if editPermission is missing. This is not desired. */
+        editPermission: CONST.DOCUMENT_OWNERSHIP_LEVELS.OBSERVER,
+        actions: {
+            toggleVault: CharacterSheet.#toggleVault,
+            rollAttribute: CharacterSheet.#rollAttribute,
+            toggleHitPoints: CharacterSheet.#toggleHitPoints,
+            toggleStress: CharacterSheet.#toggleStress,
+            toggleArmor: CharacterSheet.#toggleArmor,
+            toggleHope: CharacterSheet.#toggleHope,
+            toggleLoadoutView: CharacterSheet.#toggleLoadoutView,
+            openPack: CharacterSheet.#openPack,
+            makeDeathMove: CharacterSheet.#makeDeathMove,
+            levelManagement: CharacterSheet.#levelManagement,
+            viewLevelups: CharacterSheet.#viewLevelups,
+            resetCharacter: CharacterSheet.#resetCharacter,
+            toggleEquipItem: CharacterSheet.#toggleEquipItem,
+            toggleResourceDice: CharacterSheet.#toggleResourceDice,
+            handleResourceDice: CharacterSheet.#handleResourceDice,
+            advanceResourceDie: CharacterSheet.#advanceResourceDie,
+            cancelBeastform: CharacterSheet.#cancelBeastform,
+            toggleResourceManagement: CharacterSheet.#toggleResourceManagement,
+            useDowntime: this.useDowntime,
+            viewParty: CharacterSheet.#viewParty
+        },
+        window: {
+            resizable: true,
+            controls: [
+                {
+                    icon: 'fa-solid fa-angles-up',
+                    label: 'APP_EXAMPLE.ACTORS.Character.viewLevelups',
+                    action: 'viewLevelups'
+                },
+                {
+                    icon: 'fa-solid fa-arrow-rotate-left',
+                    label: 'APP_EXAMPLE.ACTORS.Character.resetCharacter',
+                    action: 'resetCharacter'
+                }
+            ]
+        },
+        dragDrop: [
+            {
+                dragSelector: '[data-item-id][draggable="true"], [data-item-id] [draggable="true"]',
+                dropSelector: null
+            }
+        ],
+        contextMenus: [
+            {
+                handler: CharacterSheet.#getDomainCardContextOptions,
+                selector: '[data-item-uuid][data-type="domainCard"]',
+                options: {
+                    parentClassHooks: false,
+                    fixed: true
+                }
+            },
+            {
+                handler: CharacterSheet.#getEquipamentContextOptions,
+                selector: '[data-item-uuid][data-type="armor"], [data-item-uuid][data-type="weapon"]',
+                options: {
+                    parentClassHooks: false,
+                    fixed: true
+                }
+            },
+            {
+                handler: CharacterSheet.#getItemContextOptions,
+                selector: '[data-item-uuid][data-type="consumable"], [data-item-uuid][data-type="loot"]',
+                options: {
+                    parentClassHooks: false,
+                    fixed: true
+                }
+            }
+        ]
+    };
+
+    /**@override */
+    static PARTS = {
+        limited: {
+            id: 'limited',
+            scrollable: ['.limited-container'],
+            template: 'systems/app-example/templates/sheets/actors/character/limited.hbs'
+        },
+        sidebar: {
+            id: 'sidebar',
+            scrollable: ['.shortcut-items-section'],
+            template: 'systems/app-example/templates/sheets/actors/character/sidebar.hbs'
+        },
+        header: {
+            id: 'header',
+            template: 'systems/app-example/templates/sheets/actors/character/header.hbs'
+        },
+        features: {
+            id: 'features',
+            scrollable: ['.features-sections'],
+            template: 'systems/app-example/templates/sheets/actors/character/features.hbs'
+        },
+        loadout: {
+            id: 'loadout',
+            scrollable: ['.items-section'],
+            template: 'systems/app-example/templates/sheets/actors/character/loadout.hbs'
+        },
+        inventory: {
+            id: 'inventory',
+            scrollable: ['.items-section'],
+            template: 'systems/app-example/templates/sheets/actors/character/inventory.hbs'
+        },
+        biography: {
+            id: 'biography',
+            scrollable: ['.items-section'],
+            template: 'systems/app-example/templates/sheets/actors/character/biography.hbs'
+        },
+        effects: {
+            id: 'effects',
+            scrollable: ['.effects-sections'],
+            template: 'systems/app-example/templates/sheets/actors/character/effects.hbs'
+        }
+    };
+
+    /* -------------------------------------------- */
+
+    /** @inheritdoc */
+    static TABS = {
+        primary: {
+            tabs: [{ id: 'features' }, { id: 'loadout' }, { id: 'inventory' }, { id: 'biography' }, { id: 'effects' }],
+            initial: 'features',
+            labelPrefix: 'APP_EXAMPLE.GENERAL.Tabs'
+        }
+    };
+
+    _attachPartListeners(partId, htmlElement, options) {
+        super._attachPartListeners(partId, htmlElement, options);
+
+        htmlElement.querySelectorAll('.inventory-item-resource').forEach(element => {
+            element.addEventListener('change', this.updateItemResource.bind(this));
+            element.addEventListener('click', e => e.stopPropagation());
+        });
+
+        // Add listener for armor marks input
+        htmlElement.querySelectorAll('.armor-marks-input').forEach(element => {
+            element.addEventListener('change', this.updateArmorMarks.bind(this));
+        });
+
+        htmlElement.querySelectorAll('.item-resource.die').forEach(element => {
+            element.addEventListener('contextmenu', this.lowerResourceDie.bind(this));
+        });
+    }
+
+    /**  @inheritdoc */
+    _initializeApplicationOptions(options) {
+        const applicationOptions = super._initializeApplicationOptions(options);
+
+        if (applicationOptions.document.testUserPermission(game.user, 'LIMITED', { exact: true })) {
+            applicationOptions.position.width = 360;
+            applicationOptions.position.height = 'auto';
+        }
+
+        return applicationOptions;
+    }
+
+    /** @inheritDoc */
+    async _onRender(context, options) {
+        await super._onRender(context, options);
+
+        if (!this.document.testUserPermission(game.user, 'LIMITED', { exact: true })) {
+            this.element
+                .querySelector('.level-value')
+                ?.addEventListener('change', event => this.document.updateLevel(Number(event.currentTarget.value)));
+
+            const observer = this.document.testUserPermission(game.user, CONST.DOCUMENT_OWNERSHIP_LEVELS.OBSERVER, {
+                exact: true
+            });
+            if (observer) {
+                this.element.querySelector('.window-content').classList.add('viewMode');
+            }
+
+            this._createFilterMenus();
+            this._createSearchFilter();
+        }
+    }
+
+    /* -------------------------------------------- */
+    /*  Prepare Context                             */
+    /* -------------------------------------------- */
+
+    async _prepareContext(_options) {
+        const context = await super._prepareContext(_options);
+
+        context.attributes = Object.keys(this.document.system.traits).reduce((acc, key) => {
+            acc[key] = {
+                ...this.document.system.traits[key],
+                name: game.i18n.localize(CONFIG.DH.ACTOR.abilities[key].name),
+                verbs: CONFIG.DH.ACTOR.abilities[key].verbs.map(x => game.i18n.localize(x))
+            };
+
+            return acc;
+        }, {});
+
+        context.resources = Object.keys(this.document.system.resources).reduce((acc, key) => {
+            acc[key] = this.document.system.resources[key];
+            return acc;
+        }, {});
+        const maxResource = Math.max(context.resources.hitPoints.max, context.resources.stress.max);
+        context.resources.hitPoints.emptyPips =
+            context.resources.hitPoints.max < maxResource ? maxResource - context.resources.hitPoints.max : 0;
+        context.resources.stress.emptyPips =
+            context.resources.stress.max < maxResource ? maxResource - context.resources.stress.max : 0;
+
+        context.beastformActive = this.document.effects.find(x => x.type === 'beastform');
+
+        return context;
+    }
+
+    /**@inheritdoc */
+    async _preparePartContext(partId, context, options) {
+        context = await super._preparePartContext(partId, context, options);
+        switch (partId) {
+            case 'header':
+                await this._prepareHeaderContext(context, options);
+                break;
+            case 'loadout':
+                await this._prepareLoadoutContext(context, options);
+                break;
+            case 'sidebar':
+                await this._prepareSidebarContext(context, options);
+                break;
+            case 'biography':
+                await this._prepareBiographyContext(context, options);
+                break;
+        }
+
+        return context;
+    }
+
+    async _prepareHeaderContext(context, _options) {
+        context.hasExtraResources = Object.keys(CONFIG.DH.RESOURCE.character.all).some(
+            key => !CONFIG.DH.RESOURCE.character.base[key]
+        );
+    }
+
+    /**
+     * Prepare render context for the Loadout part.
+     * @param {ApplicationRenderContext} context
+     * @param {ApplicationRenderOptions} options
+     * @returns {Promise<void>}
+     * @protected
+     */
+    async _prepareLoadoutContext(context, _options) {
+        context.cardView = game.user.getFlag(CONFIG.DH.id, CONFIG.DH.FLAGS.displayDomainCardsAsCard);
+    }
+
+    /**
+     * Prepare render context for the Sidebar part.
+     * @param {ApplicationRenderContext} context
+     * @param {ApplicationRenderOptions} options
+     * @returns {Promise<void>}
+     * @protected
+     */
+    async _prepareSidebarContext(context, _options) {
+        context.isDeath = this.document.system.deathMoveViable;
+    }
+
+    /**
+     * Prepare render context for the Biography part.
+     * @param {ApplicationRenderContext} context
+     * @param {ApplicationRenderOptions} options
+     * @returns {Promise<void>}
+     * @protected
+     */
+    async _prepareBiographyContext(context, _options) {
+        const { system } = this.document;
+        const { TextEditor } = foundry.applications.ux;
+
+        const paths = {
+            background: 'biography.background',
+            connections: 'biography.connections'
+        };
+
+        for (const [key, path] of Object.entries(paths)) {
+            const value = foundry.utils.getProperty(system, path);
+            context[key] = {
+                field: system.schema.getField(path),
+                value,
+                enriched: await TextEditor.implementation.enrichHTML(value, {
+                    secrets: this.document.isOwner,
+                    relativeTo: this.document
+                })
+            };
+        }
+    }
+
+    /* -------------------------------------------- */
+    /*  Context Menu                                */
+    /* -------------------------------------------- */
+
+    /**
+     * Get the set of ContextMenu options for DomainCards.
+     * @returns {import('@client/applications/ux/context-menu.mjs').ContextMenuEntry[]} - The Array of context options passed to the ContextMenu instance
+     * @this {CharacterSheet}
+     * @protected
+     */
+    static #getDomainCardContextOptions() {
+        /**@type {import('@client/applications/ux/context-menu.mjs').ContextMenuEntry[]} */
+        const options = [
+            {
+                name: 'toLoadout',
+                icon: 'fa-solid fa-arrow-up',
+                condition: target => {
+                    const doc = getDocFromElementSync(target);
+                    return doc && doc.system.inVault;
+                },
+                callback: async target => {
+                    const doc = await getDocFromElement(target);
+                    const actorLoadout = doc.actor.system.loadoutSlot;
+                    if (actorLoadout.available) return doc.update({ 'system.inVault': false });
+                    ui.notifications.warn(game.i18n.localize('APP_EXAMPLE.UI.Notifications.loadoutMaxReached'));
+                }
+            },
+            {
+                name: 'recall',
+                icon: 'fa-solid fa-bolt-lightning',
+                condition: target => {
+                    const doc = getDocFromElementSync(target);
+                    return doc && doc.system.inVault;
+                },
+                callback: async (target, event) => {
+                    const doc = await getDocFromElement(target);
+                    const actorLoadout = doc.actor.system.loadoutSlot;
+                    if (!actorLoadout.available) {
+                        ui.notifications.warn(game.i18n.localize('APP_EXAMPLE.UI.Notifications.loadoutMaxReached'));
+                        return;
+                    }
+                    if (doc.system.recallCost == 0) {
+                        return doc.update({ 'system.inVault': false });
+                    }
+                    const type = 'effect';
+                    const cls = game.system.api.models.actions.actionsTypes[type];
+                    const action = new cls(
+                        {
+                            ...cls.getSourceConfig(doc.system),
+                            type: type,
+                            chatDisplay: false,
+                            cost: [
+                                {
+                                    key: 'stress',
+                                    value: doc.system.recallCost
+                                }
+                            ]
+                        },
+                        { parent: doc.system }
+                    );
+                    const config = await action.use(event);
+                    if (config) {
+                        return doc.update({ 'system.inVault': false });
+                    }
+                }
+            },
+            {
+                name: 'toVault',
+                icon: 'fa-solid fa-arrow-down',
+                condition: target => {
+                    const doc = getDocFromElementSync(target);
+                    return doc && !doc.system.inVault;
+                },
+                callback: async target => (await getDocFromElement(target)).update({ 'system.inVault': true })
+            }
+        ].map(option => ({
+            ...option,
+            name: `APP_EXAMPLE.APPLICATIONS.ContextMenu.${option.name}`,
+            icon: `<i class="${option.icon}"></i>`
+        }));
+
+        return [...options, ...this._getContextMenuCommonOptions.call(this, { usable: true, toChat: true })];
+    }
+
+    /**
+     * Get the set of ContextMenu options for Armors and Weapons.
+     * @returns {import('@client/applications/ux/context-menu.mjs').ContextMenuEntry[]} - The Array of context options passed to the ContextMenu instance
+     * @this {CharacterSheet}
+     * @protected
+     */
+    static #getEquipamentContextOptions() {
+        const options = [
+            {
+                name: 'equip',
+                icon: 'fa-solid fa-hands',
+                condition: target => {
+                    const doc = getDocFromElementSync(target);
+                    return doc && !doc.system.equipped;
+                },
+                callback: (target, event) => CharacterSheet.#toggleEquipItem.call(this, event, target)
+            },
+            {
+                name: 'unequip',
+                icon: 'fa-solid fa-hands',
+                condition: target => {
+                    const doc = getDocFromElementSync(target);
+                    return doc && doc.system.equipped;
+                },
+                callback: (target, event) => CharacterSheet.#toggleEquipItem.call(this, event, target)
+            }
+        ].map(option => ({
+            ...option,
+            name: `APP_EXAMPLE.APPLICATIONS.ContextMenu.${option.name}`,
+            icon: `<i class="${option.icon}"></i>`
+        }));
+
+        return [...options, ...this._getContextMenuCommonOptions.call(this, { usable: true, toChat: true })];
+    }
+
+    /**
+     * Get the set of ContextMenu options for Consumable and Loot.
+     * @returns {import('@client/applications/ux/context-menu.mjs').ContextMenuEntry[]} - The Array of context options passed to the ContextMenu instance
+     * @this {CharacterSheet}
+     * @protected
+     */
+    static #getItemContextOptions() {
+        return this._getContextMenuCommonOptions.call(this, { usable: true, toChat: true });
+    }
+    /* -------------------------------------------- */
+    /*  Filter Tracking                             */
+    /* -------------------------------------------- */
+
+    /**
+     * The currently active search filter.
+     * @type {foundry.applications.ux.SearchFilter}
+     */
+    #search = {};
+
+    /**
+     * The currently active search filter.
+     * @type {FilterMenu}
+     */
+    #menu = {};
+
+    /**
+     * Tracks which item IDs are currently displayed, organized by filter type and section.
+     * @type {{
+     *   inventory: {
+     *     search: Set<string>,
+     *     menu: Set<string>
+     *   },
+     *   loadout: {
+     *     search: Set<string>,
+     *     menu: Set<string>
+     *   },
+     * }}
+     */
+    #filteredItems = {
+        inventory: {
+            search: new Set(),
+            menu: new Set()
+        },
+        loadout: {
+            search: new Set(),
+            menu: new Set()
+        }
+    };
+
+    /* -------------------------------------------- */
+    /*  Search Inputs                               */
+    /* -------------------------------------------- */
+
+    /**
+     * Create and initialize search filter instances for the inventory and loadout sections.
+     *
+     * Sets up two {@link foundry.applications.ux.SearchFilter} instances:
+     * - One for the inventory, which filters items in the inventory grid.
+     * - One for the loadout, which filters items in the loadout/card grid.
+     * @private
+     */
+    _createSearchFilter() {
+        //Filters could be a application option if needed
+        const filters = [
+            {
+                key: 'inventory',
+                input: 'input[type="search"].search-inventory',
+                content: '[data-application-part="inventory"] .items-section',
+                callback: this._onSearchFilterInventory.bind(this)
+            },
+            {
+                key: 'loadout',
+                input: 'input[type="search"].search-loadout',
+                content: '[data-application-part="loadout"] .items-section',
+                callback: this._onSearchFilterCard.bind(this)
+            }
+        ];
+
+        for (const { key, input, content, callback } of filters) {
+            const filter = new foundry.applications.ux.SearchFilter({
+                inputSelector: input,
+                contentSelector: content,
+                callback
+            });
+            filter.bind(this.element);
+            this.#search[key] = filter;
+        }
+    }
+
+    /**
+     * Handle invetory items search and filtering.
+     * @param {KeyboardEvent} event  The keyboard input event.
+     * @param {string} query         The input search string.
+     * @param {RegExp} rgx           The regular expression query that should be matched against.
+     * @param {HTMLElement} html     The container to filter items from.
+     * @protected
+     */
+    async _onSearchFilterInventory(_event, query, rgx, html) {
+        this.#filteredItems.inventory.search.clear();
+
+        for (const li of html.querySelectorAll('.inventory-item')) {
+            const item = await getDocFromElement(li);
+            const matchesSearch = !query || foundry.applications.ux.SearchFilter.testQuery(rgx, item.name);
+            if (matchesSearch) this.#filteredItems.inventory.search.add(item.id);
+            const { menu } = this.#filteredItems.inventory;
+            li.hidden = !(menu.has(item.id) && matchesSearch);
+        }
+    }
+
+    /**
+     * Handle card items search and filtering.
+     * @param {KeyboardEvent} event  The keyboard input event.
+     * @param {string} query         The input search string.
+     * @param {RegExp} rgx           The regular expression query that should be matched against.
+     * @param {HTMLElement} html     The container to filter items from.
+     * @protected
+     */
+    async _onSearchFilterCard(_event, query, rgx, html) {
+        this.#filteredItems.loadout.search.clear();
+
+        for (const li of html.querySelectorAll('.items-list .inventory-item, .card-list .card-item')) {
+            const item = await getDocFromElement(li);
+            const matchesSearch = !query || foundry.applications.ux.SearchFilter.testQuery(rgx, item.name);
+            if (matchesSearch) this.#filteredItems.loadout.search.add(item.id);
+            const { menu } = this.#filteredItems.loadout;
+            li.hidden = !(menu.has(item.id) && matchesSearch);
+        }
+    }
+
+    /* -------------------------------------------- */
+    /*  Filter Menus                                */
+    /* -------------------------------------------- */
+
+    _createFilterMenus() {
+        //Menus could be a application option if needed
+        const menus = [
+            {
+                key: 'inventory',
+                container: '[data-application-part="inventory"]',
+                content: '.items-section',
+                callback: this._onMenuFilterInventory.bind(this),
+                target: '.filter-button',
+                filters: FilterMenu.invetoryFilters
+            },
+            {
+                key: 'loadout',
+                container: '[data-application-part="loadout"]',
+                content: '.items-section',
+                callback: this._onMenuFilterLoadout.bind(this),
+                target: '.filter-button',
+                filters: FilterMenu.cardsFilters
+            }
+        ];
+
+        menus.forEach(m => {
+            const container = this.element.querySelector(m.container);
+            this.#menu[m.key] = new FilterMenu(container, m.target, m.filters, m.callback, {
+                contentSelector: m.content
+            });
+        });
+    }
+
+    /**
+     * Callback when filters change
+     * @param {PointerEvent} event
+     * @param {HTMLElement} html
+     * @param {import('../ux/filter-menu.mjs').FilterItem[]} filters
+     */
+    async _onMenuFilterInventory(_event, html, filters) {
+        this.#filteredItems.inventory.menu.clear();
+
+        for (const li of html.querySelectorAll('.inventory-item')) {
+            const item = await getDocFromElement(li);
+
+            const matchesMenu =
+                filters.length === 0 || filters.some(f => foundry.applications.ux.SearchFilter.evaluateFilter(item, f));
+            if (matchesMenu) this.#filteredItems.inventory.menu.add(item.id);
+
+            const { search } = this.#filteredItems.inventory;
+            li.hidden = !(search.has(item.id) && matchesMenu);
+        }
+    }
+
+    /**
+     * Callback when filters change
+     * @param {PointerEvent} event
+     * @param {HTMLElement} html
+     * @param {import('../ux/filter-menu.mjs').FilterItem[]} filters
+     */
+    async _onMenuFilterLoadout(_event, html, filters) {
+        this.#filteredItems.loadout.menu.clear();
+
+        for (const li of html.querySelectorAll('.items-list .inventory-item, .card-list .card-item')) {
+            const item = await getDocFromElement(li);
+
+            const matchesMenu =
+                filters.length === 0 || filters.some(f => foundry.applications.ux.SearchFilter.evaluateFilter(item, f));
+            if (matchesMenu) this.#filteredItems.loadout.menu.add(item.id);
+
+            const { search } = this.#filteredItems.loadout;
+            li.hidden = !(search.has(item.id) && matchesMenu);
+        }
+    }
+
+    /* -------------------------------------------- */
+    /*  Application Listener Actions                */
+    /* -------------------------------------------- */
+
+    async updateItemResource(event) {
+        const item = await getDocFromElement(event.currentTarget);
+        if (!item) return;
+
+        const max = event.currentTarget.max ? Number(event.currentTarget.max) : null;
+        const value = max ? Math.min(Number(event.currentTarget.value), max) : event.currentTarget.value;
+        await item.update({ 'system.resource.value': value });
+        this.render();
+    }
+
+    async updateArmorMarks(event) {
+        const armor = this.document.system.armor;
+        if (!armor) return;
+
+        const maxMarks = this.document.system.armorScore;
+        const value = Math.min(Math.max(Number(event.currentTarget.value), 0), maxMarks);
+        await armor.update({ 'system.marks.value': value });
+    }
+
+    /* -------------------------------------------- */
+    /*  Application Clicks Actions                  */
+    /* -------------------------------------------- */
+
+    /**
+     * Opens the character level management window.
+     * If the character requires setup, opens the character creation interface.
+     * If class or subclass is missing, shows an error notification.
+     * @type {ApplicationClickAction}
+     */
+    static #levelManagement() {
+        if (this.document.system.needsCharacterSetup)
+            return new DhCharacterCreation(this.document).render({ force: true });
+
+        const { value, subclass } = this.document.system.class;
+        if (!value || !subclass)
+            return ui.notifications.error(game.i18n.localize('APP_EXAMPLE.UI.Notifications.missingClassOrSubclass'));
+
+        new CharacterLevelup(this.document).render({ force: true });
+    }
+
+    /**
+     * Opens the charater level management window in viewMode.
+     */
+    static #viewLevelups() {
+        new LevelupViewMode(this.document).render({ force: true });
+    }
+
+    /**
+     * Resets the character data and removes all embedded documents.
+     */
+    static async #resetCharacter() {
+        new game.system.api.applications.dialogs.CharacterResetDialog(this.document).render({ force: true });
+    }
+
+    /**
+     * Opens the Death Move interface for the character.
+     * @type {ApplicationClickAction}
+     */
+    static async #makeDeathMove() {
+        await new DhDeathMove(this.document).render({ force: true });
+    }
+
+    /**
+     * Opens a compendium pack given its dataset key.
+     * @type {ApplicationClickAction}
+     */
+    static async #openPack(_event, button) {
+        const { key } = button.dataset;
+
+        const presets = {
+            folder: key,
+            filter:
+                key === 'subclasses'
+                    ? {
+                          'system.linkedClass.uuid': {
+                              key: 'system.linkedClass.uuid',
+                              value: this.document.system.class.value._stats.compendiumSource
+                          }
+                      }
+                    : undefined,
+            render: {
+                noFolder: true
+            }
+        };
+
+        ui.compendiumBrowser.open(presets);
+    }
+
+    /**
+     * Rolls an attribute check based on the clicked button's dataset attribute.
+     * @type {ApplicationClickAction}
+     */
+    static async #rollAttribute(event, button) {
+        const abilityLabel = game.i18n.localize(abilities[button.dataset.attribute].label);
+        const config = {
+            event: event,
+            title: `${game.i18n.localize('APP_EXAMPLE.GENERAL.dualityRoll')}: ${this.actor.name}`,
+            headerTitle: game.i18n.format('APP_EXAMPLE.UI.Chat.dualityRoll.abilityCheckTitle', {
+                ability: abilityLabel
+            }),
+            effects: await game.system.api.data.actions.actionsTypes.base.getEffects(this.document),
+            roll: {
+                trait: button.dataset.attribute,
+                type: 'trait'
+            },
+            hasRoll: true,
+            actionType: 'action',
+            headerTitle: `${game.i18n.localize('APP_EXAMPLE.GENERAL.dualityRoll')}: ${this.actor.name}`,
+            title: game.i18n.format('APP_EXAMPLE.UI.Chat.dualityRoll.abilityCheckTitle', {
+                ability: abilityLabel
+            })
+        };
+        const result = await this.document.diceRoll(config);
+        if (!result) return;
+
+        /* This could be avoided by baking config.costs into config.resourceUpdates. Didn't feel like messing with it at the time */
+        const costResources =
+            result.costs?.filter(x => x.enabled).map(cost => ({ ...cost, value: -cost.value, total: -cost.total })) ||
+            {};
+        config.resourceUpdates.addResources(costResources);
+        await config.resourceUpdates.updateResources();
+    }
+
+    //TODO: redo toggleEquipItem method
+
+    /**
+     * Toggles the equipped state of an item (armor or weapon).
+     * @type {ApplicationClickAction}
+     */
+    static async #toggleEquipItem(_event, button) {
+        const item = await getDocFromElement(button);
+        if (!item) return;
+        if (item.system.equipped) {
+            await item.update({ 'system.equipped': false });
+            return;
+        }
+
+        switch (item.type) {
+            case 'armor':
+                const currentArmor = this.document.system.armor;
+                if (currentArmor) {
+                    await currentArmor.update({ 'system.equipped': false });
+                }
+
+                await item.update({ 'system.equipped': true });
+                break;
+            case 'weapon':
+                if (this.document.effects.find(x => !x.disabled && x.type === 'beastform')) {
+                    return ui.notifications.warn(
+                        game.i18n.localize('APP_EXAMPLE.UI.Notifications.beastformEquipWeapon')
+                    );
+                }
+
+                await this.document.system.constructor.unequipBeforeEquip.bind(this.document.system)(item);
+
+                await item.update({ 'system.equipped': true });
+                break;
+        }
+    }
+
+    /**
+     * Toggles the current view of the character's loadout display.
+     * @type {ApplicationClickAction}
+     */
+    static async #toggleLoadoutView(_, button) {
+        const newAbilityView = button.dataset.value === 'true';
+        await game.user.setFlag(CONFIG.DH.id, CONFIG.DH.FLAGS.displayDomainCardsAsCard, newAbilityView);
+        this.render();
+    }
+
+    /**
+     * Toggles hitpoint resource value.
+     * @type {ApplicationClickAction}
+     */
+    static async #toggleHitPoints(_, button) {
+        const hitPointsValue = Number.parseInt(button.dataset.value);
+        const newValue =
+            this.document.system.resources.hitPoints.value >= hitPointsValue ? hitPointsValue - 1 : hitPointsValue;
+        await this.document.update({ 'system.resources.hitPoints.value': newValue });
+    }
+
+    /**
+     * Toggles stress resource value.
+     * @type {ApplicationClickAction}
+     */
+    static async #toggleStress(_, button) {
+        const StressValue = Number.parseInt(button.dataset.value);
+        const newValue = this.document.system.resources.stress.value >= StressValue ? StressValue - 1 : StressValue;
+        await this.document.update({ 'system.resources.stress.value': newValue });
+    }
+
+    /**
+     * Toggles ArmorScore resource value.
+     * @type {ApplicationClickAction}
+     */
+    static async #toggleArmor(_, button, element) {
+        const ArmorValue = Number.parseInt(button.dataset.value);
+        const newValue = this.document.system.armor.system.marks.value >= ArmorValue ? ArmorValue - 1 : ArmorValue;
+        await this.document.system.armor.update({ 'system.marks.value': newValue });
+    }
+
+    /**
+     * Toggles a hope resource value.
+     * @type {ApplicationClickAction}
+     */
+    static async #toggleHope(_, button) {
+        const hopeValue = Number.parseInt(button.dataset.value);
+        const newValue = this.document.system.resources.hope.value >= hopeValue ? hopeValue - 1 : hopeValue;
+        await this.document.update({ 'system.resources.hope.value': newValue });
+    }
+
+    /**
+     * Toggles whether an item is stored in the vault.
+     * @type {ApplicationClickAction}
+     */
+    static async #toggleVault(_event, button) {
+        const doc = await getDocFromElement(button);
+        const { available } = this.document.system.loadoutSlot;
+        if (doc.system.inVault && !available && !doc.system.loadoutIgnore) {
+            return ui.notifications.warn(game.i18n.localize('APP_EXAMPLE.UI.Notifications.loadoutMaxReached'));
+        }
+
+        await doc?.update({ 'system.inVault': !doc.system.inVault });
+    }
+
+    /**
+     * Toggle the used state of a resource dice.
+     * @type {ApplicationClickAction}
+     */
+    static async #toggleResourceDice(event, target) {
+        const item = await getDocFromElement(target);
+
+        const { dice } = event.target.closest('.item-resource').dataset;
+        const diceState = item.system.resource.diceStates[dice];
+
+        await item.update({
+            [`system.resource.diceStates.${dice}.used`]: diceState ? !diceState.used : true
+        });
+    }
+
+    /**
+     * Handle the roll values of resource dice.
+     * @type {ApplicationClickAction}
+     */
+    static async #handleResourceDice(_, target) {
+        const item = await getDocFromElement(target);
+        if (!item) return;
+
+        const rollValues = await game.system.api.applications.dialogs.ResourceDiceDialog.create(item, this.document);
+        if (!rollValues) return;
+
+        await item.update({
+            'system.resource.diceStates': rollValues.reduce((acc, state, index) => {
+                acc[index] = { value: state.value, used: state.used };
+                return acc;
+            }, {})
+        });
+    }
+
+    /** */
+    static #advanceResourceDie(_, target) {
+        this.updateResourceDie(target, true);
+    }
+
+    lowerResourceDie(event) {
+        event.preventDefault();
+        event.stopPropagation();
+        this.updateResourceDie(event.target, false);
+    }
+
+    async updateResourceDie(target, advance) {
+        const item = await getDocFromElement(target);
+        if (!item) return;
+
+        const advancedValue = item.system.resource.value + (advance ? 1 : -1);
+        await item.update({
+            'system.resource.value': Math.min(advancedValue, Number(item.system.resource.dieFaces.split('d')[1]))
+        });
+    }
+
+    /**
+     *
+     */
+    static async #cancelBeastform(_, target) {
+        const item = await getDocFromElement(target);
+        if (!item) return;
+        game.system.api.fields.ActionFields.BeastformField.handleActiveTransformations.call(item);
+    }
+
+    static async #viewParty(_, target) {
+        const parties = this.document.parties;
+        if (parties.size <= 1) {
+            parties.first()?.sheet.render({ force: true });
+            return;
+        }
+
+        const buttons = parties.map(p => {
+            const button = document.createElement('button');
+            button.type = 'button';
+            button.classList.add('plain');
+            const img = document.createElement('img');
+            img.src = p.img;
+            button.append(img);
+            const name = document.createElement('span');
+            name.textContent = p.name;
+            button.append(name);
+            button.addEventListener('click', () => {
+                p.sheet?.render({ force: true });
+                game.tooltip.dismissLockedTooltips();
+            });
+            return button;
+        });
+
+        const html = document.createElement('div');
+        html.classList.add('party-list');
+        html.append(...buttons);
+
+        game.tooltip.dismissLockedTooltips();
+        game.tooltip.activate(target, {
+            html,
+            locked: true
+        });
+    }
+
+    static async #toggleResourceManagement(event, button) {
+        event.stopPropagation();
+        const existingTooltip = document.body.querySelector('.locked-tooltip .resource-management-container');
+        if (existingTooltip) {
+            game.tooltip.dismissLockedTooltips();
+            return;
+        }
+
+        const extraResources = Object.values(CONFIG.DH.RESOURCE.character.all).reduce((acc, resource) => {
+            if (CONFIG.DH.RESOURCE.character.base[resource.id]) return acc;
+
+            const resourceData = this.document.system.resources[resource.id];
+            acc[resource.id] = {
+                id: resource.id,
+                label: game.i18n.localize(resource.label),
+                value: resourceData.value,
+                max: resourceData.max,
+                fullIcon: resource.images?.full ?? { value: 'fa-solid fa-circle', isIcon: true },
+                emptyIcon: resource.images?.empty ?? { value: 'fa-regular fa-circle', isIcon: true }
+            };
+
+            return acc;
+        }, {});
+
+        const html = document.createElement('div');
+        html.innerHTML = await foundry.applications.handlebars.renderTemplate(
+            `systems/app-example/templates/ui/tooltip/resourceManagement.hbs`,
+            {
+                resources: extraResources
+            }
+        );
+
+        const target = button.closest('.resource-section');
+
+        game.tooltip.dismissLockedTooltips();
+        game.tooltip.activate(target, {
+            html,
+            locked: true,
+            cssClass: 'bordered-tooltip',
+            direction: 'DOWN',
+            noOffset: true
+        });
+
+        const resourceManager = target.querySelector('.resource-manager');
+        resourceManager.classList.toggle('inverted');
+
+        Hooks.once(CONFIG.DH.HOOKS.hooksConfig.lockedTooltipDismissed, () => {
+            resourceManager.classList.toggle('inverted');
+        });
+
+        for (const element of html.querySelectorAll('.resource-value'))
+            element.addEventListener('click', this.onUpdateResource.bind(this));
+    }
+
+    async onUpdateResource(event) {
+        const target = event.target.closest('.resource-value');
+        const { resource, value: textValue } = target.dataset;
+
+        const inputValue = Number.parseInt(textValue);
+        const decreasing = inputValue <= this.document.system.resources[resource].value;
+        const value = decreasing ? inputValue - 1 : inputValue;
+        await this.document.update({ [`system.resources.${resource}.value`]: value }, { render: false });
+
+        /* Update resource symbols */
+        const section = target.closest('.resource-section');
+        for (const element of section.querySelectorAll('.resource-value')) {
+            const showFull = Number.parseInt(element.dataset.value) <= value;
+            element.querySelector('.full').classList.toggle('hidden', !showFull);
+            element.querySelector('.empty').classList.toggle('hidden', showFull);
+        }
+    }
+
+    /**
+     *  Open the downtime application.
+     * @type {ApplicationClickAction}
+     */
+    static useDowntime(_, button) {
+        new game.system.api.applications.dialogs.Downtime(this.document, button.dataset.type === 'shortRest').render({
+            force: true
+        });
+    }
+
+    /** @inheritdoc */
+    async _onDragStart(event) {
+        const inventoryItem = event.currentTarget.closest('.inventory-item');
+        if (inventoryItem) {
+            event.dataTransfer.setDragImage(inventoryItem.querySelector('img'), 60, 0);
+        }
+        super._onDragStart(event);
+    }
+
+    async _onDropItem(event, item) {
+        const setupCriticalItemTypes = ['class', 'subclass', 'ancestry', 'community'];
+        if (this.document.system.needsCharacterSetup && setupCriticalItemTypes.includes(item.type)) {
+            const confirmed = await foundry.applications.api.DialogV2.confirm({
+                window: {
+                    title: game.i18n.localize('APP_EXAMPLE.APPLICATIONS.CharacterCreation.setupSkipTitle')
+                },
+                content: game.i18n.localize('APP_EXAMPLE.APPLICATIONS.CharacterCreation.setupSkipContent')
+            });
+
+            if (!confirmed) return;
+        }
+
+        if (this.document.uuid === item.parent?.uuid) {
+            return super._onDropItem(event, item);
+        }
+
+        if (item.type === 'beastform') {
+            if (this.document.effects.find(x => x.type === 'beastform')) {
+                return ui.notifications.warn(
+                    game.i18n.localize('APP_EXAMPLE.UI.Notifications.beastformAlreadyApplied')
+                );
+            }
+
+            const itemData = item.toObject();
+            const data = await game.system.api.data.items.DHBeastform.getWildcardImage(this.document, itemData);
+            if (!data?.selectedImage) {
+                return;
+            } else if (data) {
+                if (data.usesDynamicToken) itemData.system.tokenRingImg = data.selectedImage;
+                else itemData.system.tokenImg = data.selectedImage;
+                return await this._onDropItemCreate(itemData);
+            }
+        }
+
+        // If this is a type that gets deleted, delete it first (but still defer to super)
+        const typesThatReplace = ['ancestry', 'community'];
+        if (typesThatReplace.includes(item.type)) {
+            await this.document.deleteEmbeddedDocuments(
+                'Item',
+                this.document.items.filter(x => x.type === item.type).map(x => x.id)
+            );
+        }
+
+        return super._onDropItem(event, item);
+    }
+
+    async _onDropItemCreate(itemData, event) {
+        itemData = itemData instanceof Array ? itemData : [itemData];
+        return this.document.createEmbeddedDocuments('Item', itemData);
+    }
+}

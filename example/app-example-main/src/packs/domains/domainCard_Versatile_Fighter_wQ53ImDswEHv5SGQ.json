@@ -1,0 +1,59 @@
+{
+  "name": "Versatile Fighter",
+  "img": "systems/app-example/assets/icons/domains/domain-card/blade.png",
+  "type": "domainCard",
+  "folder": "wWL9mV6i2EGX5xHS",
+  "system": {
+    "description": "<p class=\"Body-Foundation\">You can use a different character trait for an equipped weapon, rather than the trait the weapon calls for.</p><p class=\"Body-Foundation\">When you deal damage, you can <strong>mark a Stress</strong> to use the maximum result of one of your damage dice instead of rolling it.</p>",
+    "domain": "blade",
+    "recallCost": 1,
+    "level": 3,
+    "type": "ability",
+    "actions": {
+      "XAaygVE635axvBX7": {
+        "type": "effect",
+        "_id": "XAaygVE635axvBX7",
+        "systemPath": "actions",
+        "description": "<p class=\"Body-Foundation\">You can use a different character trait for an equipped weapon, rather than the trait the weapon calls for.</p><p class=\"Body-Foundation\">When you deal damage, you can <strong>mark a Stress</strong> to use the maximum result of one of your damage dice instead of rolling it.</p>",
+        "chatDisplay": true,
+        "actionType": "action",
+        "cost": [
+          {
+            "scalable": false,
+            "key": "stress",
+            "value": 1,
+            "step": null,
+            "consumeOnSuccess": false
+          }
+        ],
+        "uses": {
+          "value": null,
+          "max": "",
+          "recovery": null,
+          "consumeOnSuccess": false
+        },
+        "effects": [],
+        "target": {
+          "type": "any",
+          "amount": null
+        },
+        "name": "Mark a Stress",
+        "img": "icons/magic/control/silhouette-aura-energy.webp",
+        "range": ""
+      }
+    },
+    "attribution": {
+      "source": "app-example SRD",
+      "page": 121,
+      "artist": ""
+    }
+  },
+  "flags": {},
+  "_id": "wQ53ImDswEHv5SGQ",
+  "sort": 3400000,
+  "effects": [],
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!wQ53ImDswEHv5SGQ"
+}

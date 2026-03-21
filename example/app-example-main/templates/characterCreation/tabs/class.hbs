@@ -1,0 +1,24 @@
+<section
+    class='tab {{tabs.class.cssClass}} {{tabs.class.id}}'
+    data-tab='{{tabs.class.id}}'
+    data-group='{{tabs.class.group}}'
+>
+    <div class="main-selections-container">
+        <fieldset class="section-container">
+            <legend>{{localize "TYPES.Item.class"}}</legend>
+            <div class="selections-outer-container">
+                <div class="selections-container class-card">
+                    {{#> "systems/app-example/templates/components/card-preview.hbs" class }}
+                        {{localize "APP_EXAMPLE.APPLICATIONS.CharacterCreation.selectClass"}}
+                    {{/"systems/app-example/templates/components/card-preview.hbs"}}
+                </div>
+
+                <div class="selections-container subclass-card">
+                    {{#> "systems/app-example/templates/components/card-preview.hbs" subclass disabled=(not class.img) }}
+                        {{localize "APP_EXAMPLE.APPLICATIONS.CharacterCreation.selectSubclass"}}
+                    {{/"systems/app-example/templates/components/card-preview.hbs"}}
+                </div>
+            </div>
+        </fieldset>
+    </div>
+</section>

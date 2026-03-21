@@ -1,0 +1,36 @@
+{
+  "folder": "rkSdPu86ybLz6aKF",
+  "name": "Advanced Leather Armor",
+  "type": "armor",
+  "_id": "itSOp2GCyem0f7oM",
+  "img": "icons/equipment/chest/breastplate-layered-leather-blue.webp",
+  "system": {
+    "description": "",
+    "actions": {},
+    "attached": [],
+    "tier": 3,
+    "equipped": false,
+    "baseScore": 5,
+    "armorFeatures": [],
+    "marks": {
+      "value": 0
+    },
+    "baseThresholds": {
+      "major": 11,
+      "severe": 27
+    },
+    "attribution": {
+      "source": "app-example SRD",
+      "page": 57,
+      "artist": ""
+    }
+  },
+  "effects": [],
+  "sort": 0,
+  "ownership": {
+    "default": 0,
+    "FecEtPuoQh6MpjQ0": 3
+  },
+  "flags": {},
+  "_key": "!items!itSOp2GCyem0f7oM"
+}

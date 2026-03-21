@@ -1,0 +1,55 @@
+{
+  "name": "Paragon’s Chain",
+  "type": "loot",
+  "_id": "F4hoRfvVdZq5bhhI",
+  "img": "icons/equipment/neck/choker-chain-thin-gold.webp",
+  "system": {
+    "description": "<p>As a downtime move, you can meditate on an ideal or principle you hold dear and focus your will into this chain.</p><p>Once per long rest, you can spend a Hope to roll a d20 as your Hope Die for rolls that directly align with that principle.</p>",
+    "quantity": 1,
+    "actions": {
+      "esnUuqMcvyOvI6PV": {
+        "type": "effect",
+        "_id": "esnUuqMcvyOvI6PV",
+        "systemPath": "actions",
+        "description": "",
+        "chatDisplay": true,
+        "actionType": "action",
+        "cost": [
+          {
+            "key": "hope",
+            "value": 1,
+            "scalable": false,
+            "step": null
+          }
+        ],
+        "uses": {
+          "value": null,
+          "max": 1,
+          "recovery": "longRest"
+        },
+        "effects": [],
+        "target": {
+          "type": "any",
+          "amount": null
+        },
+        "name": "Use",
+        "img": "icons/equipment/neck/choker-chain-thin-gold.webp",
+        "range": ""
+      }
+    },
+    "attribution": {
+      "source": "app-example SRD",
+      "page": 59,
+      "artist": ""
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0,
+    "OFxauskoxcvVTVNA": 3
+  },
+  "flags": {},
+  "_key": "!items!F4hoRfvVdZq5bhhI"
+}

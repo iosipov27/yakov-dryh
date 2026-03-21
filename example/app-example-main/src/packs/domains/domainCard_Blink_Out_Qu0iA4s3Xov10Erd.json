@@ -1,0 +1,83 @@
+{
+  "name": "Blink Out",
+  "img": "systems/app-example/assets/icons/domains/domain-card/arcana.png",
+  "type": "domainCard",
+  "folder": "1e5Sn8OXxEQ57GSD",
+  "system": {
+    "description": "<p><p class=\"Body-Foundation\">Make a <tooltip category=\"rule\" class=\"tooltip-convert\" element=\"spellcast-roll\" nexus=\"app-example\"><strong>Spellcast Roll</strong></tooltip><strong> (12)</strong>. On a success, <strong>spend a </strong><tooltip category=\"rule\" class=\"tooltip-convert\" element=\"hope\" nexus=\"app-example\"><strong>Hope</strong></tooltip> to teleport to another point you can see within <tooltip category=\"rule\" class=\"tooltip-convert\" element=\"far\" nexus=\"app-example\">Far</tooltip> range. If any willing creatures are within <tooltip category=\"rule\" class=\"tooltip-convert\" element=\"very-close\" nexus=\"app-example\">Very Close</tooltip> range, <strong>spend an additional Hope</strong> for each creature to bring them with you.        </p></p>",
+    "domain": "arcana",
+    "recallCost": 1,
+    "level": 4,
+    "type": "spell",
+    "actions": {
+      "LsAdmSinOiNr9jH8": {
+        "type": "attack",
+        "_id": "LsAdmSinOiNr9jH8",
+        "systemPath": "actions",
+        "description": "<p>Make a <strong>Spellcast Roll (12)</strong>. On a success, <strong>spend a Hope</strong> to teleport to another point you can see within Far range. If any willing creatures are within Very Close range, <strong>spend an additional Hope</strong> for each creature to bring them with you.</p>",
+        "chatDisplay": true,
+        "actionType": "action",
+        "cost": [
+          {
+            "consumeOnSuccess": true,
+            "scalable": true,
+            "key": "hope",
+            "value": 1,
+            "step": null
+          }
+        ],
+        "uses": {
+          "value": null,
+          "max": "",
+          "recovery": null,
+          "consumeOnSuccess": false
+        },
+        "damage": {
+          "parts": [],
+          "includeBase": false
+        },
+        "target": {
+          "type": "any",
+          "amount": null
+        },
+        "effects": [],
+        "roll": {
+          "type": "spellcast",
+          "trait": null,
+          "difficulty": 12,
+          "bonus": null,
+          "advState": "neutral",
+          "diceRolling": {
+            "multiplier": "prof",
+            "flatMultiplier": 1,
+            "dice": "d6",
+            "compare": null,
+            "treshold": null
+          },
+          "useDefault": false
+        },
+        "save": {
+          "trait": null,
+          "difficulty": null,
+          "damageMod": "none"
+        },
+        "name": "Teleport",
+        "img": "icons/magic/symbols/runes-star-orange-purple.webp",
+        "range": "veryClose"
+      }
+    },
+    "attribution": {
+      "source": "app-example SRD",
+      "page": 119,
+      "artist": ""
+    }
+  },
+  "flags": {},
+  "_id": "Qu0iA4s3Xov10Erd",
+  "sort": 3400000,
+  "effects": [],
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!Qu0iA4s3Xov10Erd"
+}

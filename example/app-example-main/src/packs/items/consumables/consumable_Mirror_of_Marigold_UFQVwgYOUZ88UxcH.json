@@ -1,0 +1,59 @@
+{
+  "name": "Mirror of Marigold",
+  "type": "consumable",
+  "_id": "UFQVwgYOUZ88UxcH",
+  "img": "icons/commodities/treasure/token-silver-blue.webp",
+  "system": {
+    "description": "<p>When you take damage, you can spend a Hope to negate that damage, after which the mirror shatters.</p>",
+    "quantity": 1,
+    "actions": {
+      "EPN43cQmNC97cCw9": {
+        "type": "effect",
+        "_id": "EPN43cQmNC97cCw9",
+        "systemPath": "actions",
+        "description": "<p>When you take damage, you can spend a Hope to negate that damage, after which the mirror shatters.</p>",
+        "chatDisplay": true,
+        "actionType": "action",
+        "cost": [
+          {
+            "scalable": false,
+            "key": "quantity",
+            "value": 1,
+            "itemId": "UFQVwgYOUZ88UxcH",
+            "step": null,
+            "consumeOnSuccess": false
+          }
+        ],
+        "uses": {
+          "value": null,
+          "max": "",
+          "recovery": null
+        },
+        "effects": [],
+        "target": {
+          "type": "any",
+          "amount": null
+        },
+        "name": "Use",
+        "img": "icons/commodities/treasure/token-silver-blue.webp",
+        "range": ""
+      }
+    },
+    "consumeOnUse": true,
+    "destroyOnEmpty": true,
+    "attribution": {
+      "source": "app-example SRD",
+      "page": 62,
+      "artist": ""
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0,
+    "OFxauskoxcvVTVNA": 3
+  },
+  "flags": {},
+  "_key": "!items!UFQVwgYOUZ88UxcH"
+}

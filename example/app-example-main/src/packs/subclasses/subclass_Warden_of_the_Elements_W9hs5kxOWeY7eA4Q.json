@@ -1,0 +1,41 @@
+{
+  "name": "Warden of the Elements",
+  "type": "subclass",
+  "_id": "W9hs5kxOWeY7eA4Q",
+  "img": "icons/magic/nature/root-vines-face-glow-green.webp",
+  "system": {
+    "description": "<p>You wish to embody the natural elements of the wild.</p>",
+    "spellcastingTrait": "instinct",
+    "features": [
+      {
+        "type": "foundation",
+        "item": "Compendium.app-example.subclasses.Item.f37TTgCc0Q3Ih1A1"
+      },
+      {
+        "type": "specialization",
+        "item": "Compendium.app-example.subclasses.Item.2JH9NaOh69yN80Gw"
+      },
+      {
+        "type": "mastery",
+        "item": "Compendium.app-example.subclasses.Item.EFUJHrkTuyv8uA9l"
+      }
+    ],
+    "featureState": 1,
+    "isMulticlass": false,
+    "attribution": {
+      "source": "app-example SRD",
+      "page": 11,
+      "artist": ""
+    },
+    "linkedClass": "Compendium.app-example.classes.Item.ZNwUTCyGCEcidZFv"
+  },
+  "effects": [],
+  "folder": "AZWrSJzGXltzQhAJ",
+  "sort": 100000,
+  "ownership": {
+    "default": 0,
+    "LgnbNMLaxandgMQq": 3
+  },
+  "flags": {},
+  "_key": "!items!W9hs5kxOWeY7eA4Q"
+}

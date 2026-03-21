@@ -1,0 +1,59 @@
+{
+  "name": "Hopehold Flare",
+  "type": "consumable",
+  "_id": "EhaQCPJ8oiqpRIwB",
+  "img": "icons/commodities/tech/smoke-bomb-purple.webp",
+  "system": {
+    "description": "<p>When you use this flare, allies within Close range roll a d6 when they spend a Hope. On a result of 6, they gain the effect of that Hope without spending it. The flare lasts until the end of the scene.</p><p>@Template[type:emanation|range:c]</p>",
+    "quantity": 1,
+    "actions": {
+      "hTF2K4uWcrUypLbs": {
+        "type": "effect",
+        "_id": "hTF2K4uWcrUypLbs",
+        "systemPath": "actions",
+        "description": "<p>When you use this flare, allies within Close range roll a d6 when they spend a Hope. On a result of 6, they gain the effect of that Hope without spending it. The flare lasts until the end of the scene.</p><p>@Template[type:emanation|range:c]</p>",
+        "chatDisplay": true,
+        "actionType": "action",
+        "cost": [
+          {
+            "scalable": false,
+            "key": "quantity",
+            "value": 1,
+            "itemId": "EhaQCPJ8oiqpRIwB",
+            "step": null,
+            "consumeOnSuccess": false
+          }
+        ],
+        "uses": {
+          "value": null,
+          "max": "",
+          "recovery": null
+        },
+        "effects": [],
+        "target": {
+          "type": "any",
+          "amount": null
+        },
+        "name": "Use",
+        "img": "icons/commodities/tech/smoke-bomb-purple.webp",
+        "range": ""
+      }
+    },
+    "consumeOnUse": true,
+    "destroyOnEmpty": true,
+    "attribution": {
+      "source": "app-example SRD",
+      "page": 61,
+      "artist": ""
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0,
+    "OFxauskoxcvVTVNA": 3
+  },
+  "flags": {},
+  "_key": "!items!EhaQCPJ8oiqpRIwB"
+}

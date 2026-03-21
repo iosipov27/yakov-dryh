@@ -1,0 +1,25 @@
+{
+  "name": "Homing Compasses",
+  "type": "loot",
+  "_id": "yrAGYlDyoe4OYl7d",
+  "img": "icons/tools/navigation/compass-worn-copper.webp",
+  "system": {
+    "description": "<p>These two compasses point toward each other no matter how far apart they are.</p>",
+    "quantity": 1,
+    "actions": {},
+    "attribution": {
+      "source": "app-example SRD",
+      "page": 58,
+      "artist": ""
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0,
+    "OFxauskoxcvVTVNA": 3
+  },
+  "flags": {},
+  "_key": "!items!yrAGYlDyoe4OYl7d"
+}

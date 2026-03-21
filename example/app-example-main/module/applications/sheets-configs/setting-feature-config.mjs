@@ -1,0 +1,254 @@
+import { actionsTypes } from '../../data/action/_module.mjs';
+import ActionSettingsConfig from './action-settings-config.mjs';
+
+const { HandlebarsApplicationMixin, ApplicationV2 } = foundry.applications.api;
+
+export default class SettingFeatureConfig extends HandlebarsApplicationMixin(ApplicationV2) {
+    constructor(configTitle, move, movePath, settings, optionalParts, options) {
+        super(options);
+
+        this.configTitle = configTitle;
+        this.move = move;
+
+        this.movePath = movePath;
+        this.actionsPath = `${movePath}.actions`;
+        this.settings = settings;
+
+        const { hasIcon, hasEffects } = optionalParts;
+        this.hasIcon = hasIcon;
+        this.hasEffects = hasEffects;
+    }
+
+    get title() {
+        return this.configTitle;
+    }
+
+    static DEFAULT_OPTIONS = {
+        tag: 'form',
+        classes: ['app-example', 'setting', 'dh-style'],
+        position: { width: 440, height: 'auto' },
+        window: {
+            icon: 'fa-solid fa-gears'
+        },
+        actions: {
+            editImage: this.onEditImage,
+            addItem: this.addItem,
+            editItem: this.editItem,
+            removeItem: this.removeItem,
+            addEffect: this.addEffect,
+            resetMoves: this.resetMoves,
+            saveForm: this.saveForm
+        },
+        form: { handler: this.updateData, submitOnChange: true, closeOnSubmit: false }
+    };
+
+    static PARTS = {
+        header: { template: 'systems/app-example/templates/settings/downtime-config/header.hbs' },
+        tabs: { template: 'systems/app-example/templates/sheets/global/tabs/tab-navigation.hbs' },
+        main: { template: 'systems/app-example/templates/settings/downtime-config/main.hbs' },
+        actions: { template: 'systems/app-example/templates/settings/downtime-config/actions.hbs' },
+        effects: { template: 'systems/app-example/templates/settings/downtime-config/effects.hbs' },
+        footer: { template: 'systems/app-example/templates/settings/downtime-config/footer.hbs' }
+    };
+
+    /** @inheritdoc */
+    static TABS = {
+        primary: {
+            tabs: [{ id: 'main' }, { id: 'actions' }, { id: 'effects' }],
+            initial: 'main',
+            labelPrefix: 'APP_EXAMPLE.GENERAL.Tabs'
+        }
+    };
+
+    async _prepareContext(_options) {
+        const context = await super._prepareContext(_options);
+        context.tabs = this._filterTabs(context.tabs);
+        context.hasIcon = this.hasIcon;
+        context.hasEffects = this.hasEffects;
+        context.move = this.move;
+        context.move.enrichedDescription = await foundry.applications.ux.TextEditor.enrichHTML(
+            context.move.description
+        );
+
+        return context;
+    }
+
+    static async updateData(_event, _element, formData) {
+        const data = foundry.utils.expandObject(formData.object);
+        await this.updateMove({
+            [`${this.movePath}`]: data
+        });
+
+        this.render();
+    }
+
+    static async saveForm() {
+        this.close({ submitted: true });
+    }
+
+    static onEditImage() {
+        const fp = new foundry.applications.apps.FilePicker.implementation({
+            current: this.img,
+            type: 'image',
+            callback: async path => {
+                this.move.img = path;
+                this.render();
+            },
+            top: this.position.top + 40,
+            left: this.position.left + 10
+        });
+        return fp.browse();
+    }
+
+    async selectActionType() {
+        return (
+            (await foundry.applications.api.DialogV2.input({
+                window: { title: game.i18n.localize('APP_EXAMPLE.CONFIG.SelectAction.selectType') },
+                position: { width: 300 },
+                classes: ['app-example', 'dh-style'],
+                content: await foundry.applications.handlebars.renderTemplate(
+                    'systems/app-example/templates/actionTypes/actionType.hbs',
+                    { types: CONFIG.DH.ACTIONS.actionTypes }
+                ),
+                ok: {
+                    label: game.i18n.format('DOCUMENT.Create', {
+                        type: game.i18n.localize('APP_EXAMPLE.GENERAL.Action.single')
+                    })
+                }
+            })) ?? {}
+        );
+    }
+
+    static async addItem() {
+        const { type: actionType } = await this.selectActionType();
+        if (!actionType) return;
+
+        const cls = actionsTypes[actionType] ?? actionsTypes.attack,
+            action = new cls(
+                {
+                    type: actionType,
+                    name: game.i18n.localize(CONFIG.DH.ACTIONS.actionTypes[actionType].name),
+                    img: 'icons/magic/life/cross-worn-green.webp',
+                    actionType: 'action',
+                    systemPath: this.actionsPath
+                },
+                {
+                    parent: this.settings
+                }
+            );
+
+        await this.updateMove({ [`${this.actionsPath}.${action.id}`]: action });
+        this.render();
+    }
+
+    static async editItem(_, target) {
+        const { type, id } = target.dataset;
+        if (type === 'effect') {
+            const effectIndex = this.move.effects.findIndex(x => x.id === id);
+            const effect = this.move.effects[effectIndex];
+            const updatedEffect =
+                await game.system.api.applications.sheetConfigs.SettingActiveEffectConfig.configure(effect);
+            if (!updatedEffect) return;
+
+            await this.updateMove({
+                [`${this.movePath}.effects`]: this.move.effects.reduce((acc, effect, index) => {
+                    acc.push(index === effectIndex ? { ...updatedEffect, id: effect.id } : effect);
+                    return acc;
+                }, [])
+            });
+            this.render();
+        } else {
+            const action = this.move.actions.get(id);
+            await new ActionSettingsConfig(action, this.move.effects, async (updatedMove, effectData, deleteEffect) => {
+                let updatedEffects = null;
+                if (effectData) {
+                    const currentEffects = foundry.utils.getProperty(this.settings, `${this.movePath}.effects`);
+                    const existingEffectIndex = currentEffects.findIndex(x => x.id === effectData.id);
+
+                    updatedEffects = deleteEffect
+                        ? currentEffects.filter(x => x.id !== effectData.id)
+                        : existingEffectIndex === -1
+                          ? [...currentEffects, effectData]
+                          : currentEffects.with(existingEffectIndex, effectData);
+                    await this.updateMove({
+                        [`${this.movePath}.effects`]: updatedEffects
+                    });
+                }
+
+                await this.updateMove({ [`${this.actionsPath}.${id}`]: updatedMove });
+
+                this.render();
+                return updatedEffects;
+            }).render(true);
+        }
+    }
+
+    static async removeItem(_, target) {
+        const { type, id } = target.dataset;
+        if (type === 'effect') {
+            const move = foundry.utils.getProperty(this.settings, this.movePath);
+            for (const action of move.actions) {
+                const remainingEffects = action.effects.filter(x => x._id !== id);
+                if (action.effects.length !== remainingEffects.length) {
+                    await action.update({
+                        effects: remainingEffects.map(x => {
+                            const { _id, ...rest } = x;
+                            return { ...rest, _id: _id };
+                        })
+                    });
+                }
+            }
+            await this.updateMove({
+                [this.movePath]: {
+                    effects: move.effects.filter(x => x.id !== id),
+                    actions: move.actions
+                }
+            });
+        } else {
+            await this.updateMove({ [`${this.actionsPath}.-=${target.dataset.id}`]: null });
+        }
+
+        this.render();
+    }
+
+    static async addEffect() {
+        const currentEffects = foundry.utils.getProperty(this.settings, `${this.movePath}.effects`);
+
+        await this.updateMove({
+            [`${this.movePath}.effects`]: [
+                ...currentEffects,
+                game.system.api.data.activeEffects.BaseEffect.getDefaultObject()
+            ]
+        });
+        this.render();
+    }
+
+    async updateMove(update) {
+        await this.settings.updateSource(update);
+        this.move = foundry.utils.getProperty(this.settings, this.movePath);
+    }
+
+    static resetMoves() {}
+
+    _filterTabs(tabs) {
+        return this.hasEffects
+            ? tabs
+            : Object.keys(tabs).reduce((acc, key) => {
+                  if (key !== 'effects') acc[key] = tabs[key];
+                  return acc;
+              }, {});
+    }
+
+    /** @override */
+    _onClose(options = {}) {
+        if (!options.submitted) this.move = null;
+    }
+
+    static async configure(configTitle, move, movePath, settings, optionalParts, options = {}) {
+        return new Promise(resolve => {
+            const app = new this(configTitle, move, movePath, settings, optionalParts, options);
+            app.addEventListener('close', () => resolve(app.move), { once: true });
+            app.render({ force: true });
+        });
+    }
+}

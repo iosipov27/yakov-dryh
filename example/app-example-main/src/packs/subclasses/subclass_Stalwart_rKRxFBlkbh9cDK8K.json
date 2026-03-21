@@ -1,0 +1,53 @@
+{
+  "folder": "WMlU3baiUdMgfuak",
+  "name": "Stalwart",
+  "type": "subclass",
+  "_id": "rKRxFBlkbh9cDK8K",
+  "img": "icons/magic/holy/barrier-shield-winged-blue.webp",
+  "system": {
+    "description": "<p>You wish to take heavy blows and keep fighting</p>",
+    "spellcastingTrait": null,
+    "features": [
+      {
+        "type": "foundation",
+        "item": "Compendium.app-example.subclasses.Item.WBiFZaYNoQNhysmN"
+      },
+      {
+        "type": "foundation",
+        "item": "Compendium.app-example.subclasses.Item.7AVRNyBcd1Nffjtn"
+      },
+      {
+        "type": "specialization",
+        "item": "Compendium.app-example.subclasses.Item.4qP7bNyxVHBmr4Rb"
+      },
+      {
+        "type": "specialization",
+        "item": "Compendium.app-example.subclasses.Item.G54qY96XK62hgoK9"
+      },
+      {
+        "type": "mastery",
+        "item": "Compendium.app-example.subclasses.Item.866b2jjyzXP8nPRQ"
+      },
+      {
+        "type": "mastery",
+        "item": "Compendium.app-example.subclasses.Item.hd7UeBPr86Mz21Pe"
+      }
+    ],
+    "featureState": 1,
+    "isMulticlass": false,
+    "attribution": {
+      "source": "app-example SRD",
+      "page": 16,
+      "artist": ""
+    },
+    "linkedClass": "Compendium.app-example.classes.Item.nRAyoC0fOzXPDa4z"
+  },
+  "effects": [],
+  "sort": 0,
+  "ownership": {
+    "default": 0,
+    "LgnbNMLaxandgMQq": 3
+  },
+  "flags": {},
+  "_key": "!items!rKRxFBlkbh9cDK8K"
+}

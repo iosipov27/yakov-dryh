@@ -1,0 +1,238 @@
+import { DhCountdown } from '../../data/countdowns.mjs';
+import { waitForDiceSoNice } from '../../helpers/utils.mjs';
+import { emitAsGM, GMUpdateEvent, RefreshType, socketEvent } from '../../systemRegistration/socket.mjs';
+
+const { HandlebarsApplicationMixin, ApplicationV2 } = foundry.applications.api;
+
+export default class CountdownEdit extends HandlebarsApplicationMixin(ApplicationV2) {
+    constructor() {
+        super();
+
+        this.data = game.settings.get(CONFIG.DH.id, CONFIG.DH.SETTINGS.gameSettings.Countdowns);
+        this.editingCountdowns = new Set();
+        this.currentEditCountdown = null;
+        this.hideNewCountdowns = false;
+    }
+
+    static DEFAULT_OPTIONS = {
+        classes: ['app-example', 'dialog', 'dh-style', 'countdown-edit'],
+        tag: 'form',
+        position: { width: 600 },
+        window: {
+            title: 'APP_EXAMPLE.APPLICATIONS.CountdownEdit.title',
+            icon: 'fa-solid fa-clock-rotate-left'
+        },
+        actions: {
+            addCountdown: CountdownEdit.#addCountdown,
+            toggleCountdownEdit: CountdownEdit.#toggleCountdownEdit,
+            editCountdownImage: CountdownEdit.#editCountdownImage,
+            editCountdownOwnership: CountdownEdit.#editCountdownOwnership,
+            randomiseCountdownStart: CountdownEdit.#randomiseCountdownStart,
+            removeCountdown: CountdownEdit.#removeCountdown
+        },
+        form: { handler: this.updateData, submitOnChange: true }
+    };
+
+    static PARTS = {
+        countdowns: {
+            template: 'systems/app-example/templates/ui/countdown-edit.hbs',
+            scrollable: ['.expanded-view', '.edit-content']
+        }
+    };
+
+    async _prepareContext(_options) {
+        const context = await super._prepareContext(_options);
+        context.isGM = game.user.isGM;
+        context.ownershipDefaultOptions = CONFIG.DH.GENERAL.basicOwnershiplevels;
+        context.defaultOwnership = this.data.defaultOwnership;
+        context.countdownBaseTypes = CONFIG.DH.GENERAL.countdownBaseTypes;
+        context.countdownProgressionTypes = CONFIG.DH.GENERAL.countdownProgressionTypes;
+        context.countdownLoopingTypes = CONFIG.DH.GENERAL.countdownLoopingTypes;
+        context.hideNewCountdowns = this.hideNewCountdowns;
+        context.countdowns = Object.keys(this.data.countdowns).reduce((acc, key) => {
+            const countdown = this.data.countdowns[key];
+            const isLooping = countdown.progress.looping !== CONFIG.DH.GENERAL.countdownLoopingTypes.noLooping;
+            const loopTooltip = isLooping
+                ? countdown.progress.looping === CONFIG.DH.GENERAL.countdownLoopingTypes.increasing.id
+                    ? 'APP_EXAMPLE.UI.Countdowns.increasingLoop'
+                    : countdown.progress.looping === CONFIG.DH.GENERAL.countdownLoopingTypes.decreasing.id
+                      ? 'APP_EXAMPLE.UI.Countdowns.decreasingLoop'
+                      : 'APP_EXAMPLE.UI.Countdowns.loop'
+                : null;
+            const randomizeValid = !new Roll(countdown.progress.startFormula ?? '').isDeterministic;
+            acc[key] = {
+                ...countdown,
+                typeName: game.i18n.localize(CONFIG.DH.GENERAL.countdownBaseTypes[countdown.type].label),
+                progress: {
+                    ...countdown.progress,
+                    typeName: game.i18n.localize(
+                        CONFIG.DH.GENERAL.countdownProgressionTypes[countdown.progress.type].label
+                    )
+                },
+                editing: this.editingCountdowns.has(key),
+                randomizeValid,
+                loopTooltip
+            };
+
+            return acc;
+        }, {});
+
+        return context;
+    }
+
+    /** @override */
+    async _postRender(_context, _options) {
+        if (this.currentEditCountdown) {
+            setTimeout(() => {
+                const input = this.element.querySelector(
+                    `.countdown-edit-container[data-id="${this.currentEditCountdown}"] input`
+                );
+                if (input) {
+                    input.select();
+                    this.currentEditCountdown = null;
+                }
+            }, 100);
+        }
+    }
+
+    canPerformEdit() {
+        if (game.user.isGM) return true;
+
+        if (!game.users.activeGM) {
+            ui.notifications.warn(game.i18n.localize('APP_EXAMPLE.UI.Notifications.gmRequired'));
+            return false;
+        }
+
+        return true;
+    }
+
+    async updateSetting(update) {
+        const noGM = !game.users.find(x => x.isGM && x.active);
+        if (noGM) {
+            ui.notifications.warn(game.i18n.localize('APP_EXAMPLE.UI.Notifications.gmRequired'));
+            return;
+        }
+
+        await this.data.updateSource(update);
+        await emitAsGM(GMUpdateEvent.UpdateCountdowns, this.gmSetSetting.bind(this.data), this.data, null, {
+            refreshType: RefreshType.Countdown
+        });
+
+        this.render();
+    }
+
+    static async updateData(_event, _, formData) {
+        const { hideNewCountdowns, ...settingsData } = foundry.utils.expandObject(formData.object);
+
+        // Sync current and max if max is changing and they were equal before
+        for (const [id, countdown] of Object.entries(settingsData.countdowns ?? {})) {
+            const existing = this.data.countdowns[id];
+            countdown.progress.current = this.getMatchingCurrentValue(
+                existing,
+                countdown.progress.start,
+                countdown.progress.current
+            );
+        }
+
+        this.hideNewCountdowns = hideNewCountdowns;
+        this.updateSetting(settingsData);
+    }
+
+    getMatchingCurrentValue(oldCount, newStart, newCurrent) {
+        const wasEqual = oldCount && oldCount.progress.current === oldCount.progress.start;
+        if (wasEqual && newStart !== oldCount.progress.start) {
+            return newStart;
+        } else {
+            return Math.min(newCurrent, newStart);
+        }
+    }
+
+    async gmSetSetting(data) {
+        await game.settings.set(CONFIG.DH.id, CONFIG.DH.SETTINGS.gameSettings.Countdowns, data),
+            game.socket.emit(`system.${CONFIG.DH.id}`, {
+                action: socketEvent.Refresh,
+                data: { refreshType: RefreshType.Countdown }
+            });
+        Hooks.callAll(socketEvent.Refresh, { refreshType: RefreshType.Countdown });
+    }
+
+    static #addCountdown() {
+        const id = foundry.utils.randomID();
+        this.editingCountdowns.add(id);
+        this.currentEditCountdown = id;
+        this.updateSetting({
+            [`countdowns.${id}`]: DhCountdown.defaultCountdown(null, this.hideNewCountdowns)
+        });
+    }
+
+    static #editCountdownImage(_, target) {
+        const countdown = this.data.countdowns[target.id];
+        const fp = new foundry.applications.apps.FilePicker.implementation({
+            current: countdown.img,
+            type: 'image',
+            callback: async path => this.updateSetting({ [`countdowns.${target.id}.img`]: path }),
+            top: this.position.top + 40,
+            left: this.position.left + 10
+        });
+        return fp.browse();
+    }
+
+    static #toggleCountdownEdit(_, button) {
+        const { countdownId } = button.dataset;
+
+        const isEditing = this.editingCountdowns.has(countdownId);
+        if (isEditing) this.editingCountdowns.delete(countdownId);
+        else {
+            this.editingCountdowns.add(countdownId);
+            this.currentEditCountdown = countdownId;
+        }
+
+        this.render();
+    }
+
+    static async #editCountdownOwnership(_, button) {
+        const countdown = this.data.countdowns[button.dataset.countdownId];
+        const data = await game.system.api.applications.dialogs.OwnershipSelection.configure(
+            countdown.name,
+            countdown.ownership,
+            this.data.defaultOwnership
+        );
+        if (!data) return;
+
+        this.updateSetting({ [`countdowns.${button.dataset.countdownId}`]: data });
+    }
+
+    static async #randomiseCountdownStart(_, button) {
+        const countdown = this.data.countdowns[button.dataset.countdownId];
+        const roll = await new Roll(countdown.progress.startFormula).roll();
+        const message = await roll.toMessage({ title: 'Countdown' });
+
+        await waitForDiceSoNice(message);
+        await this.updateSetting({
+            [`countdowns.${button.dataset.countdownId}.progress`]: {
+                start: roll.total,
+                current: this.getMatchingCurrentValue(countdown, roll.total, countdown.progress.current)
+            }
+        });
+        this.render();
+    }
+
+    static async #removeCountdown(event, button) {
+        const { countdownId } = button.dataset;
+
+        if (!event.shiftKey) {
+            const confirmed = await foundry.applications.api.DialogV2.confirm({
+                window: {
+                    title: game.i18n.localize('APP_EXAMPLE.APPLICATIONS.CountdownEdit.removeCountdownTitle')
+                },
+                content: game.i18n.format('APP_EXAMPLE.APPLICATIONS.CountdownEdit.removeCountdownText', {
+                    name: this.data.countdowns[countdownId].name
+                })
+            });
+            if (!confirmed) return;
+        }
+
+        if (this.editingCountdowns.has(countdownId)) this.editingCountdowns.delete(countdownId);
+        this.updateSetting({ [`countdowns.-=${countdownId}`]: null });
+    }
+}

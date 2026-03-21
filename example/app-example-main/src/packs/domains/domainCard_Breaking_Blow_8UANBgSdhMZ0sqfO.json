@@ -1,0 +1,101 @@
+{
+  "name": "Breaking Blow",
+  "img": "systems/app-example/assets/icons/domains/domain-card/bone.png",
+  "type": "domainCard",
+  "folder": "n7pgTBYSItMzCX0s",
+  "system": {
+    "description": "<p class=\"Body-Foundation\">When you make a successful attack, you can <strong>mark a Stress</strong> to make the next successful attack against that same target deal an extra <strong>2d12</strong> damage.</p>",
+    "domain": "bone",
+    "recallCost": 3,
+    "level": 8,
+    "type": "ability",
+    "actions": {
+      "aL83OMkU7hSQRlOA": {
+        "type": "effect",
+        "_id": "aL83OMkU7hSQRlOA",
+        "systemPath": "actions",
+        "description": "<p class=\"Body-Foundation\">When you make a successful attack, you can <strong>mark a Stress</strong> to make the next successful attack against that same target deal an extra <strong>2d12</strong> damage.</p>",
+        "chatDisplay": true,
+        "actionType": "action",
+        "cost": [
+          {
+            "scalable": false,
+            "key": "stress",
+            "value": 1,
+            "step": null,
+            "consumeOnSuccess": false
+          }
+        ],
+        "uses": {
+          "value": null,
+          "max": "",
+          "recovery": null,
+          "consumeOnSuccess": false
+        },
+        "effects": [
+          {
+            "_id": "ETIeXRAib3DFBHpX",
+            "onSave": false
+          }
+        ],
+        "target": {
+          "type": "any",
+          "amount": 1
+        },
+        "name": "Mark Stress",
+        "img": "icons/skills/wounds/bone-broken-knee-beam.webp",
+        "range": ""
+      }
+    },
+    "attribution": {
+      "source": "app-example SRD",
+      "page": 123,
+      "artist": ""
+    }
+  },
+  "flags": {},
+  "_id": "8UANBgSdhMZ0sqfO",
+  "sort": 3400000,
+  "effects": [
+    {
+      "name": "Breaking Blow",
+      "img": "icons/skills/wounds/bone-broken-knee-beam.webp",
+      "origin": "Compendium.app-example.domains.Item.8UANBgSdhMZ0sqfO",
+      "transfer": false,
+      "_id": "ETIeXRAib3DFBHpX",
+      "type": "base",
+      "system": {
+        "rangeDependence": {
+          "enabled": false,
+          "type": "withinRange",
+          "target": "hostile",
+          "range": "melee"
+        }
+      },
+      "changes": [],
+      "disabled": false,
+      "duration": {
+        "startTime": null,
+        "combat": null,
+        "seconds": null,
+        "rounds": null,
+        "turns": null,
+        "startRound": null,
+        "startTurn": null
+      },
+      "description": "<p class=\"Body-Foundation\">The next successful attack against this target deals an extra <strong>2d12</strong> damage.</p>",
+      "tint": "#ffffff",
+      "statuses": [],
+      "sort": 0,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null
+      },
+      "_key": "!items.effects!8UANBgSdhMZ0sqfO.ETIeXRAib3DFBHpX"
+    }
+  ],
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!8UANBgSdhMZ0sqfO"
+}

@@ -1,0 +1,32 @@
+@import '../../../utils/colors.less';
+@import '../../../utils/fonts.less';
+@import '../../../utils/mixin.less';
+
+.appTheme({
+    &.environment {
+        background-image: url('../assets/parchments/dh-parchment-dark.png');
+
+        .attribution-header-label {
+            background-image: url('../assets/parchments/dh-parchment-dark.png');
+        }
+    }
+}, {
+    &.environment {
+        background: url('../assets/parchments/dh-parchment-light.png');
+    }
+});
+
+.application.sheet.app-example.actor.dh-style.environment {
+    .tab {
+        flex: 1;
+        overflow-y: auto;
+        scrollbar-width: thin;
+        scrollbar-color: light-dark(@dark-blue, @golden) transparent;
+
+        &.active {
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+    }
+}

@@ -1,0 +1,163 @@
+{
+  "folder": "mV306wqqkeIDd9EE",
+  "name": "Shortsword",
+  "type": "weapon",
+  "_id": "cjGZpXCoshEqi1FI",
+  "img": "icons/weapons/swords/shortsword-guard-brass.webp",
+  "system": {
+    "description": "",
+    "actions": {},
+    "attached": [],
+    "tier": 1,
+    "equipped": false,
+    "secondary": true,
+    "burden": "oneHanded",
+    "weaponFeatures": [
+      {
+        "value": "paired",
+        "effectIds": [
+          "djNtNpasgNDRP8Dd"
+        ],
+        "actionIds": []
+      }
+    ],
+    "attack": {
+      "name": "Attack",
+      "img": "icons/skills/melee/blood-slash-foam-red.webp",
+      "_id": "VS5Gc43b6SmYuaVF",
+      "baseAction": true,
+      "systemPath": "attack",
+      "type": "attack",
+      "range": "melee",
+      "target": {
+        "type": "any",
+        "amount": 1
+      },
+      "roll": {
+        "trait": "agility",
+        "type": "attack",
+        "difficulty": null,
+        "bonus": null,
+        "advState": "neutral",
+        "diceRolling": {
+          "multiplier": "prof",
+          "flatMultiplier": 1,
+          "dice": "d6",
+          "compare": null,
+          "treshold": null
+        },
+        "useDefault": false
+      },
+      "damage": {
+        "parts": [
+          {
+            "value": {
+              "dice": "d8",
+              "bonus": null,
+              "multiplier": "prof",
+              "flatMultiplier": 1,
+              "custom": {
+                "enabled": false
+              }
+            },
+            "type": [
+              "physical"
+            ],
+            "applyTo": "hitPoints",
+            "resultBased": false,
+            "valueAlt": {
+              "multiplier": "prof",
+              "flatMultiplier": 1,
+              "dice": "d6",
+              "bonus": null,
+              "custom": {
+                "enabled": false
+              }
+            },
+            "base": false
+          }
+        ],
+        "includeBase": false
+      },
+      "description": "",
+      "chatDisplay": false,
+      "actionType": "action",
+      "cost": [],
+      "uses": {
+        "value": null,
+        "max": null,
+        "recovery": null
+      },
+      "effects": [],
+      "save": {
+        "trait": null,
+        "difficulty": null,
+        "damageMod": "none"
+      }
+    },
+    "rules": {
+      "attack": {
+        "roll": {
+          "trait": null
+        }
+      }
+    },
+    "attribution": {
+      "source": "app-example SRD",
+      "page": 52,
+      "artist": ""
+    }
+  },
+  "effects": [
+    {
+      "name": "Paired",
+      "description": "<p>Add this Secondary Weapon's tier + 1 to your primary weapon against targets within Melee range</p>",
+      "img": "icons/skills/melee/weapons-crossed-swords-yellow-teal.webp",
+      "changes": [
+        {
+          "key": "system.bonuses.damage.primaryWeapon.bonus",
+          "mode": 2,
+          "value": "ITEM.@system.tier + 1",
+          "priority": null
+        }
+      ],
+      "system": {
+        "rangeDependence": {
+          "enabled": true,
+          "range": "melee",
+          "target": "hostile",
+          "type": "withinRange"
+        }
+      },
+      "_id": "djNtNpasgNDRP8Dd",
+      "type": "base",
+      "disabled": false,
+      "duration": {
+        "startTime": null,
+        "combat": null,
+        "seconds": null,
+        "rounds": null,
+        "turns": null,
+        "startRound": null,
+        "startTurn": null
+      },
+      "origin": null,
+      "tint": "#ffffff",
+      "transfer": true,
+      "statuses": [],
+      "sort": 0,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null
+      },
+      "_key": "!items.effects!cjGZpXCoshEqi1FI.djNtNpasgNDRP8Dd"
+    }
+  ],
+  "sort": 0,
+  "ownership": {
+    "default": 0,
+    "FecEtPuoQh6MpjQ0": 3
+  },
+  "flags": {},
+  "_key": "!items!cjGZpXCoshEqi1FI"
+}

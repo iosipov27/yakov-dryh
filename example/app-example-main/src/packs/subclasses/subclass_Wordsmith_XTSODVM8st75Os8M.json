@@ -1,0 +1,45 @@
+{
+  "folder": "0DMzpFZB8A6vwpRX",
+  "name": "Wordsmith",
+  "type": "subclass",
+  "img": "icons/tools/scribal/ink-quill-red.webp",
+  "system": {
+    "description": "<p>You wish to use clever wordplay and captivate crowds.</p>",
+    "spellcastingTrait": "presence",
+    "features": [
+      {
+        "type": "foundation",
+        "item": "Compendium.app-example.subclasses.Item.Ce0sn0kqAw3PFe0k"
+      },
+      {
+        "type": "foundation",
+        "item": "Compendium.app-example.subclasses.Item.PCmYTX02JLzBpgml"
+      },
+      {
+        "type": "specialization",
+        "item": "Compendium.app-example.subclasses.Item.5bmB1YcxiJVNVXDM"
+      },
+      {
+        "type": "mastery",
+        "item": "Compendium.app-example.subclasses.Item.eCoEWkWuZPMZ9C6a"
+      }
+    ],
+    "featureState": 1,
+    "isMulticlass": false,
+    "attribution": {
+      "source": "app-example SRD",
+      "page": 9,
+      "artist": ""
+    },
+    "linkedClass": "Compendium.app-example.classes.Item.vegl3bFOq3pcFTWT"
+  },
+  "effects": [],
+  "ownership": {
+    "default": 0,
+    "LgnbNMLaxandgMQq": 3
+  },
+  "flags": {},
+  "_id": "XTSODVM8st75Os8M",
+  "sort": 200000,
+  "_key": "!items!XTSODVM8st75Os8M"
+}

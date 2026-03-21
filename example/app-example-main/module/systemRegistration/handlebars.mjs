@@ -1,0 +1,52 @@
+export const preloadHandlebarsTemplates = async function () {
+    foundry.applications.handlebars.loadTemplates({
+        'app-example.inventory-item-compact':
+            'systems/app-example/templates/sheets/global/partials/inventory-item-compact.hbs',
+        'app-example.inventory-items':
+            'systems/app-example/templates/sheets/global/partials/inventory-fieldset-items-V2.hbs',
+        'app-example.inventory-item': 'systems/app-example/templates/sheets/global/partials/inventory-item-V2.hbs'
+    });
+    return foundry.applications.handlebars.loadTemplates([
+        'templates/generic/tab-navigation.hbs',
+        'systems/app-example/templates/sheets/global/tabs/tab-navigation.hbs',
+        'systems/app-example/templates/sheets/global/partials/action-item.hbs',
+        'systems/app-example/templates/sheets/global/partials/domain-card-item.hbs',
+        'systems/app-example/templates/sheets/global/partials/item-resource.hbs',
+        'systems/app-example/templates/sheets/global/partials/resource-section/resource-section.hbs',
+        'systems/app-example/templates/sheets/global/partials/resource-section/simple.hbs',
+        'systems/app-example/templates/sheets/global/partials/resource-section/dice-value.hbs',
+        'systems/app-example/templates/sheets/global/partials/resource-section/die.hbs',
+        'systems/app-example/templates/sheets/global/partials/resource-bar.hbs',
+        'systems/app-example/templates/sheets/global/partials/feature-section-item.hbs',
+        'systems/app-example/templates/sheets/global/partials/item-tags.hbs',
+        'systems/app-example/templates/components/card-preview.hbs',
+        'systems/app-example/templates/levelup/parts/selectable-card-preview.hbs',
+        'systems/app-example/templates/ui/combatTracker/combatTrackerSection.hbs',
+        'systems/app-example/templates/actionTypes/damage.hbs',
+        'systems/app-example/templates/actionTypes/resource.hbs',
+        'systems/app-example/templates/actionTypes/macro.hbs',
+        'systems/app-example/templates/actionTypes/uses.hbs',
+        'systems/app-example/templates/actionTypes/roll.hbs',
+        'systems/app-example/templates/actionTypes/save.hbs',
+        'systems/app-example/templates/actionTypes/cost.hbs',
+        'systems/app-example/templates/actionTypes/range-target.hbs',
+        'systems/app-example/templates/actionTypes/effect.hbs',
+        'systems/app-example/templates/actionTypes/beastform.hbs',
+        'systems/app-example/templates/actionTypes/countdown.hbs',
+        'systems/app-example/templates/actionTypes/summon.hbs',
+        'systems/app-example/templates/actionTypes/transform.hbs',
+        'systems/app-example/templates/settings/components/settings-item-line.hbs',
+        'systems/app-example/templates/ui/tooltip/parts/tooltipChips.hbs',
+        'systems/app-example/templates/ui/tooltip/parts/tooltipTags.hbs',
+        'systems/app-example/templates/dialogs/downtime/activities.hbs',
+        'systems/app-example/templates/dialogs/dice-roll/costSelection.hbs',
+        'systems/app-example/templates/ui/chat/parts/roll-part.hbs',
+        'systems/app-example/templates/ui/chat/parts/description-part.hbs',
+        'systems/app-example/templates/ui/chat/parts/damage-part.hbs',
+        'systems/app-example/templates/ui/chat/parts/target-part.hbs',
+        'systems/app-example/templates/ui/chat/parts/button-part.hbs',
+        'systems/app-example/templates/ui/itemBrowser/itemContainer.hbs',
+        'systems/app-example/templates/scene/dh-config.hbs',
+        'systems/app-example/templates/settings/appearance-settings/diceSoNiceTab.hbs'
+    ]);
+};

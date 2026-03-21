@@ -1,0 +1,131 @@
+{
+  "name": "Forest Sprites",
+  "img": "systems/app-example/assets/icons/domains/domain-card/sage.png",
+  "type": "domainCard",
+  "folder": "qY4Zqc1Ch6p317uK",
+  "system": {
+    "description": "<p class=\"Body\">Make a <strong>Spellcast Roll (13)</strong>. On a success, <strong>spend any number of Hope</strong> to create an equal number of small forest sprites who appear at points you choose within Far range, providing the following benefits:</p><ul><li class=\"vertical-card-list\"><p>Your allies gain a +3 bonus to attack rolls against adversaries within Melee range of a sprite.</p></li><li class=\"vertical-card-list\"><p>An ally who marks an Armor Slot while within Melee range of a sprite can mark an additional Armor Slot.</p></li></ul><p class=\"Body\">A sprite vanishes after granting a benefit or taking any damage.</p>",
+    "domain": "sage",
+    "recallCost": 2,
+    "level": 8,
+    "type": "spell",
+    "actions": {
+      "TVepLgRNQLhZWDu6": {
+        "type": "attack",
+        "_id": "TVepLgRNQLhZWDu6",
+        "systemPath": "actions",
+        "description": "<p class=\"Body\">Make a <strong>Spellcast Roll (13)</strong>. On a success, <strong>spend any number of Hope</strong> to create an equal number of small forest sprites who appear at points you choose within Far range, providing the following benefits:</p><ul class=\"\"><li class=\"vertical-card-list\"><p>Your allies gain a +3 bonus to attack rolls against adversaries within Melee range of a sprite.</p></li><li class=\"vertical-card-list\"><p>An ally who marks an Armor Slot while within Melee range of a sprite can mark an additional Armor Slot.</p></li></ul><p class=\"Body\">A sprite vanishes after granting a benefit or taking any damage.</p>",
+        "chatDisplay": true,
+        "actionType": "action",
+        "cost": [
+          {
+            "consumeOnSuccess": true,
+            "scalable": true,
+            "key": "hope",
+            "value": 1,
+            "step": 1
+          }
+        ],
+        "uses": {
+          "value": null,
+          "max": "",
+          "recovery": null
+        },
+        "damage": {
+          "parts": [],
+          "includeBase": false
+        },
+        "target": {
+          "type": "any",
+          "amount": null
+        },
+        "effects": [
+          {
+            "_id": "SuiUFAPyB37Qr6sO",
+            "onSave": false
+          }
+        ],
+        "roll": {
+          "type": "spellcast",
+          "trait": null,
+          "difficulty": 13,
+          "bonus": null,
+          "advState": "neutral",
+          "diceRolling": {
+            "multiplier": "prof",
+            "flatMultiplier": 1,
+            "dice": "d6",
+            "compare": null,
+            "treshold": null
+          },
+          "useDefault": false
+        },
+        "save": {
+          "trait": null,
+          "difficulty": null,
+          "damageMod": "none"
+        },
+        "name": "Cast",
+        "img": "icons/creatures/magical/humanoid-silhouette-dashing-blue.webp",
+        "range": ""
+      }
+    },
+    "attribution": {
+      "source": "app-example SRD",
+      "page": 131,
+      "artist": ""
+    }
+  },
+  "flags": {},
+  "_id": "JrkUMTzaFmQNBHVm",
+  "sort": 3400000,
+  "effects": [
+    {
+      "name": "Sprite",
+      "img": "systems/app-example/assets/icons/domains/domain-card/sage.png",
+      "origin": "Compendium.app-example.domains.Item.JrkUMTzaFmQNBHVm",
+      "transfer": false,
+      "_id": "SuiUFAPyB37Qr6sO",
+      "type": "base",
+      "system": {
+        "rangeDependence": {
+          "enabled": false,
+          "type": "withinRange",
+          "target": "hostile",
+          "range": "melee"
+        }
+      },
+      "changes": [
+        {
+          "key": "system.bonuses.roll.attack.bonus",
+          "mode": 2,
+          "value": "+3",
+          "priority": null
+        }
+      ],
+      "disabled": false,
+      "duration": {
+        "startTime": null,
+        "combat": null,
+        "seconds": null,
+        "rounds": null,
+        "turns": null,
+        "startRound": null,
+        "startTurn": null
+      },
+      "description": "<p><span class=\"vertical-card-list\" style=\"box-sizing:border-box;margin:0px 0px 0.25rem;scrollbar-width:thin;scrollbar-color:rgb(93, 20, 43) rgba(0, 0, 0, 0);font-family:Montserrat, sans-serif\">Gain a +3 bonus to attack rolls against adversaries within Melee range of a sprite.</p><p></p><p><span class=\"vertical-card-list\" style=\"box-sizing:border-box;margin:0px 0px 0.25rem;scrollbar-width:thin;scrollbar-color:rgb(93, 20, 43) rgba(0, 0, 0, 0);font-family:Montserrat, sans-serif\">An ally who marks an Armor Slot while within Melee range of a sprite can mark an additional Armor Slot.</p><p></p><p><span class=\"Body\" style=\"box-sizing:border-box;margin:0px;scrollbar-width:thin;scrollbar-color:rgb(93, 20, 43) rgba(0, 0, 0, 0);font-family:Montserrat, sans-serif;color:rgb(239, 230, 216);font-size:14px;font-style:normal;font-variant-ligatures:normal;font-variant-caps:normal;font-weight:400;letter-spacing:normal;orphans:2;text-align:start;text-indent:0px;text-transform:none;widows:2;word-spacing:0px;-webkit-text-stroke-width:0px;white-space:normal;background-color:rgba(24, 22, 46, 0.376);text-decoration-thickness:initial;text-decoration-style:initial;text-decoration-color:initial\">A sprite vanishes after granting a benefit or taking any damage.</p>",
+      "tint": "#ffffff",
+      "statuses": [],
+      "sort": 0,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null
+      },
+      "_key": "!items.effects!JrkUMTzaFmQNBHVm.SuiUFAPyB37Qr6sO"
+    }
+  ],
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!JrkUMTzaFmQNBHVm"
+}

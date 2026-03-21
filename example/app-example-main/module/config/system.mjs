@@ -1,0 +1,32 @@
+import * as GENERAL from './generalConfig.mjs';
+import * as DOMAIN from './domainConfig.mjs';
+import * as ENCOUNTER from './encounterConfig.mjs';
+import * as ACTOR from './actorConfig.mjs';
+import * as RESOURCE from './resourceConfig.mjs';
+import * as ITEM from './itemConfig.mjs';
+import * as SETTINGS from './settingsConfig.mjs';
+import * as EFFECTS from './effectConfig.mjs';
+import * as ACTIONS from './actionConfig.mjs';
+import * as FLAGS from './flagsConfig.mjs';
+import * as HOOKS from './hooksConfig.mjs';
+import * as TRIGGER from './triggerConfig.mjs';
+import * as ITEMBROWSER from './itemBrowserConfig.mjs';
+
+export const SYSTEM_ID = 'app-example';
+
+export const SYSTEM = {
+    id: SYSTEM_ID,
+    ENCOUNTER,
+    GENERAL,
+    DOMAIN,
+    ACTOR,
+    RESOURCE,
+    ITEM,
+    SETTINGS,
+    EFFECTS,
+    ACTIONS,
+    FLAGS,
+    HOOKS,
+    TRIGGER,
+    ITEMBROWSER
+};

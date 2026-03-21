@@ -1,0 +1,627 @@
+import { DhHomebrew } from '../../data/settings/_module.mjs';
+import { Resource } from '../../data/settings/Homebrew.mjs';
+import { slugify } from '../../helpers/utils.mjs';
+
+const { HandlebarsApplicationMixin, ApplicationV2 } = foundry.applications.api;
+
+export default class DhHomebrewSettings extends HandlebarsApplicationMixin(ApplicationV2) {
+    constructor() {
+        super({});
+
+        this.settings = new DhHomebrew(
+            game.settings.get(CONFIG.DH.id, CONFIG.DH.SETTINGS.gameSettings.Homebrew).toObject()
+        );
+
+        this.selected = this.#getDefaultAdversaryType();
+    }
+
+    #getDefaultAdversaryType = () => ({
+        domain: null,
+        adversaryType: null
+    });
+
+    get title() {
+        return game.i18n.localize('APP_EXAMPLE.SETTINGS.Menu.title');
+    }
+
+    static DEFAULT_OPTIONS = {
+        tag: 'form',
+        id: 'app-example-homebrew-settings',
+        classes: ['app-example', 'dh-style', 'dialog', 'setting', 'homebrew-settings'],
+        position: { width: '600', height: 'auto' },
+        window: {
+            icon: 'fa-solid fa-gears'
+        },
+        actions: {
+            editCurrencyIcon: this.changeCurrencyIcon,
+            addItem: this.addItem,
+            editItem: this.editItem,
+            removeItem: this.removeItem,
+            resetDowntimeMoves: this.resetDowntimeMoves,
+            resetItemFeatures: this.resetItemFeatures,
+            addDomain: this.addDomain,
+            toggleSelectedDomain: this.toggleSelectedDomain,
+            deleteDomain: this.deleteDomain,
+            addAdversaryType: this.addAdversaryType,
+            deleteAdversaryType: this.deleteAdversaryType,
+            selectAdversaryType: this.selectAdversaryType,
+            addResource: this.addResource,
+            removeResource: this.removeResource,
+            resetResourceImage: this.resetResourceImage,
+            save: this.save,
+            resetTokenSizes: this.resetTokenSizes,
+            reset: this.reset
+        },
+        form: { handler: this.updateData, submitOnChange: true }
+    };
+
+    static PARTS = {
+        tabs: { template: 'systems/app-example/templates/sheets/global/tabs/tab-navigation.hbs' },
+        settings: { template: 'systems/app-example/templates/settings/homebrew-settings/settings.hbs' },
+        domains: { template: 'systems/app-example/templates/settings/homebrew-settings/domains.hbs' },
+        types: { template: 'systems/app-example/templates/settings/homebrew-settings/types.hbs' },
+        resources: {
+            template: 'systems/app-example/templates/settings/homebrew-settings/resources.hbs',
+            scrollable: ['.resource-types-container']
+        },
+        itemTypes: { template: 'systems/app-example/templates/settings/homebrew-settings/itemFeatures.hbs' },
+        downtime: { template: 'systems/app-example/templates/settings/homebrew-settings/downtime.hbs' },
+        footer: { template: 'systems/app-example/templates/settings/homebrew-settings/footer.hbs' }
+    };
+
+    /** @inheritdoc */
+    static TABS = {
+        main: {
+            tabs: [
+                { id: 'settings' },
+                { id: 'domains' },
+                { id: 'types' },
+                { id: 'resources' },
+                { id: 'itemFeatures' },
+                { id: 'downtime' }
+            ],
+            initial: 'settings',
+            labelPrefix: 'APP_EXAMPLE.GENERAL.Tabs'
+        }
+    };
+
+    changeTab(tab, group, options) {
+        super.changeTab(tab, group, options);
+        this.selected = this.#getDefaultAdversaryType();
+
+        this.render();
+    }
+
+    _attachPartListeners(partId, htmlElement, options) {
+        super._attachPartListeners(partId, htmlElement, options);
+
+        for (const element of htmlElement.querySelectorAll('.path-field input'))
+            element.addEventListener('change', this.toggleResourceIsIcon.bind(this));
+    }
+
+    async _prepareContext(_options) {
+        const context = await super._prepareContext(_options);
+        context.settingFields = this.settings;
+        context.schemaFields = context.settingFields.schema.fields;
+
+        return context;
+    }
+
+    async _preparePartContext(partId, context) {
+        await super._preparePartContext(partId, context);
+
+        switch (partId) {
+            case 'domains':
+                const selectedDomain = this.selected.domain ? this.settings.domains[this.selected.domain] : null;
+                const enrichedDescription = selectedDomain
+                    ? await foundry.applications.ux.TextEditor.implementation.enrichHTML(selectedDomain.description)
+                    : null;
+
+                if (enrichedDescription !== null) context.selectedDomain = { ...selectedDomain, enrichedDescription };
+                context.configDomains = CONFIG.DH.DOMAIN.domains;
+                context.homebrewDomains = this.settings.domains;
+                break;
+            case 'types':
+                context.selectedAdversaryType = this.selected.adversaryType
+                    ? { id: this.selected.adversaryType, ...this.settings.adversaryTypes[this.selected.adversaryType] }
+                    : null;
+                break;
+            case 'resources':
+                break;
+            case 'downtime':
+                context.restOptions = {
+                    shortRest: CONFIG.DH.GENERAL.defaultRestOptions.shortRest(),
+                    longRest: CONFIG.DH.GENERAL.defaultRestOptions.longRest()
+                };
+                break;
+        }
+
+        return context;
+    }
+
+    static async updateData(_event, _element, formData) {
+        const updatedSettings = foundry.utils.expandObject(formData.object);
+
+        await this.settings.updateSource({
+            ...updatedSettings,
+            traitArray: Object.values(updatedSettings.traitArray)
+        });
+        this.render();
+    }
+
+    async toggleResourceIsIcon(event) {
+        const element = event.target.closest('.resource-icon-container');
+        const { actorType, resourceKey, imageKey } = element.dataset;
+
+        const current = this.settings.resources[actorType].resources[resourceKey].images[imageKey];
+        await this.settings.updateSource({
+            [`resources.${actorType}.resources.${resourceKey}.images.${imageKey}`]: {
+                isIcon: !current.isIcon,
+                value: ''
+            }
+        });
+
+        this.render();
+    }
+
+    static async resetResourceImage(_event, button) {
+        const element = button.closest('.resource-icon-container');
+        const { actorType, resourceKey, imageKey } = element.dataset;
+
+        await this.settings.updateSource({
+            [`resources.${actorType}.resources.${resourceKey}.images.${imageKey}`]:
+                Resource.getDefaultImageData(imageKey)
+        });
+
+        this.render();
+    }
+
+    static async changeCurrencyIcon(_, target) {
+        const type = target.dataset.currency;
+        const currentIcon = this.settings.currency[type].icon;
+        const icon = await foundry.applications.api.DialogV2.input({
+            classes: ['app-example', 'dh-style', 'change-currency-icon'],
+            content: await foundry.applications.handlebars.renderTemplate(
+                'systems/app-example/templates/settings/homebrew-settings/change-currency-icon.hbs',
+                { currentIcon }
+            ),
+            window: {
+                title: game.i18n.localize('APP_EXAMPLE.SETTINGS.Homebrew.currency.changeIcon'),
+                icon: 'fa-solid fa-coins'
+            },
+            render: (_, dialog) => {
+                const icon = dialog.element.querySelector('.displayed-icon i');
+                const input = dialog.element.querySelector('input');
+                const reset = dialog.element.querySelector('button[data-action=reset]');
+                input.addEventListener('input', () => {
+                    icon.classList.value = input.value;
+                });
+                reset.addEventListener('click', () => {
+                    const currencyField = DhHomebrew.schema.fields.currency.fields[type];
+                    const initial = currencyField.fields.icon.getInitialValue();
+                    input.value = icon.classList.value = initial;
+                });
+            },
+            ok: {
+                callback: (_, button) => button.form.elements.icon.value
+            }
+        });
+
+        if (icon !== null) {
+            await this.settings.updateSource({
+                [`currency.${type}.icon`]: icon
+            });
+            this.render();
+        }
+    }
+
+    static async addItem(_, target) {
+        const { type } = target.dataset;
+        if (['shortRest', 'longRest'].includes(type)) {
+            await this.settings.updateSource({
+                [`restMoves.${type}.moves.${foundry.utils.randomID()}`]: {
+                    name: game.i18n.localize('APP_EXAMPLE.SETTINGS.Homebrew.newDowntimeMove'),
+                    img: 'icons/magic/life/cross-worn-green.webp',
+                    description: '',
+                    actions: [],
+                    effects: []
+                }
+            });
+        } else if (['armorFeatures', 'weaponFeatures'].includes(type)) {
+            await this.settings.updateSource({
+                [`itemFeatures.${type}.${foundry.utils.randomID()}`]: {
+                    name: game.i18n.localize('APP_EXAMPLE.SETTINGS.Homebrew.newFeature'),
+                    img: 'icons/magic/life/cross-worn-green.webp',
+                    description: '',
+                    actions: [],
+                    effects: []
+                }
+            });
+        }
+
+        game.settings.set(CONFIG.DH.id, CONFIG.DH.SETTINGS.gameSettings.Homebrew, this.settings.toObject());
+        this.render();
+    }
+
+    static async editItem(_, target) {
+        const { type, id } = target.dataset;
+        const isDowntime = ['shortRest', 'longRest'].includes(type);
+        const path = isDowntime ? `restMoves.${type}.moves.${id}` : `itemFeatures.${type}.${id}`;
+        const featureBase = isDowntime ? this.settings.restMoves[type].moves[id] : this.settings.itemFeatures[type][id];
+
+        const configTitle = isDowntime
+            ? game.i18n.localize('APP_EXAMPLE.SETTINGS.Homebrew.downtimeMove')
+            : type === 'armorFeatures'
+              ? game.i18n.localize('APP_EXAMPLE.SETTINGS.Homebrew.armorFeature')
+              : game.i18n.localize('APP_EXAMPLE.SETTINGS.Homebrew.weaponFeature');
+
+        const editedBase = await game.system.api.applications.sheetConfigs.SettingFeatureConfig.configure(
+            configTitle,
+            featureBase,
+            path,
+            this.settings,
+            { hasIcon: isDowntime, hasEffects: !isDowntime }
+        );
+        if (!editedBase) return;
+
+        await this.updateAction.bind(this)(editedBase, target.dataset.type, target.dataset.id);
+    }
+
+    async updateAction(data, type, id) {
+        const isDowntime = ['shortRest', 'longRest'].includes(type);
+        const path = isDowntime ? `restMoves.${type}.moves` : `itemFeatures.${type}`;
+        await this.settings.updateSource({
+            [`${path}.${id}`]: {
+                actions: data.actions,
+                name: data.name,
+                icon: data.icon,
+                img: data.img,
+                description: data.description
+            }
+        });
+
+        game.settings.set(CONFIG.DH.id, CONFIG.DH.SETTINGS.gameSettings.Homebrew, this.settings.toObject());
+        this.render();
+    }
+
+    static async removeItem(_, target) {
+        const confirmed = await foundry.applications.api.DialogV2.confirm({
+            window: {
+                title: game.i18n.localize(`APP_EXAMPLE.SETTINGS.Homebrew.deleteItemTitle`)
+            },
+            content: game.i18n.localize('APP_EXAMPLE.SETTINGS.Homebrew.deleteItemText')
+        });
+
+        if (!confirmed) return;
+
+        const { type, id } = target.dataset;
+        const isDowntime = ['shortRest', 'longRest'].includes(type);
+        const path = isDowntime ? `restMoves.${type}.moves` : `itemFeatures.${type}`;
+        await this.settings.updateSource({
+            [`${path}.-=${id}`]: null
+        });
+
+        game.settings.set(CONFIG.DH.id, CONFIG.DH.SETTINGS.gameSettings.Homebrew, this.settings.toObject());
+        this.render();
+    }
+
+    static async resetDowntimeMoves(_, target) {
+        const confirmed = await foundry.applications.api.DialogV2.confirm({
+            window: {
+                title: game.i18n.format('APP_EXAMPLE.SETTINGS.Homebrew.resetMovesTitle', {
+                    type: game.i18n.localize(
+                        `APP_EXAMPLE.APPLICATIONS.Downtime.${target.dataset.type === 'shortRest' ? 'shortRest' : 'longRest'}.title`
+                    )
+                })
+            },
+            content: game.i18n.localize('APP_EXAMPLE.SETTINGS.Homebrew.resetMovesText')
+        });
+
+        if (!confirmed) return;
+
+        const fields = game.settings.get(CONFIG.DH.id, CONFIG.DH.SETTINGS.gameSettings.Homebrew).schema.fields;
+
+        const removeUpdate = Object.keys(this.settings.restMoves[target.dataset.type].moves).reduce((acc, key) => {
+            acc[`-=${key}`] = null;
+
+            return acc;
+        }, {});
+
+        const updateBase =
+            target.dataset.type === 'shortRest'
+                ? fields.restMoves.fields.shortRest.fields
+                : fields.restMoves.fields.longRest.fields;
+        const update = {
+            nrChoices: updateBase.nrChoices.initial,
+            moves: Object.keys(updateBase.moves.initial).reduce((acc, key) => {
+                const move = updateBase.moves.initial[key];
+                acc[key] = {
+                    ...move,
+                    name: game.i18n.localize(move.name),
+                    description: game.i18n.localize(move.description),
+                    actions: Object.keys(move.actions).reduce((acc, key) => {
+                        const action = move.actions[key];
+                        acc[key] = {
+                            ...action,
+                            name: game.i18n.localize(action.name)
+                        };
+                        return acc;
+                    }, {})
+                };
+
+                return acc;
+            }, {})
+        };
+
+        await this.settings.updateSource({
+            [`restMoves.${target.dataset.type}`]: {
+                ...update,
+                moves: {
+                    ...removeUpdate,
+                    ...update.moves
+                }
+            }
+        });
+
+        this.render();
+    }
+
+    static async resetItemFeatures(_, target) {
+        const confirmed = await foundry.applications.api.DialogV2.confirm({
+            window: {
+                title: game.i18n.format('APP_EXAMPLE.SETTINGS.Homebrew.resetItemFeaturesTitle', {
+                    type: game.i18n.localize(`APP_EXAMPLE.GENERAL.${target.dataset.type}`)
+                })
+            },
+            content: game.i18n.localize('APP_EXAMPLE.SETTINGS.Homebrew.resetMovesText')
+        });
+
+        if (!confirmed) return;
+
+        await this.settings.updateSource({
+            [`itemFeatures.${target.dataset.type}`]: Object.keys(
+                this.settings.itemFeatures[target.dataset.type]
+            ).reduce((acc, key) => {
+                acc[`-=${key}`] = null;
+
+                return acc;
+            }, {})
+        });
+
+        this.render();
+    }
+
+    static async addDomain(event) {
+        event.preventDefault();
+        const content = new foundry.data.fields.StringField({
+            label: game.i18n.localize('APP_EXAMPLE.SETTINGS.Homebrew.domains.newDomainInputLabel'),
+            hint: game.i18n.localize('APP_EXAMPLE.SETTINGS.Homebrew.domains.newDomainInputHint'),
+            required: true
+        }).toFormGroup({}, { name: 'domainName', localize: true }).outerHTML;
+
+        async function callback(_, button) {
+            const domainName = button.form.elements.domainName.value;
+            if (!domainName) return;
+
+            const newSlug = slugify(domainName);
+            const existingDomains = [
+                ...Object.values(this.settings.domains),
+                ...Object.values(CONFIG.DH.DOMAIN.domains)
+            ];
+            if (existingDomains.find(x => slugify(game.i18n.localize(x.label)) === newSlug)) {
+                ui.notifications.warn(game.i18n.localize('APP_EXAMPLE.SETTINGS.Homebrew.domains.duplicateDomain'));
+                return;
+            }
+
+            this.settings.updateSource({
+                [`domains.${newSlug}`]: {
+                    id: newSlug,
+                    label: domainName,
+                    src: 'icons/svg/portal.svg'
+                }
+            });
+
+            this.selected.domain = newSlug;
+            this.render();
+        }
+
+        foundry.applications.api.DialogV2.prompt({
+            content: content,
+            rejectClose: false,
+            modal: true,
+            ok: { callback: callback.bind(this) },
+            window: {
+                title: game.i18n.localize('APP_EXAMPLE.SETTINGS.Homebrew.domains.newDomainInputTitle')
+            },
+            position: { width: 400 }
+        });
+    }
+
+    static toggleSelectedDomain(_, target) {
+        this.selected.domain = this.selected.domain === target.id ? null : target.id;
+        this.render();
+    }
+
+    static async deleteDomain() {
+        const confirmed = await foundry.applications.api.DialogV2.confirm({
+            window: {
+                title: game.i18n.localize('APP_EXAMPLE.SETTINGS.Homebrew.domains.deleteDomain')
+            },
+            content: game.i18n.format('APP_EXAMPLE.SETTINGS.Homebrew.domains.deleteDomainText', {
+                name: this.settings.domains[this.selected.domain].label
+            })
+        });
+
+        if (!confirmed) return;
+
+        await this.settings.updateSource({
+            [`domains.-=${this.selected.domain}`]: null
+        });
+
+        const currentSettings = game.settings.get(CONFIG.DH.id, CONFIG.DH.SETTINGS.gameSettings.Homebrew);
+        if (currentSettings.domains[this.selected.domain]) {
+            await currentSettings.updateSource({ [`domains.-=${this.selected.domain}`]: null });
+            await game.settings.set(CONFIG.DH.id, CONFIG.DH.SETTINGS.gameSettings.Homebrew, currentSettings);
+        }
+
+        const updateClasses = game.items.filter(x => x.type === 'class');
+        for (let actor of game.actors) {
+            updateClasses.push(...actor.items.filter(x => x.type === 'class'));
+        }
+
+        for (let c of updateClasses) {
+            if (c.system.domains.includes(this.selected.domain)) {
+                const newDomains =
+                    c.system.domains.length === 1
+                        ? [CONFIG.DH.DOMAIN.domains.arcana.id]
+                        : c.system.domains.filter(x => x !== this.selected.domain);
+                await c.update({ 'system.domains': newDomains });
+            }
+            c.sheet.render();
+        }
+
+        const updateDomainCards = game.items.filter(
+            x => x.type === 'domainCard' && x.system.domain === this.selected.domain
+        );
+        for (let d of updateDomainCards) {
+            await d.update({ 'system.domain': CONFIG.DH.DOMAIN.domains.arcana.id });
+            d.sheet.render();
+        }
+
+        this.selected.domain = null;
+        this.render();
+    }
+
+    static async addAdversaryType(_, target) {
+        const newId = foundry.utils.randomID();
+        await this.settings.updateSource({
+            [`adversaryTypes.${newId}`]: {
+                id: newId,
+                label: game.i18n.localize('APP_EXAMPLE.SETTINGS.Homebrew.adversaryType.newType')
+            }
+        });
+
+        this.selected.adversaryType = newId;
+        this.render();
+    }
+
+    static async deleteAdversaryType(_, target) {
+        const { key } = target.dataset;
+        await this.settings.updateSource({ [`adversaryTypes.-=${key}`]: null });
+
+        this.selected.adversaryType = this.selected.adversaryType === key ? null : this.selected.adversaryType;
+        this.render();
+    }
+
+    static async selectAdversaryType(_, target) {
+        this.selected.adversaryType = this.selected.adversaryType === target.dataset.type ? null : target.dataset.type;
+        this.render();
+    }
+
+    static async addResource(_, target) {
+        const { actorType } = target.dataset;
+        const content = new foundry.data.fields.StringField({
+            label: game.i18n.localize('APP_EXAMPLE.SETTINGS.Homebrew.resources.resourceIdentifier'),
+            required: true
+        }).toFormGroup({}, { name: 'identifier', localize: true }).outerHTML;
+
+        async function callback(_, button) {
+            const identifier = button.form.elements.identifier.value;
+            if (!identifier) return;
+
+            const sluggedIdentifier = slugify(identifier);
+
+            await this.settings.updateSource({
+                [`resources.${actorType}.resources.${sluggedIdentifier}`]: Resource.getDefaultResourceData(identifier)
+            });
+
+            game.settings.set(CONFIG.DH.id, CONFIG.DH.SETTINGS.gameSettings.Homebrew, this.settings.toObject());
+            this.render();
+        }
+
+        await foundry.applications.api.DialogV2.prompt({
+            content: content,
+            rejectClose: false,
+            modal: true,
+            ok: { callback: callback.bind(this) },
+            window: {
+                title: game.i18n.localize('APP_EXAMPLE.SETTINGS.Homebrew.resources.setResourceIdentifier')
+            },
+            position: { width: 400 }
+        });
+    }
+
+    static async removeResource(_, target) {
+        const confirmed = await foundry.applications.api.DialogV2.confirm({
+            window: {
+                title: game.i18n.localize(`APP_EXAMPLE.SETTINGS.Homebrew.deleteResourceTitle`)
+            },
+            content: game.i18n.localize('APP_EXAMPLE.SETTINGS.Homebrew.deleteResourceText')
+        });
+
+        if (!confirmed) return;
+
+        const { actorType, resourceKey } = target.dataset;
+        await this.settings.updateSource({
+            [`resources.${actorType}.resources.-=${resourceKey}`]: null
+        });
+
+        game.settings.set(CONFIG.DH.id, CONFIG.DH.SETTINGS.gameSettings.Homebrew, this.settings.toObject());
+        this.render();
+    }
+
+    static async save() {
+        await game.settings.set(CONFIG.DH.id, CONFIG.DH.SETTINGS.gameSettings.Homebrew, this.settings.toObject());
+        this.close();
+    }
+
+    static async resetTokenSizes() {
+        await this.settings.updateSource({
+            tokenSizes: this.settings.schema.fields.tokenSizes.initial
+        });
+
+        this.render();
+    }
+
+    static async reset() {
+        const confirmed = await foundry.applications.api.DialogV2.confirm({
+            window: {
+                title: game.i18n.format('APP_EXAMPLE.SETTINGS.ResetSettings.resetConfirmationTitle')
+            },
+            content: game.i18n.format('APP_EXAMPLE.SETTINGS.ResetSettings.resetConfirmationText', {
+                settings: game.i18n.localize('APP_EXAMPLE.SETTINGS.Menu.homebrew.name')
+            })
+        });
+        if (!confirmed) return;
+
+        const resetSettings = new DhHomebrew();
+        let localizedSettings = this.localizeObject(resetSettings.toObject());
+        this.settings.updateSource(localizedSettings);
+        this.render();
+    }
+
+    localizeObject(obj) {
+        for (let key in obj) {
+            if (obj.hasOwnProperty(key)) {
+                const value = obj[key];
+                if (typeof value === 'object' && value !== null) {
+                    obj[key] = this.localizeObject(value);
+                } else {
+                    if (typeof value === 'string' && value.startsWith('APP_EXAMPLE.')) {
+                        obj[key] = game.i18n.localize(value);
+                    }
+                }
+            }
+        }
+        return obj;
+    }
+
+    _getTabs(tabs) {
+        for (const v of Object.values(tabs)) {
+            v.active = this.tabGroups[v.group] ? this.tabGroups[v.group] === v.id : v.active;
+            v.cssClass = v.active ? 'active' : '';
+        }
+
+        return tabs;
+    }
+}

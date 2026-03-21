@@ -1,0 +1,481 @@
+{
+  "name": "Assassin Poisoner",
+  "img": "systems/app-example/assets/icons/documents/actors/dragon-head.svg",
+  "type": "adversary",
+  "folder": "OgzrmfH1ZbpljX7k",
+  "system": {
+    "difficulty": 14,
+    "damageThresholds": {
+      "major": 8,
+      "severe": 16
+    },
+    "resources": {
+      "hitPoints": {
+        "value": 0,
+        "max": 4,
+        "isReversed": true
+      },
+      "stress": {
+        "value": 0,
+        "max": 4,
+        "isReversed": true
+      }
+    },
+    "motivesAndTactics": "Anticipate, get paid, kill, taint food and water",
+    "resistance": {
+      "physical": {
+        "resistance": false,
+        "immunity": false,
+        "reduction": 0
+      },
+      "magical": {
+        "resistance": false,
+        "immunity": false,
+        "reduction": 0
+      }
+    },
+    "type": "skulk",
+    "notes": "",
+    "hordeHp": 1,
+    "experiences": {
+      "t4LUkxg9fu3go5h4": {
+        "name": "Intrusion",
+        "description": "",
+        "value": 2
+      }
+    },
+    "bonuses": {
+      "roll": {
+        "attack": {
+          "bonus": 0,
+          "dice": []
+        },
+        "action": {
+          "bonus": 0,
+          "dice": []
+        },
+        "reaction": {
+          "bonus": 0,
+          "dice": []
+        }
+      },
+      "damage": {
+        "physical": {
+          "bonus": 0,
+          "dice": []
+        },
+        "magical": {
+          "bonus": 0,
+          "dice": []
+        }
+      }
+    },
+    "tier": 2,
+    "description": "<p>A cunning scoundrel skilled in both poisons and ambushing.</p>",
+    "attack": {
+      "name": "Poisoned Throwing Dagger",
+      "img": "icons/skills/melee/blade-tip-acid-poison-green.webp",
+      "roll": {
+        "bonus": 3,
+        "type": "attack"
+      },
+      "range": "close",
+      "damage": {
+        "parts": [
+          {
+            "value": {
+              "custom": {
+                "enabled": false
+              },
+              "flatMultiplier": 2,
+              "dice": "d8",
+              "bonus": 1,
+              "multiplier": "flat"
+            },
+            "applyTo": "hitPoints",
+            "type": [
+              "physical"
+            ],
+            "resultBased": false,
+            "valueAlt": {
+              "multiplier": "prof",
+              "flatMultiplier": 1,
+              "dice": "d6",
+              "bonus": null,
+              "custom": {
+                "enabled": false
+              }
+            },
+            "base": false
+          }
+        ]
+      },
+      "type": "attack",
+      "chatDisplay": false
+    },
+    "attribution": {
+      "source": "app-example SRD",
+      "page": 84,
+      "artist": ""
+    },
+    "size": "medium"
+  },
+  "flags": {},
+  "_id": "h5RuhzGL17dW5FBT",
+  "sort": 2700000,
+  "ownership": {
+    "default": 0,
+    "ei8OkswTzyDp4IGC": 3,
+    "WafZqd6qLGpBRGTt": 3
+  },
+  "prototypeToken": {
+    "name": "Assassin Poisoner",
+    "displayName": 0,
+    "actorLink": false,
+    "width": 1,
+    "height": 1,
+    "texture": {
+      "src": "systems/app-example/assets/icons/documents/actors/dragon-head.svg",
+      "anchorX": 0.5,
+      "anchorY": 0.5,
+      "offsetX": 0,
+      "offsetY": 0,
+      "fit": "contain",
+      "scaleX": 1,
+      "scaleY": 1,
+      "rotation": 0,
+      "tint": "#ffffff",
+      "alphaThreshold": 0.75
+    },
+    "lockRotation": false,
+    "rotation": 0,
+    "alpha": 1,
+    "disposition": -1,
+    "displayBars": 0,
+    "bar1": {
+      "attribute": "resources.hitPoints"
+    },
+    "bar2": {
+      "attribute": "resources.stress"
+    },
+    "light": {
+      "negative": false,
+      "priority": 0,
+      "alpha": 0.5,
+      "angle": 360,
+      "bright": 0,
+      "color": null,
+      "coloration": 1,
+      "dim": 0,
+      "attenuation": 0.5,
+      "luminosity": 0.5,
+      "saturation": 0,
+      "contrast": 0,
+      "shadows": 0,
+      "animation": {
+        "type": null,
+        "speed": 5,
+        "intensity": 5,
+        "reverse": false
+      },
+      "darkness": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    "sight": {
+      "enabled": false,
+      "range": 0,
+      "angle": 360,
+      "visionMode": "basic",
+      "color": null,
+      "attenuation": 0.1,
+      "brightness": 0,
+      "saturation": 0,
+      "contrast": 0
+    },
+    "detectionModes": [],
+    "occludable": {
+      "radius": 0
+    },
+    "ring": {
+      "enabled": false,
+      "colors": {
+        "ring": null,
+        "background": null
+      },
+      "effects": 1,
+      "subject": {
+        "scale": 1,
+        "texture": null
+      }
+    },
+    "turnMarker": {
+      "mode": 1,
+      "animation": null,
+      "src": null,
+      "disposition": false
+    },
+    "movementAction": null,
+    "flags": {},
+    "randomImg": false,
+    "appendNumber": false,
+    "prependAdjective": false
+  },
+  "items": [
+    {
+      "name": "Grindletooth Venom",
+      "type": "feature",
+      "system": {
+        "description": "<p>Targets who mark HP from the @Lookup[@name]’s attacks are Vulnerable until they clear a HP.</p>",
+        "resource": null,
+        "actions": {
+          "L83tU1TgmqoH9SSn": {
+            "type": "effect",
+            "_id": "L83tU1TgmqoH9SSn",
+            "systemPath": "actions",
+            "description": "",
+            "chatDisplay": true,
+            "actionType": "action",
+            "cost": [],
+            "uses": {
+              "value": null,
+              "max": "",
+              "recovery": null
+            },
+            "effects": [
+              {
+                "_id": "2iBVUGHtGW3I9VIj",
+                "onSave": false
+              }
+            ],
+            "target": {
+              "type": "any",
+              "amount": null
+            },
+            "name": "Apply Venom",
+            "img": "icons/skills/toxins/poison-bottle-corked-fire-green.webp",
+            "range": ""
+          }
+        },
+        "originItemType": null,
+        "originId": null
+      },
+      "_id": "Fz2lnUEeBxsDpx0G",
+      "img": "icons/skills/toxins/poison-bottle-corked-fire-green.webp",
+      "effects": [
+        {
+          "name": "Grindletooth Venom",
+          "img": "icons/skills/toxins/poison-bottle-corked-fire-green.webp",
+          "origin": "Compendium.app-example.adversaries.Actor.h5RuhzGL17dW5FBT.Item.Fz2lnUEeBxsDpx0G",
+          "transfer": false,
+          "_id": "2iBVUGHtGW3I9VIj",
+          "type": "base",
+          "system": {
+            "rangeDependence": {
+              "enabled": false,
+              "type": "withinRange",
+              "target": "hostile",
+              "range": "melee"
+            }
+          },
+          "changes": [],
+          "disabled": false,
+          "duration": {
+            "startTime": null,
+            "combat": null,
+            "seconds": null,
+            "rounds": null,
+            "turns": null,
+            "startRound": null,
+            "startTurn": null
+          },
+          "description": "<p> <em>Vulnerable</em> until you clear a HP.</p>",
+          "tint": "#ffffff",
+          "statuses": [
+            "vulnerable"
+          ],
+          "sort": 0,
+          "flags": {},
+          "_stats": {
+            "compendiumSource": null
+          },
+          "_key": "!actors.items.effects!h5RuhzGL17dW5FBT.Fz2lnUEeBxsDpx0G.2iBVUGHtGW3I9VIj"
+        }
+      ],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "MQSznptE5yLT7kj8": 3
+      },
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null
+      },
+      "_key": "!actors.items!h5RuhzGL17dW5FBT.Fz2lnUEeBxsDpx0G"
+    },
+    {
+      "name": "Assassin Poisoner",
+      "type": "feature",
+      "system": {
+        "description": "<p>The @Lookup[@name] has advantage on attacks if they are <em>Hidden</em>.</p>",
+        "resource": null,
+        "actions": {},
+        "originItemType": null,
+        "originId": null
+      },
+      "_id": "of6g4piugKzTI4dv",
+      "img": "icons/magic/perception/shadow-stealth-eyes-purple.webp",
+      "effects": [
+        {
+          "name": "Out of Nowhere",
+          "type": "base",
+          "system": {
+            "rangeDependence": {
+              "enabled": false,
+              "type": "withinRange",
+              "target": "hostile",
+              "range": "melee"
+            }
+          },
+          "_id": "qT5nh7OcQ6aGdiWS",
+          "img": "icons/magic/perception/shadow-stealth-eyes-purple.webp",
+          "changes": [
+            {
+              "key": "system.advantageSources",
+              "mode": 2,
+              "value": "On attacks if they are Hidden.",
+              "priority": null
+            }
+          ],
+          "disabled": false,
+          "duration": {
+            "startTime": null,
+            "combat": null,
+            "seconds": null,
+            "rounds": null,
+            "turns": null,
+            "startRound": null,
+            "startTurn": null
+          },
+          "description": "<p>The Assassin has advantage on attacks if they are <em>Hidden.</em></p>",
+          "origin": null,
+          "tint": "#ffffff",
+          "transfer": true,
+          "statuses": [],
+          "sort": 0,
+          "flags": {},
+          "_stats": {
+            "compendiumSource": null
+          },
+          "_key": "!actors.items.effects!h5RuhzGL17dW5FBT.of6g4piugKzTI4dv.qT5nh7OcQ6aGdiWS"
+        }
+      ],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "MQSznptE5yLT7kj8": 3
+      },
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null
+      },
+      "_key": "!actors.items!h5RuhzGL17dW5FBT.of6g4piugKzTI4dv"
+    },
+    {
+      "name": "Fumigation",
+      "type": "feature",
+      "system": {
+        "description": "<p>Drop a smoke bomb that fills the air within Close range with smoke, Dizzying all targets in this area. Dizzied targets have disadvantage on their next action roll, then clear the condition.</p><p>@Template[type:emanation|range:c]</p>",
+        "resource": null,
+        "actions": {
+          "sp7RfJRQJsEUm09m": {
+            "type": "effect",
+            "_id": "sp7RfJRQJsEUm09m",
+            "systemPath": "actions",
+            "description": "",
+            "chatDisplay": true,
+            "actionType": "action",
+            "cost": [],
+            "uses": {
+              "value": null,
+              "max": "",
+              "recovery": null
+            },
+            "effects": [
+              {
+                "_id": "yP4ot8VqS56RnxnE",
+                "onSave": false
+              }
+            ],
+            "target": {
+              "type": "any",
+              "amount": null
+            },
+            "name": "Drop Bomb",
+            "img": "icons/magic/air/fog-gas-smoke-green.webp",
+            "range": "close"
+          }
+        },
+        "originItemType": null,
+        "originId": null,
+        "featureForm": "action"
+      },
+      "_id": "lAmiK8wVxjyHwKlp",
+      "img": "icons/magic/air/fog-gas-smoke-green.webp",
+      "effects": [
+        {
+          "name": "Dizzy",
+          "img": "icons/magic/control/silhouette-hold-change-green.webp",
+          "origin": "Compendium.app-example.adversaries.Actor.h5RuhzGL17dW5FBT.Item.lAmiK8wVxjyHwKlp",
+          "transfer": false,
+          "_id": "yP4ot8VqS56RnxnE",
+          "type": "base",
+          "system": {
+            "rangeDependence": {
+              "enabled": false,
+              "type": "withinRange",
+              "target": "hostile",
+              "range": "melee"
+            }
+          },
+          "changes": [],
+          "disabled": false,
+          "duration": {
+            "startTime": null,
+            "combat": null,
+            "seconds": null,
+            "rounds": null,
+            "turns": null,
+            "startRound": null,
+            "startTurn": null
+          },
+          "description": "<p>Dizzied targets have disadvantage on their next action roll, then clear the condition.</p>",
+          "tint": "#ffffff",
+          "statuses": [],
+          "sort": 0,
+          "flags": {},
+          "_stats": {
+            "compendiumSource": null
+          },
+          "_key": "!actors.items.effects!h5RuhzGL17dW5FBT.lAmiK8wVxjyHwKlp.yP4ot8VqS56RnxnE"
+        }
+      ],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "MQSznptE5yLT7kj8": 3
+      },
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null
+      },
+      "_key": "!actors.items!h5RuhzGL17dW5FBT.lAmiK8wVxjyHwKlp"
+    }
+  ],
+  "effects": [],
+  "_key": "!actors!h5RuhzGL17dW5FBT"
+}

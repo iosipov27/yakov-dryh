@@ -1,0 +1,58 @@
+{
+  "name": "Devastating Strikes",
+  "type": "feature",
+  "img": "icons/skills/melee/blood-slash-foam-red.webp",
+  "system": {
+    "description": "<p>When you deal Severe damage to a target within Melee range, you can <strong>mark a Stress</strong> to force them to mark an additional Hit Point.</p>",
+    "resource": null,
+    "actions": {
+      "Il2C9zALU6a1gGrg": {
+        "type": "effect",
+        "_id": "Il2C9zALU6a1gGrg",
+        "systemPath": "actions",
+        "description": "<p>When you deal Severe damage to a target within Melee range, you can <strong>mark a Stress</strong> to force them to mark an additional Hit Point.</p>",
+        "chatDisplay": true,
+        "actionType": "action",
+        "cost": [
+          {
+            "scalable": false,
+            "key": "stress",
+            "value": 1,
+            "step": null
+          }
+        ],
+        "uses": {
+          "value": null,
+          "max": null,
+          "recovery": null
+        },
+        "effects": [],
+        "target": {
+          "type": null,
+          "amount": null
+        },
+        "name": "Mark Stress",
+        "img": "icons/skills/melee/blood-slash-foam-red.webp",
+        "range": ""
+      }
+    },
+    "originItemType": null,
+    "subType": null,
+    "originId": null,
+    "attribution": {
+      "source": "app-example SRD",
+      "page": 14,
+      "artist": ""
+    }
+  },
+  "effects": [],
+  "folder": "uU8bIoZvXge0rLaU",
+  "ownership": {
+    "default": 0,
+    "FecEtPuoQh6MpjQ0": 3
+  },
+  "flags": {},
+  "_id": "HJbQcKWcFZ9NoFxs",
+  "sort": 200000,
+  "_key": "!items!HJbQcKWcFZ9NoFxs"
+}

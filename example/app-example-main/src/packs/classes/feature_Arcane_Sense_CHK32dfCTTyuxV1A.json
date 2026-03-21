@@ -1,0 +1,27 @@
+{
+  "folder": "oNhnBt8HZ2oaSnSn",
+  "name": "Arcane Sense",
+  "type": "feature",
+  "_id": "CHK32dfCTTyuxV1A",
+  "img": "icons/magic/perception/third-eye-blue-red.webp",
+  "system": {
+    "description": "<p>You can sense the presence of magical people and objects within Close range.</p>",
+    "resource": null,
+    "actions": {},
+    "originItemType": null,
+    "originId": null,
+    "attribution": {
+      "source": "app-example SRD",
+      "page": 22,
+      "artist": ""
+    }
+  },
+  "effects": [],
+  "sort": 0,
+  "ownership": {
+    "default": 0,
+    "Q9NoTaEarn3VMS6Z": 3
+  },
+  "flags": {},
+  "_key": "!items!CHK32dfCTTyuxV1A"
+}

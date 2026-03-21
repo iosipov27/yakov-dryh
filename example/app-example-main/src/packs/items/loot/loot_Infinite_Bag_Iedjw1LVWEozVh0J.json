@@ -1,0 +1,25 @@
+{
+  "name": "Infinite Bag",
+  "type": "loot",
+  "_id": "Iedjw1LVWEozVh0J",
+  "img": "icons/containers/bags/pack-engraved-leather-blue.webp",
+  "system": {
+    "description": "<p>When you store items in this bag, they are kept in a pocket dimension that never runs out of space. You can retrieve an item at any time.</p>",
+    "quantity": 1,
+    "actions": {},
+    "attribution": {
+      "source": "app-example SRD",
+      "page": 59,
+      "artist": ""
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0,
+    "OFxauskoxcvVTVNA": 3
+  },
+  "flags": {},
+  "_key": "!items!Iedjw1LVWEozVh0J"
+}

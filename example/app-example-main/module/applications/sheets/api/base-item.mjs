@@ -1,0 +1,334 @@
+import { getDocFromElement } from '../../../helpers/utils.mjs';
+import DHApplicationMixin from './application-mixin.mjs';
+
+const { ItemSheetV2 } = foundry.applications.sheets;
+
+/**@typedef {import('@client/applications/_types.mjs').ApplicationClickAction} ApplicationClickAction */
+
+/**
+ * A base item sheet extending {@link ItemSheetV2} via {@link DHApplicationMixin}
+ */
+export default class DHBaseItemSheet extends DHApplicationMixin(ItemSheetV2) {
+    /** @inheritDoc */
+    static DEFAULT_OPTIONS = {
+        classes: ['item'],
+        position: { width: 600 },
+        window: {
+            resizable: true,
+            controls: [
+                {
+                    icon: 'fa-solid fa-signature',
+                    label: 'APP_EXAMPLE.UI.Tooltip.configureAttribution',
+                    action: 'editAttribution'
+                }
+            ]
+        },
+        form: {
+            submitOnChange: true
+        },
+        actions: {
+            addFeature: DHBaseItemSheet.#addFeature,
+            deleteFeature: DHBaseItemSheet.#deleteFeature,
+            addResource: DHBaseItemSheet.#addResource,
+            removeResource: DHBaseItemSheet.#removeResource
+        },
+        dragDrop: [
+            { dragSelector: null, dropSelector: '.drop-section' },
+            { dragSelector: '.feature-item', dropSelector: null },
+            { dragSelector: '.inventory-item', dropSelector: null }
+        ],
+        contextMenus: [
+            {
+                handler: DHBaseItemSheet.#getFeatureContextOptions,
+                selector: '[data-item-uuid][data-type="feature"]',
+                options: {
+                    parentClassHooks: false,
+                    fixed: true
+                }
+            }
+        ]
+    };
+
+    /* -------------------------------------------- */
+
+    /** @inheritdoc */
+    static TABS = {
+        primary: {
+            tabs: [{ id: 'description' }, { id: 'settings' }, { id: 'actions' }, { id: 'effects' }],
+            initial: 'description',
+            labelPrefix: 'APP_EXAMPLE.GENERAL.Tabs'
+        }
+    };
+
+    /* -------------------------------------------- */
+    /*  Prepare Context                             */
+    /* -------------------------------------------- */
+
+    /**@inheritdoc */
+    async _prepareContext(options) {
+        const context = await super._prepareContext(options);
+        context.showAttribution = !game.settings.get(CONFIG.DH.id, CONFIG.DH.SETTINGS.gameSettings.appearance)
+            .hideAttribution;
+
+        return context;
+    }
+
+    /**@inheritdoc */
+    async _preparePartContext(partId, context, options) {
+        await super._preparePartContext(partId, context, options);
+
+        switch (partId) {
+            case 'description':
+                context.enrichedDescription = await this.document.system.getEnrichedDescription();
+                break;
+            case 'effects':
+                await this._prepareEffectsContext(context, options);
+                break;
+            case 'features':
+                context.isGM = game.user.isGM;
+                break;
+        }
+
+        return context;
+    }
+
+    /**
+     * Prepare render context for the Effect part.
+     * @param {ApplicationRenderContext} context
+     * @param {ApplicationRenderOptions} options
+     * @returns {Promise<void>}
+     * @protected
+     */
+    async _prepareEffectsContext(context, _options) {
+        context.effects = {
+            actives: [],
+            inactives: []
+        };
+
+        for (const effect of this.item.effects) {
+            const list = effect.active ? context.effects.actives : context.effects.inactives;
+            list.push(effect);
+        }
+    }
+
+    /* -------------------------------------------- */
+    /*  Context Menu                                */
+    /* -------------------------------------------- */
+
+    /**
+     * Get the set of ContextMenu options for Features.
+     * @returns {import('@client/applications/ux/context-menu.mjs').ContextMenuEntry[]} - The Array of context options passed to the ContextMenu instance
+     * @this {DHBaseItemSheet}
+     * @protected
+     */
+    static #getFeatureContextOptions() {
+        const options = this._getContextMenuCommonOptions({ usable: true, toChat: true, deletable: false });
+        options.push({
+            name: 'CONTROLS.CommonDelete',
+            icon: '<i class="fa-solid fa-trash"></i>',
+            callback: async target => {
+                const feature = await getDocFromElement(target);
+                if (!feature) return;
+                const confirmed = await foundry.applications.api.DialogV2.confirm({
+                    window: {
+                        title: game.i18n.format('APP_EXAMPLE.APPLICATIONS.DeleteConfirmation.title', {
+                            type: game.i18n.localize(`TYPES.Item.feature`),
+                            name: feature.name
+                        })
+                    },
+                    content: game.i18n.format('APP_EXAMPLE.APPLICATIONS.DeleteConfirmation.text', {
+                        name: feature.name
+                    })
+                });
+                if (!confirmed) return;
+                await this.document.update({
+                    'system.features': this.document.system.toObject().features.filter(uuid => uuid !== feature.uuid)
+                });
+            }
+        });
+        return options;
+    }
+
+    /* -------------------------------------------- */
+    /*  Application Clicks Actions                  */
+    /* -------------------------------------------- */
+
+    /**
+     * Add a new feature to the item, prompting the user for its type.
+     * @type {ApplicationClickAction}
+     */
+    static async #addFeature(_, target) {
+        const { type } = target.dataset;
+        const cls = foundry.documents.Item.implementation;
+
+        const multiclass = this.document.system.isMulticlass ? 'multiclass' : null;
+        let systemData = {};
+        if (this.document.parent?.type === 'character') {
+            systemData = {
+                originItemType: this.document.type,
+                identifier: multiclass ?? type
+            };
+        }
+
+        const item = await cls.create(
+            {
+                type: 'feature',
+                name: cls.defaultName({ type: 'feature' }),
+                system: systemData
+            },
+            { parent: this.document.parent?.type === 'character' ? this.document.parent : undefined }
+        );
+        await this.document.update({
+            'system.features': [...this.document.system.features, { type, item }].map(x => ({
+                ...x,
+                item: x.item?.uuid
+            }))
+        });
+    }
+
+    /**
+     * Remove a feature from the item.
+     * @type {ApplicationClickAction}
+     */
+    static async #deleteFeature(_, element) {
+        const target = element.closest('[data-item-uuid]');
+        const feature = await getDocFromElement(target);
+
+        if (!feature) {
+            await this.document.update({
+                'system.features': this.document.system.features
+                    .filter(x => x.item)
+                    .map(x => ({ ...x, item: x.item.uuid }))
+            });
+        } else {
+            const confirmed = await foundry.applications.api.DialogV2.confirm({
+                window: {
+                    title: game.i18n.format('APP_EXAMPLE.APPLICATIONS.DeleteConfirmation.title', {
+                        type: game.i18n.localize('TYPES.Item.feature'),
+                        name: feature.name
+                    })
+                },
+                content: game.i18n.format('APP_EXAMPLE.APPLICATIONS.DeleteConfirmation.text', { name: feature.name })
+            });
+
+            if (!confirmed) return;
+
+            await this.document.update({
+                'system.features': this.document.system.features
+                    .filter(x => target.dataset.type !== x.type || x.item.uuid !== feature.uuid)
+                    .map(x => ({ ...x, item: x.item.uuid }))
+            });
+        }
+    }
+
+    /**
+     * Add a resource to the item.
+     * @type {ApplicationClickAction}
+     */
+    static async #addResource() {
+        await this.document.update({
+            'system.resource': { type: 'simple', value: 0 }
+        });
+    }
+
+    /**
+     * Remove the resource from the item.
+     * @type {ApplicationClickAction}
+     */
+    static async #removeResource() {
+        await this.document.update({
+            'system.resource': null
+        });
+    }
+
+    /* -------------------------------------------- */
+    /*  Application Drag/Drop                       */
+    /* -------------------------------------------- */
+
+    /**
+     * On dragStart on the item.
+     * @param {DragEvent} event - The drag event
+     */
+    async _onDragStart(event) {
+        /* Can prolly be improved a lot, but I don't wanna >_< */
+        const featureItem = event.currentTarget.closest('.feature-item');
+        const inventoryItem = event.currentTarget.closest('.inventory-item');
+        const lineItem = event.currentTarget.closest('.item-line');
+        const dragItemData = featureItem ?? inventoryItem ?? lineItem;
+
+        const dragItem = await foundry.utils.fromUuid(dragItemData.dataset.itemUuid);
+        if (dragItem) {
+            if (!dragItem) {
+                ui.notifications.warn(game.i18n.localize('APP_EXAMPLE.UI.Notifications.featureIsMissing'));
+                return;
+            }
+
+            let dragData = {};
+            if (dragItemData.dataset.type === 'effect')
+                dragData = {
+                    type: 'ActiveEffect',
+                    fromInternal: this.document.uuid,
+                    data: { ...dragItem, uuid: dragItem.uuid, id: dragItem.id }
+                };
+            else dragData = { type: 'Item', uuid: dragItem.uuid, id: dragItem.id, fromInternal: this.document.id };
+
+            event.dataTransfer.setData('text/plain', JSON.stringify(dragData));
+            event.dataTransfer.setDragImage(dragItemData.querySelector('img'), 60, 0);
+        }
+    }
+
+    /**
+     * On drop on the item.
+     * @param {DragEvent} event - The drag event
+     */
+    async _onDrop(event) {
+        super._onDrop(event);
+
+        const data = foundry.applications.ux.TextEditor.implementation.getDragEventData(event);
+        if (data.fromInternal === this.document.id) return;
+
+        const target = event.target.closest('fieldset.drop-section');
+        let item = await fromUuid(data.uuid);
+        if (item?.type === 'feature') {
+            const cls = foundry.documents.Item.implementation;
+
+            if (this.document.parent?.type === 'character') {
+                const itemData = item.toObject();
+                const multiclass = this.document.system.isMulticlass ? 'multiclass' : null;
+                item = await cls.create(
+                    {
+                        ...itemData,
+                        _stats: { compendiumSource: this.document.uuid },
+                        system: {
+                            ...itemData.system,
+                            originItemType: this.document.type,
+                            identifier: multiclass ?? target.dataset.type
+                        }
+                    },
+                    { parent: this.document.parent }
+                );
+            }
+
+            if (target.dataset.type) {
+                await this.document.update(
+                    {
+                        'system.features': [...this.document.system.features, { type: target.dataset.type, item }].map(
+                            x => ({
+                                ...x,
+                                item: x.item?.uuid
+                            })
+                        )
+                    },
+                    { parent: this.document.parent?.type === 'character' ? this.document.parent : undefined }
+                );
+            } else {
+                await this.document.update(
+                    {
+                        'system.features': [...this.document.system.features, item].map(x => x.uuid)
+                    },
+                    { parent: this.document.parent?.type === 'character' ? this.document.parent : undefined }
+                );
+            }
+        }
+    }
+}

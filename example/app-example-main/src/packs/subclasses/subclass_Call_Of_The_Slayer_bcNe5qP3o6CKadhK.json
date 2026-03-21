@@ -1,0 +1,41 @@
+{
+  "folder": "aTyhcJgENR9uI7u4",
+  "name": "Call Of The Slayer",
+  "type": "subclass",
+  "_id": "bcNe5qP3o6CKadhK",
+  "img": "icons/skills/melee/weapons-crossed-swords-yellow.webp",
+  "system": {
+    "description": "<p>Play the Call of the Slayer if you want to strike down adversaries with immense force.</p>",
+    "spellcastingTrait": null,
+    "features": [
+      {
+        "type": "foundation",
+        "item": "Compendium.app-example.subclasses.Item.1hF5KGKQc2VKT5O8"
+      },
+      {
+        "type": "specialization",
+        "item": "Compendium.app-example.subclasses.Item.HAqtoKUTrk8Mip1n"
+      },
+      {
+        "type": "mastery",
+        "item": "Compendium.app-example.subclasses.Item.dHgAnbt9m1KsQFmp"
+      }
+    ],
+    "featureState": 1,
+    "isMulticlass": false,
+    "attribution": {
+      "source": "app-example SRD",
+      "page": 24,
+      "artist": ""
+    },
+    "linkedClass": "Compendium.app-example.classes.Item.xCUWwJz4WSthvLfy"
+  },
+  "effects": [],
+  "sort": 0,
+  "ownership": {
+    "default": 0,
+    "MQSznptE5yLT7kj8": 3
+  },
+  "flags": {},
+  "_key": "!items!bcNe5qP3o6CKadhK"
+}

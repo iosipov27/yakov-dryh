@@ -1,0 +1,217 @@
+{
+  "name": "Vicious Entangle",
+  "img": "systems/app-example/assets/icons/domains/domain-card/sage.png",
+  "type": "domainCard",
+  "folder": "EJoXzO85rG5EiZsh",
+  "system": {
+    "description": "<p class=\"Body-Foundation\">Make a <strong>Spellcast Roll</strong> against a target within Far range. On a success, roots and vines reach out from the ground, dealing <strong>1d8+1</strong> physical damage and temporarily <em>Restraining</em> the target.</p><p class=\"Body-Foundation\">Additionally on a success, you can <strong>spend a Hope</strong> to temporarily <em>Restrain</em> another adversary within Very Close range of your target.</p>",
+    "domain": "sage",
+    "recallCost": 1,
+    "level": 1,
+    "type": "spell",
+    "actions": {
+      "lrA95PnD2vOwwmgN": {
+        "type": "attack",
+        "_id": "lrA95PnD2vOwwmgN",
+        "systemPath": "actions",
+        "description": "<p>Make a <strong>Spellcast Roll</strong> against a target within Far range. On a success, roots and vines reach out from the ground, dealing <strong>1d8+1</strong> physical damage and temporarily <em>Restraining</em> the target.</p>",
+        "chatDisplay": true,
+        "actionType": "action",
+        "cost": [],
+        "uses": {
+          "value": null,
+          "max": "",
+          "recovery": null
+        },
+        "damage": {
+          "parts": [
+            {
+              "resultBased": false,
+              "value": {
+                "custom": {
+                  "enabled": false
+                },
+                "multiplier": "flat",
+                "flatMultiplier": 1,
+                "dice": "d8",
+                "bonus": 1
+              },
+              "applyTo": "hitPoints",
+              "type": [
+                "physical"
+              ],
+              "base": false,
+              "valueAlt": {
+                "multiplier": "prof",
+                "flatMultiplier": 1,
+                "dice": "d6",
+                "bonus": null,
+                "custom": {
+                  "enabled": false
+                }
+              }
+            }
+          ],
+          "includeBase": false
+        },
+        "target": {
+          "type": "any",
+          "amount": null
+        },
+        "effects": [
+          {
+            "_id": "Xh0wrgRUuYpwChBU",
+            "onSave": false
+          }
+        ],
+        "roll": {
+          "type": "spellcast",
+          "trait": null,
+          "difficulty": null,
+          "bonus": null,
+          "advState": "neutral",
+          "diceRolling": {
+            "multiplier": "prof",
+            "flatMultiplier": 1,
+            "dice": "d6",
+            "compare": null,
+            "treshold": null
+          },
+          "useDefault": false
+        },
+        "save": {
+          "trait": null,
+          "difficulty": null,
+          "damageMod": "none"
+        },
+        "name": "Cast",
+        "img": "icons/magic/nature/vines-thorned-curled-glow-teal.webp",
+        "range": ""
+      },
+      "vh1IKRvsU4w57lBt": {
+        "type": "effect",
+        "_id": "vh1IKRvsU4w57lBt",
+        "systemPath": "actions",
+        "description": "<p class=\"Body-Foundation\">Additionally on a success, you can <strong>spend a Hope</strong> to temporarily <em>Restrain</em> another adversary within Very Close range of your target.</p>",
+        "chatDisplay": true,
+        "actionType": "action",
+        "cost": [
+          {
+            "key": "hope",
+            "value": 1,
+            "scalable": false,
+            "step": null
+          }
+        ],
+        "uses": {
+          "value": null,
+          "max": "",
+          "recovery": null
+        },
+        "effects": [
+          {
+            "_id": "2xzOqTaPJQzGqFJv",
+            "onSave": false
+          }
+        ],
+        "target": {
+          "type": "any",
+          "amount": null
+        },
+        "name": "Restrain Another",
+        "img": "icons/commodities/gems/gem-faceted-octagon-yellow.webp",
+        "range": ""
+      }
+    },
+    "attribution": {
+      "source": "app-example SRD",
+      "page": 130,
+      "artist": ""
+    }
+  },
+  "flags": {},
+  "_id": "qvpvTnkAoRn9vYO4",
+  "sort": 3400000,
+  "effects": [
+    {
+      "name": "Restrained",
+      "img": "icons/magic/control/debuff-chains-shackle-movement-red.webp",
+      "origin": "Compendium.app-example.domains.Item.qvpvTnkAoRn9vYO4",
+      "transfer": false,
+      "_id": "Xh0wrgRUuYpwChBU",
+      "type": "base",
+      "system": {
+        "rangeDependence": {
+          "enabled": false,
+          "type": "withinRange",
+          "target": "hostile",
+          "range": "melee"
+        }
+      },
+      "changes": [],
+      "disabled": false,
+      "duration": {
+        "startTime": null,
+        "combat": null,
+        "seconds": null,
+        "rounds": null,
+        "turns": null,
+        "startRound": null,
+        "startTurn": null
+      },
+      "description": "",
+      "tint": "#ffffff",
+      "statuses": [
+        "restrained"
+      ],
+      "sort": 0,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null
+      },
+      "_key": "!items.effects!qvpvTnkAoRn9vYO4.Xh0wrgRUuYpwChBU"
+    },
+    {
+      "name": "Restrained",
+      "img": "icons/magic/control/debuff-chains-shackle-movement-red.webp",
+      "origin": "Compendium.app-example.domains.Item.qvpvTnkAoRn9vYO4",
+      "transfer": false,
+      "_id": "2xzOqTaPJQzGqFJv",
+      "type": "base",
+      "system": {
+        "rangeDependence": {
+          "enabled": false,
+          "type": "withinRange",
+          "target": "hostile",
+          "range": "melee"
+        }
+      },
+      "changes": [],
+      "disabled": false,
+      "duration": {
+        "startTime": null,
+        "combat": null,
+        "seconds": null,
+        "rounds": null,
+        "turns": null,
+        "startRound": null,
+        "startTurn": null
+      },
+      "description": "",
+      "tint": "#ffffff",
+      "statuses": [
+        "restrained"
+      ],
+      "sort": 0,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null
+      },
+      "_key": "!items.effects!qvpvTnkAoRn9vYO4.2xzOqTaPJQzGqFJv"
+    }
+  ],
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!qvpvTnkAoRn9vYO4"
+}

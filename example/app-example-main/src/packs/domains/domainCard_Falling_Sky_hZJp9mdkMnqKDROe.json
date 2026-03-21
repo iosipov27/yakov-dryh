@@ -1,0 +1,109 @@
+{
+  "name": "Falling Sky",
+  "img": "systems/app-example/assets/icons/domains/domain-card/arcana.png",
+  "type": "domainCard",
+  "folder": "7Cs44YADBTmmtCw6",
+  "system": {
+    "description": "<p class=\"Body-Foundation\">Make a <strong>Spellcast Roll</strong> against all adversaries within Far range. <strong>Mark any number of Stress</strong> to make shards of arcana rain down from above. Targets you succeed against take <strong>1d20+2</strong> magic damage for each Stress marked.</p><p>@Template[type:emanation|range:f]</p>",
+    "domain": "arcana",
+    "recallCost": 1,
+    "level": 10,
+    "type": "spell",
+    "actions": {
+      "xJfXJDVsBayGaqkr": {
+        "type": "attack",
+        "_id": "xJfXJDVsBayGaqkr",
+        "systemPath": "actions",
+        "description": "<p class=\"Body-Foundation\">Make a <strong>Spellcast Roll</strong> against all adversaries within Far range. <strong>Mark any number of Stress</strong> to make shards of arcana rain down from above. Targets you succeed against take <strong>1d20+2</strong> magic damage for each Stress marked.</p><p>@Template[type:emanation|range:f]</p>",
+        "chatDisplay": true,
+        "actionType": "action",
+        "cost": [
+          {
+            "consumeOnSuccess": false,
+            "scalable": true,
+            "key": "stress",
+            "value": 1,
+            "step": 1
+          }
+        ],
+        "uses": {
+          "value": null,
+          "max": "",
+          "recovery": null,
+          "consumeOnSuccess": false
+        },
+        "damage": {
+          "parts": [
+            {
+              "resultBased": false,
+              "value": {
+                "custom": {
+                  "enabled": true,
+                  "formula": "@scaled20 + @scale*2"
+                },
+                "multiplier": "prof",
+                "flatMultiplier": 1,
+                "dice": "d6",
+                "bonus": null
+              },
+              "applyTo": "hitPoints",
+              "type": [],
+              "base": false,
+              "valueAlt": {
+                "multiplier": "prof",
+                "flatMultiplier": 1,
+                "dice": "d6",
+                "bonus": null,
+                "custom": {
+                  "enabled": false
+                }
+              }
+            }
+          ],
+          "includeBase": false
+        },
+        "target": {
+          "type": "any",
+          "amount": null
+        },
+        "effects": [],
+        "roll": {
+          "type": "spellcast",
+          "trait": null,
+          "difficulty": null,
+          "bonus": null,
+          "advState": "neutral",
+          "diceRolling": {
+            "multiplier": "prof",
+            "flatMultiplier": 1,
+            "dice": "d6",
+            "compare": null,
+            "treshold": null
+          },
+          "useDefault": false
+        },
+        "save": {
+          "trait": null,
+          "difficulty": null,
+          "damageMod": "none"
+        },
+        "name": "Attack",
+        "img": "icons/magic/light/projectiles-star-purple.webp",
+        "range": ""
+      }
+    },
+    "attribution": {
+      "source": "app-example SRD",
+      "page": 120,
+      "artist": ""
+    }
+  },
+  "flags": {},
+  "_id": "hZJp9mdkMnqKDROe",
+  "sort": 3400000,
+  "effects": [],
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!hZJp9mdkMnqKDROe"
+}

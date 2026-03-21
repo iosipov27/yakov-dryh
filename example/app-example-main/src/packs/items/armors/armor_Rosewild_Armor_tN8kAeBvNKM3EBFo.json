@@ -1,0 +1,66 @@
+{
+  "folder": "hLn0v6ov6KuFgptu",
+  "name": "Rosewild Armor",
+  "type": "armor",
+  "_id": "tN8kAeBvNKM3EBFo",
+  "img": "icons/equipment/chest/breastplate-banded-leather-purple.webp",
+  "system": {
+    "description": "",
+    "actions": {
+      "QRTnCYxJfuJHdnyV": {
+        "type": "effect",
+        "actionType": "action",
+        "chatDisplay": true,
+        "name": "Hope",
+        "description": "When you would spend a Hope, you can mark an Armor Slot instead.",
+        "img": "icons/magic/holy/barrier-shield-winged-blue.webp",
+        "_id": "QRTnCYxJfuJHdnyV",
+        "effects": [],
+        "systemPath": "actions",
+        "cost": [],
+        "uses": {
+          "value": null,
+          "max": null,
+          "recovery": null
+        },
+        "target": {
+          "type": "any",
+          "amount": null
+        }
+      }
+    },
+    "attached": [],
+    "tier": 2,
+    "equipped": false,
+    "baseScore": 5,
+    "armorFeatures": [
+      {
+        "value": "hopeful",
+        "effectIds": [],
+        "actionIds": [
+          "QRTnCYxJfuJHdnyV"
+        ]
+      }
+    ],
+    "marks": {
+      "value": 0
+    },
+    "baseThresholds": {
+      "major": 11,
+      "severe": 23
+    },
+    "attribution": {
+      "source": "app-example SRD",
+      "page": 56,
+      "artist": ""
+    }
+  },
+  "effects": [],
+  "sort": 0,
+  "ownership": {
+    "default": 0,
+    "FecEtPuoQh6MpjQ0": 3
+  },
+  "flags": {},
+  "_key": "!items!tN8kAeBvNKM3EBFo"
+}

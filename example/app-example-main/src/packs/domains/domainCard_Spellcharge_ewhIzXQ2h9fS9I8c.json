@@ -1,0 +1,65 @@
+{
+  "name": "Spellcharge",
+  "img": "systems/app-example/assets/icons/domains/domain-card/midnight.png",
+  "type": "domainCard",
+  "folder": "taM81THa8h6Bv2Xa",
+  "system": {
+    "description": "<p class=\"Body-Foundation\">When you take magic damage, place tokens equal to the number of Hit Points you marked on this card. You can store a number of tokens equal to your Spellcast trait.</p><p class=\"Body-Foundation\">When you make a successful attack against a target, you can spend any number of tokens to add a <strong>d6</strong> for each token spent to your damage roll.</p>",
+    "domain": "midnight",
+    "recallCost": 1,
+    "level": 8,
+    "type": "spell",
+    "resource": {
+      "type": "simple",
+      "value": 0,
+      "max": "@cast",
+      "icon": ""
+    },
+    "actions": {
+      "jCgZ0yCoIhSAVEw3": {
+        "type": "effect",
+        "_id": "jCgZ0yCoIhSAVEw3",
+        "systemPath": "actions",
+        "description": "<p>When you make a successful attack against a target, you can spend any number of tokens to add a </span><span style=\"box-sizing: border-box; scrollbar-width: thin; scrollbar-color: rgb(93, 20, 43) rgba(0, 0, 0, 0); color: rgb(239, 230, 216); font-family: Montserrat, sans-serif; font-size: 14px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal; background-color: rgba(24, 22, 46, 0.376); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial\">d6</span> for each token spent to your </span><span class=\"tooltip-convert\" style=\"box-sizing: border-box; scrollbar-width: thin; scrollbar-color: rgb(93, 20, 43) rgba(0, 0, 0, 0); color: rgb(239, 230, 216); font-family: Montserrat, sans-serif; font-size: 14px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal; background-color: rgba(24, 22, 46, 0.376); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial\">damage roll</span>.</p>",
+        "chatDisplay": true,
+        "actionType": "action",
+        "cost": [
+          {
+            "key": "resource",
+            "itemId": "ewhIzXQ2h9fS9I8c",
+            "value": 1,
+            "scalable": true,
+            "step": null,
+            "consumeOnSuccess": false
+          }
+        ],
+        "uses": {
+          "value": null,
+          "max": "",
+          "recovery": null
+        },
+        "effects": [],
+        "target": {
+          "type": "any",
+          "amount": null
+        },
+        "name": "Spend Tokens",
+        "img": "icons/commodities/gems/gem-faceted-diamond-blue.webp",
+        "range": ""
+      }
+    },
+    "attribution": {
+      "source": "app-example SRD",
+      "page": 129,
+      "artist": ""
+    }
+  },
+  "flags": {},
+  "_id": "ewhIzXQ2h9fS9I8c",
+  "sort": 3400000,
+  "effects": [],
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!ewhIzXQ2h9fS9I8c"
+}

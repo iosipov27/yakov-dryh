@@ -1,0 +1,39 @@
+@import '../../utils/mixin.less';
+
+.appTheme({}, {
+    &.levelup {
+        .tiers-container {
+            .tier-container {
+                background-image: url('../assets/parchments/dh-parchment-light.png');
+            }
+        }
+    }
+});
+
+.app-example.levelup {
+    .window-content {
+        max-height: 960px;
+        overflow: auto;
+    }
+
+    div[data-application-part='form'] {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    section {
+        .section-container {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            gap: 20px 8px;
+            margin-top: 8px;
+            flex-wrap: wrap;
+        }
+    }
+
+    .levelup-footer {
+        display: flex;
+    }
+}

@@ -1,0 +1,204 @@
+import DhCreature from './creature.mjs';
+import DhLevelData from '../levelData.mjs';
+import ForeignDocumentUUIDField from '../fields/foreignDocumentUUIDField.mjs';
+import { ActionField } from '../fields/actionField.mjs';
+import { adjustDice, adjustRange } from '../../helpers/utils.mjs';
+import DHCompanionSettings from '../../applications/sheets-configs/companion-settings.mjs';
+import { bonusField } from '../fields/actorField.mjs';
+
+export default class DhCompanion extends DhCreature {
+    static LOCALIZATION_PREFIXES = ['APP_EXAMPLE.ACTORS.Companion'];
+
+    /**@inheritdoc */
+    static get metadata() {
+        return foundry.utils.mergeObject(super.metadata, {
+            label: 'TYPES.Actor.companion',
+            type: 'companion',
+            isNPC: false,
+            settingSheet: DHCompanionSettings
+        });
+    }
+
+    /**@inheritdoc */
+    static defineSchema() {
+        const fields = foundry.data.fields;
+
+        return {
+            ...super.defineSchema(),
+            partner: new ForeignDocumentUUIDField({ type: 'Actor' }),
+            evasion: new fields.NumberField({
+                required: true,
+                min: 1,
+                initial: 10,
+                integer: true,
+                label: 'APP_EXAMPLE.GENERAL.evasion'
+            }),
+            experiences: new fields.TypedObjectField(
+                new fields.SchemaField({
+                    name: new fields.StringField({}),
+                    value: new fields.NumberField({ integer: true, initial: 0 }),
+                    description: new fields.StringField(),
+                    core: new fields.BooleanField({ initial: false })
+                }),
+                {
+                    initial: {
+                        experience1: { value: 2, core: true },
+                        experience2: { value: 2, core: true }
+                    }
+                }
+            ),
+            rules: new fields.SchemaField({
+                conditionImmunities: new fields.SchemaField({
+                    hidden: new fields.BooleanField({
+                        initial: false,
+                        label: 'APP_EXAMPLE.GENERAL.Rules.conditionImmunities.hidden'
+                    }),
+                    restrained: new fields.BooleanField({
+                        initial: false,
+                        label: 'APP_EXAMPLE.GENERAL.Rules.conditionImmunities.restrained'
+                    }),
+                    vulnerable: new fields.BooleanField({
+                        initial: false,
+                        label: 'APP_EXAMPLE.GENERAL.Rules.conditionImmunities.vulnerable'
+                    })
+                })
+            }),
+            attack: new ActionField({
+                initial: {
+                    name: 'Attack',
+                    img: 'icons/creatures/claws/claw-bear-paw-swipe-brown.webp',
+                    _id: foundry.utils.randomID(),
+                    systemPath: 'attack',
+                    chatDisplay: false,
+                    type: 'attack',
+                    range: 'melee',
+                    target: {
+                        type: 'any',
+                        amount: 1
+                    },
+                    roll: {
+                        type: 'attack',
+                        bonus: 0
+                    },
+                    damage: {
+                        parts: [
+                            {
+                                type: ['physical'],
+                                value: {
+                                    dice: 'd6',
+                                    multiplier: 'prof'
+                                }
+                            }
+                        ]
+                    }
+                }
+            }),
+            levelData: new fields.EmbeddedDataField(DhLevelData),
+            bonuses: new fields.SchemaField({
+                damage: new fields.SchemaField({
+                    physical: bonusField('APP_EXAMPLE.GENERAL.Damage.physicalDamage'),
+                    magical: bonusField('APP_EXAMPLE.GENERAL.Damage.magicalDamage')
+                })
+            })
+        };
+    }
+
+    /* -------------------------------------------- */
+
+    /**@inheritdoc */
+    static DEFAULT_ICON = 'systems/app-example/assets/icons/documents/actors/capybara.svg';
+
+    /* -------------------------------------------- */
+
+    get proficiency() {
+        return this.partner?.system?.proficiency ?? 1;
+    }
+
+    get canLevelUp() {
+        return this.levelupChoicesLeft > 0;
+    }
+
+    isItemValid() {
+        return false;
+    }
+
+    prepareBaseData() {
+        super.prepareBaseData();
+        this.attack.roll.bonus = this.partner?.system?.spellcastModifier ?? 0;
+
+        for (let levelKey in this.levelData.levelups) {
+            const level = this.levelData.levelups[levelKey];
+            for (let selection of level.selections) {
+                switch (selection.type) {
+                    case 'hope':
+                        this.resources.hope += selection.value;
+                        break;
+                    case 'vicious':
+                        if (selection.data[0] === 'damage') {
+                            this.attack.damage.parts[0].value.dice = adjustDice(this.attack.damage.parts[0].value.dice);
+                        } else {
+                            this.attack.range = adjustRange(this.attack.range).id;
+                        }
+                        break;
+                    case 'stress':
+                        this.resources.stress.max += selection.value;
+                        break;
+                    case 'evasion':
+                        this.evasion += selection.value;
+                        break;
+                    case 'experience':
+                        Object.keys(this.experiences).forEach(key => {
+                            const experience = this.experiences[key];
+                            experience.value += selection.value;
+                        });
+                        break;
+                }
+            }
+        }
+    }
+
+    prepareDerivedData() {
+        super.prepareDerivedData();
+        /* Partner Related Setup */
+        if (this.partner) {
+            this.levelData.level.changed = this.partner.system.levelData.level.current;
+            this.levelupChoicesLeft = Object.values(this.levelData.levelups).reduce((acc, curr) => {
+                acc = Math.max(acc - curr.selections.length, 0);
+                return acc;
+            }, this.partner.system.companionData.levelupChoices);
+        }
+    }
+
+    async _preUpdate(changes, options, userId) {
+        const allowed = await super._preUpdate(changes, options, userId);
+        if (allowed === false) return;
+
+        /* The first two experiences are always marked as core */
+        if (changes.system?.experiences && Object.keys(this.experiences).length < 2) {
+            const experiences = new Set(Object.keys(this.experiences));
+            const changeExperiences = new Set(Object.keys(changes.system.experiences));
+            const newExperiences = Array.from(changeExperiences.difference(experiences));
+
+            for (var i = 0; i < Math.min(newExperiences.length, 2 - experiences.size); i++) {
+                const experience = newExperiences[i];
+                changes.system.experiences[experience].core = true;
+            }
+        }
+
+        /* Force partner data prep */
+        if (this.partner) {
+            if (
+                changes.system?.levelData?.level?.current !== undefined &&
+                changes.system.levelData.level.current !== this._source.levelData.level.current
+            ) {
+                this.partner.update(this.partner.toObject(), { diff: false, recursive: false });
+            }
+        }
+    }
+
+    async _preDelete() {
+        if (this.partner) {
+            await this.partner.update({ 'system.companion': null });
+        }
+    }
+}

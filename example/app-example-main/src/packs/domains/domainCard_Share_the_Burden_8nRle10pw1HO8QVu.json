@@ -1,0 +1,51 @@
+{
+  "name": "Share the Burden",
+  "img": "systems/app-example/assets/icons/domains/domain-card/grace.png",
+  "type": "domainCard",
+  "folder": "VgADdqYn9nS9G1Us",
+  "system": {
+    "description": "<p class=\"Body-Foundation\">Once per rest, take on the Stress from a willing creature within Melee range. The target describes what intimate knowledge or emotions telepathically leak from their mind in this moment between you. Transfer any number of their marked Stress to you, then gain a Hope for each Stress transferred.</p>",
+    "domain": "grace",
+    "recallCost": 0,
+    "level": 6,
+    "type": "spell",
+    "actions": {
+      "MjSx44ovuKBGVKGs": {
+        "type": "effect",
+        "_id": "MjSx44ovuKBGVKGs",
+        "systemPath": "actions",
+        "description": "<p class=\"Body-Foundation\">Once per rest, take on the Stress from a willing creature within Melee range. The target describes what intimate knowledge or emotions telepathically leak from their mind in this moment between you. Transfer any number of their marked Stress to you, then gain a Hope for each Stress transferred.</p>",
+        "chatDisplay": true,
+        "actionType": "action",
+        "cost": [],
+        "uses": {
+          "value": null,
+          "max": "1",
+          "recovery": "shortRest",
+          "consumeOnSuccess": false
+        },
+        "effects": [],
+        "target": {
+          "type": "any",
+          "amount": null
+        },
+        "name": "Take Stress",
+        "img": "systems/app-example/assets/icons/domains/domain-card/grace.png",
+        "range": ""
+      }
+    },
+    "attribution": {
+      "source": "app-example SRD",
+      "page": 127,
+      "artist": ""
+    }
+  },
+  "flags": {},
+  "_id": "8nRle10pw1HO8QVu",
+  "sort": 3400000,
+  "effects": [],
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!8nRle10pw1HO8QVu"
+}

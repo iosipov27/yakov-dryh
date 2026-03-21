@@ -1,0 +1,291 @@
+import D20RollDialog from '../applications/dialogs/d20RollDialog.mjs';
+
+export default class DHRoll extends Roll {
+    baseTerms = [];
+    constructor(formula, data = {}, options = {}) {
+        super(formula, data, foundry.utils.mergeObject(options, { roll: [] }, { overwrite: false }));
+        options.bonusEffects = this.bonusEffectBuilder();
+        if (!this.data || !Object.keys(this.data).length) this.data = options.data;
+    }
+
+    get title() {
+        return game.i18n.localize('APP_EXAMPLE.GENERAL.Roll.basic');
+    }
+
+    static messageType = 'adversaryRoll';
+
+    static CHAT_TEMPLATE = 'systems/app-example/templates/ui/chat/roll.hbs';
+
+    static DefaultDialog = D20RollDialog;
+
+    static async build(config = {}, message = {}) {
+        const roll = await this.buildConfigure(config, message);
+        if (!roll) return;
+        await this.buildEvaluate(roll, config, (message = {}));
+        await this.buildPost(roll, config, (message = {}));
+        return config;
+    }
+
+    static async buildConfigure(config = {}, message = {}) {
+        config.hooks = [...this.getHooks(), ''];
+        config.dialog ??= {};
+
+        const actorIdSplit = config.source?.actor?.split('.');
+        if (actorIdSplit) {
+            const tagTeamSettings = game.settings.get(CONFIG.DH.id, CONFIG.DH.SETTINGS.gameSettings.TagTeamRoll);
+            config.tagTeamSelected = Boolean(tagTeamSettings.members[actorIdSplit[actorIdSplit.length - 1]]);
+        }
+
+        for (const hook of config.hooks) {
+            if (Hooks.call(`${CONFIG.DH.id}.preRoll${hook.capitalize()}`, config, message) === false) return null;
+        }
+
+        this.applyKeybindings(config);
+
+        this.temporaryModifierBuilder(config);
+
+        let roll = new this(config.roll.formula, config.data, config);
+        if (config.dialog.configure !== false) {
+            // Open Roll Dialog
+            const DialogClass = config.dialog?.class ?? this.DefaultDialog;
+            const configDialog = await DialogClass.configure(roll, config, message);
+            if (!configDialog) return;
+        }
+
+        for (const hook of config.hooks) {
+            if (
+                Hooks.call(`${CONFIG.DH.id}.post${hook.capitalize()}RollConfiguration`, roll, config, message) === false
+            )
+                return [];
+        }
+        return roll;
+    }
+
+    static async buildEvaluate(roll, config = {}, message = {}) {
+        if (config.evaluate !== false) {
+            await roll.evaluate();
+            config.roll = this.postEvaluate(roll, config);
+        }
+    }
+
+    static async buildPost(roll, config, message) {
+        for (const hook of config.hooks) {
+            if (Hooks.call(`${CONFIG.DH.id}.postRoll${hook.capitalize()}`, config, message) === false) return null;
+        }
+
+        if (config.skips?.createMessage) {
+            if (game.modules.get('dice-so-nice')?.active) {
+                await game.dice3d.showForRoll(roll, game.user, true);
+            }
+        } else if (!config.source?.message) {
+            config.message = await this.toMessage(roll, config);
+        }
+    }
+
+    static postEvaluate(roll, config = {}) {
+        return {
+            total: roll.total,
+            formula: roll.formula,
+            dice: roll.dice.map(d => ({
+                dice: d.denomination,
+                total: d.total,
+                formula: d.formula,
+                results: d.results
+            }))
+        };
+    }
+
+    static async toMessage(roll, config) {
+        const item = config.data.parent?.items?.get?.(config.source.item) ?? null;
+        const action = item ? item.system.actions.get(config.source.action) : null;
+        let actionDescription = null;
+        if (action?.chatDisplay) {
+            actionDescription = action
+                ? await foundry.applications.ux.TextEditor.implementation.enrichHTML(action.description, {
+                      relativeTo: config.data,
+                      rollData: config.data.getRollData?.() ?? {}
+                  })
+                : null;
+            config.actionChatMessageHandled = true;
+        }
+
+        const cls = getDocumentClass('ChatMessage'),
+            msgData = {
+                type: this.messageType,
+                user: game.user.id,
+                title: roll.title,
+                speaker: cls.getSpeaker({ actor: roll.data?.parent }),
+                sound: config.mute ? null : CONFIG.sounds.dice,
+                system: { ...config, actionDescription },
+                rolls: [roll]
+            };
+
+        config.selectedRollMode ??= game.settings.get('core', 'rollMode');
+
+        if (roll._evaluated) {
+            const message = await cls.create(msgData, { rollMode: config.selectedRollMode });
+
+            if (config.tagTeamSelected) {
+                game.system.api.applications.dialogs.TagTeamDialog.assignRoll(message.speakerActor, message);
+            }
+
+            if (roll.formula !== '' && game.modules.get('dice-so-nice')?.active) {
+                await game.dice3d.waitFor3DAnimationByMessageID(message.id);
+            }
+
+            return message;
+        } else return msgData;
+    }
+
+    /** @inheritDoc */
+    async render({ flavor, template = this.constructor.CHAT_TEMPLATE, isPrivate = false, ...options } = {}) {
+        if (!this._evaluated) return;
+
+        const metagamingSettings = game.settings.get(CONFIG.DH.id, CONFIG.DH.SETTINGS.gameSettings.Metagaming);
+        const chatData = await this._prepareChatRenderContext({ flavor, isPrivate, ...options });
+        return foundry.applications.handlebars.renderTemplate(template, {
+            ...chatData,
+            parent: chatData.parent,
+            targetMode: chatData.targetMode,
+            metagamingSettings
+        });
+    }
+
+    /** @inheritDoc */
+    async _prepareChatRenderContext({ flavor, isPrivate = false, ...options } = {}) {
+        if (isPrivate) {
+            return {
+                user: game.user.id,
+                flavor: null,
+                title: '???',
+                roll: {
+                    total: '??'
+                },
+                hasRoll: true,
+                isPrivate
+            };
+        } else {
+            options.message.system.user = game.user.id;
+            return options.message.system;
+        }
+    }
+
+    static applyKeybindings(config) {
+        if (config.event)
+            config.dialog.configure ??= !(config.event.shiftKey || config.event.altKey || config.event.ctrlKey);
+    }
+
+    static getHooks(hooks) {
+        return hooks ?? [];
+    }
+
+    formatModifier(modifier) {
+        if (Array.isArray(modifier)) {
+            return [
+                new foundry.dice.terms.OperatorTerm({ operator: '+' }),
+                ...this.constructor.parse(modifier.join(' + '), this.options.data)
+            ];
+        } else if (Number.isNumeric(modifier)) {
+            const numTerm = modifier < 0 ? '-' : '+';
+            return [
+                new foundry.dice.terms.OperatorTerm({ operator: numTerm }),
+                new foundry.dice.terms.NumericTerm({ number: Math.abs(modifier) })
+            ];
+        } else {
+            const numTerm = modifier < 0 ? '-' : '+';
+            return [
+                new foundry.dice.terms.OperatorTerm({ operator: numTerm }),
+                ...this.constructor.parse(modifier, this.options.data)
+            ];
+        }
+    }
+
+    applyBaseBonus() {
+        return [];
+    }
+
+    addModifiers(roll) {
+        roll = roll ?? this.options.roll;
+        roll.modifiers?.forEach(m => {
+            this.terms.push(...this.formatModifier(m.value));
+        });
+    }
+
+    getBonus(path, label) {
+        const modifiers = [];
+        for (const effect of Object.values(this.options.bonusEffects)) {
+            if (!effect.selected) continue;
+            for (const change of effect.changes) {
+                if (!change.key.includes(path)) continue;
+                const changeValue = game.system.api.documents.DhActiveEffect.getChangeValue(
+                    this.data,
+                    change,
+                    effect.origEffect
+                );
+                modifiers.push({ label: label, value: changeValue });
+            }
+        }
+
+        return modifiers;
+    }
+
+    getFaces(faces) {
+        return Number(faces.startsWith('d') ? faces.replace('d', '') : faces);
+    }
+
+    constructFormula(config) {
+        this.terms = Roll.parse(this.options.roll.formula, config.data);
+
+        this.options.roll.modifiers = this.applyBaseBonus();
+        this.addModifiers();
+
+        if (this.options.extraFormula) {
+            this.terms.push(
+                new foundry.dice.terms.OperatorTerm({ operator: '+' }),
+                ...this.constructor.parse(this.options.extraFormula, this.options.data)
+            );
+        }
+        return (this._formula = this.constructor.getFormula(this.terms));
+    }
+
+    static calculateTotalModifiers(roll) {
+        let modifierTotal = 0;
+        for (let i = 0; i < roll.terms.length; i++) {
+            if (
+                roll.terms[i] instanceof foundry.dice.terms.NumericTerm &&
+                !!roll.terms[i - 1] &&
+                roll.terms[i - 1] instanceof foundry.dice.terms.OperatorTerm
+            )
+                modifierTotal += Number(`${roll.terms[i - 1].operator}${roll.terms[i].total}`);
+        }
+        return modifierTotal;
+    }
+
+    static temporaryModifierBuilder(config) {
+        return {};
+    }
+
+    bonusEffectBuilder() {
+        const changeKeys = this.getActionChangeKeys();
+        return (
+            this.options.effects?.reduce((acc, effect) => {
+                if (effect.changes.some(x => changeKeys.some(key => x.key.includes(key)))) {
+                    acc[effect.id] = {
+                        id: effect.id,
+                        name: effect.name,
+                        description: effect.description,
+                        changes: effect.changes,
+                        origEffect: effect,
+                        selected: !effect.disabled
+                    };
+                }
+
+                return acc;
+            }, {}) ?? []
+        );
+    }
+
+    getActionChangeKeys() {
+        return [];
+    }
+}

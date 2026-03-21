@@ -1,0 +1,20 @@
+{
+  "folder": "9mO4hIBDnL2RFUuz",
+  "name": "Letter(Never Opened)",
+  "type": "loot",
+  "img": "icons/sundries/documents/envelope-sealed-red-tan.webp",
+  "system": {
+    "description": "",
+    "quantity": 1,
+    "actions": {}
+  },
+  "effects": [],
+  "flags": {},
+  "ownership": {
+    "default": 0,
+    "LgnbNMLaxandgMQq": 3
+  },
+  "_id": "XGWVVkHlVrF5fGm6",
+  "sort": 200000,
+  "_key": "!items!XGWVVkHlVrF5fGm6"
+}

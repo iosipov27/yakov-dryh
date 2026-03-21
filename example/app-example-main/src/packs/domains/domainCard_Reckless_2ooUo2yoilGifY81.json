@@ -1,0 +1,59 @@
+{
+  "name": "Reckless",
+  "img": "systems/app-example/assets/icons/domains/domain-card/blade.png",
+  "type": "domainCard",
+  "folder": "o7t2fsAmRxKLoHrO",
+  "system": {
+    "description": "<p class=\"Body-Foundation\"><strong>Mark a Stress</strong> to gain advantage on an attack.</p>",
+    "domain": "blade",
+    "recallCost": 1,
+    "level": 2,
+    "type": "ability",
+    "actions": {
+      "1vOYZjiUbRBmLcVr": {
+        "type": "effect",
+        "_id": "1vOYZjiUbRBmLcVr",
+        "systemPath": "actions",
+        "description": "<p class=\"Body-Foundation\"><strong>Mark a Stress</strong> to gain advantage on an attack.</p>",
+        "chatDisplay": true,
+        "actionType": "action",
+        "cost": [
+          {
+            "scalable": false,
+            "key": "stress",
+            "value": 1,
+            "step": null,
+            "consumeOnSuccess": false
+          }
+        ],
+        "uses": {
+          "value": null,
+          "max": "",
+          "recovery": null,
+          "consumeOnSuccess": false
+        },
+        "effects": [],
+        "target": {
+          "type": "any",
+          "amount": null
+        },
+        "name": "Mark a Stress",
+        "img": "icons/magic/control/silhouette-aura-energy.webp",
+        "range": ""
+      }
+    },
+    "attribution": {
+      "source": "app-example SRD",
+      "page": 121,
+      "artist": ""
+    }
+  },
+  "flags": {},
+  "_id": "2ooUo2yoilGifY81",
+  "sort": 3400000,
+  "effects": [],
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!2ooUo2yoilGifY81"
+}

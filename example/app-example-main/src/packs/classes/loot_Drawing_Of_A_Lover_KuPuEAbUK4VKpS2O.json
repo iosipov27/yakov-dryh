@@ -1,0 +1,20 @@
+{
+  "folder": "RAxu4Kr7NzexDJVb",
+  "name": "Drawing Of A Lover",
+  "type": "loot",
+  "_id": "KuPuEAbUK4VKpS2O",
+  "img": "icons/tools/hand/brush-paint-pink.webp",
+  "system": {
+    "description": "",
+    "quantity": 1,
+    "actions": {}
+  },
+  "effects": [],
+  "sort": 0,
+  "ownership": {
+    "default": 0,
+    "MQSznptE5yLT7kj8": 3
+  },
+  "flags": {},
+  "_key": "!items!KuPuEAbUK4VKpS2O"
+}

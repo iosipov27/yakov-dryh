@@ -1,0 +1,35 @@
+.app-example.dh-style.dialog.item-transfer {
+    .summary {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 3rem;
+        
+        .actor-img {
+            border-radius: 50%;
+            width: 5rem;
+            height: 5rem;
+            object-fit: cover;
+            object-position: top center;
+        }
+
+        .granted-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-size: var(--font-size-32);
+
+            img {
+                width: 2rem;
+                height: 2rem;
+                object-fit: contain;
+                border-radius: 3px;
+            }
+        }
+    }
+    label {
+        flex: 0;
+        margin-right: 0.5rem;
+    }
+}

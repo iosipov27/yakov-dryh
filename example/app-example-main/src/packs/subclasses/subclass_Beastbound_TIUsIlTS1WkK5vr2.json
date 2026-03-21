@@ -1,0 +1,49 @@
+{
+  "folder": "ArVAtkgkm5bYpKHL",
+  "name": "Beastbound",
+  "type": "subclass",
+  "_id": "TIUsIlTS1WkK5vr2",
+  "img": "icons/creatures/mammals/elk-moose-marked-green.webp",
+  "system": {
+    "description": "<p>You wish to form a deep bond with an animal ally.</p>",
+    "spellcastingTrait": "agility",
+    "features": [
+      {
+        "type": "foundation",
+        "item": "Compendium.app-example.subclasses.Item.MBFXxIEwc0Dl4kJg"
+      },
+      {
+        "type": "specialization",
+        "item": "Compendium.app-example.subclasses.Item.iCXtOWBKv1FdKdWz"
+      },
+      {
+        "type": "specialization",
+        "item": "Compendium.app-example.subclasses.Item.hWsKyed1vfILg0I8"
+      },
+      {
+        "type": "mastery",
+        "item": "Compendium.app-example.subclasses.Item.uGcs785h94RMtueH"
+      },
+      {
+        "type": "mastery",
+        "item": "Compendium.app-example.subclasses.Item.xjZHD5Yo3Tu26rLm"
+      }
+    ],
+    "featureState": 1,
+    "isMulticlass": false,
+    "attribution": {
+      "source": "app-example SRD",
+      "page": 17,
+      "artist": ""
+    },
+    "linkedClass": "Compendium.app-example.classes.Item.BTyfve69LKqoOi9S"
+  },
+  "effects": [],
+  "sort": 0,
+  "ownership": {
+    "default": 0,
+    "LgnbNMLaxandgMQq": 3
+  },
+  "flags": {},
+  "_key": "!items!TIUsIlTS1WkK5vr2"
+}

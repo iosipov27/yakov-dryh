@@ -1,0 +1,96 @@
+import { itemAbleRollParse } from './utils.mjs';
+
+export default class RegisterHandlebarsHelpers {
+    static registerHelpers() {
+        Handlebars.registerHelper({
+            add: this.add,
+            includes: this.includes,
+            times: this.times,
+            damageFormula: this.damageFormula,
+            formulaValue: this.formulaValue,
+            damageSymbols: this.damageSymbols,
+            rollParsed: this.rollParsed,
+            hasProperty: foundry.utils.hasProperty,
+            getProperty: foundry.utils.getProperty,
+            setVar: this.setVar,
+            empty: this.empty,
+            pluralize: this.pluralize,
+            positive: this.positive,
+            isNullish: this.isNullish
+        });
+    }
+    static add(a, b) {
+        const aNum = Number.parseInt(a);
+        const bNum = Number.parseInt(b);
+        return (Number.isNaN(aNum) ? 0 : aNum) + (Number.isNaN(bNum) ? 0 : bNum);
+    }
+
+    static includes(list, item) {
+        return list.includes(item);
+    }
+
+    static times(nr, block) {
+        var accum = '';
+        for (var i = 0; i < nr; ++i) accum += block.fn(i);
+        return accum;
+    }
+
+    static damageFormula(attack) {
+        return attack.getDamageFormula();
+    }
+
+    static formulaValue(formula, item) {
+        if (isNaN(formula)) {
+            const data = item.getRollData.bind(item)(),
+                roll = new Roll(Roll.replaceFormulaData(formula, data)).evaluateSync();
+            formula = roll.total;
+        }
+        return formula;
+    }
+
+    static damageSymbols(damageParts) {
+        const symbols = [...new Set(damageParts.reduce((a, c) => a.concat([...c.type]), []))].map(
+            p => CONFIG.DH.GENERAL.damageTypes[p].icon
+        );
+        return new Handlebars.SafeString(Array.from(symbols).map(symbol => `<i class="fa-solid ${symbol}"></i>`));
+    }
+
+    static rollParsed(value, actor, item, numerical) {
+        const isNumerical = typeof numerical === 'boolean' ? numerical : false;
+        const result = itemAbleRollParse(value, actor?.getRollData() ?? {}, item);
+        return isNumerical ? (!result ? 0 : Number(result)) : result;
+    }
+
+    static setVar(name, value) {
+        this[name] = value;
+    }
+
+    static empty(object) {
+        if (!(typeof object === 'object')) return true;
+        return Object.keys(object).length === 0;
+    }
+
+    /**
+     * Pluralize helper that returns the appropriate localized string based on count
+     * @param {number} count - The number to check for plurality
+     * @param {string} baseKey - The base localization key (e.g., "APP_EXAMPLE.GENERAL.Target")
+     * @returns {string} The localized singular or plural string
+     *
+     * Usage: {{pluralize currentTargets.length "APP_EXAMPLE.GENERAL.Target"}}
+     * Returns: "Target" if count is exactly 1, "Targets" if count is 0, 2+, or invalid
+     */
+    static pluralize(count, baseKey) {
+        const numericCount = Number(count);
+        const isSingular = !isNaN(numericCount) && numericCount === 1;
+        const key = isSingular ? `${baseKey}.single` : `${baseKey}.plural`;
+        return game.i18n.localize(key);
+    }
+
+    static positive(a) {
+        return Math.abs(Number(a));
+    }
+
+    static isNullish(a) {
+        return a === null || a === undefined;
+    }
+}

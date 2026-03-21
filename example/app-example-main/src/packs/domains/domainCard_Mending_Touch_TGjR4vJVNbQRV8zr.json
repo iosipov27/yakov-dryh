@@ -1,0 +1,358 @@
+{
+  "name": "Mending Touch",
+  "img": "systems/app-example/assets/icons/domains/domain-card/splendor.png",
+  "type": "domainCard",
+  "folder": "LlWJaBZOKh0Ot2kD",
+  "system": {
+    "description": "<p class=\"Body-Foundation\">You lay your hands upon a creature and channel healing magic to close their wounds. When you can take a few minutes to focus on the target you’re helping, you can <strong>spend 2 Hope</strong> to clear a Hit Point or a Stress on them.</p><p class=\"Body-Foundation\">Once per long rest, when you spend this healing time learning something new about them or revealing something about yourself, you can clear 2 Hit Points or 2 Stress on them instead.</p>",
+    "domain": "splendor",
+    "recallCost": 1,
+    "level": 1,
+    "type": "spell",
+    "actions": {
+      "sDoL9p1cpIx8Vdbb": {
+        "type": "healing",
+        "_id": "sDoL9p1cpIx8Vdbb",
+        "systemPath": "actions",
+        "description": "<p>When you can take a few minutes to focus on the target you’re helping, you can </span><span style=\"box-sizing: border-box; scrollbar-width: thin; scrollbar-color: rgb(93, 20, 43) rgba(0, 0, 0, 0); color: rgb(239, 230, 216); font-family: Montserrat, sans-serif; font-size: 14px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal; background-color: rgba(24, 22, 46, 0.376); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial\">spend 2 Hope</span> to clear a Hit Point or a Stress on them.</p>",
+        "chatDisplay": true,
+        "actionType": "action",
+        "cost": [
+          {
+            "scalable": false,
+            "key": "hope",
+            "value": 2,
+            "step": null,
+            "consumeOnSuccess": false
+          }
+        ],
+        "uses": {
+          "value": null,
+          "max": "",
+          "recovery": null,
+          "consumeOnSuccess": false
+        },
+        "damage": {
+          "parts": [
+            {
+              "value": {
+                "custom": {
+                  "enabled": true,
+                  "formula": "1"
+                },
+                "multiplier": "prof",
+                "flatMultiplier": 1,
+                "dice": "d6",
+                "bonus": null
+              },
+              "applyTo": "hitPoints",
+              "base": false,
+              "resultBased": false,
+              "valueAlt": {
+                "multiplier": "prof",
+                "flatMultiplier": 1,
+                "dice": "d6",
+                "bonus": null,
+                "custom": {
+                  "enabled": false
+                }
+              },
+              "type": []
+            }
+          ],
+          "includeBase": false
+        },
+        "target": {
+          "type": "any",
+          "amount": null
+        },
+        "effects": [],
+        "roll": {
+          "type": null,
+          "trait": null,
+          "difficulty": null,
+          "bonus": null,
+          "advState": "neutral",
+          "diceRolling": {
+            "multiplier": "prof",
+            "flatMultiplier": 1,
+            "dice": "d6",
+            "compare": null,
+            "treshold": null
+          },
+          "useDefault": false
+        },
+        "name": "Heal One Hitpoint",
+        "img": "icons/commodities/gems/gem-faceted-diamond-green.webp",
+        "range": ""
+      },
+      "NCDSgZBLoq9fQvku": {
+        "type": "healing",
+        "_id": "NCDSgZBLoq9fQvku",
+        "systemPath": "actions",
+        "description": "",
+        "chatDisplay": true,
+        "actionType": "action",
+        "cost": [
+          {
+            "scalable": false,
+            "key": "hope",
+            "value": 2,
+            "step": null,
+            "consumeOnSuccess": false
+          }
+        ],
+        "uses": {
+          "value": null,
+          "max": "",
+          "recovery": null,
+          "consumeOnSuccess": false
+        },
+        "damage": {
+          "parts": [
+            {
+              "value": {
+                "custom": {
+                  "enabled": true,
+                  "formula": "1"
+                },
+                "multiplier": "prof",
+                "flatMultiplier": 1,
+                "dice": "d6",
+                "bonus": null
+              },
+              "applyTo": "stress",
+              "base": false,
+              "resultBased": false,
+              "valueAlt": {
+                "multiplier": "prof",
+                "flatMultiplier": 1,
+                "dice": "d6",
+                "bonus": null,
+                "custom": {
+                  "enabled": false
+                }
+              },
+              "type": []
+            }
+          ],
+          "includeBase": false
+        },
+        "target": {
+          "type": "any",
+          "amount": null
+        },
+        "effects": [],
+        "roll": {
+          "type": null,
+          "trait": null,
+          "difficulty": null,
+          "bonus": null,
+          "advState": "neutral",
+          "diceRolling": {
+            "multiplier": "prof",
+            "flatMultiplier": 1,
+            "dice": "d6",
+            "compare": null,
+            "treshold": null
+          },
+          "useDefault": false
+        },
+        "name": "Heal One Stress",
+        "img": "icons/commodities/gems/gem-faceted-navette-red.webp",
+        "range": ""
+      },
+      "FsbOSV8eR2PEb1aS": {
+        "type": "healing",
+        "_id": "FsbOSV8eR2PEb1aS",
+        "systemPath": "actions",
+        "description": "<p>When you can take a few minutes to focus on the target you’re helping, you can <strong>spend 2 Hope</strong> to clear a Hit Point or a Stress on them.</p><p class=\"Body-Foundation\">Once per long rest, when you spend this healing time learning something new about them or revealing something about yourself, you can clear 2 Hit Points or 2 Stress on them instead.</p>",
+        "chatDisplay": true,
+        "actionType": "action",
+        "cost": [
+          {
+            "key": "hope",
+            "itemId": null,
+            "value": 2,
+            "scalable": false,
+            "step": null,
+            "consumeOnSuccess": false
+          },
+          {
+            "key": "resource",
+            "itemId": "TGjR4vJVNbQRV8zr",
+            "value": 1,
+            "scalable": false,
+            "step": null,
+            "consumeOnSuccess": false
+          }
+        ],
+        "uses": {
+          "value": null,
+          "max": "",
+          "recovery": null,
+          "consumeOnSuccess": false
+        },
+        "damage": {
+          "parts": [
+            {
+              "value": {
+                "custom": {
+                  "enabled": true,
+                  "formula": "2"
+                },
+                "multiplier": "prof",
+                "flatMultiplier": 1,
+                "dice": "d6",
+                "bonus": null
+              },
+              "applyTo": "hitPoints",
+              "base": false,
+              "resultBased": false,
+              "valueAlt": {
+                "multiplier": "prof",
+                "flatMultiplier": 1,
+                "dice": "d6",
+                "bonus": null,
+                "custom": {
+                  "enabled": false
+                }
+              },
+              "type": []
+            }
+          ],
+          "includeBase": false
+        },
+        "target": {
+          "type": "any",
+          "amount": null
+        },
+        "effects": [],
+        "roll": {
+          "type": null,
+          "trait": null,
+          "difficulty": null,
+          "bonus": null,
+          "advState": "neutral",
+          "diceRolling": {
+            "multiplier": "prof",
+            "flatMultiplier": 1,
+            "dice": "d6",
+            "compare": null,
+            "treshold": null
+          },
+          "useDefault": false
+        },
+        "name": "Heal Two Hit Points",
+        "img": "icons/commodities/gems/gem-faceted-diamond-green.webp",
+        "range": ""
+      },
+      "mqDV9s6oMRQjJF4U": {
+        "type": "healing",
+        "_id": "mqDV9s6oMRQjJF4U",
+        "systemPath": "actions",
+        "description": "<p>When you can take a few minutes to focus on the target you’re helping, you can <strong>spend 2 Hope</strong> to clear a Hit Point or a Stress on them.</p><p class=\"Body-Foundation\">Once per long rest, when you spend this healing time learning something new about them or revealing something about yourself, you can clear 2 Hit Points or 2 Stress on them instead.</p>",
+        "chatDisplay": true,
+        "actionType": "action",
+        "cost": [
+          {
+            "key": "hope",
+            "itemId": null,
+            "value": 2,
+            "scalable": false,
+            "step": null,
+            "consumeOnSuccess": false
+          },
+          {
+            "key": "resource",
+            "itemId": "TGjR4vJVNbQRV8zr",
+            "value": 1,
+            "scalable": false,
+            "step": null,
+            "consumeOnSuccess": false
+          }
+        ],
+        "uses": {
+          "value": null,
+          "max": "",
+          "recovery": null,
+          "consumeOnSuccess": false
+        },
+        "damage": {
+          "parts": [
+            {
+              "value": {
+                "custom": {
+                  "enabled": true,
+                  "formula": "2"
+                },
+                "multiplier": "prof",
+                "flatMultiplier": 1,
+                "dice": "d6",
+                "bonus": null
+              },
+              "applyTo": "stress",
+              "base": false,
+              "resultBased": false,
+              "valueAlt": {
+                "multiplier": "prof",
+                "flatMultiplier": 1,
+                "dice": "d6",
+                "bonus": null,
+                "custom": {
+                  "enabled": false
+                }
+              },
+              "type": []
+            }
+          ],
+          "includeBase": false
+        },
+        "target": {
+          "type": "any",
+          "amount": null
+        },
+        "effects": [],
+        "roll": {
+          "type": null,
+          "trait": null,
+          "difficulty": null,
+          "bonus": null,
+          "advState": "neutral",
+          "diceRolling": {
+            "multiplier": "prof",
+            "flatMultiplier": 1,
+            "dice": "d6",
+            "compare": null,
+            "treshold": null
+          },
+          "useDefault": false
+        },
+        "name": "Heal Two Stress",
+        "img": "icons/commodities/gems/gem-faceted-navette-red.webp",
+        "range": ""
+      }
+    },
+    "resource": {
+      "type": "simple",
+      "value": 1,
+      "progression": "decreasing",
+      "max": "1",
+      "icon": "fa-solid fa-hands-praying",
+      "recovery": "longRest"
+    },
+    "attribution": {
+      "source": "app-example SRD",
+      "page": 132,
+      "artist": ""
+    }
+  },
+  "flags": {},
+  "_id": "TGjR4vJVNbQRV8zr",
+  "sort": 3400000,
+  "effects": [],
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!TGjR4vJVNbQRV8zr"
+}

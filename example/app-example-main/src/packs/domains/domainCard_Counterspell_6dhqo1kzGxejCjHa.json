@@ -1,0 +1,75 @@
+{
+  "name": "Counterspell",
+  "img": "systems/app-example/assets/icons/domains/domain-card/arcana.png",
+  "type": "domainCard",
+  "folder": "mOv6BGhJAeGrzA84",
+  "system": {
+    "description": "<p></p><p class=\"Body-Foundation\">You can interrupt a magical effect taking place by making a reaction roll using your Spellcast trait. On a success, the effect stops and any consequences are avoided, and this card is placed in your vault.</p>",
+    "domain": "arcana",
+    "recallCost": 2,
+    "level": 3,
+    "type": "spell",
+    "actions": {
+      "SeOcGdKAc7egwg9H": {
+        "type": "attack",
+        "_id": "SeOcGdKAc7egwg9H",
+        "systemPath": "actions",
+        "description": "<p>You can interrupt a magical effect taking place by making a reaction roll using your Spellcast trait. On a success, the effect stops and any consequences are avoided, and this card is placed in your vault.</p>",
+        "chatDisplay": true,
+        "actionType": "action",
+        "cost": [],
+        "uses": {
+          "value": null,
+          "max": "",
+          "recovery": null,
+          "consumeOnSuccess": false
+        },
+        "damage": {
+          "parts": [],
+          "includeBase": false
+        },
+        "target": {
+          "type": "any",
+          "amount": null
+        },
+        "effects": [],
+        "roll": {
+          "type": "spellcast",
+          "trait": null,
+          "difficulty": null,
+          "bonus": null,
+          "advState": "neutral",
+          "diceRolling": {
+            "multiplier": "prof",
+            "flatMultiplier": 1,
+            "dice": "d6",
+            "compare": null,
+            "treshold": null
+          },
+          "useDefault": false
+        },
+        "save": {
+          "trait": null,
+          "difficulty": null,
+          "damageMod": "none"
+        },
+        "name": "Interrupt",
+        "img": "icons/magic/control/hypnosis-mesmerism-watch.webp",
+        "range": ""
+      }
+    },
+    "attribution": {
+      "source": "app-example SRD",
+      "page": 119,
+      "artist": ""
+    }
+  },
+  "flags": {},
+  "_id": "6dhqo1kzGxejCjHa",
+  "sort": 3400000,
+  "effects": [],
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!6dhqo1kzGxejCjHa"
+}

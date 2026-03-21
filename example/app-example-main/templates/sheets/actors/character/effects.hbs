@@ -1,0 +1,23 @@
+<section class='tab {{tabs.effects.cssClass}} {{tabs.effects.id}}' data-tab='{{tabs.effects.id}}'
+    data-group='{{tabs.effects.group}}'>
+
+    <div class="effects-sections">
+        {{> 'app-example.inventory-items'
+        title='APP_EXAMPLE.GENERAL.activeEffects'
+        type='effect'
+        isGlassy=true
+        collection=effects.actives
+        canCreate=true
+        hideResources=true
+        }}
+
+        {{> 'app-example.inventory-items'
+        title='APP_EXAMPLE.GENERAL.inactiveEffects'
+        type='effect'
+        isGlassy=true
+        collection=effects.inactives
+        canCreate=true
+        hideResources=true
+        }}
+    </div>
+</section>

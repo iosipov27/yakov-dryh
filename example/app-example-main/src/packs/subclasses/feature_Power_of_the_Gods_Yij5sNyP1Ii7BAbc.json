@@ -1,0 +1,27 @@
+{
+  "folder": "gdnQftNWn4kxnew9",
+  "name": "Power of the Gods",
+  "type": "feature",
+  "_id": "Yij5sNyP1Ii7BAbc",
+  "img": "icons/magic/holy/projectiles-blades-salvo-yellow.webp",
+  "system": {
+    "description": "<p>While flying, you deal an extra 1d12 damage instead of 1d8 from your “Wings of Light” feature.</p>",
+    "resource": null,
+    "actions": {},
+    "originItemType": null,
+    "originId": null,
+    "attribution": {
+      "source": "app-example SRD",
+      "page": 21,
+      "artist": ""
+    }
+  },
+  "effects": [],
+  "sort": 0,
+  "ownership": {
+    "default": 0,
+    "Q9NoTaEarn3VMS6Z": 3
+  },
+  "flags": {},
+  "_key": "!items!Yij5sNyP1Ii7BAbc"
+}
