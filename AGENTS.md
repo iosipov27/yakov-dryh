@@ -320,6 +320,11 @@ tools/
 - Prefer configuration over hardcoded values.
 - Avoid using jquery
 - Use Typescript, prefer using types
+- Follow the Single Responsibility Principle:
+  - each file, class, and function should have one clear reason to change
+  - keep domain modules focused on domain logic
+  - move generic parsing, normalization, formatting, and reusable helpers into `utils/` or another dedicated helper module
+  - if a file starts mixing actor logic, UI logic, chat logic, and generic helpers, split it before adding more code
 
 ## Simplicity Rules
 

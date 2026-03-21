@@ -1,3 +1,4 @@
+import { normalizeInteger, normalizeString, normalizeStringArray } from "../utils/index.js";
 export const YAKOV_DRYH_ACTOR_TYPES = {
     character: "character"
 };
@@ -23,35 +24,12 @@ export function createDefaultCharacterSystemData() {
         scars: []
     };
 }
-function normalizeNumber(value, fallback, { min = Number.NEGATIVE_INFINITY, max = Number.POSITIVE_INFINITY } = {}) {
-    const numericValue = typeof value === "number"
-        ? value
-        : typeof value === "string"
-            ? Number.parseInt(value, 10)
-            : Number.NaN;
-    if (!Number.isFinite(numericValue)) {
-        return fallback;
-    }
-    return Math.min(Math.max(Math.trunc(numericValue), min), max);
-}
-function normalizeText(value) {
-    return typeof value === "string" ? value : "";
-}
-function normalizeScars(value) {
-    if (!Array.isArray(value)) {
-        return [];
-    }
-    return value
-        .filter((entry) => typeof entry === "string")
-        .map((entry) => entry.trim())
-        .filter((entry) => entry.length > 0);
-}
 export function normalizeResponses(value, changedField) {
     const defaults = createDefaultCharacterSystemData().responses;
     const source = value && typeof value === "object" ? value : {};
     const max = DRYH_RESPONSE_MAX;
-    let fight = normalizeNumber(source.fight, defaults.fight, { min: 0, max });
-    let flight = normalizeNumber(source.flight, defaults.flight, { min: 0, max });
+    let fight = normalizeInteger(source.fight, defaults.fight, { min: 0, max });
+    let flight = normalizeInteger(source.flight, defaults.flight, { min: 0, max });
     if (fight + flight > max) {
         if (changedField === "fight") {
             flight = Math.max(max - fight, 0);
@@ -66,29 +44,20 @@ export function normalizeCharacterSystemData(value) {
     const defaults = createDefaultCharacterSystemData();
     const source = value && typeof value === "object" ? value : {};
     return {
-        concept: normalizeText(source.concept),
-        discipline: normalizeNumber(source.discipline, defaults.discipline, { min: 0 }),
-        exhaustion: normalizeNumber(source.exhaustion, defaults.exhaustion, {
+        concept: normalizeString(source.concept),
+        discipline: normalizeInteger(source.discipline, defaults.discipline, { min: 0 }),
+        exhaustion: normalizeInteger(source.exhaustion, defaults.exhaustion, {
             min: 0,
             max: DRYH_EXHAUSTION_MAX
         }),
-        madnessPermanent: normalizeNumber(source.madnessPermanent, defaults.madnessPermanent, { min: 0 }),
+        madnessPermanent: normalizeInteger(source.madnessPermanent, defaults.madnessPermanent, { min: 0 }),
         responses: normalizeResponses(source.responses),
-        hope: normalizeNumber(source.hope, defaults.hope, { min: 0 }),
+        hope: normalizeInteger(source.hope, defaults.hope, { min: 0 }),
         talents: {
-            exhaustion: normalizeText(source.talents?.exhaustion),
-            madness: normalizeText(source.talents?.madness)
+            exhaustion: normalizeString(source.talents?.exhaustion),
+            madness: normalizeString(source.talents?.madness)
         },
-        scars: normalizeScars(source.scars)
+        scars: normalizeStringArray(source.scars)
     };
-}
-export function parseScarsText(value) {
-    return value
-        .split("\n")
-        .map((entry) => entry.trim())
-        .filter((entry) => entry.length > 0);
-}
-export function formatScarsText(scars) {
-    return scars.join("\n");
 }
 //# sourceMappingURL=actor.js.map

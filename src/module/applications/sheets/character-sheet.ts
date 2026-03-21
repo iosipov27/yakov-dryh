@@ -2,12 +2,12 @@ import { YakovDryhRollDialog } from "../dialogs/roll-dialog.js";
 import {
   DRYH_EXHAUSTION_MAX,
   DRYH_RESPONSE_MAX,
-  formatScarsText,
   normalizeCharacterSystemData,
   normalizeResponses,
   YAKOV_DRYH_ACTOR_TYPES
 } from "../../data/index.js";
 import { SYSTEM_ID, SYSTEM_TITLE, TEMPLATE_PATHS } from "../../constants.js";
+import { formatLineList, parseLineList } from "../../utils/index.js";
 
 const BaseSheet = foundry.applications.api.HandlebarsApplicationMixin(
   foundry.applications.sheets.ActorSheetV2
@@ -98,7 +98,7 @@ export class YakovDryhCharacterSheet extends BaseSheet {
         actorData.responses.flight,
       0
     );
-    context.scarsText = formatScarsText(actorData.scars);
+    context.scarsText = formatLineList(actorData.scars);
 
     return context;
   }
@@ -199,10 +199,7 @@ export class YakovDryhCharacterSheet extends BaseSheet {
     }
 
     await this.actor.update({
-      "system.scars": value
-        .split("\n")
-        .map((entry) => entry.trim())
-        .filter((entry) => entry.length > 0)
+      "system.scars": parseLineList(value)
     } as Record<string, unknown>);
   }
 }
