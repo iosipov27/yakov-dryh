@@ -325,6 +325,12 @@ tools/
   - keep domain modules focused on domain logic
   - move generic parsing, normalization, formatting, and reusable helpers into `utils/` or another dedicated helper module
   - if a file starts mixing actor logic, UI logic, chat logic, and generic helpers, split it before adding more code
+- For styles:
+  - keep `src/styles/yakov-dryh.scss` as the style composition root that only wires partials together
+  - keep CSS variables and tokens in a dedicated partial such as `src/styles/partials/_variables.scss`
+  - split SCSS partials by responsibility, for example surfaces, sheet layout, controls, rolls, and responsive rules
+  - prefer nested SCSS for modifiers and closely related child selectors so the base block and its variants stay together
+  - treat `src/styles/**` as the source of truth and `styles/**` as the runtime output that should stay in sync when source styles change
 
 ## Simplicity Rules
 

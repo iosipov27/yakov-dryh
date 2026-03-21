@@ -1,0 +1,22 @@
+@media (max-width: 760px) {
+  .yakov-dryh-header {
+    flex-direction: column;
+  }
+
+  .yakov-dryh-sheet-columns {
+    grid-template-columns: 1fr;
+  }
+
+  .yakov-dryh-roll-pool {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .yakov-dryh-actions {
+    flex-direction: column;
+  }
+
+  .yakov-dryh-button {
+    width: 100%;
+  }
+}

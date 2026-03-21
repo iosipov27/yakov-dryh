@@ -4,12 +4,15 @@
   --yakov-dryh-panel: #fffaf4;
   --yakov-dryh-panel-strong: #f8f0e2;
   --yakov-dryh-accent: #9b3d24;
-  --yakov-dryh-exhaustion: #9f2f1f;
-  --yakov-dryh-madness: #8e1e32;
+  --yakov-dryh-exhaustion: #111111;
+  --yakov-dryh-madness: #b01c2e;
   --yakov-dryh-pain: #3d4557;
   --yakov-dryh-border: #b7a79c;
   --yakov-dryh-muted: #64545d;
   --yakov-dryh-shadow: 0 14px 30px rgb(33 22 30 / 12%);
+  --yakov-dryh-pip-discipline: #fffdf8;
+  --yakov-dryh-pip-inactive: #d7d3cf;
+  --yakov-dryh-pip-shadow: rgb(33 22 30 / 30%);
 }
 
 .yakov-dryh-chat-card,
@@ -221,28 +224,26 @@
 }
 
 .yakov-dryh-pip {
-  background: rgb(255 255 255 / 92%);
-  border: 1px solid var(--yakov-dryh-border);
-  border-radius: 4px;
+  background-color: var(--yakov-dryh-pip-inactive);
   display: inline-block;
-  height: 1rem;
-  width: 1rem;
+  filter: drop-shadow(0 0 1px var(--yakov-dryh-pip-shadow));
+  height: 2rem;
+  mask: url("../assets/six-sided-dice.svg") center/contain no-repeat;
+  -webkit-mask: url("../assets/six-sided-dice.svg") center/contain no-repeat;
+  width: 2rem;
 }
 
 .yakov-dryh-pip.is-filled {
-  background: var(--yakov-dryh-accent);
-  border-color: var(--yakov-dryh-accent);
+  background-color: var(--yakov-dryh-pip-discipline);
 }
 
 .yakov-dryh-pip-track.is-exhaustion .yakov-dryh-pip.is-filled {
-  background: var(--yakov-dryh-exhaustion);
-  border-color: var(--yakov-dryh-exhaustion);
+  background-color: var(--yakov-dryh-exhaustion);
 }
 
 .yakov-dryh-pip-track.is-madness .yakov-dryh-pip.is-filled,
 .yakov-dryh-pip-track.is-response .yakov-dryh-pip.is-filled {
-  background: var(--yakov-dryh-madness);
-  border-color: var(--yakov-dryh-madness);
+  background-color: var(--yakov-dryh-madness);
 }
 
 .yakov-dryh-checkbox {

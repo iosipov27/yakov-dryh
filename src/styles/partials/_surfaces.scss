@@ -1,0 +1,51 @@
+.yakov-dryh-chat-card,
+.yakov-dryh-dialog-shell,
+.yakov-dryh-sheet-shell {
+  background:
+    radial-gradient(circle at top right, rgb(155 61 36 / 12%), transparent 34%),
+    linear-gradient(180deg, #fffdf8 0%, var(--yakov-dryh-surface) 100%);
+  border: 1px solid var(--yakov-dryh-border);
+  border-radius: 20px;
+  box-shadow: var(--yakov-dryh-shadow);
+  color: var(--yakov-dryh-ink);
+  font-family:
+    "Trebuchet MS",
+    "Gill Sans",
+    sans-serif;
+  padding: 1rem;
+}
+
+.yakov-dryh-subtitle,
+.yakov-dryh-copy {
+  color: var(--yakov-dryh-muted);
+  margin: 0.35rem 0 0;
+}
+
+.yakov-dryh-status {
+  align-self: flex-start;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 0.45rem 0.75rem;
+  text-transform: uppercase;
+
+  &.is-success {
+    background: #dbe9dd;
+  }
+
+  &.is-failure {
+    background: #f1d8d3;
+  }
+
+  &.is-draft {
+    background: #f2e2d8;
+  }
+
+  &.is-review {
+    background: #efe3b5;
+  }
+
+  &.is-resolved {
+    background: #cfe7d7;
+  }
+}

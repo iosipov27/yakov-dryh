@@ -1,0 +1,70 @@
+.yakov-dryh-sheet-shell {
+  display: grid;
+  gap: 1rem;
+}
+
+.yakov-dryh-header {
+  align-items: flex-start;
+  display: flex;
+  gap: 1rem;
+  justify-content: space-between;
+
+  &--sheet {
+    margin-bottom: 1rem;
+  }
+
+  h2,
+  h3 {
+    margin: 0;
+  }
+}
+
+.yakov-dryh-eyebrow {
+  color: var(--yakov-dryh-muted);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  margin: 0 0 0.35rem;
+  text-transform: uppercase;
+}
+
+.yakov-dryh-sheet-columns {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: minmax(0, 1.5fr) minmax(280px, 0.9fr);
+}
+
+.yakov-dryh-sheet-column {
+  display: grid;
+  gap: 0.85rem;
+
+  &.is-story,
+  &.is-sidebar {
+    align-content: start;
+  }
+}
+
+.yakov-dryh-card-panel,
+.yakov-dryh-resource-card,
+.yakov-dryh-sheet-highlight {
+  background: rgb(255 255 255 / 76%);
+  border: 1px solid rgb(183 167 156 / 66%);
+  border-radius: 16px;
+  padding: 1rem;
+}
+
+.yakov-dryh-sheet-highlight {
+  &--exhaustion {
+    background:
+      linear-gradient(135deg, rgb(159 47 31 / 14%), rgb(255 255 255 / 70%)),
+      var(--yakov-dryh-panel-strong);
+    min-width: 290px;
+  }
+}
+
+.yakov-dryh-card-panel,
+.yakov-dryh-resource-card {
+  h3 {
+    margin: 0;
+  }
+}

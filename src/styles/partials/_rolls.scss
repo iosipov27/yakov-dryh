@@ -1,0 +1,56 @@
+.yakov-dryh-chat-card__body {
+  display: grid;
+  gap: 0.85rem;
+}
+
+.yakov-dryh-roll-pools {
+  display: grid;
+  gap: 0.85rem;
+}
+
+.yakov-dryh-roll-summary,
+.yakov-dryh-roll-dominant {
+  background: rgb(255 255 255 / 72%);
+  border-radius: 14px;
+  margin: 0;
+  padding: 0.8rem 0.9rem;
+}
+
+.yakov-dryh-roll-pool {
+  align-items: center;
+  background: rgb(255 255 255 / 72%);
+  border: 1px solid rgb(183 167 156 / 56%);
+  border-radius: 14px;
+  display: flex;
+  gap: 0.75rem;
+  justify-content: space-between;
+  padding: 0.8rem 0.9rem;
+
+  &.is-exhaustion {
+    border-left: 4px solid var(--yakov-dryh-exhaustion);
+  }
+
+  &.is-madness {
+    border-left: 4px solid var(--yakov-dryh-madness);
+  }
+
+  &.is-pain {
+    border-left: 4px solid var(--yakov-dryh-pain);
+  }
+
+  &.is-discipline {
+    border-left: 4px solid var(--yakov-dryh-accent);
+  }
+}
+
+.yakov-dryh-chat-card__detail {
+  background: rgb(255 255 255 / 76%);
+  border-left: 4px solid var(--yakov-dryh-accent);
+  border-radius: 12px;
+  margin: 0;
+  padding: 0.85rem 1rem;
+
+  p {
+    margin: 0.35rem 0 0;
+  }
+}
