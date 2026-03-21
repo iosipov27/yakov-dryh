@@ -1,0 +1,41 @@
+<form class="yakov-dryh-sheet-shell">
+  <header class="yakov-dryh-header">
+    <div>
+      <p class="yakov-dryh-eyebrow">Character Surface</p>
+      <h2>{{actorName}}</h2>
+      <p class="yakov-dryh-subtitle">Actor type: {{actorType}}</p>
+    </div>
+
+    <div class="yakov-dryh-sheet-highlight">
+      <strong>Composition root ready</strong>
+      <span>This sheet is the anchor point for actor-centric workflows.</span>
+    </div>
+  </header>
+
+  <section class="yakov-dryh-sheet-grid">
+    <article class="yakov-dryh-card-panel">
+      <h4>Sheets</h4>
+      <p class="yakov-dryh-copy">{{sheetCapability}}</p>
+    </article>
+
+    <article class="yakov-dryh-card-panel">
+      <h4>Popups</h4>
+      <p class="yakov-dryh-copy">{{dialogCapability}}</p>
+    </article>
+
+    <article class="yakov-dryh-card-panel">
+      <h4>Chat</h4>
+      <p class="yakov-dryh-copy">{{chatCapability}}</p>
+    </article>
+  </section>
+
+  <footer class="yakov-dryh-actions">
+    <button
+      class="yakov-dryh-button"
+      type="button"
+      data-yakov-dryh-action="create-chat-card"
+    >
+      Create interactive chat card
+    </button>
+  </footer>
+</form>

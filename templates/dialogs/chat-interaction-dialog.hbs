@@ -1,0 +1,66 @@
+<section class="yakov-dryh-dialog-shell">
+  <header class="yakov-dryh-header">
+    <div>
+      <p class="yakov-dryh-eyebrow">Composition Root</p>
+      <h2>Chat interaction controller</h2>
+      <p class="yakov-dryh-subtitle">Message
+        {{messageId}}
+        is synchronized with the interactive chat card.</p>
+    </div>
+
+    <span class="yakov-dryh-status is-{{card.status}}">{{statusLabel}}</span>
+  </header>
+
+  <div class="yakov-dryh-dialog-grid">
+    <label class="yakov-dryh-field">
+      <span>Summary</span>
+      <input type="text" name="summary" value="{{card.summary}}" />
+    </label>
+
+    <label class="yakov-dryh-field">
+      <span>Detail</span>
+      <textarea name="detail">{{card.detail}}</textarea>
+    </label>
+
+    <label class="yakov-dryh-field">
+      <span>Status</span>
+      <select name="status">
+        {{#each statusOptions}}
+          {{#if selected}}
+            <option value="{{value}}" selected>{{label}}</option>
+          {{else}}
+            <option value="{{value}}">{{label}}</option>
+          {{/if}}
+        {{/each}}
+      </select>
+    </label>
+
+    <div class="yakov-dryh-card-panel">
+      <h4>Interaction scope</h4>
+      <p class="yakov-dryh-copy">
+        This popup is the first orchestration surface for complex edits that
+        need to push changes back into chat.
+      </p>
+      <p class="yakov-dryh-copy">Opened
+        {{card.dialogOpens}}
+        times for this card.</p>
+    </div>
+  </div>
+
+  <footer class="yakov-dryh-actions">
+    <button
+      class="yakov-dryh-button"
+      type="button"
+      data-yakov-dryh-action="apply-updates"
+    >
+      Apply to chat card
+    </button>
+    <button
+      class="yakov-dryh-button is-secondary"
+      type="button"
+      data-yakov-dryh-action="advance-status"
+    >
+      Cycle status
+    </button>
+  </footer>
+</section>

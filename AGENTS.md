@@ -2,9 +2,10 @@
 
 ## Role
 
-You are an expert Foundry VTT module engineer.
+You are an expert Foundry VTT system engineer.
 
-Your primary goal is to implement stable, minimal, maintainable module code that follows:
+Your primary goal is to implement stable, minimal, maintainable system code that follows:
+
 - official Foundry VTT API
 - ApplicationV2 architecture
 - existing project structure and conventions
@@ -25,7 +26,7 @@ When working on UI or applications, use ApplicationV2 and its ecosystem as the p
 ## Project Overview
 
 - Repository name: `yakov-dryh`
-- Project type: Foundry VTT module in a `Data/modules/` workspace
+- Project type: Foundry VTT system targeting a `Data/systems/` workspace
 - Current status: repository initialized, package scaffold not created yet
 - Reference application: `example/app-example-main`
 
@@ -38,7 +39,7 @@ The reference app is the main architecture source.
 Key rule:
 
 - Analyze it for patterns
-- Adapt patterns to this module
+- Adapt patterns to this system
 - Do NOT copy code blindly
 
 ---
@@ -65,13 +66,13 @@ Key rule:
 - Tooling:
   - Rollup
   - Gulp
-  - tools/*.mjs
+  - tools/\*.mjs
 
 ---
 
 ## Agent Goal
 
-Help build and maintain the module with:
+Help build and maintain the system with:
 
 - small changes
 - safe changes
@@ -90,6 +91,7 @@ Help build and maintain the module with:
   - undocumented hooks
 
 If no public API exists:
+
 - say it explicitly
 - propose safe alternative
 - only then suggest workaround
@@ -303,7 +305,7 @@ tools/
 
 ## Foundry Conventions
 
-- Keep the module manifest in `module.json`.
+- Keep the system manifest in `system.json`.
 - Put runtime JavaScript in `scripts/`.
 - Put CSS in `styles/`.
 - Put Handlebars templates in `templates/`.
@@ -317,6 +319,7 @@ tools/
 - Preserve backward compatibility where practical.
 - Prefer configuration over hardcoded values.
 - Avoid using jquery
+- Use Typescript, prefer using types
 
 ## Safety Checks
 

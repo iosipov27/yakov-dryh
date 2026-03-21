@@ -1,1 +1,196 @@
-/* Root stylesheet for the yakov-dryh module. */
+:root {
+  --yakov-dryh-ink: #21161e;
+  --yakov-dryh-surface: #f4efe7;
+  --yakov-dryh-panel: #fffaf4;
+  --yakov-dryh-accent: #9b3d24;
+  --yakov-dryh-accent-soft: #d7b7a2;
+  --yakov-dryh-border: #b7a79c;
+  --yakov-dryh-muted: #64545d;
+  --yakov-dryh-shadow: 0 14px 30px rgb(33 22 30 / 12%);
+}
+
+.yakov-dryh-chat-card,
+.yakov-dryh-dialog-shell,
+.yakov-dryh-sheet-shell {
+  color: var(--yakov-dryh-ink);
+}
+
+.yakov-dryh-chat-card,
+.yakov-dryh-dialog-shell {
+  background:
+    radial-gradient(circle at top right, rgb(155 61 36 / 12%), transparent 30%),
+    linear-gradient(180deg, #fffdf8 0%, var(--yakov-dryh-surface) 100%);
+  border: 1px solid var(--yakov-dryh-border);
+  border-radius: 18px;
+  box-shadow: var(--yakov-dryh-shadow);
+  padding: 1rem;
+}
+
+.yakov-dryh-sheet-shell {
+  background:
+    radial-gradient(circle at top left, rgb(155 61 36 / 10%), transparent 28%),
+    linear-gradient(180deg, #fffdf9 0%, var(--yakov-dryh-panel) 100%);
+  border: 1px solid var(--yakov-dryh-border);
+  border-radius: 22px;
+  box-shadow: var(--yakov-dryh-shadow);
+  display: grid;
+  gap: 1rem;
+  padding: 1.25rem;
+}
+
+.yakov-dryh-header {
+  align-items: start;
+  display: flex;
+  gap: 1rem;
+  justify-content: space-between;
+}
+
+.yakov-dryh-eyebrow {
+  color: var(--yakov-dryh-muted);
+  font-size: 0.75rem;
+  letter-spacing: 0.18em;
+  margin: 0 0 0.35rem;
+  text-transform: uppercase;
+}
+
+.yakov-dryh-header h2,
+.yakov-dryh-header h3 {
+  margin: 0;
+}
+
+.yakov-dryh-subtitle,
+.yakov-dryh-copy {
+  color: var(--yakov-dryh-muted);
+  margin: 0.35rem 0 0;
+}
+
+.yakov-dryh-status {
+  align-self: start;
+  background: #f2e2d8;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 0.35rem 0.65rem;
+  text-transform: uppercase;
+}
+
+.yakov-dryh-status.is-review {
+  background: #efe3b5;
+}
+
+.yakov-dryh-status.is-resolved {
+  background: #cfe7d7;
+}
+
+.yakov-dryh-chat-card__body,
+.yakov-dryh-dialog-grid,
+.yakov-dryh-sheet-grid {
+  display: grid;
+  gap: 0.85rem;
+}
+
+.yakov-dryh-chat-card__detail {
+  background: rgb(255 255 255 / 72%);
+  border-left: 3px solid var(--yakov-dryh-accent);
+  margin: 0;
+  padding: 0.75rem;
+}
+
+.yakov-dryh-chat-card__meta {
+  display: grid;
+  gap: 0.35rem;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  margin: 0;
+}
+
+.yakov-dryh-chat-card__meta dt {
+  color: var(--yakov-dryh-muted);
+  font-size: 0.75rem;
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.yakov-dryh-chat-card__meta dd {
+  font-weight: 600;
+  margin: 0.15rem 0 0;
+}
+
+.yakov-dryh-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.yakov-dryh-button {
+  background: var(--yakov-dryh-accent);
+  border: 0;
+  border-radius: 999px;
+  color: #fff;
+  cursor: pointer;
+  font-weight: 700;
+  padding: 0.65rem 1rem;
+}
+
+.yakov-dryh-button.is-secondary {
+  background: transparent;
+  border: 1px solid var(--yakov-dryh-border);
+  color: var(--yakov-dryh-ink);
+}
+
+.yakov-dryh-card-panel {
+  background: rgb(255 255 255 / 78%);
+  border: 1px solid rgb(183 167 156 / 66%);
+  border-radius: 16px;
+  padding: 1rem;
+}
+
+.yakov-dryh-card-panel h4 {
+  margin: 0 0 0.4rem;
+}
+
+.yakov-dryh-field {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.yakov-dryh-field input,
+.yakov-dryh-field select,
+.yakov-dryh-field textarea {
+  background: rgb(255 255 255 / 85%);
+  border: 1px solid var(--yakov-dryh-border);
+  border-radius: 12px;
+  min-height: 2.6rem;
+  padding: 0.65rem 0.8rem;
+}
+
+.yakov-dryh-field textarea {
+  min-height: 8rem;
+  resize: vertical;
+}
+
+.yakov-dryh-sheet-highlight {
+  background: linear-gradient(135deg, rgb(155 61 36 / 10%), rgb(215 183 162 / 30%));
+  border: 1px solid rgb(155 61 36 / 15%);
+  border-radius: 16px;
+  padding: 1rem;
+}
+
+.yakov-dryh-sheet-highlight strong {
+  display: block;
+  margin-bottom: 0.35rem;
+}
+
+@media (max-width: 640px) {
+  .yakov-dryh-header {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .yakov-dryh-actions {
+    flex-direction: column;
+  }
+
+  .yakov-dryh-button {
+    width: 100%;
+  }
+}
