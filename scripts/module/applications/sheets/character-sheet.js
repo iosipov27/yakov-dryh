@@ -54,14 +54,9 @@ export class YakovDryhCharacterSheet extends BaseSheet {
     }
     async _onRender(context, options) {
         await super._onRender(context, options);
-        const addExhaustionButton = this.element.querySelector('[data-yakov-dryh-action="add-exhaustion"]');
         const rollButton = this.element.querySelector('[data-yakov-dryh-action="open-roll-dialog"]');
         const responseInputs = this.element.querySelectorAll("[data-yakov-dryh-response]");
         const scarsInput = this.element.querySelector('textarea[data-yakov-dryh-field="scars"]');
-        addExhaustionButton?.addEventListener("click", (event) => {
-            event.preventDefault();
-            void this.addExhaustion();
-        });
         rollButton?.addEventListener("click", (event) => {
             event.preventDefault();
             void this.openRollDialog();
@@ -73,17 +68,6 @@ export class YakovDryhCharacterSheet extends BaseSheet {
         });
         scarsInput?.addEventListener("change", () => {
             void this.updateScars(scarsInput.value);
-        });
-    }
-    async addExhaustion() {
-        const actor = this.actor;
-        if (!actor) {
-            return;
-        }
-        const actorData = normalizeCharacterSystemData(actor.system);
-        const nextExhaustion = Math.min(actorData.exhaustion + 1, DRYH_EXHAUSTION_MAX);
-        await actor.update({
-            "system.exhaustion": nextExhaustion
         });
     }
     async openRollDialog() {

@@ -17,21 +17,9 @@
         {{/each}}
       </div>
       <div class="yakov-dryh-inline-actions">
-        <input
-          type="number"
-          name="system.exhaustion"
-          min="0"
-          max="6"
-          step="1"
-          value="{{actorData.exhaustion}}"
-        >
-        <button
-          class="yakov-dryh-button"
-          type="button"
-          data-yakov-dryh-action="add-exhaustion"
-        >
-          {{localize "YAKOV_DRYH.SHEETS.Actor.Character.Actions.AddExhaustion"}}
-        </button>
+        <span class="yakov-dryh-copy">
+          {{actorData.exhaustion}} / 6
+        </span>
         <button
           class="yakov-dryh-button is-secondary"
           type="button"
