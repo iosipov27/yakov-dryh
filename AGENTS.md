@@ -316,6 +316,7 @@ tools/
 - Add comments only where behavior is not obvious.
 - Preserve backward compatibility where practical.
 - Prefer configuration over hardcoded values.
+- Avoid using jquery
 
 ## Safety Checks
 
