@@ -9,4 +9,5 @@ export const TEMPLATE_PATHS = {
 export const CHAT_CARD_COMMAND = `/${SYSTEM_ID}-card`;
 export const CHAT_CARD_FLAG = "chatCard";
 export const CHAT_CARD_STATUSES = ["draft", "review", "resolved"];
+export const LOCALIZATION_PREFIX = "YAKOV_DRYH";
 //# sourceMappingURL=constants.js.map

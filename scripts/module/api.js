@@ -1,6 +1,8 @@
 import { YakovDryhChatInteractionDialog, YakovDryhCharacterSheet } from "./applications/index.js";
 import { advanceChatCardStatus, createInteractiveChatMessage, getChatCardData, rerenderChatCard } from "./chat/chat-card-service.js";
 import { openChatInteraction } from "./chat/index.js";
+import * as data from "./data/index.js";
+import * as documents from "./documents/index.js";
 export function createSystemApi() {
     return {
         applications: {
@@ -11,6 +13,8 @@ export function createSystemApi() {
                 Character: YakovDryhCharacterSheet
             }
         },
+        data,
+        documents,
         chat: {
             advanceStatus: advanceChatCardStatus,
             createInteractiveMessage: createInteractiveChatMessage,

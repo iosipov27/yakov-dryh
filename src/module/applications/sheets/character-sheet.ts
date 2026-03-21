@@ -1,13 +1,16 @@
 import { createInteractiveChatMessage } from "../../chat/chat-card-service.js";
+import { YAKOV_DRYH_ACTOR_TYPES } from "../../data/index.js";
 import { SYSTEM_ID, SYSTEM_TITLE, TEMPLATE_PATHS } from "../../constants.js";
 
 const BaseSheet = foundry.applications.api.HandlebarsApplicationMixin(
-  foundry.applications.api.ApplicationV2
+  foundry.applications.sheets.ActorSheetV2
 );
 
-interface CharacterSheetContext extends Record<string, unknown> {
+interface CharacterSheetContext
+  extends foundry.applications.sheets.ActorSheetV2.RenderContext {
   actorName: string;
   actorType: string;
+  actorTypeLabel: string;
   chatCapability: string;
   dialogCapability: string;
   moduleId: string;
@@ -16,7 +19,7 @@ interface CharacterSheetContext extends Record<string, unknown> {
 
 export class YakovDryhCharacterSheet extends BaseSheet {
   static override DEFAULT_OPTIONS = {
-    classes: [SYSTEM_ID, "yakov-dryh-sheet"],
+    classes: ["actor", SYSTEM_ID, "yakov-dryh-sheet"],
     position: {
       height: "auto" as const,
       width: 720
@@ -36,21 +39,6 @@ export class YakovDryhCharacterSheet extends BaseSheet {
     }
   };
 
-  readonly actorId: string;
-
-  constructor(actor: Actor.Implementation) {
-    super();
-    this.actorId = actor.id ?? "";
-  }
-
-  get actor(): Actor.Implementation | null {
-    if (!this.actorId) {
-      return null;
-    }
-
-    return game.actors?.get(this.actorId) ?? null;
-  }
-
   override get title(): string {
     const actorName = this.actor?.name ?? game.i18n?.localize("DOCUMENT.Actor") ?? "Actor";
 
@@ -59,12 +47,14 @@ export class YakovDryhCharacterSheet extends BaseSheet {
 
   protected override async _prepareContext(
     options: object
-  ): Promise<foundry.applications.api.HandlebarsApplicationMixin.RenderContext> {
+  ): Promise<CharacterSheetContext> {
     const context = (await super._prepareContext(options as never)) as CharacterSheetContext;
     const actor = this.actor;
+    const actorType = actor?.type ?? YAKOV_DRYH_ACTOR_TYPES.character;
 
     context.actorName = actor?.name ?? "Unbound actor";
-    context.actorType = actor?.type ?? "unknown";
+    context.actorType = actorType;
+    context.actorTypeLabel = localizeActorType(actorType);
     context.chatCapability =
       "Chat cards are designed as mutable views that can react to later user actions and popup workflows.";
     context.dialogCapability =
@@ -73,7 +63,7 @@ export class YakovDryhCharacterSheet extends BaseSheet {
     context.sheetCapability =
       "Character sheets are the stable anchor for actor-centric workflows and future command surfaces.";
 
-    return context as foundry.applications.api.HandlebarsApplicationMixin.RenderContext;
+    return context;
   }
 
   protected override async _onRender(
@@ -98,7 +88,11 @@ export class YakovDryhCharacterSheet extends BaseSheet {
       const actor = this.actor;
 
       if (!actor) {
-        ui.notifications?.warn("Actor is no longer available.");
+        ui.notifications?.warn(
+          game.i18n?.localize("YAKOV_DRYH.UI.Warnings.ActorUnavailable") ??
+            "Actor is no longer available."
+        );
+
         return;
       }
 
@@ -109,4 +103,11 @@ export class YakovDryhCharacterSheet extends BaseSheet {
       });
     });
   }
+}
+
+function localizeActorType(actorType: string): string {
+  const localizationKey = `TYPES.Actor.${actorType}`;
+  const localizedActorType = game.i18n?.localize(localizationKey) ?? localizationKey;
+
+  return localizedActorType === localizationKey ? actorType : localizedActorType;
 }

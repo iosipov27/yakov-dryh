@@ -321,6 +321,16 @@ tools/
 - Avoid using jquery
 - Use Typescript, prefer using types
 
+## Simplicity Rules
+
+- Do not add speculative defensive checks just to be safe.
+- Avoid guards like `if (!(root instanceof HTMLElement)) return;` unless there is an observed runtime failure or a documented API reason that requires it.
+- Prefer the simplest direct code path first. If it later fails in real usage, then fix that specific failure.
+- Do not add preventative fixes for hypothetical crashes that have not been observed yet.
+- Avoid unnecessary mappings, translation layers, adapter objects, or intermediate transformations.
+- If a mapping layer is truly needed, stop and ask before introducing it.
+- When in doubt, choose fewer abstractions and less branching.
+
 ## Safety Checks
 
 Before finishing a task, the agent should:

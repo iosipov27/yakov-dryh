@@ -1,0 +1,34 @@
+{
+  "TYPES": {
+    "Actor": {
+      "character": "Character"
+    }
+  },
+  "YAKOV_DRYH": {
+    "SHEETS": {
+      "Actor": {
+        "Character": {
+          "Label": "Yakov Dryh Character Sheet",
+          "Eyebrow": "Character Surface",
+          "ActorType": "Actor type:",
+          "HighlightTitle": "Document sheet registered",
+          "HighlightText": "This sheet now participates in Foundry's actor sheet registration flow.",
+          "Sections": {
+            "Sheets": "Sheets",
+            "Popups": "Popups",
+            "Chat": "Chat"
+          },
+          "Actions": {
+            "CreateChatCard": "Create interactive chat card"
+          }
+        }
+      }
+    },
+    "UI": {
+      "Warnings": {
+        "ActorUnavailable": "Actor is no longer available.",
+        "ChatMessageUnavailable": "Chat message is no longer available."
+      }
+    }
+  }
+}

@@ -11,6 +11,8 @@ import {
   type YakovDryhChatCardData
 } from "./chat/chat-card-service.js";
 import { openChatInteraction } from "./chat/index.js";
+import * as data from "./data/index.js";
+import * as documents from "./documents/index.js";
 
 export interface YakovDryhSystemApi {
   applications: {
@@ -21,6 +23,8 @@ export interface YakovDryhSystemApi {
       Character: typeof YakovDryhCharacterSheet;
     };
   };
+  data: typeof data;
+  documents: typeof documents;
   chat: {
     advanceStatus: (message: ChatMessage.Implementation) => Promise<YakovDryhChatCardData>;
     createInteractiveMessage: (
@@ -42,6 +46,8 @@ export function createSystemApi(): YakovDryhSystemApi {
         Character: YakovDryhCharacterSheet
       }
     },
+    data,
+    documents,
     chat: {
       advanceStatus: advanceChatCardStatus,
       createInteractiveMessage: createInteractiveChatMessage,

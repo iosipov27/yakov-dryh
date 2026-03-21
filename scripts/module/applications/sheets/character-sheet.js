@@ -1,9 +1,10 @@
 import { createInteractiveChatMessage } from "../../chat/chat-card-service.js";
+import { YAKOV_DRYH_ACTOR_TYPES } from "../../data/index.js";
 import { SYSTEM_ID, SYSTEM_TITLE, TEMPLATE_PATHS } from "../../constants.js";
-const BaseSheet = foundry.applications.api.HandlebarsApplicationMixin(foundry.applications.api.ApplicationV2);
+const BaseSheet = foundry.applications.api.HandlebarsApplicationMixin(foundry.applications.sheets.ActorSheetV2);
 export class YakovDryhCharacterSheet extends BaseSheet {
     static DEFAULT_OPTIONS = {
-        classes: [SYSTEM_ID, "yakov-dryh-sheet"],
+        classes: ["actor", SYSTEM_ID, "yakov-dryh-sheet"],
         position: {
             height: "auto",
             width: 720
@@ -21,17 +22,6 @@ export class YakovDryhCharacterSheet extends BaseSheet {
             template: TEMPLATE_PATHS.characterSheet
         }
     };
-    actorId;
-    constructor(actor) {
-        super();
-        this.actorId = actor.id ?? "";
-    }
-    get actor() {
-        if (!this.actorId) {
-            return null;
-        }
-        return game.actors?.get(this.actorId) ?? null;
-    }
     get title() {
         const actorName = this.actor?.name ?? game.i18n?.localize("DOCUMENT.Actor") ?? "Actor";
         return `${SYSTEM_TITLE}: ${actorName}`;
@@ -39,8 +29,10 @@ export class YakovDryhCharacterSheet extends BaseSheet {
     async _prepareContext(options) {
         const context = (await super._prepareContext(options));
         const actor = this.actor;
+        const actorType = actor?.type ?? YAKOV_DRYH_ACTOR_TYPES.character;
         context.actorName = actor?.name ?? "Unbound actor";
-        context.actorType = actor?.type ?? "unknown";
+        context.actorType = actorType;
+        context.actorTypeLabel = localizeActorType(actorType);
         context.chatCapability =
             "Chat cards are designed as mutable views that can react to later user actions and popup workflows.";
         context.dialogCapability =
@@ -61,7 +53,8 @@ export class YakovDryhCharacterSheet extends BaseSheet {
             event.preventDefault();
             const actor = this.actor;
             if (!actor) {
-                ui.notifications?.warn("Actor is no longer available.");
+                ui.notifications?.warn(game.i18n?.localize("YAKOV_DRYH.UI.Warnings.ActorUnavailable") ??
+                    "Actor is no longer available.");
                 return;
             }
             void createInteractiveChatMessage({
@@ -71,5 +64,10 @@ export class YakovDryhCharacterSheet extends BaseSheet {
             });
         });
     }
+}
+function localizeActorType(actorType) {
+    const localizationKey = `TYPES.Actor.${actorType}`;
+    const localizedActorType = game.i18n?.localize(localizationKey) ?? localizationKey;
+    return localizedActorType === localizationKey ? actorType : localizedActorType;
 }
 //# sourceMappingURL=character-sheet.js.map

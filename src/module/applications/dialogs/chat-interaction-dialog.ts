@@ -129,7 +129,11 @@ export class YakovDryhChatInteractionDialog extends BaseApplication {
     const message = this.message;
 
     if (!message) {
-      ui.notifications?.warn("Chat message is no longer available.");
+      ui.notifications?.warn(
+        game.i18n?.localize("YAKOV_DRYH.UI.Warnings.ChatMessageUnavailable") ??
+          "Chat message is no longer available."
+      );
+
       return;
     }
 
@@ -156,7 +160,11 @@ export class YakovDryhChatInteractionDialog extends BaseApplication {
     const message = this.message;
 
     if (!message) {
-      ui.notifications?.warn("Chat message is no longer available.");
+      ui.notifications?.warn(
+        game.i18n?.localize("YAKOV_DRYH.UI.Warnings.ChatMessageUnavailable") ??
+          "Chat message is no longer available."
+      );
+
       return;
     }
 

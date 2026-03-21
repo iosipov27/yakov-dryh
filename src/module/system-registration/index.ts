@@ -1,7 +1,7 @@
 import type { YakovDryhSystemApi } from "../api.js";
-import { registerApplicationSheets } from "../applications/index.js";
-import { SYSTEM_ID } from "../constants.js";
 import { registerChatHooks } from "../chat/index.js";
+import { registerDocumentClasses } from "./documents.js";
+import { registerApplicationSheets } from "./sheets.js";
 
 export function registerSystem(api: YakovDryhSystemApi): void {
   Hooks.once("init", () => {
@@ -11,11 +11,8 @@ export function registerSystem(api: YakovDryhSystemApi): void {
 
     systemData.api = api;
 
+    registerDocumentClasses();
     registerApplicationSheets();
     registerChatHooks(api);
-  });
-
-  Hooks.once("ready", () => {
-    console.info(`[${SYSTEM_ID}] Composition root ready.`);
   });
 }

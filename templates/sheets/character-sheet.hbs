@@ -1,30 +1,33 @@
 <form class="yakov-dryh-sheet-shell">
   <header class="yakov-dryh-header">
     <div>
-      <p class="yakov-dryh-eyebrow">Character Surface</p>
+      <p class="yakov-dryh-eyebrow">{{localize "YAKOV_DRYH.SHEETS.Actor.Character.Eyebrow"}}</p>
       <h2>{{actorName}}</h2>
-      <p class="yakov-dryh-subtitle">Actor type: {{actorType}}</p>
+      <p class="yakov-dryh-subtitle">
+        {{localize "YAKOV_DRYH.SHEETS.Actor.Character.ActorType"}}
+        {{actorTypeLabel}}
+      </p>
     </div>
 
     <div class="yakov-dryh-sheet-highlight">
-      <strong>Composition root ready</strong>
-      <span>This sheet is the anchor point for actor-centric workflows.</span>
+      <strong>{{localize "YAKOV_DRYH.SHEETS.Actor.Character.HighlightTitle"}}</strong>
+      <span>{{localize "YAKOV_DRYH.SHEETS.Actor.Character.HighlightText"}}</span>
     </div>
   </header>
 
   <section class="yakov-dryh-sheet-grid">
     <article class="yakov-dryh-card-panel">
-      <h4>Sheets</h4>
+      <h4>{{localize "YAKOV_DRYH.SHEETS.Actor.Character.Sections.Sheets"}}</h4>
       <p class="yakov-dryh-copy">{{sheetCapability}}</p>
     </article>
 
     <article class="yakov-dryh-card-panel">
-      <h4>Popups</h4>
+      <h4>{{localize "YAKOV_DRYH.SHEETS.Actor.Character.Sections.Popups"}}</h4>
       <p class="yakov-dryh-copy">{{dialogCapability}}</p>
     </article>
 
     <article class="yakov-dryh-card-panel">
-      <h4>Chat</h4>
+      <h4>{{localize "YAKOV_DRYH.SHEETS.Actor.Character.Sections.Chat"}}</h4>
       <p class="yakov-dryh-copy">{{chatCapability}}</p>
     </article>
   </section>
@@ -35,7 +38,7 @@
       type="button"
       data-yakov-dryh-action="create-chat-card"
     >
-      Create interactive chat card
+      {{localize "YAKOV_DRYH.SHEETS.Actor.Character.Actions.CreateChatCard"}}
     </button>
   </footer>
 </form>

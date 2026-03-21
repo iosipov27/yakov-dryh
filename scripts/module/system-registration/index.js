@@ -1,15 +1,13 @@
-import { registerApplicationSheets } from "../applications/index.js";
-import { SYSTEM_ID } from "../constants.js";
 import { registerChatHooks } from "../chat/index.js";
+import { registerDocumentClasses } from "./documents.js";
+import { registerApplicationSheets } from "./sheets.js";
 export function registerSystem(api) {
     Hooks.once("init", () => {
         const systemData = game.system;
         systemData.api = api;
+        registerDocumentClasses();
         registerApplicationSheets();
         registerChatHooks(api);
-    });
-    Hooks.once("ready", () => {
-        console.info(`[${SYSTEM_ID}] Composition root ready.`);
     });
 }
 //# sourceMappingURL=index.js.map
