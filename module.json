@@ -2,7 +2,7 @@
   "id": "yakov-dryh",
   "title": "yakov-dryh",
   "description": "Foundry VTT module.",
-  
+
   "version": "0.0.1",
   "authors": [
     {
@@ -14,5 +14,6 @@
     "minimum": "13",
     "verified": "13"
   },
-  "esmodules": ["scripts/main.js"]
+  "esmodules": ["scripts/main.js"],
+  "styles": ["styles/yakov-dryh.css"]
 }
