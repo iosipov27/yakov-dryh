@@ -1,36 +1,210 @@
 # AGENTS.md
 
+## Role
+
+You are an expert Foundry VTT module engineer.
+
+Your primary goal is to implement stable, minimal, maintainable module code that follows:
+- official Foundry VTT API
+- ApplicationV2 architecture
+- existing project structure and conventions
+
+---
+
+## Primary Source of Truth
+
+Always prefer the official Foundry VTT API documentation:
+
+- https://foundryvtt.com/api/
+- https://foundryvtt.com/api/classes/foundry.applications.api.ApplicationV2.html
+
+When working on UI or applications, use ApplicationV2 and its ecosystem as the primary reference model.
+
+---
+
 ## Project Overview
 
 - Repository name: `yakov-dryh`
-- Project type: Foundry VTT package in a `Data/modules/` workspace
+- Project type: Foundry VTT module in a `Data/modules/` workspace
 - Current status: repository initialized, package scaffold not created yet
 - Reference application: `example/app-example-main`
 
+---
+
+## Reference Application Strategy
+
+The reference app is the main architecture source.
+
+Key rule:
+
+- Analyze it for patterns
+- Adapt patterns to this module
+- Do NOT copy code blindly
+
+---
+
 ## Reference Application Summary
 
-The reference app in `example/app-example-main` is a full Foundry VTT system.
-Use it as the main architecture reference until this repository has its own runtime structure.
+- `system.json` loads runtime bundle and styles
+- `app-example.mjs` is the composition root
+- Code split into:
+  - applications
+  - data
+  - documents
+  - dice
+  - canvas
+  - enrichers
+  - helpers
+  - systemRegistration
+- Static content:
+  - templates
+  - lang
+  - assets
+  - styles
+  - packs
+- Tooling:
+  - Rollup
+  - Gulp
+  - tools/*.mjs
 
-Key findings from the analysis:
-
-- `system.json` is the runtime manifest and loads `build/app-example.js` and `styles/app-example.css`.
-- `app-example.mjs` is the composition root. It wires `CONFIG`, hooks, sockets, sheet registrations, dice, enrichers, and canvas integration.
-- Runtime code is split into `module/applications`, `module/data`, `module/documents`, `module/dice`, `module/canvas`, `module/enrichers`, `module/helpers`, and `module/systemRegistration`.
-- Static support content lives in `templates`, `lang`, `assets`, `styles`, and `packs`.
-- Development uses Rollup for the JS bundle, Gulp for LESS to CSS, and `tools/*.mjs` scripts for local Foundry setup and startup.
+---
 
 ## Agent Goal
 
-Help build and maintain this Foundry VTT module with small, safe, reviewable changes.
+Help build and maintain the module with:
 
-## Working Rules
+- small changes
+- safe changes
+- reviewable diffs
+- architecture consistency
 
-- Prefer minimal diffs and keep the repo easy to understand.
-- Do not remove or overwrite user content unless explicitly requested.
-- Keep paths and filenames stable once the module scaffold exists.
-- When adding new files, follow the expected Foundry module layout.
-- Document new commands, scripts, and assumptions in this file or `README.md`.
+---
+
+## Core API Policy
+
+- Use only documented public API
+- NEVER invent Foundry APIs
+- Avoid:
+  - `_private` methods
+  - `#private` fields
+  - undocumented hooks
+
+If no public API exists:
+- say it explicitly
+- propose safe alternative
+- only then suggest workaround
+
+---
+
+## ApplicationV2-First Rule
+
+When implementing UI:
+
+1. Prefer ApplicationV2
+2. Then DialogV2
+3. Then DocumentSheetV2
+4. Then existing ApplicationV2 subclasses
+
+---
+
+## Preferred Application Classes
+
+Use these as reference patterns:
+
+- ApplicationV2
+- DialogV2
+- DocumentSheetV2
+- CategoryBrowser
+- CameraPopout
+- CameraViews
+- CombatTrackerConfig
+- CompendiumArtConfig
+- DocumentSheetConfig
+- FilePicker
+- ImagePopout
+- PermissionConfig
+- RollResolver
+- HeadsUpDisplayContainer
+- BasePlaceableHUD
+- DependencyResolution
+- AVConfig
+- PrototypeTokenConfig
+- ChatPopout
+- FrameViewer
+- ModuleManagement
+- Sidebar
+- AbstractSidebarTab
+- GamePause
+- Hotbar
+- MainMenu
+- Players
+- RegionLegend
+- SceneControls
+- SceneNavigation
+
+---
+
+## UI Implementation Rules
+
+- Use ApplicationV2 lifecycle
+- Keep UI logic separate from game logic
+- Prefer small focused apps
+- Avoid DOM hacks
+- Do not depend on unstable markup
+- Use templates for rendering
+
+---
+
+## Rendering & Lifecycle
+
+- Use DEFAULT_OPTIONS
+- Respect render() and close()
+- Use documented lifecycle methods
+- Avoid direct DOM manipulation outside app root
+
+---
+
+## DOM & Events
+
+- Scope selectors to app root
+- Avoid global listeners
+- Clean up listeners properly
+
+---
+
+## Data & Documents
+
+- Use Foundry Document API
+- Do not mutate raw data
+- Use create/update/delete methods
+
+---
+
+## Hooks & Integration
+
+- Prefer hooks over overrides
+- Avoid patching core behavior
+- Keep integrations local and predictable
+
+---
+
+## Reference-Based Development Rule (Important)
+
+When implementing new functionality:
+
+1. Check official Foundry API docs
+2. Check ApplicationV2 patterns
+3. Check reference project (`example/app-example-main`)
+4. Then implement
+
+Priority order:
+
+1. Official API
+2. ApplicationV2 patterns
+3. Reference project
+4. Custom implementation
+
+---
 
 ## C4 Model
 

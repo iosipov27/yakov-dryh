@@ -1,0 +1,18 @@
+{
+  "id": "yakov-dryh",
+  "title": "yakov-dryh",
+  "description": "Foundry VTT module.",
+  
+  "version": "0.0.1",
+  "authors": [
+    {
+      "name": "Ilia Osipov",
+      "url": "https://github.com/iosipov27"
+    }
+  ],
+  "compatibility": {
+    "minimum": "13",
+    "verified": "13"
+  },
+  "esmodules": ["scripts/main.js"]
+}
