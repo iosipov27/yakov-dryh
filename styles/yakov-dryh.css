@@ -2,8 +2,11 @@
   --yakov-dryh-ink: #21161e;
   --yakov-dryh-surface: #f4efe7;
   --yakov-dryh-panel: #fffaf4;
+  --yakov-dryh-panel-strong: #f8f0e2;
   --yakov-dryh-accent: #9b3d24;
-  --yakov-dryh-accent-soft: #d7b7a2;
+  --yakov-dryh-exhaustion: #9f2f1f;
+  --yakov-dryh-madness: #8e1e32;
+  --yakov-dryh-pain: #3d4557;
   --yakov-dryh-border: #b7a79c;
   --yakov-dryh-muted: #64545d;
   --yakov-dryh-shadow: 0 14px 30px rgb(33 22 30 / 12%);
@@ -13,38 +16,45 @@
 .yakov-dryh-dialog-shell,
 .yakov-dryh-sheet-shell {
   color: var(--yakov-dryh-ink);
+  font-family: "Trebuchet MS", "Gill Sans", sans-serif;
 }
 
 .yakov-dryh-chat-card,
-.yakov-dryh-dialog-shell {
-  background: radial-gradient(circle at top right, rgba(155, 61, 36, 0.12), transparent 30%), linear-gradient(180deg, #fffdf8 0%, var(--yakov-dryh-surface) 100%);
+.yakov-dryh-dialog-shell,
+.yakov-dryh-sheet-shell {
+  background: radial-gradient(circle at top right, rgb(155 61 36 / 12%), transparent 34%), linear-gradient(180deg, #fffdf8 0%, var(--yakov-dryh-surface) 100%);
   border: 1px solid var(--yakov-dryh-border);
-  border-radius: 18px;
+  border-radius: 20px;
   box-shadow: var(--yakov-dryh-shadow);
+}
+
+.yakov-dryh-sheet-shell,
+.yakov-dryh-dialog-shell,
+.yakov-dryh-chat-card {
   padding: 1rem;
 }
 
 .yakov-dryh-sheet-shell {
-  background: radial-gradient(circle at top left, rgba(155, 61, 36, 0.1), transparent 28%), linear-gradient(180deg, #fffdf9 0%, var(--yakov-dryh-panel) 100%);
-  border: 1px solid var(--yakov-dryh-border);
-  border-radius: 22px;
-  box-shadow: var(--yakov-dryh-shadow);
   display: grid;
   gap: 1rem;
-  padding: 1.25rem;
 }
 
 .yakov-dryh-header {
-  align-items: start;
+  align-items: flex-start;
   display: flex;
   gap: 1rem;
   justify-content: space-between;
 }
 
+.yakov-dryh-header--sheet {
+  margin-bottom: 1rem;
+}
+
 .yakov-dryh-eyebrow {
   color: var(--yakov-dryh-muted);
   font-size: 0.75rem;
-  letter-spacing: 0.18em;
+  font-weight: 700;
+  letter-spacing: 0.16em;
   margin: 0 0 0.35rem;
   text-transform: uppercase;
 }
@@ -61,13 +71,24 @@
 }
 
 .yakov-dryh-status {
-  align-self: start;
-  background: #f2e2d8;
+  align-self: flex-start;
   border-radius: 999px;
   font-size: 0.75rem;
   font-weight: 700;
-  padding: 0.35rem 0.65rem;
+  padding: 0.45rem 0.75rem;
   text-transform: uppercase;
+}
+
+.yakov-dryh-status.is-success {
+  background: #dbe9dd;
+}
+
+.yakov-dryh-status.is-failure {
+  background: #f1d8d3;
+}
+
+.yakov-dryh-status.is-draft {
+  background: #f2e2d8;
 }
 
 .yakov-dryh-status.is-review {
@@ -78,37 +99,84 @@
   background: #cfe7d7;
 }
 
-.yakov-dryh-chat-card__body,
+.yakov-dryh-sheet-columns {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: minmax(0, 1.5fr) minmax(280px, 0.9fr);
+}
+
+.yakov-dryh-sheet-column,
 .yakov-dryh-dialog-grid,
-.yakov-dryh-sheet-grid {
+.yakov-dryh-chat-card__body,
+.yakov-dryh-roll-pools {
   display: grid;
   gap: 0.85rem;
 }
 
-.yakov-dryh-chat-card__detail {
-  background: rgba(255, 255, 255, 0.72);
-  border-left: 3px solid var(--yakov-dryh-accent);
-  margin: 0;
-  padding: 0.75rem;
+.yakov-dryh-sheet-column.is-story {
+  align-content: start;
 }
 
-.yakov-dryh-chat-card__meta {
+.yakov-dryh-sheet-column.is-sidebar {
+  align-content: start;
+}
+
+.yakov-dryh-card-panel,
+.yakov-dryh-resource-card,
+.yakov-dryh-sheet-highlight {
+  background: rgb(255 255 255 / 76%);
+  border: 1px solid rgb(183 167 156 / 66%);
+  border-radius: 16px;
+  padding: 1rem;
+}
+
+.yakov-dryh-sheet-highlight--exhaustion {
+  background: linear-gradient(135deg, rgb(159 47 31 / 14%), rgb(255 255 255 / 70%)), var(--yakov-dryh-panel-strong);
+  min-width: 290px;
+}
+
+.yakov-dryh-card-panel h3,
+.yakov-dryh-resource-card h3 {
+  margin: 0;
+}
+
+.yakov-dryh-field {
   display: grid;
   gap: 0.35rem;
-  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-  margin: 0;
 }
 
-.yakov-dryh-chat-card__meta dt {
-  color: var(--yakov-dryh-muted);
-  font-size: 0.75rem;
-  margin: 0;
+.yakov-dryh-field > span {
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
 }
 
-.yakov-dryh-chat-card__meta dd {
-  font-weight: 600;
-  margin: 0.15rem 0 0;
+.yakov-dryh-field input,
+.yakov-dryh-field textarea,
+.yakov-dryh-inline-actions input {
+  background: rgb(255 255 255 / 88%);
+  border: 1px solid var(--yakov-dryh-border);
+  border-radius: 12px;
+  min-height: 2.5rem;
+  padding: 0.65rem 0.8rem;
+}
+
+.yakov-dryh-field textarea {
+  min-height: 10rem;
+  resize: vertical;
+}
+
+.yakov-dryh-inline-actions {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+}
+
+.yakov-dryh-inline-actions input {
+  width: 5rem;
 }
 
 .yakov-dryh-actions {
@@ -124,7 +192,13 @@
   color: #fff;
   cursor: pointer;
   font-weight: 700;
+  min-height: 2.6rem;
   padding: 0.65rem 1rem;
+}
+
+.yakov-dryh-button:disabled {
+  cursor: default;
+  opacity: 0.45;
 }
 
 .yakov-dryh-button.is-secondary {
@@ -133,57 +207,133 @@
   color: var(--yakov-dryh-ink);
 }
 
-.yakov-dryh-card-panel {
-  background: rgba(255, 255, 255, 0.78);
-  border: 1px solid rgba(183, 167, 156, 0.66);
-  border-radius: 16px;
-  padding: 1rem;
+.yakov-dryh-button.is-compact {
+  min-height: 2rem;
+  min-width: 3.5rem;
+  padding: 0.35rem 0.75rem;
 }
 
-.yakov-dryh-card-panel h4 {
-  margin: 0 0 0.4rem;
-}
-
-.yakov-dryh-field {
-  display: grid;
+.yakov-dryh-pip-track {
+  display: flex;
+  flex-wrap: wrap;
   gap: 0.35rem;
+  margin-top: 0.65rem;
 }
 
-.yakov-dryh-field input,
-.yakov-dryh-field select,
-.yakov-dryh-field textarea {
-  background: rgba(255, 255, 255, 0.85);
+.yakov-dryh-pip {
+  background: rgb(255 255 255 / 92%);
   border: 1px solid var(--yakov-dryh-border);
+  border-radius: 4px;
+  display: inline-block;
+  height: 1rem;
+  width: 1rem;
+}
+
+.yakov-dryh-pip.is-filled {
+  background: var(--yakov-dryh-accent);
+  border-color: var(--yakov-dryh-accent);
+}
+
+.yakov-dryh-pip-track.is-exhaustion .yakov-dryh-pip.is-filled {
+  background: var(--yakov-dryh-exhaustion);
+  border-color: var(--yakov-dryh-exhaustion);
+}
+
+.yakov-dryh-pip-track.is-madness .yakov-dryh-pip.is-filled,
+.yakov-dryh-pip-track.is-response .yakov-dryh-pip.is-filled {
+  background: var(--yakov-dryh-madness);
+  border-color: var(--yakov-dryh-madness);
+}
+
+.yakov-dryh-checkbox {
+  align-items: center;
+  display: flex;
+  gap: 0.6rem;
+  margin-top: 0.75rem;
+}
+
+.yakov-dryh-checkbox input {
+  margin: 0;
+}
+
+.yakov-dryh-range-field {
+  align-items: center;
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: minmax(0, 1fr) auto;
+}
+
+.yakov-dryh-range-field output {
+  font-weight: 700;
+  min-width: 2ch;
+  text-align: center;
+}
+
+.yakov-dryh-roll-summary,
+.yakov-dryh-roll-dominant {
+  background: rgb(255 255 255 / 72%);
+  border-radius: 14px;
+  margin: 0;
+  padding: 0.8rem 0.9rem;
+}
+
+.yakov-dryh-roll-pool {
+  align-items: center;
+  background: rgb(255 255 255 / 72%);
+  border: 1px solid rgb(183 167 156 / 56%);
+  border-radius: 14px;
+  display: flex;
+  gap: 0.75rem;
+  justify-content: space-between;
+  padding: 0.8rem 0.9rem;
+}
+
+.yakov-dryh-roll-pool.is-exhaustion {
+  border-left: 4px solid var(--yakov-dryh-exhaustion);
+}
+
+.yakov-dryh-roll-pool.is-madness {
+  border-left: 4px solid var(--yakov-dryh-madness);
+}
+
+.yakov-dryh-roll-pool.is-pain {
+  border-left: 4px solid var(--yakov-dryh-pain);
+}
+
+.yakov-dryh-roll-pool.is-discipline {
+  border-left: 4px solid var(--yakov-dryh-accent);
+}
+
+.yakov-dryh-chat-card__detail {
+  background: rgb(255 255 255 / 76%);
+  border-left: 4px solid var(--yakov-dryh-accent);
   border-radius: 12px;
-  min-height: 2.6rem;
-  padding: 0.65rem 0.8rem;
+  margin: 0;
+  padding: 0.85rem 1rem;
 }
 
-.yakov-dryh-field textarea {
-  min-height: 8rem;
-  resize: vertical;
+.yakov-dryh-chat-card__detail p {
+  margin: 0.35rem 0 0;
 }
 
-.yakov-dryh-sheet-highlight {
-  background: linear-gradient(135deg, rgba(155, 61, 36, 0.1), rgba(215, 183, 162, 0.3));
-  border: 1px solid rgba(155, 61, 36, 0.15);
-  border-radius: 16px;
-  padding: 1rem;
-}
-
-.yakov-dryh-sheet-highlight strong {
-  display: block;
-  margin-bottom: 0.35rem;
-}
-
-@media (max-width: 640px) {
+@media (max-width: 760px) {
   .yakov-dryh-header {
+    flex-direction: column;
+  }
+
+  .yakov-dryh-sheet-columns {
+    grid-template-columns: 1fr;
+  }
+
+  .yakov-dryh-roll-pool {
     align-items: stretch;
     flex-direction: column;
   }
+
   .yakov-dryh-actions {
     flex-direction: column;
   }
+
   .yakov-dryh-button {
     width: 100%;
   }

@@ -1,0 +1,85 @@
+<article class="yakov-dryh-chat-card yakov-dryh-roll-card {{#if isFinal}}is-final{{/if}}">
+  <header class="yakov-dryh-header">
+    <div>
+      <p class="yakov-dryh-eyebrow">Don't Rest Your Head</p>
+      <h3>{{stageLabel}}</h3>
+      <p class="yakov-dryh-subtitle">{{actorName}}</p>
+    </div>
+
+    <span class="yakov-dryh-status is-{{rollResult.outcome}}">{{outcomeLabel}}</span>
+  </header>
+
+  <div class="yakov-dryh-chat-card__body">
+    <p class="yakov-dryh-roll-summary">
+      {{localize "YAKOV_DRYH.ROLL.Chat.Successes"}}
+      {{rollResult.successes.player}}
+      vs
+      {{rollResult.successes.pain}}
+      =>
+      <strong>{{outcomeLabel}}</strong>
+    </p>
+
+    <div class="yakov-dryh-roll-pools">
+      {{#each poolSummaries}}
+        <section class="yakov-dryh-roll-pool {{cssClass}}">
+          <div>
+            <strong>{{label}}</strong>
+            <p class="yakov-dryh-copy">{{dice}} => {{successes}}</p>
+          </div>
+
+          {{#if ../canModify}}
+            <div class="yakov-dryh-inline-actions">
+              <button
+                class="yakov-dryh-button is-secondary is-compact"
+                type="button"
+                data-yakov-dryh-roll-action="add6"
+                data-target-pool="{{key}}"
+              >
+                +6
+              </button>
+              <button
+                class="yakov-dryh-button is-secondary is-compact"
+                type="button"
+                data-yakov-dryh-roll-action="remove6"
+                data-target-pool="{{key}}"
+                {{#unless hasSix}}disabled{{/unless}}
+              >
+                -6
+              </button>
+            </div>
+          {{/if}}
+        </section>
+      {{/each}}
+    </div>
+
+    <p class="yakov-dryh-roll-dominant">
+      <strong>{{localize "YAKOV_DRYH.ROLL.Chat.Dominant"}}</strong>
+      {{dominantLabel}}
+    </p>
+
+    {{#if effectText}}
+      <div class="yakov-dryh-chat-card__detail">
+        <strong>{{localize "YAKOV_DRYH.ROLL.Chat.Effect"}}</strong>
+        <p>{{effectText}}</p>
+      </div>
+    {{/if}}
+
+    {{#if isResolved}}
+      {{#if finalMessageId}}
+        <p class="yakov-dryh-copy">{{localize "YAKOV_DRYH.ROLL.Chat.Finalized"}}</p>
+      {{/if}}
+    {{/if}}
+  </div>
+
+  {{#if canModify}}
+    <footer class="yakov-dryh-actions">
+      <button
+        class="yakov-dryh-button"
+        type="button"
+        data-yakov-dryh-roll-action="finalize"
+      >
+        {{localize "YAKOV_DRYH.ROLL.Chat.Finalize"}}
+      </button>
+    </footer>
+  {{/if}}
+</article>

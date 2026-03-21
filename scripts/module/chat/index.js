@@ -1,5 +1,6 @@
 import { YakovDryhChatInteractionDialog } from "../applications/dialogs/chat-interaction-dialog.js";
 import { CHAT_CARD_COMMAND } from "../constants.js";
+import { finalizeDryhRoll, getDryhRollCardData, hasDryhRollCard } from "./roll-card-service.js";
 import { advanceChatCardStatus, getChatCardData, hasInteractiveChatCard, markChatCardDialogOpened } from "./chat-card-service.js";
 export async function openChatInteraction(message) {
     await markChatCardDialogOpened(message);
@@ -21,10 +22,44 @@ export function registerChatHooks(api) {
         return false;
     });
     Hooks.on("renderChatMessageHTML", (message, html) => {
+        if (hasDryhRollCard(message)) {
+            activateDryhRollListeners(message, html);
+        }
         if (!hasInteractiveChatCard(message)) {
             return;
         }
         activateChatCardListeners(message, html, api);
+    });
+}
+function activateDryhRollListeners(message, html) {
+    const card = getDryhRollCardData(message);
+    const actionElements = html.querySelectorAll("[data-yakov-dryh-roll-action]");
+    actionElements.forEach((actionElement) => {
+        if (game.user && !game.user.isGM) {
+            actionElement.hidden = true;
+            return;
+        }
+        if (card.stage !== "initial" || card.finalized) {
+            actionElement.setAttribute("disabled", "disabled");
+            return;
+        }
+        const action = actionElement.dataset.yakovDryhRollAction;
+        const targetPool = actionElement.dataset.targetPool;
+        actionElement.addEventListener("click", (event) => {
+            event.preventDefault();
+            actionElement.setAttribute("disabled", "disabled");
+            if (action === "finalize") {
+                void finalizeDryhRoll(message);
+                return;
+            }
+            if (!targetPool || (action !== "add6" && action !== "remove6")) {
+                return;
+            }
+            void finalizeDryhRoll(message, {
+                type: action,
+                targetPool
+            });
+        });
     });
 }
 function activateChatCardListeners(message, html, api) {

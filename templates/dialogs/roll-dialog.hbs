@@ -1,0 +1,59 @@
+<section class="yakov-dryh-dialog-shell">
+  <header class="yakov-dryh-header">
+    <div>
+      <p class="yakov-dryh-eyebrow">{{localize "YAKOV_DRYH.ROLL.Dialog.Eyebrow"}}</p>
+      <h3>{{actorName}}</h3>
+      <p class="yakov-dryh-subtitle">{{localize "YAKOV_DRYH.ROLL.Dialog.Subtitle"}}</p>
+    </div>
+  </header>
+
+  <div class="yakov-dryh-dialog-grid">
+    <div class="yakov-dryh-card-panel">
+      <strong>{{localize "YAKOV_DRYH.ROLL.Dialog.Discipline"}}</strong>
+      <p class="yakov-dryh-copy">{{disciplineDots}}</p>
+    </div>
+
+    <div class="yakov-dryh-card-panel">
+      <strong>{{localize "YAKOV_DRYH.ROLL.Dialog.Exhaustion"}}</strong>
+      <p class="yakov-dryh-copy">{{exhaustionDots}}</p>
+      <label class="yakov-dryh-checkbox">
+        <input type="checkbox" name="addExhaustion">
+        <span>{{localize "YAKOV_DRYH.ROLL.Dialog.AddExhaustion"}}</span>
+      </label>
+    </div>
+
+    <div class="yakov-dryh-card-panel">
+      <strong>{{localize "YAKOV_DRYH.ROLL.Dialog.PermanentMadness"}}</strong>
+      <p class="yakov-dryh-copy">{{madnessDots}}</p>
+      <label class="yakov-dryh-field">
+        <span>{{localize "YAKOV_DRYH.ROLL.Dialog.TemporaryMadness"}}</span>
+        <div class="yakov-dryh-range-field">
+          <input type="range" name="madnessTemp" min="0" max="6" step="1" value="0">
+          <output data-yakov-dryh-madness-output>0</output>
+        </div>
+      </label>
+    </div>
+
+    <label class="yakov-dryh-field">
+      <span>{{localize "YAKOV_DRYH.ROLL.Dialog.Pain"}}</span>
+      <input type="number" name="painDice" min="0" step="1" value="0">
+    </label>
+  </div>
+
+  <footer class="yakov-dryh-actions">
+    <button
+      class="yakov-dryh-button"
+      type="button"
+      data-yakov-dryh-action="submit-roll"
+    >
+      {{localize "YAKOV_DRYH.ROLL.Dialog.Roll"}}
+    </button>
+    <button
+      class="yakov-dryh-button is-secondary"
+      type="button"
+      data-yakov-dryh-action="cancel-roll"
+    >
+      {{localize "YAKOV_DRYH.ROLL.Dialog.Cancel"}}
+    </button>
+  </footer>
+</section>

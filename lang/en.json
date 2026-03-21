@@ -5,21 +5,80 @@
     }
   },
   "YAKOV_DRYH": {
+    "ROLL": {
+      "Chat": {
+        "Dominant": "Dominant:",
+        "Effect": "Effect",
+        "Finalize": "Finalize Result",
+        "Finalized": "Initial result has been finalized.",
+        "FinalTitle": "Final Result",
+        "InitialTitle": "Roll Result",
+        "Successes": "Successes:"
+      },
+      "Dialog": {
+        "AddExhaustion": "Take +1 Exhaustion",
+        "Cancel": "Cancel",
+        "Discipline": "Discipline",
+        "Exhaustion": "Exhaustion",
+        "Eyebrow": "Dice Pool",
+        "Pain": "Pain Dice",
+        "PermanentMadness": "Permanent Madness",
+        "Roll": "Roll",
+        "Subtitle": "Build the pool before the chat card goes live.",
+        "TemporaryMadness": "Temporary Madness"
+      },
+      "Effects": {
+        "DespairTotal": "Total Despair:",
+        "discipline": "You may recover control.",
+        "exhaustion": "Gain +1 Exhaustion.",
+        "madness": "Mark a Response.",
+        "pain": "GM gains +1 Despair."
+      },
+      "Outcomes": {
+        "failure": "Failure",
+        "success": "Success"
+      },
+      "Pools": {
+        "discipline": "Discipline",
+        "exhaustion": "Exhaustion",
+        "madness": "Madness",
+        "pain": "Pain"
+      }
+    },
+    "SETTINGS": {
+      "GmDespair": {
+        "Hint": "Tracks the current GM Despair total for DRYH pain effects.",
+        "Name": "GM Despair"
+      }
+    },
     "SHEETS": {
       "Actor": {
         "Character": {
-          "Label": "Yakov Dryh Character Sheet",
-          "Eyebrow": "Character Surface",
           "ActorType": "Actor type:",
-          "HighlightTitle": "Document sheet registered",
-          "HighlightText": "This sheet now participates in Foundry's actor sheet registration flow.",
+          "Eyebrow": "Character Sheet",
+          "Fields": {
+            "Concept": "Concept",
+            "Discipline": "Discipline",
+            "Exhaustion": "Current Exhaustion",
+            "ExhaustionTalent": "Exhaustion Talent",
+            "Fight": "Fight",
+            "Flight": "Flight",
+            "Hope": "Hope",
+            "MadnessTalent": "Madness Talent",
+            "Name": "Name",
+            "PermanentMadness": "Permanent Madness",
+            "Responses": "Responses",
+            "ResponsesRemaining": "Response capacity remaining:",
+            "Scars": "Scars"
+          },
+          "Label": "Yakov Dryh Character Sheet",
           "Sections": {
-            "Sheets": "Sheets",
-            "Popups": "Popups",
-            "Chat": "Chat"
+            "Talents": "Talents"
           },
           "Actions": {
-            "CreateChatCard": "Create interactive chat card"
+            "AddExhaustion": "+ Exhaustion",
+            "CreateChatCard": "Create interactive chat card",
+            "Roll": "Roll"
           }
         }
       }

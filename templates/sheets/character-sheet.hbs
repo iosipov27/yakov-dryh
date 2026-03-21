@@ -1,5 +1,5 @@
-<form class="yakov-dryh-sheet-shell">
-  <header class="yakov-dryh-header">
+<section class="yakov-dryh-sheet-shell">
+  <header class="yakov-dryh-header yakov-dryh-header--sheet">
     <div>
       <p class="yakov-dryh-eyebrow">{{localize "YAKOV_DRYH.SHEETS.Actor.Character.Eyebrow"}}</p>
       <h2>{{actorName}}</h2>
@@ -9,36 +9,163 @@
       </p>
     </div>
 
-    <div class="yakov-dryh-sheet-highlight">
-      <strong>{{localize "YAKOV_DRYH.SHEETS.Actor.Character.HighlightTitle"}}</strong>
-      <span>{{localize "YAKOV_DRYH.SHEETS.Actor.Character.HighlightText"}}</span>
+    <div class="yakov-dryh-sheet-highlight yakov-dryh-sheet-highlight--exhaustion">
+      <strong>{{localize "YAKOV_DRYH.SHEETS.Actor.Character.Fields.Exhaustion"}}</strong>
+      <div class="yakov-dryh-pip-track is-exhaustion">
+        {{#each exhaustionPips}}
+          <span class="yakov-dryh-pip {{#if filled}}is-filled{{/if}}"></span>
+        {{/each}}
+      </div>
+      <div class="yakov-dryh-inline-actions">
+        <input
+          type="number"
+          name="system.exhaustion"
+          min="0"
+          max="6"
+          step="1"
+          value="{{actorData.exhaustion}}"
+        >
+        <button
+          class="yakov-dryh-button"
+          type="button"
+          data-yakov-dryh-action="add-exhaustion"
+        >
+          {{localize "YAKOV_DRYH.SHEETS.Actor.Character.Actions.AddExhaustion"}}
+        </button>
+        <button
+          class="yakov-dryh-button is-secondary"
+          type="button"
+          data-yakov-dryh-action="open-roll-dialog"
+        >
+          {{localize "YAKOV_DRYH.SHEETS.Actor.Character.Actions.Roll"}}
+        </button>
+      </div>
     </div>
   </header>
 
-  <section class="yakov-dryh-sheet-grid">
-    <article class="yakov-dryh-card-panel">
-      <h4>{{localize "YAKOV_DRYH.SHEETS.Actor.Character.Sections.Sheets"}}</h4>
-      <p class="yakov-dryh-copy">{{sheetCapability}}</p>
-    </article>
+  <div class="yakov-dryh-sheet-columns">
+    <div class="yakov-dryh-sheet-column is-story">
+      <label class="yakov-dryh-field">
+        <span>{{localize "YAKOV_DRYH.SHEETS.Actor.Character.Fields.Name"}}</span>
+        <input type="text" name="name" value="{{actorName}}">
+      </label>
 
-    <article class="yakov-dryh-card-panel">
-      <h4>{{localize "YAKOV_DRYH.SHEETS.Actor.Character.Sections.Popups"}}</h4>
-      <p class="yakov-dryh-copy">{{dialogCapability}}</p>
-    </article>
+      <label class="yakov-dryh-field">
+        <span>{{localize "YAKOV_DRYH.SHEETS.Actor.Character.Fields.Concept"}}</span>
+        <input type="text" name="system.concept" value="{{actorData.concept}}">
+      </label>
 
-    <article class="yakov-dryh-card-panel">
-      <h4>{{localize "YAKOV_DRYH.SHEETS.Actor.Character.Sections.Chat"}}</h4>
-      <p class="yakov-dryh-copy">{{chatCapability}}</p>
-    </article>
-  </section>
+      <label class="yakov-dryh-field">
+        <span>{{localize "YAKOV_DRYH.SHEETS.Actor.Character.Fields.Hope"}}</span>
+        <input type="number" name="system.hope" min="0" step="1" value="{{actorData.hope}}">
+      </label>
 
-  <footer class="yakov-dryh-actions">
-    <button
-      class="yakov-dryh-button"
-      type="button"
-      data-yakov-dryh-action="create-chat-card"
-    >
-      {{localize "YAKOV_DRYH.SHEETS.Actor.Character.Actions.CreateChatCard"}}
-    </button>
-  </footer>
-</form>
+      <div class="yakov-dryh-card-panel">
+        <h3>{{localize "YAKOV_DRYH.SHEETS.Actor.Character.Sections.Talents"}}</h3>
+
+        <label class="yakov-dryh-field">
+          <span>{{localize "YAKOV_DRYH.SHEETS.Actor.Character.Fields.ExhaustionTalent"}}</span>
+          <input
+            type="text"
+            name="system.talents.exhaustion"
+            value="{{actorData.talents.exhaustion}}"
+          >
+        </label>
+
+        <label class="yakov-dryh-field">
+          <span>{{localize "YAKOV_DRYH.SHEETS.Actor.Character.Fields.MadnessTalent"}}</span>
+          <input
+            type="text"
+            name="system.talents.madness"
+            value="{{actorData.talents.madness}}"
+          >
+        </label>
+      </div>
+
+      <label class="yakov-dryh-field">
+        <span>{{localize "YAKOV_DRYH.SHEETS.Actor.Character.Fields.Scars"}}</span>
+        <textarea data-yakov-dryh-field="scars">{{scarsText}}</textarea>
+      </label>
+    </div>
+
+    <aside class="yakov-dryh-sheet-column is-sidebar">
+      <div class="yakov-dryh-resource-card">
+        <label class="yakov-dryh-field">
+          <span>{{localize "YAKOV_DRYH.SHEETS.Actor.Character.Fields.Discipline"}}</span>
+          <input
+            type="number"
+            name="system.discipline"
+            min="0"
+            step="1"
+            value="{{actorData.discipline}}"
+          >
+        </label>
+        <div class="yakov-dryh-pip-track">
+          {{#each disciplinePips}}
+            <span class="yakov-dryh-pip {{#if filled}}is-filled{{/if}}"></span>
+          {{/each}}
+        </div>
+      </div>
+
+      <div class="yakov-dryh-resource-card">
+        <label class="yakov-dryh-field">
+          <span>{{localize "YAKOV_DRYH.SHEETS.Actor.Character.Fields.PermanentMadness"}}</span>
+          <input
+            type="number"
+            name="system.madnessPermanent"
+            min="0"
+            step="1"
+            value="{{actorData.madnessPermanent}}"
+          >
+        </label>
+        <div class="yakov-dryh-pip-track is-madness">
+          {{#each madnessPips}}
+            <span class="yakov-dryh-pip {{#if filled}}is-filled{{/if}}"></span>
+          {{/each}}
+        </div>
+      </div>
+
+      <div class="yakov-dryh-resource-card">
+        <h3>{{localize "YAKOV_DRYH.SHEETS.Actor.Character.Fields.Responses"}}</h3>
+        <p class="yakov-dryh-copy">
+          {{localize "YAKOV_DRYH.SHEETS.Actor.Character.Fields.ResponsesRemaining"}}
+          {{responsesRemaining}} / {{actorData.responses.max}}
+        </p>
+
+        <label class="yakov-dryh-field">
+          <span>{{localize "YAKOV_DRYH.SHEETS.Actor.Character.Fields.Fight"}}</span>
+          <input
+            type="number"
+            min="0"
+            max="{{actorData.responses.max}}"
+            step="1"
+            value="{{actorData.responses.fight}}"
+            data-yakov-dryh-response="fight"
+          >
+        </label>
+        <div class="yakov-dryh-pip-track is-response">
+          {{#each responseFightPips}}
+            <span class="yakov-dryh-pip {{#if filled}}is-filled{{/if}}"></span>
+          {{/each}}
+        </div>
+
+        <label class="yakov-dryh-field">
+          <span>{{localize "YAKOV_DRYH.SHEETS.Actor.Character.Fields.Flight"}}</span>
+          <input
+            type="number"
+            min="0"
+            max="{{actorData.responses.max}}"
+            step="1"
+            value="{{actorData.responses.flight}}"
+            data-yakov-dryh-response="flight"
+          >
+        </label>
+        <div class="yakov-dryh-pip-track is-response">
+          {{#each responseFlightPips}}
+            <span class="yakov-dryh-pip {{#if filled}}is-filled{{/if}}"></span>
+          {{/each}}
+        </div>
+      </div>
+    </aside>
+  </div>
+</section>

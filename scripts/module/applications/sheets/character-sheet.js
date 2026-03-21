@@ -1,15 +1,19 @@
-import { createInteractiveChatMessage } from "../../chat/chat-card-service.js";
-import { YAKOV_DRYH_ACTOR_TYPES } from "../../data/index.js";
+import { YakovDryhRollDialog } from "../dialogs/roll-dialog.js";
+import { DRYH_EXHAUSTION_MAX, DRYH_RESPONSE_MAX, formatScarsText, normalizeCharacterSystemData, normalizeResponses, YAKOV_DRYH_ACTOR_TYPES } from "../../data/index.js";
 import { SYSTEM_ID, SYSTEM_TITLE, TEMPLATE_PATHS } from "../../constants.js";
 const BaseSheet = foundry.applications.api.HandlebarsApplicationMixin(foundry.applications.sheets.ActorSheetV2);
 export class YakovDryhCharacterSheet extends BaseSheet {
     static DEFAULT_OPTIONS = {
         classes: ["actor", SYSTEM_ID, "yakov-dryh-sheet"],
+        form: {
+            closeOnSubmit: false,
+            submitOnChange: true
+        },
         position: {
             height: "auto",
-            width: 720
+            width: 860
         },
-        tag: "section",
+        tag: "form",
         window: {
             icon: "fa-solid fa-address-card",
             resizable: true,
@@ -27,43 +31,99 @@ export class YakovDryhCharacterSheet extends BaseSheet {
         return `${SYSTEM_TITLE}: ${actorName}`;
     }
     async _prepareContext(options) {
-        const context = (await super._prepareContext(options));
+        const context = await super._prepareContext(options);
         const actor = this.actor;
+        const actorData = normalizeCharacterSystemData(actor?.system);
         const actorType = actor?.type ?? YAKOV_DRYH_ACTOR_TYPES.character;
-        context.actorName = actor?.name ?? "Unbound actor";
+        context.actorData = actorData;
+        context.actorName = actor?.name ?? "";
         context.actorType = actorType;
         context.actorTypeLabel = localizeActorType(actorType);
-        context.chatCapability =
-            "Chat cards are designed as mutable views that can react to later user actions and popup workflows.";
-        context.dialogCapability =
-            "Complex popup windows should orchestrate focused editing, validation and multi-step interactions.";
+        context.disciplinePips = createPips(actorData.discipline, Math.max(actorData.discipline, 3));
+        context.exhaustionPips = createPips(actorData.exhaustion, DRYH_EXHAUSTION_MAX);
+        context.madnessPips = createPips(actorData.madnessPermanent, Math.max(actorData.madnessPermanent, 3));
         context.moduleId = SYSTEM_ID;
-        context.sheetCapability =
-            "Character sheets are the stable anchor for actor-centric workflows and future command surfaces.";
+        context.responseFightPips = createPips(actorData.responses.fight, actorData.responses.max);
+        context.responseFlightPips = createPips(actorData.responses.flight, actorData.responses.max);
+        context.responsesRemaining = Math.max(actorData.responses.max -
+            actorData.responses.fight -
+            actorData.responses.flight, 0);
+        context.scarsText = formatScarsText(actorData.scars);
         return context;
     }
     async _onRender(context, options) {
         await super._onRender(context, options);
-        const root = this.element;
-        if (!(root instanceof HTMLElement)) {
-            return;
-        }
-        const createChatCardButton = root.querySelector('[data-yakov-dryh-action="create-chat-card"]');
-        createChatCardButton?.addEventListener("click", (event) => {
+        const addExhaustionButton = this.element.querySelector('[data-yakov-dryh-action="add-exhaustion"]');
+        const rollButton = this.element.querySelector('[data-yakov-dryh-action="open-roll-dialog"]');
+        const responseInputs = this.element.querySelectorAll("[data-yakov-dryh-response]");
+        const scarsInput = this.element.querySelector('textarea[data-yakov-dryh-field="scars"]');
+        addExhaustionButton?.addEventListener("click", (event) => {
             event.preventDefault();
-            const actor = this.actor;
-            if (!actor) {
-                ui.notifications?.warn(game.i18n?.localize("YAKOV_DRYH.UI.Warnings.ActorUnavailable") ??
-                    "Actor is no longer available.");
-                return;
-            }
-            void createInteractiveChatMessage({
-                actorName: actor.name ?? null,
-                actorUuid: actor.uuid,
-                summary: `Interactive workflow opened from ${actor.name ?? "actor"}`
+            void this.addExhaustion();
+        });
+        rollButton?.addEventListener("click", (event) => {
+            event.preventDefault();
+            void this.openRollDialog();
+        });
+        responseInputs.forEach((input) => {
+            input.addEventListener("change", () => {
+                void this.updateResponses(input.dataset.yakovDryhResponse, input.value);
             });
         });
+        scarsInput?.addEventListener("change", () => {
+            void this.updateScars(scarsInput.value);
+        });
     }
+    async addExhaustion() {
+        const actor = this.actor;
+        if (!actor) {
+            return;
+        }
+        const actorData = normalizeCharacterSystemData(actor.system);
+        const nextExhaustion = Math.min(actorData.exhaustion + 1, DRYH_EXHAUSTION_MAX);
+        await actor.update({
+            "system.exhaustion": nextExhaustion
+        });
+    }
+    async openRollDialog() {
+        if (!this.actor) {
+            return;
+        }
+        await YakovDryhRollDialog.openForActor(this.actor);
+    }
+    async updateResponses(changedField, value) {
+        const actor = this.actor;
+        if (!actor) {
+            return;
+        }
+        const currentData = normalizeCharacterSystemData(actor.system);
+        const numericValue = Number.parseInt(value, 10);
+        const responses = normalizeResponses({
+            ...currentData.responses,
+            [changedField]: Number.isFinite(numericValue) ? numericValue : 0
+        }, changedField);
+        await actor.update({
+            "system.responses.fight": responses.fight,
+            "system.responses.flight": responses.flight,
+            "system.responses.max": DRYH_RESPONSE_MAX
+        });
+    }
+    async updateScars(value) {
+        if (!this.actor) {
+            return;
+        }
+        await this.actor.update({
+            "system.scars": value
+                .split("\n")
+                .map((entry) => entry.trim())
+                .filter((entry) => entry.length > 0)
+        });
+    }
+}
+function createPips(value, total) {
+    return Array.from({ length: Math.max(total, 0) }, (_entry, index) => ({
+        filled: index < value
+    }));
 }
 function localizeActorType(actorType) {
     const localizationKey = `TYPES.Actor.${actorType}`;
