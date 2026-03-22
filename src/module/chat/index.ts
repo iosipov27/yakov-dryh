@@ -1,12 +1,13 @@
 import { YakovDryhChatInteractionDialog } from "../applications/dialogs/chat-interaction-dialog.js";
 import { YakovDryhPainRollDialog } from "../applications/dialogs/pain-roll-dialog.js";
 import type { YakovDryhSystemApi } from "../api.js";
-import { CHAT_CARD_COMMAND } from "../constants.js";
+import { CHAT_CARD_COMMAND, DRYH_SETTINGS, SYSTEM_ID } from "../constants.js";
 import {
   applyDryhRollGmAction,
   finalizeDryhRoll,
   getDryhRollCardData,
-  hasDryhRollCard
+  hasDryhRollCard,
+  rerenderDryhRollMessage
 } from "./roll-card-service.js";
 import {
   advanceChatCardStatus,
@@ -56,6 +57,20 @@ export function registerChatHooks(api: YakovDryhSystemApi): void {
     }
 
     activateChatCardListeners(message, html, api);
+  });
+
+  Hooks.on("updateSetting", (setting: { key?: string }) => {
+    if (setting.key !== `${SYSTEM_ID}.${DRYH_SETTINGS.gmDespair}`) {
+      return;
+    }
+
+    const rollMessages = (game.messages?.contents ?? []).filter((message) =>
+      hasDryhRollCard(message as ChatMessage.Implementation)
+    ) as ChatMessage.Implementation[];
+
+    rollMessages.forEach((message) => {
+      void rerenderDryhRollMessage(message);
+    });
   });
 }
 

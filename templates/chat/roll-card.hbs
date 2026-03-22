@@ -27,13 +27,14 @@
             <p class="yakov-dryh-copy">{{dice}} => {{successes}}</p>
           </div>
 
-          {{#if ../canAdjust}}
+          {{#if ../showAdjustments}}
             <div class="yakov-dryh-inline-actions">
               <button
                 class="yakov-dryh-button yakov-dryh-button--secondary yakov-dryh-button--compact"
                 type="button"
                 data-yakov-dryh-roll-action="add6"
                 data-target-pool="{{key}}"
+                {{#unless ../canAffordAdjustment}}disabled{{/unless}}
               >
                 +6
               </button>
@@ -42,7 +43,7 @@
                 type="button"
                 data-yakov-dryh-roll-action="remove6"
                 data-target-pool="{{key}}"
-                {{#unless hasSix}}disabled{{/unless}}
+                {{#unless ../canAffordAdjustment}}disabled{{else}}{{#unless hasSix}}disabled{{/unless}}{{/unless}}
               >
                 -6
               </button>

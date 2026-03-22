@@ -13,6 +13,7 @@ import {
 } from "../dice/index.js";
 import {
   addDespair,
+  getSharedDespairTotal,
   spendDespairForHope
 } from "../resources/index.js";
 import { getFailureConsequence } from "./failure-consequence.js";
@@ -172,9 +173,10 @@ function getPoolSummaries(rollResult: YakovDryhRollResult): RollPoolSummary[] {
 async function renderRollCard(card: YakovDryhRollCardData): Promise<string> {
   const rollResult = getRollResult(card);
   const isInitial = card.stage === "initial";
-  const canAdjust = isInitial
+  const showAdjustments = isInitial
     ? !card.finalized && card.painRolled && !card.gmActionUsed
     : false;
+  const canAffordAdjustment = showAdjustments ? getSharedDespairTotal() >= 1 : false;
   const canFinalize = isInitial ? !card.finalized && card.painRolled : false;
   const canRollPain = isInitial ? !card.finalized && !card.painRolled : false;
   const finalMessageId = isInitial ? card.finalMessageId : null;
@@ -183,7 +185,7 @@ async function renderRollCard(card: YakovDryhRollCardData): Promise<string> {
 
   return foundry.applications.handlebars.renderTemplate(TEMPLATE_PATHS.dryhRollCard, {
     actorName: card.actorName,
-    canAdjust,
+    canAffordAdjustment,
     canFinalize,
     canRollPain,
     dominantLabel: formatDominantPool(rollResult.dominant),
@@ -195,6 +197,7 @@ async function renderRollCard(card: YakovDryhRollCardData): Promise<string> {
     outcomeLabel: formatOutcome(rollResult.outcome),
     poolSummaries: getPoolSummaries(rollResult),
     rollResult,
+    showAdjustments,
     stageLabel:
       card.stage === "initial"
         ? localize("YAKOV_DRYH.ROLL.Chat.InitialTitle", "Roll Result")
@@ -378,6 +381,24 @@ async function updateInitialRollMessage(
   await message.update({
     [`flags.${SYSTEM_ID}.${DRYH_ROLL_FLAG}`]: card,
     content: updatedContent
+  } as Record<string, unknown>);
+
+  return card;
+}
+
+export async function rerenderDryhRollMessage(
+  message: ChatMessage.Implementation
+): Promise<YakovDryhRollCardData | null> {
+  const card = getRollCardFlag(message);
+
+  if (!card) {
+    return null;
+  }
+
+  const content = await renderRollCard(card);
+
+  await message.update({
+    content
   } as Record<string, unknown>);
 
   return card;
