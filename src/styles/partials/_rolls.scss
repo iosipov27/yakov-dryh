@@ -1,19 +1,35 @@
-.yakov-dryh-chat-card__body {
-  display: grid;
-  gap: 0.85rem;
+.yakov-dryh-chat-card {
+  &__body {
+    display: grid;
+    gap: 0.85rem;
+  }
+
+  &__detail {
+    background: rgb(255 255 255 / 76%);
+    border-left: 4px solid var(--yakov-dryh-accent);
+    border-radius: 12px;
+    margin: 0;
+    padding: 0.85rem 1rem;
+
+    p {
+      margin: 0.35rem 0 0;
+    }
+  }
 }
 
-.yakov-dryh-roll-pools {
-  display: grid;
-  gap: 0.85rem;
-}
+.yakov-dryh-roll-card {
+  &__pools {
+    display: grid;
+    gap: 0.85rem;
+  }
 
-.yakov-dryh-roll-summary,
-.yakov-dryh-roll-dominant {
-  background: rgb(255 255 255 / 72%);
-  border-radius: 14px;
-  margin: 0;
-  padding: 0.8rem 0.9rem;
+  &__summary,
+  &__dominant {
+    background: rgb(255 255 255 / 72%);
+    border-radius: 14px;
+    margin: 0;
+    padding: 0.8rem 0.9rem;
+  }
 }
 
 .yakov-dryh-roll-pool {
@@ -26,31 +42,19 @@
   justify-content: space-between;
   padding: 0.8rem 0.9rem;
 
-  &.is-exhaustion {
+  &--exhaustion {
     border-left: 4px solid var(--yakov-dryh-exhaustion);
   }
 
-  &.is-madness {
+  &--madness {
     border-left: 4px solid var(--yakov-dryh-madness);
   }
 
-  &.is-pain {
+  &--pain {
     border-left: 4px solid var(--yakov-dryh-pain);
   }
 
-  &.is-discipline {
+  &--discipline {
     border-left: 4px solid var(--yakov-dryh-accent);
-  }
-}
-
-.yakov-dryh-chat-card__detail {
-  background: rgb(255 255 255 / 76%);
-  border-left: 4px solid var(--yakov-dryh-accent);
-  border-radius: 12px;
-  margin: 0;
-  padding: 0.85rem 1rem;
-
-  p {
-    margin: 0.35rem 0 0;
   }
 }

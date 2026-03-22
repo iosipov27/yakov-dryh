@@ -29,23 +29,23 @@
   padding: 0.45rem 0.75rem;
   text-transform: uppercase;
 
-  &.is-success {
+  &--success {
     background: #dbe9dd;
   }
 
-  &.is-failure {
+  &--failure {
     background: #f1d8d3;
   }
 
-  &.is-draft {
+  &--draft {
     background: #f2e2d8;
   }
 
-  &.is-review {
+  &--review {
     background: #efe3b5;
   }
 
-  &.is-resolved {
+  &--resolved {
     background: #cfe7d7;
   }
 }

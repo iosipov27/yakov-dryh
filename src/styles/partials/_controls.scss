@@ -67,13 +67,13 @@
     opacity: 0.45;
   }
 
-  &.is-secondary {
+  &--secondary {
     background: transparent;
     border: 1px solid var(--yakov-dryh-border);
     color: var(--yakov-dryh-ink);
   }
 
-  &.is-compact {
+  &--compact {
     min-height: 2rem;
     min-width: 3.5rem;
     padding: 0.35rem 0.75rem;
@@ -86,13 +86,17 @@
   gap: 0.35rem;
   margin-top: 0.65rem;
 
-  &.is-exhaustion .yakov-dryh-pip.is-filled {
-    background-color: var(--yakov-dryh-exhaustion);
+  &--exhaustion {
+    .yakov-dryh-pip--filled {
+      background-color: var(--yakov-dryh-exhaustion);
+    }
   }
 
-  &.is-madness .yakov-dryh-pip.is-filled,
-  &.is-response .yakov-dryh-pip.is-filled {
-    background-color: var(--yakov-dryh-madness);
+  &--madness,
+  &--response {
+    .yakov-dryh-pip--filled {
+      background-color: var(--yakov-dryh-madness);
+    }
   }
 }
 
@@ -105,7 +109,7 @@
   -webkit-mask: url("../assets/six-sided-dice.svg") center / contain no-repeat;
   width: 2rem;
 
-  &.is-filled {
+  &--filled {
     background-color: var(--yakov-dryh-pip-discipline);
   }
 }

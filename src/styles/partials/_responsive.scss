@@ -3,8 +3,10 @@
     flex-direction: column;
   }
 
-  .yakov-dryh-sheet-columns {
-    grid-template-columns: 1fr;
+  .yakov-dryh-sheet-shell {
+    &__columns {
+      grid-template-columns: 1fr;
+    }
   }
 
   .yakov-dryh-roll-pool {

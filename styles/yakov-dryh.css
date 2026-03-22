@@ -41,25 +41,37 @@
   padding: 0.45rem 0.75rem;
   text-transform: uppercase;
 }
-.yakov-dryh-status.is-success {
+.yakov-dryh-status--success {
   background: #dbe9dd;
 }
-.yakov-dryh-status.is-failure {
+.yakov-dryh-status--failure {
   background: #f1d8d3;
 }
-.yakov-dryh-status.is-draft {
+.yakov-dryh-status--draft {
   background: #f2e2d8;
 }
-.yakov-dryh-status.is-review {
+.yakov-dryh-status--review {
   background: #efe3b5;
 }
-.yakov-dryh-status.is-resolved {
+.yakov-dryh-status--resolved {
   background: #cfe7d7;
 }
 
 .yakov-dryh-sheet-shell {
   display: grid;
   gap: 1rem;
+}
+.yakov-dryh-sheet-shell__columns {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: minmax(0, 1.5fr) minmax(280px, 0.9fr);
+}
+.yakov-dryh-sheet-shell__column {
+  display: grid;
+  gap: 0.85rem;
+}
+.yakov-dryh-sheet-shell__column--story, .yakov-dryh-sheet-shell__column--sidebar {
+  align-content: start;
 }
 
 .yakov-dryh-header {
@@ -83,20 +95,6 @@
   letter-spacing: 0.16em;
   margin: 0 0 0.35rem;
   text-transform: uppercase;
-}
-
-.yakov-dryh-sheet-columns {
-  display: grid;
-  gap: 1rem;
-  grid-template-columns: minmax(0, 1.5fr) minmax(280px, 0.9fr);
-}
-
-.yakov-dryh-sheet-column {
-  display: grid;
-  gap: 0.85rem;
-}
-.yakov-dryh-sheet-column.is-story, .yakov-dryh-sheet-column.is-sidebar {
-  align-content: start;
 }
 
 .yakov-dryh-card-panel,
@@ -182,12 +180,12 @@
   cursor: default;
   opacity: 0.45;
 }
-.yakov-dryh-button.is-secondary {
+.yakov-dryh-button--secondary {
   background: transparent;
   border: 1px solid var(--yakov-dryh-border);
   color: var(--yakov-dryh-ink);
 }
-.yakov-dryh-button.is-compact {
+.yakov-dryh-button--compact {
   min-height: 2rem;
   min-width: 3.5rem;
   padding: 0.35rem 0.75rem;
@@ -199,10 +197,10 @@
   gap: 0.35rem;
   margin-top: 0.65rem;
 }
-.yakov-dryh-pip-track.is-exhaustion .yakov-dryh-pip.is-filled {
+.yakov-dryh-pip-track--exhaustion .yakov-dryh-pip--filled {
   background-color: var(--yakov-dryh-exhaustion);
 }
-.yakov-dryh-pip-track.is-madness .yakov-dryh-pip.is-filled, .yakov-dryh-pip-track.is-response .yakov-dryh-pip.is-filled {
+.yakov-dryh-pip-track--madness .yakov-dryh-pip--filled, .yakov-dryh-pip-track--response .yakov-dryh-pip--filled {
   background-color: var(--yakov-dryh-madness);
 }
 
@@ -215,7 +213,7 @@
   -webkit-mask: url("../assets/six-sided-dice.svg") center/contain no-repeat;
   width: 2rem;
 }
-.yakov-dryh-pip.is-filled {
+.yakov-dryh-pip--filled {
   background-color: var(--yakov-dryh-pip-discipline);
 }
 
@@ -245,14 +243,22 @@
   display: grid;
   gap: 0.85rem;
 }
+.yakov-dryh-chat-card__detail {
+  background: rgba(255, 255, 255, 0.76);
+  border-left: 4px solid var(--yakov-dryh-accent);
+  border-radius: 12px;
+  margin: 0;
+  padding: 0.85rem 1rem;
+}
+.yakov-dryh-chat-card__detail p {
+  margin: 0.35rem 0 0;
+}
 
-.yakov-dryh-roll-pools {
+.yakov-dryh-roll-card__pools {
   display: grid;
   gap: 0.85rem;
 }
-
-.yakov-dryh-roll-summary,
-.yakov-dryh-roll-dominant {
+.yakov-dryh-roll-card__summary, .yakov-dryh-roll-card__dominant {
   background: rgba(255, 255, 255, 0.72);
   border-radius: 14px;
   margin: 0;
@@ -269,28 +275,17 @@
   justify-content: space-between;
   padding: 0.8rem 0.9rem;
 }
-.yakov-dryh-roll-pool.is-exhaustion {
+.yakov-dryh-roll-pool--exhaustion {
   border-left: 4px solid var(--yakov-dryh-exhaustion);
 }
-.yakov-dryh-roll-pool.is-madness {
+.yakov-dryh-roll-pool--madness {
   border-left: 4px solid var(--yakov-dryh-madness);
 }
-.yakov-dryh-roll-pool.is-pain {
+.yakov-dryh-roll-pool--pain {
   border-left: 4px solid var(--yakov-dryh-pain);
 }
-.yakov-dryh-roll-pool.is-discipline {
+.yakov-dryh-roll-pool--discipline {
   border-left: 4px solid var(--yakov-dryh-accent);
-}
-
-.yakov-dryh-chat-card__detail {
-  background: rgba(255, 255, 255, 0.76);
-  border-left: 4px solid var(--yakov-dryh-accent);
-  border-radius: 12px;
-  margin: 0;
-  padding: 0.85rem 1rem;
-}
-.yakov-dryh-chat-card__detail p {
-  margin: 0.35rem 0 0;
 }
 
 .yakov-dryh-hope-despair-tracker {
@@ -354,7 +349,7 @@
   .yakov-dryh-header {
     flex-direction: column;
   }
-  .yakov-dryh-sheet-columns {
+  .yakov-dryh-sheet-shell__columns {
     grid-template-columns: 1fr;
   }
   .yakov-dryh-roll-pool {

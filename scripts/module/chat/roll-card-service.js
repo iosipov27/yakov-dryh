@@ -58,7 +58,7 @@ function formatDice(dice) {
 function getPoolSummaries(rollResult) {
     return [
         {
-            cssClass: "is-discipline",
+            cssClass: "yakov-dryh-roll-pool--discipline",
             dice: formatDice(rollResult.pools.discipline),
             hasSix: rollResult.pools.discipline.includes(6),
             key: "discipline",
@@ -66,7 +66,7 @@ function getPoolSummaries(rollResult) {
             successes: rollResult.pools.discipline.filter((die) => die <= 3).length
         },
         {
-            cssClass: "is-exhaustion",
+            cssClass: "yakov-dryh-roll-pool--exhaustion",
             dice: formatDice(rollResult.pools.exhaustion),
             hasSix: rollResult.pools.exhaustion.includes(6),
             key: "exhaustion",
@@ -74,7 +74,7 @@ function getPoolSummaries(rollResult) {
             successes: rollResult.pools.exhaustion.filter((die) => die <= 3).length
         },
         {
-            cssClass: "is-madness",
+            cssClass: "yakov-dryh-roll-pool--madness",
             dice: formatDice(rollResult.pools.madness),
             hasSix: rollResult.pools.madness.includes(6),
             key: "madness",
@@ -82,7 +82,7 @@ function getPoolSummaries(rollResult) {
             successes: rollResult.pools.madness.filter((die) => die <= 3).length
         },
         {
-            cssClass: "is-pain",
+            cssClass: "yakov-dryh-roll-pool--pain",
             dice: formatDice(rollResult.pools.pain),
             hasSix: rollResult.pools.pain.includes(6),
             key: "pain",

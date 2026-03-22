@@ -11,9 +11,9 @@
 
     <div class="yakov-dryh-sheet-highlight yakov-dryh-sheet-highlight--exhaustion">
       <strong>{{localize "YAKOV_DRYH.SHEETS.Actor.Character.Fields.Exhaustion"}}</strong>
-      <div class="yakov-dryh-pip-track is-exhaustion">
+      <div class="yakov-dryh-pip-track yakov-dryh-pip-track--exhaustion">
         {{#each exhaustionPips}}
-          <span class="yakov-dryh-pip {{#if filled}}is-filled{{/if}}"></span>
+          <span class="yakov-dryh-pip {{#if filled}}yakov-dryh-pip--filled{{/if}}"></span>
         {{/each}}
       </div>
       <div class="yakov-dryh-inline-actions">
@@ -21,7 +21,7 @@
           {{actorData.exhaustion}} / 6
         </span>
         <button
-          class="yakov-dryh-button is-secondary"
+          class="yakov-dryh-button yakov-dryh-button--secondary"
           type="button"
           data-yakov-dryh-action="open-roll-dialog"
         >
@@ -31,8 +31,8 @@
     </div>
   </header>
 
-  <div class="yakov-dryh-sheet-columns">
-    <div class="yakov-dryh-sheet-column is-story">
+  <div class="yakov-dryh-sheet-shell__columns">
+    <div class="yakov-dryh-sheet-shell__column yakov-dryh-sheet-shell__column--story">
       <label class="yakov-dryh-field">
         <span>{{localize "YAKOV_DRYH.SHEETS.Actor.Character.Fields.Name"}}</span>
         <input type="text" name="name" value="{{actorName}}">
@@ -71,7 +71,7 @@
       </label>
     </div>
 
-    <aside class="yakov-dryh-sheet-column is-sidebar">
+    <aside class="yakov-dryh-sheet-shell__column yakov-dryh-sheet-shell__column--sidebar">
       <div class="yakov-dryh-resource-card">
         <label class="yakov-dryh-field">
           <span>{{localize "YAKOV_DRYH.SHEETS.Actor.Character.Fields.Discipline"}}</span>
@@ -85,7 +85,7 @@
         </label>
         <div class="yakov-dryh-pip-track">
           {{#each disciplinePips}}
-            <span class="yakov-dryh-pip {{#if filled}}is-filled{{/if}}"></span>
+            <span class="yakov-dryh-pip {{#if filled}}yakov-dryh-pip--filled{{/if}}"></span>
           {{/each}}
         </div>
       </div>
@@ -101,9 +101,9 @@
             value="{{actorData.madnessPermanent}}"
           >
         </label>
-        <div class="yakov-dryh-pip-track is-madness">
+        <div class="yakov-dryh-pip-track yakov-dryh-pip-track--madness">
           {{#each madnessPips}}
-            <span class="yakov-dryh-pip {{#if filled}}is-filled{{/if}}"></span>
+            <span class="yakov-dryh-pip {{#if filled}}yakov-dryh-pip--filled{{/if}}"></span>
           {{/each}}
         </div>
       </div>
@@ -126,9 +126,9 @@
             data-yakov-dryh-response="fight"
           >
         </label>
-        <div class="yakov-dryh-pip-track is-response">
+        <div class="yakov-dryh-pip-track yakov-dryh-pip-track--response">
           {{#each responseFightPips}}
-            <span class="yakov-dryh-pip {{#if filled}}is-filled{{/if}}"></span>
+            <span class="yakov-dryh-pip {{#if filled}}yakov-dryh-pip--filled{{/if}}"></span>
           {{/each}}
         </div>
 
@@ -143,9 +143,9 @@
             data-yakov-dryh-response="flight"
           >
         </label>
-        <div class="yakov-dryh-pip-track is-response">
+        <div class="yakov-dryh-pip-track yakov-dryh-pip-track--response">
           {{#each responseFlightPips}}
-            <span class="yakov-dryh-pip {{#if filled}}is-filled{{/if}}"></span>
+            <span class="yakov-dryh-pip {{#if filled}}yakov-dryh-pip--filled{{/if}}"></span>
           {{/each}}
         </div>
       </div>

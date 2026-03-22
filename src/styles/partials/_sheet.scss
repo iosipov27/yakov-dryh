@@ -1,6 +1,22 @@
 .yakov-dryh-sheet-shell {
   display: grid;
   gap: 1rem;
+
+  &__columns {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: minmax(0, 1.5fr) minmax(280px, 0.9fr);
+  }
+
+  &__column {
+    display: grid;
+    gap: 0.85rem;
+
+    &--story,
+    &--sidebar {
+      align-content: start;
+    }
+  }
 }
 
 .yakov-dryh-header {
@@ -26,22 +42,6 @@
   letter-spacing: 0.16em;
   margin: 0 0 0.35rem;
   text-transform: uppercase;
-}
-
-.yakov-dryh-sheet-columns {
-  display: grid;
-  gap: 1rem;
-  grid-template-columns: minmax(0, 1.5fr) minmax(280px, 0.9fr);
-}
-
-.yakov-dryh-sheet-column {
-  display: grid;
-  gap: 0.85rem;
-
-  &.is-story,
-  &.is-sidebar {
-    align-content: start;
-  }
 }
 
 .yakov-dryh-card-panel,

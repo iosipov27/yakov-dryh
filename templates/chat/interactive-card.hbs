@@ -6,7 +6,7 @@
       <p class="yakov-dryh-subtitle">{{card.summary}}</p>
     </div>
 
-    <span class="yakov-dryh-status is-{{card.status}}">{{statusLabel}}</span>
+    <span class="yakov-dryh-status yakov-dryh-status--{{card.status}}">{{statusLabel}}</span>
   </header>
 
   <div class="yakov-dryh-chat-card__body">
@@ -43,7 +43,7 @@
 
     {{#if canAdvanceStatus}}
       <button
-        class="yakov-dryh-button is-secondary"
+        class="yakov-dryh-button yakov-dryh-button--secondary"
         type="button"
         data-yakov-dryh-action="advance-status"
       >
