@@ -19,9 +19,16 @@
   }
 
   &__header-side {
+    align-content: start;
     display: grid;
     gap: 0.75rem;
-    justify-items: end;
+    justify-items: stretch;
+    min-width: 300px;
+
+    > .yakov-dryh-button,
+    > .yakov-dryh-resource-card {
+      width: 100%;
+    }
   }
 }
 
@@ -51,20 +58,76 @@
 }
 
 .yakov-dryh-card-panel,
-.yakov-dryh-resource-card,
-.yakov-dryh-sheet-highlight {
-  background: rgb(255 255 255 / 76%);
-  border: 1px solid rgb(183 167 156 / 66%);
+.yakov-dryh-resource-card {
+  background:
+    linear-gradient(
+      145deg,
+      rgb(var(--yakov-dryh-stress-overlay) / 0.42),
+      rgb(var(--yakov-dryh-stress-overlay-edge) / 0.28)
+    ),
+    linear-gradient(
+      160deg,
+      var(--yakov-dryh-pool-card-base),
+      var(--yakov-dryh-pool-card-base-edge)
+    );
+  border: 1px solid var(--yakov-dryh-pool-card-border);
   border-radius: 16px;
+  color: var(--yakov-dryh-pool-card-ink);
   padding: 1rem;
+
+  .yakov-dryh-copy,
+  .yakov-dryh-dice-picker__header,
+  .yakov-dryh-field > span,
+  h3,
+  h4,
+  strong {
+    color: inherit;
+  }
 }
 
-.yakov-dryh-sheet-highlight {
-  &--exhaustion {
+.yakov-dryh-resource-card {
+  transition:
+    background 160ms ease,
+    border-color 160ms ease,
+    color 160ms ease;
+
+  &--stress {
     background:
-      linear-gradient(135deg, rgb(159 47 31 / 14%), rgb(255 255 255 / 70%)),
-      var(--yakov-dryh-panel-strong);
-    min-width: 290px;
+      linear-gradient(
+        145deg,
+        rgb(var(--yakov-dryh-stress-overlay) / var(--yakov-dryh-stress-sheen, 0.86)),
+        rgb(var(--yakov-dryh-stress-overlay-edge) / 0.62)
+      ),
+      linear-gradient(
+        160deg,
+        color-mix(
+          in srgb,
+          var(--yakov-dryh-stress-neutral) var(--yakov-dryh-stress-safe-stop, 100%),
+          var(--yakov-dryh-stress-target) var(--yakov-dryh-stress-danger-stop, 0%)
+        ),
+        color-mix(
+          in srgb,
+          var(--yakov-dryh-stress-neutral-edge) var(--yakov-dryh-stress-safe-stop, 100%),
+          var(--yakov-dryh-stress-target-edge) var(--yakov-dryh-stress-danger-stop, 0%)
+        )
+      );
+    border-color: color-mix(
+      in srgb,
+      var(--yakov-dryh-border) var(--yakov-dryh-stress-safe-stop, 100%),
+      var(--yakov-dryh-stress-border) var(--yakov-dryh-stress-danger-stop, 0%)
+    );
+  }
+
+  &--exhaustion {
+    --yakov-dryh-stress-target: var(--yakov-dryh-stress-exhaustion);
+    --yakov-dryh-stress-target-edge: var(--yakov-dryh-stress-exhaustion-edge);
+    --yakov-dryh-stress-border: var(--yakov-dryh-stress-exhaustion-border);
+  }
+
+  &--madness {
+    --yakov-dryh-stress-target: var(--yakov-dryh-stress-madness);
+    --yakov-dryh-stress-target-edge: var(--yakov-dryh-stress-madness-edge);
+    --yakov-dryh-stress-border: var(--yakov-dryh-stress-madness-border);
   }
 }
 

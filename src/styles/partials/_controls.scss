@@ -15,10 +15,12 @@
   }
 
   input,
-  textarea {
+  textarea,
+  select {
     background: rgb(255 255 255 / 88%);
     border: 1px solid var(--yakov-dryh-border);
     border-radius: 12px;
+    color: var(--yakov-dryh-ink);
     min-height: 2.5rem;
     padding: 0.65rem 0.8rem;
   }
@@ -89,6 +91,9 @@
   &--exhaustion {
     .yakov-dryh-pip--filled {
       background-color: var(--yakov-dryh-exhaustion);
+      filter:
+        drop-shadow(0 0 1px rgb(255 255 255 / 34%))
+        drop-shadow(0 0 1px var(--yakov-dryh-pip-shadow));
     }
   }
 

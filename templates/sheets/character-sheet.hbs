@@ -18,7 +18,10 @@
         {{localize "YAKOV_DRYH.SHEETS.Actor.Character.Actions.Roll"}}
       </button>
 
-      <div class="yakov-dryh-sheet-highlight yakov-dryh-sheet-highlight--exhaustion">
+      <div
+        class="yakov-dryh-resource-card yakov-dryh-resource-card--stress yakov-dryh-resource-card--exhaustion"
+        style="{{exhaustionCardStyle}}"
+      >
         <div class="yakov-dryh-dice-picker">
           <div class="yakov-dryh-dice-picker__header">
             <strong>{{localize "YAKOV_DRYH.SHEETS.Actor.Character.Fields.Exhaustion"}}</strong>
@@ -121,7 +124,10 @@
         </div>
       </div>
 
-      <div class="yakov-dryh-resource-card">
+      <div
+        class="yakov-dryh-resource-card yakov-dryh-resource-card--stress yakov-dryh-resource-card--madness"
+        style="{{madnessCardStyle}}"
+      >
         <div class="yakov-dryh-dice-picker">
           <div class="yakov-dryh-dice-picker__header">
             <strong>{{localize "YAKOV_DRYH.SHEETS.Actor.Character.Fields.PermanentMadness"}}</strong>

@@ -8,6 +8,20 @@
   --yakov-dryh-madness: #b01c2e;
   --yakov-dryh-pain: #3d4557;
   --yakov-dryh-border: #b7a79c;
+  --yakov-dryh-pool-card-base: #8b837c;
+  --yakov-dryh-pool-card-base-edge: #6f6861;
+  --yakov-dryh-pool-card-border: #5f5953;
+  --yakov-dryh-pool-card-ink: #f4ede5;
+  --yakov-dryh-stress-neutral: #8b837c;
+  --yakov-dryh-stress-neutral-edge: #6f6861;
+  --yakov-dryh-stress-overlay: 166 158 149;
+  --yakov-dryh-stress-overlay-edge: 128 120 112;
+  --yakov-dryh-stress-exhaustion: #c79b87;
+  --yakov-dryh-stress-exhaustion-edge: #a97e6b;
+  --yakov-dryh-stress-exhaustion-border: #8f6655;
+  --yakov-dryh-stress-madness: #c28e9f;
+  --yakov-dryh-stress-madness-edge: #9f6c7d;
+  --yakov-dryh-stress-madness-border: #825264;
   --yakov-dryh-muted: #64545d;
   --yakov-dryh-shadow: 0 14px 30px rgb(33 22 30 / 12%);
   --yakov-dryh-pip-discipline: #fffdf8;
@@ -74,9 +88,15 @@
   align-content: start;
 }
 .yakov-dryh-sheet-shell__header-side {
+  align-content: start;
   display: grid;
   gap: 0.75rem;
-  justify-items: end;
+  justify-items: stretch;
+  min-width: 300px;
+}
+.yakov-dryh-sheet-shell__header-side > .yakov-dryh-button,
+.yakov-dryh-sheet-shell__header-side > .yakov-dryh-resource-card {
+  width: 100%;
 }
 
 .yakov-dryh-header {
@@ -103,17 +123,44 @@
 }
 
 .yakov-dryh-card-panel,
-.yakov-dryh-resource-card,
-.yakov-dryh-sheet-highlight {
-  background: rgba(255, 255, 255, 0.76);
-  border: 1px solid rgba(183, 167, 156, 0.66);
+.yakov-dryh-resource-card {
+  background: linear-gradient(145deg, rgb(var(--yakov-dryh-stress-overlay)/0.42), rgb(var(--yakov-dryh-stress-overlay-edge)/0.28)), linear-gradient(160deg, var(--yakov-dryh-pool-card-base), var(--yakov-dryh-pool-card-base-edge));
+  border: 1px solid var(--yakov-dryh-pool-card-border);
   border-radius: 16px;
+  color: var(--yakov-dryh-pool-card-ink);
   padding: 1rem;
 }
+.yakov-dryh-card-panel .yakov-dryh-copy,
+.yakov-dryh-card-panel .yakov-dryh-dice-picker__header,
+.yakov-dryh-card-panel .yakov-dryh-field > span,
+.yakov-dryh-card-panel h3,
+.yakov-dryh-card-panel h4,
+.yakov-dryh-card-panel strong,
+.yakov-dryh-resource-card .yakov-dryh-copy,
+.yakov-dryh-resource-card .yakov-dryh-dice-picker__header,
+.yakov-dryh-resource-card .yakov-dryh-field > span,
+.yakov-dryh-resource-card h3,
+.yakov-dryh-resource-card h4,
+.yakov-dryh-resource-card strong {
+  color: inherit;
+}
 
-.yakov-dryh-sheet-highlight--exhaustion {
-  background: linear-gradient(135deg, rgba(159, 47, 31, 0.14), rgba(255, 255, 255, 0.7)), var(--yakov-dryh-panel-strong);
-  min-width: 290px;
+.yakov-dryh-resource-card {
+  transition: background 160ms ease, border-color 160ms ease, color 160ms ease;
+}
+.yakov-dryh-resource-card--stress {
+  background: linear-gradient(145deg, rgb(var(--yakov-dryh-stress-overlay)/var(--yakov-dryh-stress-sheen, 0.86)), rgb(var(--yakov-dryh-stress-overlay-edge)/0.62)), linear-gradient(160deg, color-mix(in srgb, var(--yakov-dryh-stress-neutral) var(--yakov-dryh-stress-safe-stop, 100%), var(--yakov-dryh-stress-target) var(--yakov-dryh-stress-danger-stop, 0%)), color-mix(in srgb, var(--yakov-dryh-stress-neutral-edge) var(--yakov-dryh-stress-safe-stop, 100%), var(--yakov-dryh-stress-target-edge) var(--yakov-dryh-stress-danger-stop, 0%)));
+  border-color: color-mix(in srgb, var(--yakov-dryh-border) var(--yakov-dryh-stress-safe-stop, 100%), var(--yakov-dryh-stress-border) var(--yakov-dryh-stress-danger-stop, 0%));
+}
+.yakov-dryh-resource-card--exhaustion {
+  --yakov-dryh-stress-target: var(--yakov-dryh-stress-exhaustion);
+  --yakov-dryh-stress-target-edge: var(--yakov-dryh-stress-exhaustion-edge);
+  --yakov-dryh-stress-border: var(--yakov-dryh-stress-exhaustion-border);
+}
+.yakov-dryh-resource-card--madness {
+  --yakov-dryh-stress-target: var(--yakov-dryh-stress-madness);
+  --yakov-dryh-stress-target-edge: var(--yakov-dryh-stress-madness-edge);
+  --yakov-dryh-stress-border: var(--yakov-dryh-stress-madness-border);
 }
 
 .yakov-dryh-card-panel h3,
@@ -137,10 +184,12 @@
   text-transform: uppercase;
 }
 .yakov-dryh-field input,
-.yakov-dryh-field textarea {
+.yakov-dryh-field textarea,
+.yakov-dryh-field select {
   background: rgba(255, 255, 255, 0.88);
   border: 1px solid var(--yakov-dryh-border);
   border-radius: 12px;
+  color: var(--yakov-dryh-ink);
   min-height: 2.5rem;
   padding: 0.65rem 0.8rem;
 }
@@ -204,6 +253,7 @@
 }
 .yakov-dryh-pip-track--exhaustion .yakov-dryh-pip--filled {
   background-color: var(--yakov-dryh-exhaustion);
+  filter: drop-shadow(0 0 1px rgba(255, 255, 255, 0.34)) drop-shadow(0 0 1px var(--yakov-dryh-pip-shadow));
 }
 .yakov-dryh-pip-track--madness .yakov-dryh-pip--filled, .yakov-dryh-pip-track--response .yakov-dryh-pip--filled {
   background-color: var(--yakov-dryh-madness);
@@ -430,6 +480,7 @@
   }
   .yakov-dryh-sheet-shell__header-side {
     justify-items: stretch;
+    min-width: 0;
     width: 100%;
   }
   .yakov-dryh-roll-pool {

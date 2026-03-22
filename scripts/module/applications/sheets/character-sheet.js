@@ -4,6 +4,7 @@ import { SYSTEM_ID, SYSTEM_TITLE, TEMPLATE_PATHS } from "../../constants.js";
 import { formatLineList, parseLineList } from "../../utils/index.js";
 const BaseSheet = foundry.applications.api.HandlebarsApplicationMixin(foundry.applications.sheets.ActorSheetV2);
 const SHEET_DICE_POOL_BASE_TOTAL = 6;
+const STRESS_CARD_VISUAL_MAX = 6;
 export class YakovDryhCharacterSheet extends BaseSheet {
     static DEFAULT_OPTIONS = {
         classes: ["actor", SYSTEM_ID, "yakov-dryh-sheet"],
@@ -53,8 +54,10 @@ export class YakovDryhCharacterSheet extends BaseSheet {
             disciplinePips: createEditablePips("discipline", actorData.discipline, getEditablePoolTotal(actorData.discipline), disciplineLabel),
             disciplinePipTotal: getEditablePoolTotal(actorData.discipline),
             exhaustionPips: createEditablePips("exhaustion", actorData.exhaustion, DRYH_EXHAUSTION_MAX, exhaustionLabel),
+            exhaustionCardStyle: createStressCardStyle(actorData.exhaustion),
             exhaustionPipTotal: DRYH_EXHAUSTION_MAX,
             madnessPips: createEditablePips("madnessPermanent", actorData.madnessPermanent, getEditablePoolTotal(actorData.madnessPermanent), madnessLabel),
+            madnessCardStyle: createStressCardStyle(actorData.madnessPermanent),
             madnessPipTotal: getEditablePoolTotal(actorData.madnessPermanent),
             moduleId: SYSTEM_ID,
             responseFightPips,
@@ -171,6 +174,19 @@ function createEditablePips(field, value, total, label) {
 }
 function getEditablePoolTotal(value) {
     return Math.max(value, SHEET_DICE_POOL_BASE_TOTAL);
+}
+function createStressCardStyle(value) {
+    const clampedValue = Math.min(Math.max(value, 0), STRESS_CARD_VISUAL_MAX);
+    const intensity = clampedValue / STRESS_CARD_VISUAL_MAX;
+    const dangerStop = `${(intensity * 100).toFixed(2)}%`;
+    const safeStop = `${(100 - intensity * 100).toFixed(2)}%`;
+    const sheen = (0.86 - intensity * 0.16).toFixed(3);
+    return [
+        `--yakov-dryh-stress-intensity: ${intensity.toFixed(3)}`,
+        `--yakov-dryh-stress-sheen: ${sheen}`,
+        `--yakov-dryh-stress-safe-stop: ${safeStop}`,
+        `--yakov-dryh-stress-danger-stop: ${dangerStop}`
+    ].join("; ");
 }
 function localizeActorType(actorType) {
     const localizationKey = `TYPES.Actor.${actorType}`;

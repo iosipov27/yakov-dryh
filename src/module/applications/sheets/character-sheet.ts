@@ -27,6 +27,7 @@ interface EditableSheetPip extends SheetPip {
 }
 
 const SHEET_DICE_POOL_BASE_TOTAL = 6;
+const STRESS_CARD_VISUAL_MAX = 6;
 
 export class YakovDryhCharacterSheet extends BaseSheet {
   static DEFAULT_OPTIONS = {
@@ -112,6 +113,7 @@ export class YakovDryhCharacterSheet extends BaseSheet {
         DRYH_EXHAUSTION_MAX,
         exhaustionLabel
       ),
+      exhaustionCardStyle: createStressCardStyle(actorData.exhaustion),
       exhaustionPipTotal: DRYH_EXHAUSTION_MAX,
       madnessPips: createEditablePips(
         "madnessPermanent",
@@ -119,6 +121,7 @@ export class YakovDryhCharacterSheet extends BaseSheet {
         getEditablePoolTotal(actorData.madnessPermanent),
         madnessLabel
       ),
+      madnessCardStyle: createStressCardStyle(actorData.madnessPermanent),
       madnessPipTotal: getEditablePoolTotal(actorData.madnessPermanent),
       moduleId: SYSTEM_ID,
       responseFightPips,
@@ -292,6 +295,21 @@ function createEditablePips(
 
 function getEditablePoolTotal(value: number): number {
   return Math.max(value, SHEET_DICE_POOL_BASE_TOTAL);
+}
+
+function createStressCardStyle(value: number): string {
+  const clampedValue = Math.min(Math.max(value, 0), STRESS_CARD_VISUAL_MAX);
+  const intensity = clampedValue / STRESS_CARD_VISUAL_MAX;
+  const dangerStop = `${(intensity * 100).toFixed(2)}%`;
+  const safeStop = `${(100 - intensity * 100).toFixed(2)}%`;
+  const sheen = (0.86 - intensity * 0.16).toFixed(3);
+
+  return [
+    `--yakov-dryh-stress-intensity: ${intensity.toFixed(3)}`,
+    `--yakov-dryh-stress-sheen: ${sheen}`,
+    `--yakov-dryh-stress-safe-stop: ${safeStop}`,
+    `--yakov-dryh-stress-danger-stop: ${dangerStop}`
+  ].join("; ");
 }
 
 function localizeActorType(actorType: string): string {
