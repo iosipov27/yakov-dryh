@@ -39,8 +39,8 @@ export class YakovDryhCharacterSheet extends BaseSheet {
         const actorData = normalizeCharacterSystemData(actor?.system);
         const actorType = actor?.type ?? YAKOV_DRYH_ACTOR_TYPES.character;
         const disciplineLabel = localize("YAKOV_DRYH.SHEETS.Actor.Character.Fields.Discipline", "Discipline");
-        const exhaustionLabel = localize("YAKOV_DRYH.SHEETS.Actor.Character.Fields.Exhaustion", "Current Exhaustion");
-        const madnessLabel = localize("YAKOV_DRYH.SHEETS.Actor.Character.Fields.PermanentMadness", "Permanent Madness");
+        const exhaustionLabel = localize("YAKOV_DRYH.SHEETS.Actor.Character.Fields.Exhaustion", "Exhaustion");
+        const madnessLabel = localize("YAKOV_DRYH.SHEETS.Actor.Character.Fields.PermanentMadness", "Madness");
         const responseFightPips = createDisplayPips(actorData.responses.fight, actorData.responses.max);
         const responseFlightPips = createDisplayPips(actorData.responses.flight, actorData.responses.max);
         const responsesRemaining = Math.max(actorData.responses.max -

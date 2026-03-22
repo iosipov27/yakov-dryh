@@ -25,7 +25,7 @@
   --yakov-dryh-muted: #64545d;
   --yakov-dryh-shadow: 0 14px 30px rgb(33 22 30 / 12%);
   --yakov-dryh-pip-discipline: #fffdf8;
-  --yakov-dryh-pip-inactive: #d7d3cf;
+  --yakov-dryh-pip-inactive: #a89d95;
   --yakov-dryh-pip-shadow: rgb(33 22 30 / 30%);
 }
 
@@ -237,7 +237,7 @@
 .yakov-dryh-button--secondary {
   background: transparent;
   border: 1px solid var(--yakov-dryh-border);
-  color: var(--yakov-dryh-ink);
+  color: #fff;
 }
 .yakov-dryh-button--compact {
   min-height: 2rem;
