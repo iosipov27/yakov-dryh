@@ -27,7 +27,7 @@
             <p class="yakov-dryh-copy">{{dice}} => {{successes}}</p>
           </div>
 
-          {{#if ../canModify}}
+          {{#if ../canAdjust}}
             <div class="yakov-dryh-inline-actions">
               <button
                 class="yakov-dryh-button is-secondary is-compact"
@@ -83,7 +83,7 @@
     </footer>
   {{/if}}
 
-  {{#if canModify}}
+  {{#if canFinalize}}
     <footer class="yakov-dryh-actions">
       <button
         class="yakov-dryh-button"

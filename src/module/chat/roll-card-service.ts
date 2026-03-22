@@ -19,6 +19,7 @@ export interface YakovDryhInitialRollCardData {
   actorUuid: string | null;
   finalMessageId: string | null;
   finalized: boolean;
+  gmActionUsed: boolean;
   painRolled: boolean;
   rollResult: YakovDryhRollResult;
   stage: "initial";
@@ -167,7 +168,10 @@ function getPoolSummaries(rollResult: YakovDryhRollResult): RollPoolSummary[] {
 async function renderRollCard(card: YakovDryhRollCardData): Promise<string> {
   const rollResult = getRollResult(card);
   const isInitial = card.stage === "initial";
-  const canModify = isInitial ? !card.finalized && card.painRolled : false;
+  const canAdjust = isInitial
+    ? !card.finalized && card.painRolled && !card.gmActionUsed
+    : false;
+  const canFinalize = isInitial ? !card.finalized && card.painRolled : false;
   const canRollPain = isInitial ? !card.finalized && !card.painRolled : false;
   const finalMessageId = isInitial ? card.finalMessageId : null;
   const isResolved = isInitial ? card.finalized : true;
@@ -175,7 +179,8 @@ async function renderRollCard(card: YakovDryhRollCardData): Promise<string> {
 
   return foundry.applications.handlebars.renderTemplate(TEMPLATE_PATHS.dryhRollCard, {
     actorName: card.actorName,
-    canModify,
+    canAdjust,
+    canFinalize,
     canRollPain,
     dominantLabel: formatDominantPool(rollResult.dominant),
     effectText,
@@ -231,6 +236,7 @@ function createInitialRollCardData(
     actorUuid: input.actor.uuid,
     finalMessageId: null,
     finalized: false,
+    gmActionUsed: false,
     painRolled: false,
     rollResult: input.rollResult,
     stage: "initial"
@@ -388,12 +394,19 @@ export async function applyDryhRollGmAction(
 ): Promise<YakovDryhInitialRollCardData | null> {
   const card = getRollCardFlag(message);
 
-  if (!card || card.stage !== "initial" || card.finalized || !card.painRolled) {
+  if (
+    !card ||
+    card.stage !== "initial" ||
+    card.finalized ||
+    !card.painRolled ||
+    card.gmActionUsed
+  ) {
     return null;
   }
 
   const updatedCard: YakovDryhInitialRollCardData = {
     ...card,
+    gmActionUsed: true,
     rollResult: applyGmActionToRollResult(card.rollResult, action)
   };
 

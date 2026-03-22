@@ -93,14 +93,16 @@ function getPoolSummaries(rollResult) {
 async function renderRollCard(card) {
     const rollResult = getRollResult(card);
     const isInitial = card.stage === "initial";
-    const canModify = isInitial ? !card.finalized && card.painRolled : false;
+    const canAdjust = isInitial ? !card.finalized && card.painRolled && !card.gmActionUsed : false;
+    const canFinalize = isInitial ? !card.finalized && card.painRolled : false;
     const canRollPain = isInitial ? !card.finalized && !card.painRolled : false;
     const finalMessageId = isInitial ? card.finalMessageId : null;
     const isResolved = isInitial ? card.finalized : true;
     const effectText = isInitial ? null : card.effectText;
     return foundry.applications.handlebars.renderTemplate(TEMPLATE_PATHS.dryhRollCard, {
         actorName: card.actorName,
-        canModify,
+        canAdjust,
+        canFinalize,
         canRollPain,
         dominantLabel: formatDominantPool(rollResult.dominant),
         effectText,
@@ -141,6 +143,7 @@ function createInitialRollCardData(input) {
         actorUuid: input.actor.uuid,
         finalMessageId: null,
         finalized: false,
+        gmActionUsed: false,
         painRolled: false,
         rollResult: input.rollResult,
         stage: "initial"
@@ -235,11 +238,12 @@ async function createFinalizedRollMessage(message, card, actor, modifiedResult) 
 }
 export async function applyDryhRollGmAction(message, action) {
     const card = getRollCardFlag(message);
-    if (!card || card.stage !== "initial" || card.finalized || !card.painRolled) {
+    if (!card || card.stage !== "initial" || card.finalized || !card.painRolled || card.gmActionUsed) {
         return null;
     }
     const updatedCard = {
         ...card,
+        gmActionUsed: true,
         rollResult: applyGmActionToRollResult(card.rollResult, action)
     };
     return updateInitialRollMessage(message, updatedCard);
