@@ -17,6 +17,17 @@ interface SheetPip {
   filled: boolean;
 }
 
+type EditableSheetPoolField = "discipline" | "exhaustion" | "madnessPermanent";
+
+interface EditableSheetPip extends SheetPip {
+  action: "decrease" | "increase" | null;
+  field: EditableSheetPoolField;
+  iconClass: string | null;
+  tooltip: string | null;
+}
+
+const SHEET_DICE_POOL_BASE_TOTAL = 6;
+
 export class YakovDryhCharacterSheet extends BaseSheet {
   static DEFAULT_OPTIONS = {
     classes: ["actor", SYSTEM_ID, "yakov-dryh-sheet"],
@@ -56,11 +67,23 @@ export class YakovDryhCharacterSheet extends BaseSheet {
     const actor = this.actor;
     const actorData = normalizeCharacterSystemData(actor?.system);
     const actorType = actor?.type ?? YAKOV_DRYH_ACTOR_TYPES.character;
-    const responseFightPips = createPips(
+    const disciplineLabel = localize(
+      "YAKOV_DRYH.SHEETS.Actor.Character.Fields.Discipline",
+      "Discipline"
+    );
+    const exhaustionLabel = localize(
+      "YAKOV_DRYH.SHEETS.Actor.Character.Fields.Exhaustion",
+      "Current Exhaustion"
+    );
+    const madnessLabel = localize(
+      "YAKOV_DRYH.SHEETS.Actor.Character.Fields.PermanentMadness",
+      "Permanent Madness"
+    );
+    const responseFightPips = createDisplayPips(
       actorData.responses.fight,
       actorData.responses.max
     );
-    const responseFlightPips = createPips(
+    const responseFlightPips = createDisplayPips(
       actorData.responses.flight,
       actorData.responses.max
     );
@@ -76,12 +99,27 @@ export class YakovDryhCharacterSheet extends BaseSheet {
       actorName: actor?.name ?? "",
       actorType,
       actorTypeLabel: localizeActorType(actorType),
-      disciplinePips: createPips(actorData.discipline, Math.max(actorData.discipline, 3)),
-      exhaustionPips: createPips(actorData.exhaustion, DRYH_EXHAUSTION_MAX),
-      madnessPips: createPips(
-        actorData.madnessPermanent,
-        Math.max(actorData.madnessPermanent, 3)
+      disciplinePips: createEditablePips(
+        "discipline",
+        actorData.discipline,
+        getEditablePoolTotal(actorData.discipline),
+        disciplineLabel
       ),
+      disciplinePipTotal: getEditablePoolTotal(actorData.discipline),
+      exhaustionPips: createEditablePips(
+        "exhaustion",
+        actorData.exhaustion,
+        DRYH_EXHAUSTION_MAX,
+        exhaustionLabel
+      ),
+      exhaustionPipTotal: DRYH_EXHAUSTION_MAX,
+      madnessPips: createEditablePips(
+        "madnessPermanent",
+        actorData.madnessPermanent,
+        getEditablePoolTotal(actorData.madnessPermanent),
+        madnessLabel
+      ),
+      madnessPipTotal: getEditablePoolTotal(actorData.madnessPermanent),
       moduleId: SYSTEM_ID,
       responseFightPips,
       responseFlightPips,
@@ -110,6 +148,9 @@ export class YakovDryhCharacterSheet extends BaseSheet {
     const responseInputs = root.querySelectorAll(
       "[data-yakov-dryh-response]"
     ) as NodeListOf<HTMLInputElement>;
+    const poolButtons = root.querySelectorAll(
+      "[data-yakov-dryh-pool-action]"
+    ) as NodeListOf<HTMLButtonElement>;
     const scarsInput = root.querySelector(
       'textarea[data-yakov-dryh-field="scars"]'
     ) as HTMLTextAreaElement | null;
@@ -126,6 +167,15 @@ export class YakovDryhCharacterSheet extends BaseSheet {
         );
       });
     });
+    poolButtons.forEach((button) => {
+      button.addEventListener("click", (event: MouseEvent) => {
+        event.preventDefault();
+        void this.updatePoolFromAction(
+          button.dataset.yakovDryhPoolField as EditableSheetPoolField,
+          button.dataset.yakovDryhPoolAction as "decrease" | "increase"
+        );
+      });
+    });
     scarsInput?.addEventListener("change", () => {
       void this.updateScars(scarsInput.value);
     });
@@ -137,6 +187,36 @@ export class YakovDryhCharacterSheet extends BaseSheet {
     }
 
     await YakovDryhRollDialog.openForActor(this.actor);
+  }
+
+  private async updatePoolFromAction(
+    field: EditableSheetPoolField,
+    action: "decrease" | "increase"
+  ): Promise<void> {
+    const actor = this.actor;
+
+    if (!actor) {
+      return;
+    }
+
+    const actorData = normalizeCharacterSystemData(actor.system);
+    const currentValue = actorData[field];
+    const maxValue =
+      field === "exhaustion"
+        ? DRYH_EXHAUSTION_MAX
+        : getEditablePoolTotal(currentValue);
+    const nextValue =
+      action === "increase"
+        ? Math.min(currentValue + 1, maxValue)
+        : Math.max(currentValue - 1, 0);
+
+    if (nextValue === currentValue) {
+      return;
+    }
+
+    await actor.update({
+      [`system.${field}`]: nextValue
+    } as Record<string, unknown>);
   }
 
   private async updateResponses(
@@ -177,10 +257,41 @@ export class YakovDryhCharacterSheet extends BaseSheet {
   }
 }
 
-function createPips(value: number, total: number): SheetPip[] {
+function createDisplayPips(value: number, total: number): SheetPip[] {
   return Array.from({ length: Math.max(total, 0) }, (_entry, index) => ({
     filled: index < value
   }));
+}
+
+function createEditablePips(
+  field: EditableSheetPoolField,
+  value: number,
+  total: number,
+  label: string
+): EditableSheetPip[] {
+  const normalizedTotal = Math.max(total, 0);
+
+  return Array.from({ length: normalizedTotal }, (_entry, index) => {
+    const filled = index < value;
+    const canDecrease = value > 0 && index === value - 1;
+    const canIncrease = index === value && value < normalizedTotal;
+
+    return {
+      action: canDecrease ? "decrease" : canIncrease ? "increase" : null,
+      field,
+      filled,
+      iconClass: canDecrease ? "fa-solid fa-trash-can" : canIncrease ? "fa-solid fa-plus" : null,
+      tooltip: canDecrease
+        ? `${localize("YAKOV_DRYH.UI.Actions.RemoveDie", "Remove 1 die")} (${label})`
+        : canIncrease
+          ? `${localize("YAKOV_DRYH.UI.Actions.AddDie", "Add 1 die")} (${label})`
+          : null
+    };
+  });
+}
+
+function getEditablePoolTotal(value: number): number {
+  return Math.max(value, SHEET_DICE_POOL_BASE_TOTAL);
 }
 
 function localizeActorType(actorType: string): string {
@@ -188,4 +299,10 @@ function localizeActorType(actorType: string): string {
   const localizedActorType = game.i18n?.localize(localizationKey) ?? localizationKey;
 
   return localizedActorType === localizationKey ? actorType : localizedActorType;
+}
+
+function localize(key: string, fallback: string): string {
+  const localizedValue = game.i18n?.localize(key) ?? key;
+
+  return localizedValue === key ? fallback : localizedValue;
 }

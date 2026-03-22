@@ -10,16 +10,37 @@
     </div>
 
     <div class="yakov-dryh-sheet-highlight yakov-dryh-sheet-highlight--exhaustion">
-      <strong>{{localize "YAKOV_DRYH.SHEETS.Actor.Character.Fields.Exhaustion"}}</strong>
-      <div class="yakov-dryh-pip-track yakov-dryh-pip-track--exhaustion">
-        {{#each exhaustionPips}}
-          <span class="yakov-dryh-pip {{#if filled}}yakov-dryh-pip--filled{{/if}}"></span>
-        {{/each}}
+      <div class="yakov-dryh-sheet-pool yakov-dryh-sheet-pool--exhaustion">
+        <div class="yakov-dryh-sheet-pool__header">
+          <strong>{{localize "YAKOV_DRYH.SHEETS.Actor.Character.Fields.Exhaustion"}}</strong>
+          <span class="yakov-dryh-sheet-pool__value">
+            {{actorData.exhaustion}} / {{exhaustionPipTotal}}
+          </span>
+        </div>
+        <div class="yakov-dryh-pip-track yakov-dryh-pip-track--exhaustion yakov-dryh-sheet-pool__track">
+          {{#each exhaustionPips}}
+            {{#if action}}
+              <button
+                class="yakov-dryh-sheet-pool__pip-control yakov-dryh-sheet-pool__pip-control--{{action}}"
+                type="button"
+                data-yakov-dryh-pool-field="{{field}}"
+                data-yakov-dryh-pool-action="{{action}}"
+                {{#if tooltip}}title="{{tooltip}}" aria-label="{{tooltip}}"{{/if}}
+              >
+                <span class="yakov-dryh-pip {{#if filled}}yakov-dryh-pip--filled{{/if}}"></span>
+                <span class="yakov-dryh-sheet-pool__action-icon yakov-dryh-sheet-pool__action-icon--{{action}}">
+                  <i class="{{iconClass}}"></i>
+                </span>
+              </button>
+            {{else}}
+              <span class="yakov-dryh-sheet-pool__pip-shell">
+                <span class="yakov-dryh-pip {{#if filled}}yakov-dryh-pip--filled{{/if}}"></span>
+              </span>
+            {{/if}}
+          {{/each}}
+        </div>
       </div>
       <div class="yakov-dryh-inline-actions">
-        <span class="yakov-dryh-copy">
-          {{actorData.exhaustion}} / 6
-        </span>
         <button
           class="yakov-dryh-button yakov-dryh-button--secondary"
           type="button"
@@ -73,38 +94,68 @@
 
     <aside class="yakov-dryh-sheet-shell__column yakov-dryh-sheet-shell__column--sidebar">
       <div class="yakov-dryh-resource-card">
-        <label class="yakov-dryh-field">
-          <span>{{localize "YAKOV_DRYH.SHEETS.Actor.Character.Fields.Discipline"}}</span>
-          <input
-            type="number"
-            name="system.discipline"
-            min="0"
-            step="1"
-            value="{{actorData.discipline}}"
-          >
-        </label>
-        <div class="yakov-dryh-pip-track">
-          {{#each disciplinePips}}
-            <span class="yakov-dryh-pip {{#if filled}}yakov-dryh-pip--filled{{/if}}"></span>
-          {{/each}}
+        <div class="yakov-dryh-sheet-pool">
+          <div class="yakov-dryh-sheet-pool__header">
+            <strong>{{localize "YAKOV_DRYH.SHEETS.Actor.Character.Fields.Discipline"}}</strong>
+            <span class="yakov-dryh-sheet-pool__value">
+              {{actorData.discipline}} / {{disciplinePipTotal}}
+            </span>
+          </div>
+          <div class="yakov-dryh-pip-track yakov-dryh-sheet-pool__track">
+            {{#each disciplinePips}}
+              {{#if action}}
+                <button
+                  class="yakov-dryh-sheet-pool__pip-control yakov-dryh-sheet-pool__pip-control--{{action}}"
+                  type="button"
+                  data-yakov-dryh-pool-field="{{field}}"
+                  data-yakov-dryh-pool-action="{{action}}"
+                  {{#if tooltip}}title="{{tooltip}}" aria-label="{{tooltip}}"{{/if}}
+                >
+                  <span class="yakov-dryh-pip {{#if filled}}yakov-dryh-pip--filled{{/if}}"></span>
+                  <span class="yakov-dryh-sheet-pool__action-icon yakov-dryh-sheet-pool__action-icon--{{action}}">
+                    <i class="{{iconClass}}"></i>
+                  </span>
+                </button>
+              {{else}}
+                <span class="yakov-dryh-sheet-pool__pip-shell">
+                  <span class="yakov-dryh-pip {{#if filled}}yakov-dryh-pip--filled{{/if}}"></span>
+                </span>
+              {{/if}}
+            {{/each}}
+          </div>
         </div>
       </div>
 
       <div class="yakov-dryh-resource-card">
-        <label class="yakov-dryh-field">
-          <span>{{localize "YAKOV_DRYH.SHEETS.Actor.Character.Fields.PermanentMadness"}}</span>
-          <input
-            type="number"
-            name="system.madnessPermanent"
-            min="0"
-            step="1"
-            value="{{actorData.madnessPermanent}}"
-          >
-        </label>
-        <div class="yakov-dryh-pip-track yakov-dryh-pip-track--madness">
-          {{#each madnessPips}}
-            <span class="yakov-dryh-pip {{#if filled}}yakov-dryh-pip--filled{{/if}}"></span>
-          {{/each}}
+        <div class="yakov-dryh-sheet-pool yakov-dryh-sheet-pool--madness">
+          <div class="yakov-dryh-sheet-pool__header">
+            <strong>{{localize "YAKOV_DRYH.SHEETS.Actor.Character.Fields.PermanentMadness"}}</strong>
+            <span class="yakov-dryh-sheet-pool__value">
+              {{actorData.madnessPermanent}} / {{madnessPipTotal}}
+            </span>
+          </div>
+          <div class="yakov-dryh-pip-track yakov-dryh-pip-track--madness yakov-dryh-sheet-pool__track">
+            {{#each madnessPips}}
+              {{#if action}}
+                <button
+                  class="yakov-dryh-sheet-pool__pip-control yakov-dryh-sheet-pool__pip-control--{{action}}"
+                  type="button"
+                  data-yakov-dryh-pool-field="{{field}}"
+                  data-yakov-dryh-pool-action="{{action}}"
+                  {{#if tooltip}}title="{{tooltip}}" aria-label="{{tooltip}}"{{/if}}
+                >
+                  <span class="yakov-dryh-pip {{#if filled}}yakov-dryh-pip--filled{{/if}}"></span>
+                  <span class="yakov-dryh-sheet-pool__action-icon yakov-dryh-sheet-pool__action-icon--{{action}}">
+                    <i class="{{iconClass}}"></i>
+                  </span>
+                </button>
+              {{else}}
+                <span class="yakov-dryh-sheet-pool__pip-shell">
+                  <span class="yakov-dryh-pip {{#if filled}}yakov-dryh-pip--filled{{/if}}"></span>
+                </span>
+              {{/if}}
+            {{/each}}
+          </div>
         </div>
       </div>
 

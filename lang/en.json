@@ -103,6 +103,10 @@
       }
     },
     "UI": {
+      "Actions": {
+        "AddDie": "Add 1 die",
+        "RemoveDie": "Remove 1 die"
+      },
       "Warnings": {
         "ActorUnavailable": "Actor is no longer available.",
         "ChatMessageUnavailable": "Chat message is no longer available.",
