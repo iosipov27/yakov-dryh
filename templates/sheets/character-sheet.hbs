@@ -9,45 +9,46 @@
       </p>
     </div>
 
-    <div class="yakov-dryh-sheet-highlight yakov-dryh-sheet-highlight--exhaustion">
-      <div class="yakov-dryh-sheet-pool yakov-dryh-sheet-pool--exhaustion">
-        <div class="yakov-dryh-sheet-pool__header">
-          <strong>{{localize "YAKOV_DRYH.SHEETS.Actor.Character.Fields.Exhaustion"}}</strong>
-          <span class="yakov-dryh-sheet-pool__value">
-            {{actorData.exhaustion}} / {{exhaustionPipTotal}}
-          </span>
-        </div>
-        <div class="yakov-dryh-pip-track yakov-dryh-pip-track--exhaustion yakov-dryh-sheet-pool__track">
-          {{#each exhaustionPips}}
-            {{#if action}}
-              <button
-                class="yakov-dryh-sheet-pool__pip-control yakov-dryh-sheet-pool__pip-control--{{action}}"
-                type="button"
-                data-yakov-dryh-pool-field="{{field}}"
-                data-yakov-dryh-pool-action="{{action}}"
-                {{#if tooltip}}title="{{tooltip}}" aria-label="{{tooltip}}"{{/if}}
-              >
-                <span class="yakov-dryh-pip {{#if filled}}yakov-dryh-pip--filled{{/if}}"></span>
-                <span class="yakov-dryh-sheet-pool__action-icon yakov-dryh-sheet-pool__action-icon--{{action}}">
-                  <i class="{{iconClass}}"></i>
+    <div class="yakov-dryh-sheet-shell__header-side">
+      <button
+        class="yakov-dryh-button yakov-dryh-button--secondary"
+        type="button"
+        data-yakov-dryh-action="open-roll-dialog"
+      >
+        {{localize "YAKOV_DRYH.SHEETS.Actor.Character.Actions.Roll"}}
+      </button>
+
+      <div class="yakov-dryh-sheet-highlight yakov-dryh-sheet-highlight--exhaustion">
+        <div class="yakov-dryh-dice-picker">
+          <div class="yakov-dryh-dice-picker__header">
+            <strong>{{localize "YAKOV_DRYH.SHEETS.Actor.Character.Fields.Exhaustion"}}</strong>
+            <span class="yakov-dryh-dice-picker__value">
+              {{actorData.exhaustion}} / {{exhaustionPipTotal}}
+            </span>
+          </div>
+          <div class="yakov-dryh-pip-track yakov-dryh-pip-track--exhaustion yakov-dryh-dice-picker__track">
+            {{#each exhaustionPips}}
+              {{#if action}}
+                <button
+                  class="yakov-dryh-dice-picker__pip-control yakov-dryh-dice-picker__pip-control--{{action}}"
+                  type="button"
+                  data-yakov-dryh-pool-field="{{field}}"
+                  data-yakov-dryh-pool-action="{{action}}"
+                  {{#if tooltip}}title="{{tooltip}}" aria-label="{{tooltip}}"{{/if}}
+                >
+                  <span class="yakov-dryh-pip {{#if filled}}yakov-dryh-pip--filled{{/if}}"></span>
+                  <span class="yakov-dryh-dice-picker__action-icon yakov-dryh-dice-picker__action-icon--{{action}}">
+                    <i class="{{iconClass}}"></i>
+                  </span>
+                </button>
+              {{else}}
+                <span class="yakov-dryh-dice-picker__pip-shell">
+                  <span class="yakov-dryh-pip {{#if filled}}yakov-dryh-pip--filled{{/if}}"></span>
                 </span>
-              </button>
-            {{else}}
-              <span class="yakov-dryh-sheet-pool__pip-shell">
-                <span class="yakov-dryh-pip {{#if filled}}yakov-dryh-pip--filled{{/if}}"></span>
-              </span>
-            {{/if}}
-          {{/each}}
+              {{/if}}
+            {{/each}}
+          </div>
         </div>
-      </div>
-      <div class="yakov-dryh-inline-actions">
-        <button
-          class="yakov-dryh-button yakov-dryh-button--secondary"
-          type="button"
-          data-yakov-dryh-action="open-roll-dialog"
-        >
-          {{localize "YAKOV_DRYH.SHEETS.Actor.Character.Actions.Roll"}}
-        </button>
       </div>
     </div>
   </header>
@@ -94,30 +95,30 @@
 
     <aside class="yakov-dryh-sheet-shell__column yakov-dryh-sheet-shell__column--sidebar">
       <div class="yakov-dryh-resource-card">
-        <div class="yakov-dryh-sheet-pool">
-          <div class="yakov-dryh-sheet-pool__header">
+        <div class="yakov-dryh-dice-picker">
+          <div class="yakov-dryh-dice-picker__header">
             <strong>{{localize "YAKOV_DRYH.SHEETS.Actor.Character.Fields.Discipline"}}</strong>
-            <span class="yakov-dryh-sheet-pool__value">
+            <span class="yakov-dryh-dice-picker__value">
               {{actorData.discipline}} / {{disciplinePipTotal}}
             </span>
           </div>
-          <div class="yakov-dryh-pip-track yakov-dryh-sheet-pool__track">
+          <div class="yakov-dryh-pip-track yakov-dryh-dice-picker__track">
             {{#each disciplinePips}}
               {{#if action}}
                 <button
-                  class="yakov-dryh-sheet-pool__pip-control yakov-dryh-sheet-pool__pip-control--{{action}}"
+                  class="yakov-dryh-dice-picker__pip-control yakov-dryh-dice-picker__pip-control--{{action}}"
                   type="button"
                   data-yakov-dryh-pool-field="{{field}}"
                   data-yakov-dryh-pool-action="{{action}}"
                   {{#if tooltip}}title="{{tooltip}}" aria-label="{{tooltip}}"{{/if}}
                 >
                   <span class="yakov-dryh-pip {{#if filled}}yakov-dryh-pip--filled{{/if}}"></span>
-                  <span class="yakov-dryh-sheet-pool__action-icon yakov-dryh-sheet-pool__action-icon--{{action}}">
+                  <span class="yakov-dryh-dice-picker__action-icon yakov-dryh-dice-picker__action-icon--{{action}}">
                     <i class="{{iconClass}}"></i>
                   </span>
                 </button>
               {{else}}
-                <span class="yakov-dryh-sheet-pool__pip-shell">
+                <span class="yakov-dryh-dice-picker__pip-shell">
                   <span class="yakov-dryh-pip {{#if filled}}yakov-dryh-pip--filled{{/if}}"></span>
                 </span>
               {{/if}}
@@ -127,30 +128,30 @@
       </div>
 
       <div class="yakov-dryh-resource-card">
-        <div class="yakov-dryh-sheet-pool yakov-dryh-sheet-pool--madness">
-          <div class="yakov-dryh-sheet-pool__header">
+        <div class="yakov-dryh-dice-picker">
+          <div class="yakov-dryh-dice-picker__header">
             <strong>{{localize "YAKOV_DRYH.SHEETS.Actor.Character.Fields.PermanentMadness"}}</strong>
-            <span class="yakov-dryh-sheet-pool__value">
+            <span class="yakov-dryh-dice-picker__value">
               {{actorData.madnessPermanent}} / {{madnessPipTotal}}
             </span>
           </div>
-          <div class="yakov-dryh-pip-track yakov-dryh-pip-track--madness yakov-dryh-sheet-pool__track">
+          <div class="yakov-dryh-pip-track yakov-dryh-pip-track--madness yakov-dryh-dice-picker__track">
             {{#each madnessPips}}
               {{#if action}}
                 <button
-                  class="yakov-dryh-sheet-pool__pip-control yakov-dryh-sheet-pool__pip-control--{{action}}"
+                  class="yakov-dryh-dice-picker__pip-control yakov-dryh-dice-picker__pip-control--{{action}}"
                   type="button"
                   data-yakov-dryh-pool-field="{{field}}"
                   data-yakov-dryh-pool-action="{{action}}"
                   {{#if tooltip}}title="{{tooltip}}" aria-label="{{tooltip}}"{{/if}}
                 >
                   <span class="yakov-dryh-pip {{#if filled}}yakov-dryh-pip--filled{{/if}}"></span>
-                  <span class="yakov-dryh-sheet-pool__action-icon yakov-dryh-sheet-pool__action-icon--{{action}}">
+                  <span class="yakov-dryh-dice-picker__action-icon yakov-dryh-dice-picker__action-icon--{{action}}">
                     <i class="{{iconClass}}"></i>
                   </span>
                 </button>
               {{else}}
-                <span class="yakov-dryh-sheet-pool__pip-shell">
+                <span class="yakov-dryh-dice-picker__pip-shell">
                   <span class="yakov-dryh-pip {{#if filled}}yakov-dryh-pip--filled{{/if}}"></span>
                 </span>
               {{/if}}

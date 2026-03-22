@@ -16,22 +16,74 @@
     <div class="yakov-dryh-card-panel">
       <strong>{{localize "YAKOV_DRYH.ROLL.Dialog.Exhaustion"}}</strong>
       <p class="yakov-dryh-copy">{{exhaustionDots}}</p>
-      <label class="yakov-dryh-checkbox">
-        <input type="checkbox" name="addExhaustion">
-        <span>{{localize "YAKOV_DRYH.ROLL.Dialog.AddExhaustion"}}</span>
-      </label>
+      <input type="hidden" name="addExhaustion" value="{{addExhaustionValue}}">
+      <input type="hidden" data-yakov-dryh-dialog-pool-max="addExhaustion" value="{{addExhaustionMax}}">
+      {{#if addExhaustionMax}}
+        <div class="yakov-dryh-dice-picker">
+          <div class="yakov-dryh-dice-picker__header">
+            <strong>{{localize "YAKOV_DRYH.ROLL.Dialog.AddExhaustion"}}</strong>
+            <span
+              class="yakov-dryh-dice-picker__value"
+              data-yakov-dryh-dialog-pool-value="addExhaustion"
+            >
+              {{addExhaustionValue}} / 1
+            </span>
+          </div>
+          <div class="yakov-dryh-pip-track yakov-dryh-pip-track--exhaustion yakov-dryh-dice-picker__track">
+            {{#each addExhaustionPips}}
+              <button
+                class="yakov-dryh-dice-picker__pip-control {{#if action}}yakov-dryh-dice-picker__pip-control--{{action}}{{/if}}"
+                type="button"
+                data-yakov-dryh-dialog-pool="addExhaustion"
+                data-yakov-dryh-dialog-pip-index="{{index}}"
+                data-yakov-dryh-dialog-pool-action="{{action}}"
+                {{#unless action}}disabled{{/unless}}
+                {{#if tooltip}}title="{{tooltip}}" aria-label="{{tooltip}}"{{/if}}
+              >
+                <span class="yakov-dryh-pip {{#if filled}}yakov-dryh-pip--filled{{/if}}"></span>
+                <span class="yakov-dryh-dice-picker__action-icon {{#if action}}yakov-dryh-dice-picker__action-icon--{{action}}{{/if}}">
+                  {{#if iconClass}}<i class="{{iconClass}}"></i>{{/if}}
+                </span>
+              </button>
+            {{/each}}
+          </div>
+        </div>
+      {{/if}}
     </div>
 
     <div class="yakov-dryh-card-panel">
       <strong>{{localize "YAKOV_DRYH.ROLL.Dialog.PermanentMadness"}}</strong>
       <p class="yakov-dryh-copy">{{madnessDots}}</p>
-      <label class="yakov-dryh-field">
-        <span>{{localize "YAKOV_DRYH.ROLL.Dialog.TemporaryMadness"}}</span>
-        <div class="yakov-dryh-range-field">
-          <input type="range" name="madnessTemp" min="0" max="6" step="1" value="0">
-          <output data-yakov-dryh-madness-output>0</output>
+      <input type="hidden" name="madnessTemp" value="{{madnessTempValue}}">
+      <div class="yakov-dryh-dice-picker">
+        <div class="yakov-dryh-dice-picker__header">
+          <strong>{{localize "YAKOV_DRYH.ROLL.Dialog.TemporaryMadness"}}</strong>
+          <span
+            class="yakov-dryh-dice-picker__value"
+            data-yakov-dryh-dialog-pool-value="madnessTemp"
+          >
+            {{madnessTempValue}} / 6
+          </span>
         </div>
-      </label>
+        <div class="yakov-dryh-pip-track yakov-dryh-pip-track--madness yakov-dryh-dice-picker__track">
+          {{#each madnessTempPips}}
+            <button
+              class="yakov-dryh-dice-picker__pip-control {{#if action}}yakov-dryh-dice-picker__pip-control--{{action}}{{/if}}"
+              type="button"
+              data-yakov-dryh-dialog-pool="madnessTemp"
+              data-yakov-dryh-dialog-pip-index="{{index}}"
+              data-yakov-dryh-dialog-pool-action="{{action}}"
+              {{#unless action}}disabled{{/unless}}
+              {{#if tooltip}}title="{{tooltip}}" aria-label="{{tooltip}}"{{/if}}
+            >
+              <span class="yakov-dryh-pip {{#if filled}}yakov-dryh-pip--filled{{/if}}"></span>
+              <span class="yakov-dryh-dice-picker__action-icon {{#if action}}yakov-dryh-dice-picker__action-icon--{{action}}{{/if}}">
+                {{#if iconClass}}<i class="{{iconClass}}"></i>{{/if}}
+              </span>
+            </button>
+          {{/each}}
+        </div>
+      </div>
     </div>
   </div>
 

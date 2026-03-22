@@ -7,6 +7,11 @@
     &__columns {
       grid-template-columns: 1fr;
     }
+
+    &__header-side {
+      justify-items: stretch;
+      width: 100%;
+    }
   }
 
   .yakov-dryh-roll-pool {

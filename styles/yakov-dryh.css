@@ -73,6 +73,11 @@
 .yakov-dryh-sheet-shell__column--story, .yakov-dryh-sheet-shell__column--sidebar {
   align-content: start;
 }
+.yakov-dryh-sheet-shell__header-side {
+  display: grid;
+  gap: 0.75rem;
+  justify-items: end;
+}
 
 .yakov-dryh-header {
   align-items: flex-start;
@@ -114,74 +119,6 @@
 .yakov-dryh-card-panel h3,
 .yakov-dryh-resource-card h3 {
   margin: 0;
-}
-
-.yakov-dryh-sheet-pool {
-  display: grid;
-  gap: 0.75rem;
-}
-.yakov-dryh-sheet-pool__header {
-  align-items: center;
-  display: flex;
-  gap: 0.75rem;
-  justify-content: space-between;
-}
-.yakov-dryh-sheet-pool__value {
-  color: var(--yakov-dryh-muted);
-  font-size: 0.8rem;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-}
-.yakov-dryh-sheet-pool__track {
-  margin-top: 0;
-}
-.yakov-dryh-sheet-pool__pip-shell, .yakov-dryh-sheet-pool__pip-control {
-  display: inline-flex;
-  position: relative;
-}
-.yakov-dryh-sheet-pool__pip-control {
-  align-items: center;
-  background: transparent;
-  border: 0;
-  cursor: pointer;
-  justify-content: center;
-  padding: 0;
-}
-.yakov-dryh-sheet-pool__pip-control:focus-visible {
-  outline: 2px solid var(--yakov-dryh-accent);
-  outline-offset: 3px;
-}
-.yakov-dryh-sheet-pool__pip-control:hover .yakov-dryh-sheet-pool__action-icon, .yakov-dryh-sheet-pool__pip-control:focus-visible .yakov-dryh-sheet-pool__action-icon {
-  opacity: 1;
-  transform: translate(0, 0);
-}
-.yakov-dryh-sheet-pool__action-icon {
-  align-items: center;
-  background: #1f1f1f;
-  border: 1px solid rgba(255, 255, 255, 0.72);
-  border-radius: 999px;
-  box-shadow: 0 8px 16px rgba(25, 16, 10, 0.22);
-  color: #fff;
-  display: inline-flex;
-  font-size: 0.62rem;
-  height: 1.05rem;
-  justify-content: center;
-  opacity: 0;
-  pointer-events: none;
-  position: absolute;
-  transition: opacity 140ms ease, transform 140ms ease;
-  width: 1.05rem;
-}
-.yakov-dryh-sheet-pool__action-icon--increase {
-  right: -0.35rem;
-  top: 50%;
-  transform: translate(-0.15rem, -50%);
-}
-.yakov-dryh-sheet-pool__action-icon--decrease {
-  right: -0.2rem;
-  top: -0.2rem;
-  transform: translate(-0.15rem, 0.15rem);
 }
 
 .yakov-dryh-dialog-grid {
@@ -283,6 +220,77 @@
 }
 .yakov-dryh-pip--filled {
   background-color: var(--yakov-dryh-pip-discipline);
+}
+
+.yakov-dryh-dice-picker {
+  display: grid;
+  gap: 0.75rem;
+}
+.yakov-dryh-dice-picker__header {
+  align-items: center;
+  display: flex;
+  gap: 0.75rem;
+  justify-content: space-between;
+}
+.yakov-dryh-dice-picker__value {
+  color: var(--yakov-dryh-muted);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.yakov-dryh-dice-picker__track {
+  margin-top: 0;
+}
+.yakov-dryh-dice-picker__pip-shell, .yakov-dryh-dice-picker__pip-control {
+  display: inline-flex;
+  position: relative;
+}
+.yakov-dryh-dice-picker__pip-control {
+  align-items: center;
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  justify-content: center;
+  padding: 0;
+}
+.yakov-dryh-dice-picker__pip-control:disabled {
+  cursor: default;
+}
+.yakov-dryh-dice-picker__pip-control:focus-visible {
+  outline: 2px solid var(--yakov-dryh-accent);
+  outline-offset: 3px;
+}
+.yakov-dryh-dice-picker__pip-control:hover .yakov-dryh-dice-picker__action-icon, .yakov-dryh-dice-picker__pip-control:focus-visible .yakov-dryh-dice-picker__action-icon {
+  opacity: 1;
+  transform: translate(0, 0);
+}
+.yakov-dryh-dice-picker__action-icon {
+  align-items: center;
+  background: #1f1f1f;
+  border: 1px solid rgba(255, 255, 255, 0.72);
+  border-radius: 999px;
+  box-shadow: 0 8px 16px rgba(25, 16, 10, 0.22);
+  color: #fff;
+  display: inline-flex;
+  font-size: 0.62rem;
+  height: 1.05rem;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  position: absolute;
+  transition: opacity 140ms ease, transform 140ms ease;
+  width: 1.05rem;
+}
+.yakov-dryh-dice-picker__action-icon--increase {
+  right: -0.35rem;
+  top: 50%;
+  transform: translate(-0.15rem, -50%);
+}
+.yakov-dryh-dice-picker__action-icon--decrease {
+  right: -0.2rem;
+  top: -0.2rem;
+  transform: translate(-0.15rem, 0.15rem);
 }
 
 .yakov-dryh-checkbox {
@@ -419,6 +427,10 @@
   }
   .yakov-dryh-sheet-shell__columns {
     grid-template-columns: 1fr;
+  }
+  .yakov-dryh-sheet-shell__header-side {
+    justify-items: stretch;
+    width: 100%;
   }
   .yakov-dryh-roll-pool {
     align-items: stretch;
