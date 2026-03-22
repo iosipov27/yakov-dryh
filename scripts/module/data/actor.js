@@ -16,7 +16,6 @@ export function createDefaultCharacterSystemData() {
             flight: 0,
             max: DRYH_RESPONSE_MAX
         },
-        hope: 0,
         talents: {
             exhaustion: "",
             madness: ""
@@ -26,7 +25,9 @@ export function createDefaultCharacterSystemData() {
 }
 export function normalizeResponses(value, changedField) {
     const defaults = createDefaultCharacterSystemData().responses;
-    const source = value && typeof value === "object" ? value : {};
+    const source = value && typeof value === "object"
+        ? value
+        : {};
     const max = DRYH_RESPONSE_MAX;
     let fight = normalizeInteger(source.fight, defaults.fight, { min: 0, max });
     let flight = normalizeInteger(source.flight, defaults.flight, { min: 0, max });
@@ -42,7 +43,9 @@ export function normalizeResponses(value, changedField) {
 }
 export function normalizeCharacterSystemData(value) {
     const defaults = createDefaultCharacterSystemData();
-    const source = value && typeof value === "object" ? value : {};
+    const source = value && typeof value === "object"
+        ? value
+        : {};
     return {
         concept: normalizeString(source.concept),
         discipline: normalizeInteger(source.discipline, defaults.discipline, { min: 0 }),
@@ -52,7 +55,6 @@ export function normalizeCharacterSystemData(value) {
         }),
         madnessPermanent: normalizeInteger(source.madnessPermanent, defaults.madnessPermanent, { min: 0 }),
         responses: normalizeResponses(source.responses),
-        hope: normalizeInteger(source.hope, defaults.hope, { min: 0 }),
         talents: {
             exhaustion: normalizeString(source.talents?.exhaustion),
             madness: normalizeString(source.talents?.madness)

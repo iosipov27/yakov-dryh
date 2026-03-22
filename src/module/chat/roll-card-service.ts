@@ -1,6 +1,5 @@
 import { DRYH_EXHAUSTION_MAX, normalizeCharacterSystemData } from "../data/index.js";
 import {
-  DRYH_SETTINGS,
   DRYH_ROLL_FLAG,
   SYSTEM_ID,
   TEMPLATE_PATHS
@@ -12,6 +11,10 @@ import {
   type YakovDryhGmAction,
   type YakovDryhRollResult
 } from "../dice/index.js";
+import {
+  addDespair,
+  spendDespairForHope
+} from "../resources/index.js";
 
 export interface YakovDryhInitialRollCardData {
   actorId: string | null;
@@ -243,12 +246,6 @@ function createInitialRollCardData(
   };
 }
 
-function getDespairTotal(): number {
-  const despair = game.settings?.get(SYSTEM_ID, DRYH_SETTINGS.gmDespair);
-
-  return typeof despair === "number" ? despair : 0;
-}
-
 async function applyDominantEffect(
   actor: Actor.Implementation,
   rollResult: YakovDryhRollResult
@@ -281,9 +278,7 @@ async function applyDominantEffect(
       );
 
     case "pain": {
-      const nextDespair = getDespairTotal() + 1;
-
-      await game.settings?.set(SYSTEM_ID, DRYH_SETTINGS.gmDespair, nextDespair);
+      const nextDespair = await addDespair(1);
 
       return `${localize(
         "YAKOV_DRYH.ROLL.Effects.pain",
@@ -401,6 +396,19 @@ export async function applyDryhRollGmAction(
     !card.painRolled ||
     card.gmActionUsed
   ) {
+    return null;
+  }
+
+  const updatedPools = await spendDespairForHope();
+
+  if (!updatedPools) {
+    ui.notifications?.warn(
+      localize(
+        "YAKOV_DRYH.UI.Warnings.DespairRequired",
+        "At least 1 Despair is required to adjust a six."
+      )
+    );
+
     return null;
   }
 

@@ -210,17 +210,22 @@ Use this section as the current checklist for development progress against the a
   - dominant-pool effect text
   - automatic `+1 Exhaustion` when Exhaustion dominates
   - automatic `+1 Despair` when Pain dominates
+- Shared resource flow currently supports:
+  - a shared world-level Hope pool
+  - a shared world-level Despair pool
+  - an always-visible Hope / Despair tracker window
+  - manual `+ / -` adjustment for both shared pools
+  - GM `+6` / `-6` intervention spending `-1 Despair` and converting it into `+1 Hope`
 
 #### Open Rules Compliance Gaps
 
-- Hope is still modeled as a character field instead of a shared player-side table pool.
-- Only GM Despair is currently shared table state; shared Hope is not implemented.
-- GM `+6` / `-6` intervention does not currently spend `-1 Despair` and convert it into `+1 Hope`.
 - Conflict resolution is staged as:
   - player roll first
   - GM Pain roll later
   - GM intervention after that
 - The aid-sheet rules describe a single conflict roll against Pain, so this staged flow must be treated as a rules divergence until intentionally kept or replaced.
+- Hope gained from GM intervention is immediately visible in the shared tracker.
+- The rules state that this Hope is unavailable until the next scene, and that availability gate is not yet modeled.
 - The player can currently take `+1 Exhaustion` only before the roll.
 - The rules also allow taking `+1 Exhaustion` after the roll, which is not implemented.
 - The player cannot currently spend shared Hope after the roll to add a `1` to Discipline.
@@ -563,6 +568,9 @@ tools/
   - keep CSS variables and tokens in a dedicated partial such as `src/styles/partials/_variables.scss`
   - split SCSS partials by responsibility, for example surfaces, sheet layout, controls, rolls, and responsive rules
   - prefer nested SCSS for modifiers and closely related child selectors so the base block and its variants stay together
+  - use BEM for unique style blocks, elements, and modifiers
+  - when writing BEM in SCSS, prefer nested selectors like `&__element` and `&--modifier` instead of repeating the full class name
+  - if a class is really a modifier, do not use ad-hoc state names like `is-*`; use a BEM modifier class in both templates and styles
   - treat `src/styles/**` as the source of truth and `styles/**` as the runtime output that should stay in sync when source styles change
 
 ## Simplicity Rules

@@ -52,10 +52,21 @@
       }
     },
     "SETTINGS": {
+      "SharedHope": {
+        "Hint": "Tracks the shared player Hope pool for DRYH.",
+        "Name": "Shared Hope"
+      },
       "GmDespair": {
         "Hint": "Tracks the current GM Despair total for DRYH pain effects.",
         "Name": "GM Despair"
       }
+    },
+    "RESOURCES": {
+      "Eyebrow": "Shared Pools",
+      "Title": "Hope / Despair",
+      "Hope": "Hope",
+      "Despair": "Despair",
+      "ReadOnly": "Only the GM can change shared pools."
     },
     "SHEETS": {
       "Actor": {
@@ -69,7 +80,6 @@
             "ExhaustionTalent": "Exhaustion Talent",
             "Fight": "Fight",
             "Flight": "Flight",
-            "Hope": "Hope",
             "MadnessTalent": "Madness Talent",
             "Name": "Name",
             "PermanentMadness": "Permanent Madness",
@@ -92,7 +102,9 @@
     "UI": {
       "Warnings": {
         "ActorUnavailable": "Actor is no longer available.",
-        "ChatMessageUnavailable": "Chat message is no longer available."
+        "ChatMessageUnavailable": "Chat message is no longer available.",
+        "DespairRequired": "At least 1 Despair is required to adjust a six.",
+        "SharedPoolsGmOnly": "Only the GM can change Hope / Despair."
       }
     }
   }

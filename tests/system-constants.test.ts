@@ -26,7 +26,6 @@ describe("system scaffold constants", () => {
         flight: 0,
         max: DRYH_RESPONSE_MAX
       },
-      hope: 0,
       talents: {
         exhaustion: "",
         madness: ""

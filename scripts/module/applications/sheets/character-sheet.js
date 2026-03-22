@@ -36,27 +36,36 @@ export class YakovDryhCharacterSheet extends BaseSheet {
         const actor = this.actor;
         const actorData = normalizeCharacterSystemData(actor?.system);
         const actorType = actor?.type ?? YAKOV_DRYH_ACTOR_TYPES.character;
-        context.actorData = actorData;
-        context.actorName = actor?.name ?? "";
-        context.actorType = actorType;
-        context.actorTypeLabel = localizeActorType(actorType);
-        context.disciplinePips = createPips(actorData.discipline, Math.max(actorData.discipline, 3));
-        context.exhaustionPips = createPips(actorData.exhaustion, DRYH_EXHAUSTION_MAX);
-        context.madnessPips = createPips(actorData.madnessPermanent, Math.max(actorData.madnessPermanent, 3));
-        context.moduleId = SYSTEM_ID;
-        context.responseFightPips = createPips(actorData.responses.fight, actorData.responses.max);
-        context.responseFlightPips = createPips(actorData.responses.flight, actorData.responses.max);
-        context.responsesRemaining = Math.max(actorData.responses.max -
+        const responseFightPips = createPips(actorData.responses.fight, actorData.responses.max);
+        const responseFlightPips = createPips(actorData.responses.flight, actorData.responses.max);
+        const responsesRemaining = Math.max(actorData.responses.max -
             actorData.responses.fight -
             actorData.responses.flight, 0);
-        context.scarsText = formatLineList(actorData.scars);
+        Object.assign(context, {
+            actorData,
+            actorName: actor?.name ?? "",
+            actorType,
+            actorTypeLabel: localizeActorType(actorType),
+            disciplinePips: createPips(actorData.discipline, Math.max(actorData.discipline, 3)),
+            exhaustionPips: createPips(actorData.exhaustion, DRYH_EXHAUSTION_MAX),
+            madnessPips: createPips(actorData.madnessPermanent, Math.max(actorData.madnessPermanent, 3)),
+            moduleId: SYSTEM_ID,
+            responseFightPips,
+            responseFlightPips,
+            responsesRemaining,
+            scarsText: formatLineList(actorData.scars)
+        });
         return context;
     }
     async _onRender(context, options) {
         await super._onRender(context, options);
-        const rollButton = this.element.querySelector('[data-yakov-dryh-action="open-roll-dialog"]');
-        const responseInputs = this.element.querySelectorAll("[data-yakov-dryh-response]");
-        const scarsInput = this.element.querySelector('textarea[data-yakov-dryh-field="scars"]');
+        const root = this.element;
+        if (!(root instanceof HTMLElement)) {
+            return;
+        }
+        const rollButton = root.querySelector('[data-yakov-dryh-action="open-roll-dialog"]');
+        const responseInputs = root.querySelectorAll("[data-yakov-dryh-response]");
+        const scarsInput = root.querySelector('textarea[data-yakov-dryh-field="scars"]');
         rollButton?.addEventListener("click", (event) => {
             event.preventDefault();
             void this.openRollDialog();

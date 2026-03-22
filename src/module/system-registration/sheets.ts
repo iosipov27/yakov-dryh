@@ -5,7 +5,7 @@ import { YAKOV_DRYH_ACTOR_TYPES } from "../data/index.js";
 export function registerApplicationSheets(): void {
   const { Actors } = foundry.documents.collections;
 
-  Actors.registerSheet(SYSTEM_ID, YakovDryhCharacterSheet, {
+  Actors.registerSheet(SYSTEM_ID, YakovDryhCharacterSheet as any, {
     types: [YAKOV_DRYH_ACTOR_TYPES.character],
     makeDefault: true,
     label:

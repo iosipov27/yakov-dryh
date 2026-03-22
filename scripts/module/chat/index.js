@@ -32,6 +32,24 @@ export function registerChatHooks(api) {
         activateChatCardListeners(message, html, api);
     });
 }
+function activateChatCardListeners(message, html, api) {
+    const actions = html.querySelectorAll("[data-yakov-dryh-action]");
+    actions.forEach((actionElement) => {
+        const action = actionElement.getAttribute("data-yakov-dryh-action");
+        if (action === "open-dialog") {
+            actionElement.addEventListener("click", (event) => {
+                event.preventDefault();
+                void api.chat.openInteraction(message);
+            });
+        }
+        if (action === "advance-status") {
+            actionElement.addEventListener("click", (event) => {
+                event.preventDefault();
+                void api.chat.advanceStatus(message);
+            });
+        }
+    });
+}
 function activateDryhRollListeners(message, html) {
     const card = getDryhRollCardData(message);
     const actionElements = html.querySelectorAll("[data-yakov-dryh-roll-action]");
@@ -66,24 +84,6 @@ function activateDryhRollListeners(message, html) {
                 targetPool
             });
         });
-    });
-}
-function activateChatCardListeners(message, html, api) {
-    const actions = html.querySelectorAll("[data-yakov-dryh-action]");
-    actions.forEach((actionElement) => {
-        const action = actionElement.getAttribute("data-yakov-dryh-action");
-        if (action === "open-dialog") {
-            actionElement.addEventListener("click", (event) => {
-                event.preventDefault();
-                void api.chat.openInteraction(message);
-            });
-        }
-        if (action === "advance-status") {
-            actionElement.addEventListener("click", (event) => {
-                event.preventDefault();
-                void api.chat.advanceStatus(message);
-            });
-        }
     });
 }
 export { advanceChatCardStatus, getChatCardData };

@@ -1,6 +1,7 @@
 import {
   YakovDryhChatInteractionDialog,
-  YakovDryhCharacterSheet
+  YakovDryhCharacterSheet,
+  YakovDryhHopeDespairTracker
 } from "./applications/index.js";
 import {
   advanceChatCardStatus,
@@ -18,6 +19,9 @@ export interface YakovDryhSystemApi {
   applications: {
     dialogs: {
       ChatInteraction: typeof YakovDryhChatInteractionDialog;
+    };
+    ui: {
+      HopeDespairTracker: typeof YakovDryhHopeDespairTracker;
     };
     sheets: {
       Character: typeof YakovDryhCharacterSheet;
@@ -41,6 +45,9 @@ export function createSystemApi(): YakovDryhSystemApi {
     applications: {
       dialogs: {
         ChatInteraction: YakovDryhChatInteractionDialog
+      },
+      ui: {
+        HopeDespairTracker: YakovDryhHopeDespairTracker
       },
       sheets: {
         Character: YakovDryhCharacterSheet

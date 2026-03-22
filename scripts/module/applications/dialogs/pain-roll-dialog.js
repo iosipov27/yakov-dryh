@@ -85,3 +85,4 @@ function localize(key, fallback) {
     const localizedValue = game.i18n?.localize(key) ?? key;
     return localizedValue === key ? fallback : localizedValue;
 }
+//# sourceMappingURL=pain-roll-dialog.js.map

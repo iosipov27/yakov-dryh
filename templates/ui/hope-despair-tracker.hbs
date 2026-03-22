@@ -1,0 +1,67 @@
+<section class="yakov-dryh-resource-tracker">
+  <header
+    class="yakov-dryh-resource-tracker__header"
+    data-yakov-dryh-drag-handle
+  >
+    <p class="yakov-dryh-eyebrow">{{localize "YAKOV_DRYH.RESOURCES.Eyebrow"}}</p>
+    <h3>{{localize "YAKOV_DRYH.RESOURCES.Title"}}</h3>
+  </header>
+
+  <div class="yakov-dryh-resource-tracker__rows">
+    <section class="yakov-dryh-resource-tracker__row yakov-dryh-resource-tracker__row--hope">
+      <div>
+        <strong>{{localize "YAKOV_DRYH.RESOURCES.Hope"}}</strong>
+        <p class="yakov-dryh-copy">{{hope}}</p>
+      </div>
+
+      <div class="yakov-dryh-inline-actions">
+        <button
+          class="yakov-dryh-button is-secondary is-compact"
+          type="button"
+          data-yakov-dryh-resource-pool="hope"
+          data-yakov-dryh-resource-delta="-1"
+        >
+          -
+        </button>
+        <button
+          class="yakov-dryh-button is-compact"
+          type="button"
+          data-yakov-dryh-resource-pool="hope"
+          data-yakov-dryh-resource-delta="1"
+        >
+          +
+        </button>
+      </div>
+    </section>
+
+    <section class="yakov-dryh-resource-tracker__row yakov-dryh-resource-tracker__row--despair">
+      <div>
+        <strong>{{localize "YAKOV_DRYH.RESOURCES.Despair"}}</strong>
+        <p class="yakov-dryh-copy">{{despair}}</p>
+      </div>
+
+      <div class="yakov-dryh-inline-actions">
+        <button
+          class="yakov-dryh-button is-secondary is-compact"
+          type="button"
+          data-yakov-dryh-resource-pool="despair"
+          data-yakov-dryh-resource-delta="-1"
+        >
+          -
+        </button>
+        <button
+          class="yakov-dryh-button is-compact"
+          type="button"
+          data-yakov-dryh-resource-pool="despair"
+          data-yakov-dryh-resource-delta="1"
+        >
+          +
+        </button>
+      </div>
+    </section>
+  </div>
+
+  {{#unless canEdit}}
+    <p class="yakov-dryh-copy">{{localize "YAKOV_DRYH.RESOURCES.ReadOnly"}}</p>
+  {{/unless}}
+</section>

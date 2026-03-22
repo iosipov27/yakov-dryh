@@ -1,5 +1,6 @@
 import type { YakovDryhSystemApi } from "../api.js";
 import { registerChatHooks } from "../chat/index.js";
+import { renderHopeDespairTracker } from "../applications/ui/hope-despair-tracker.js";
 import { registerDocumentClasses } from "./documents.js";
 import { registerSettings } from "./settings.js";
 import { registerApplicationSheets } from "./sheets.js";
@@ -16,5 +17,9 @@ export function registerSystem(api: YakovDryhSystemApi): void {
     registerSettings();
     registerApplicationSheets();
     registerChatHooks(api);
+  });
+
+  Hooks.once("ready", () => {
+    void renderHopeDespairTracker();
   });
 }

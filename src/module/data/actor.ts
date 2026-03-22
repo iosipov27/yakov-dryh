@@ -32,7 +32,6 @@ export interface YakovDryhCharacterSystemData extends Record<string, unknown> {
   exhaustion: number;
   madnessPermanent: number;
   responses: YakovDryhResponsesData;
-  hope: number;
   talents: YakovDryhTalentsData;
   scars: string[];
 }
@@ -48,7 +47,6 @@ export function createDefaultCharacterSystemData(): YakovDryhCharacterSystemData
       flight: 0,
       max: DRYH_RESPONSE_MAX
     },
-    hope: 0,
     talents: {
       exhaustion: "",
       madness: ""
@@ -103,7 +101,6 @@ export function normalizeCharacterSystemData(
       { min: 0 }
     ),
     responses: normalizeResponses(source.responses),
-    hope: normalizeInteger(source.hope, defaults.hope, { min: 0 }),
     talents: {
       exhaustion: normalizeString(source.talents?.exhaustion),
       madness: normalizeString(source.talents?.madness)

@@ -1,6 +1,7 @@
 import { DRYH_EXHAUSTION_MAX, normalizeCharacterSystemData } from "../data/index.js";
-import { DRYH_SETTINGS, DRYH_ROLL_FLAG, SYSTEM_ID, TEMPLATE_PATHS } from "../constants.js";
-import { applyGmActionToRollResult, applyPainRollToRollResult } from "../dice/index.js";
+import { DRYH_ROLL_FLAG, SYSTEM_ID, TEMPLATE_PATHS } from "../constants.js";
+import { applyPainRollToRollResult, applyGmActionToRollResult } from "../dice/index.js";
+import { addDespair, spendDespairForHope } from "../resources/index.js";
 function cloneRollCardData(card) {
     if (card.stage === "initial") {
         return {
@@ -93,7 +94,9 @@ function getPoolSummaries(rollResult) {
 async function renderRollCard(card) {
     const rollResult = getRollResult(card);
     const isInitial = card.stage === "initial";
-    const canAdjust = isInitial ? !card.finalized && card.painRolled && !card.gmActionUsed : false;
+    const canAdjust = isInitial
+        ? !card.finalized && card.painRolled && !card.gmActionUsed
+        : false;
     const canFinalize = isInitial ? !card.finalized && card.painRolled : false;
     const canRollPain = isInitial ? !card.finalized && !card.painRolled : false;
     const finalMessageId = isInitial ? card.finalMessageId : null;
@@ -149,10 +152,6 @@ function createInitialRollCardData(input) {
         stage: "initial"
     };
 }
-function getDespairTotal() {
-    const despair = game.settings?.get(SYSTEM_ID, DRYH_SETTINGS.gmDespair);
-    return typeof despair === "number" ? despair : 0;
-}
 async function applyDominantEffect(actor, rollResult) {
     switch (rollResult.dominant) {
         case "discipline":
@@ -168,8 +167,7 @@ async function applyDominantEffect(actor, rollResult) {
         case "madness":
             return localize("YAKOV_DRYH.ROLL.Effects.madness", "Mark a Response.");
         case "pain": {
-            const nextDespair = getDespairTotal() + 1;
-            await game.settings?.set(SYSTEM_ID, DRYH_SETTINGS.gmDespair, nextDespair);
+            const nextDespair = await addDespair(1);
             return `${localize("YAKOV_DRYH.ROLL.Effects.pain", "GM gains +1 Despair.")} ${localize("YAKOV_DRYH.ROLL.Effects.DespairTotal", "Total Despair:")} ${nextDespair}`;
         }
     }
@@ -218,7 +216,7 @@ async function createFinalizedRollMessage(message, card, actor, modifiedResult) 
         stage: "final"
     };
     const finalContent = await renderRollCard(finalCard);
-    const finalMessage = await ChatMessage.create({
+    const finalMessage = (await ChatMessage.create({
         content: finalContent,
         flags: {
             [SYSTEM_ID]: {
@@ -226,7 +224,7 @@ async function createFinalizedRollMessage(message, card, actor, modifiedResult) 
             }
         },
         speaker: getSpeaker(actor)
-    });
+    }));
     const updatedInitialCard = {
         ...card,
         finalMessageId: finalMessage.id ?? null,
@@ -238,7 +236,16 @@ async function createFinalizedRollMessage(message, card, actor, modifiedResult) 
 }
 export async function applyDryhRollGmAction(message, action) {
     const card = getRollCardFlag(message);
-    if (!card || card.stage !== "initial" || card.finalized || !card.painRolled || card.gmActionUsed) {
+    if (!card ||
+        card.stage !== "initial" ||
+        card.finalized ||
+        !card.painRolled ||
+        card.gmActionUsed) {
+        return null;
+    }
+    const updatedPools = await spendDespairForHope();
+    if (!updatedPools) {
+        ui.notifications?.warn(localize("YAKOV_DRYH.UI.Warnings.DespairRequired", "At least 1 Despair is required to adjust a six."));
         return null;
     }
     const updatedCard = {

@@ -1,4 +1,4 @@
-import { YakovDryhChatInteractionDialog, YakovDryhCharacterSheet } from "./applications/index.js";
+import { YakovDryhChatInteractionDialog, YakovDryhCharacterSheet, YakovDryhHopeDespairTracker } from "./applications/index.js";
 import { advanceChatCardStatus, createInteractiveChatMessage, getChatCardData, rerenderChatCard } from "./chat/chat-card-service.js";
 import { openChatInteraction } from "./chat/index.js";
 import * as data from "./data/index.js";
@@ -8,6 +8,9 @@ export function createSystemApi() {
         applications: {
             dialogs: {
                 ChatInteraction: YakovDryhChatInteractionDialog
+            },
+            ui: {
+                HopeDespairTracker: YakovDryhHopeDespairTracker
             },
             sheets: {
                 Character: YakovDryhCharacterSheet
