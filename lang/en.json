@@ -87,8 +87,9 @@
             "Name": "Name",
             "PermanentMadness": "Madness",
             "Responses": "Responses",
-            "ResponsesRemaining": "Response capacity remaining:",
-            "Scars": "Scars"
+            "ResponsesHint": "Choose Fight or Flight for each response slot.",
+            "Scars": "Scars",
+            "SelectResponse": "Select a Response"
           },
           "Label": "Yakov Dryh Character Sheet",
           "Sections": {

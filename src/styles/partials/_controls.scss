@@ -218,6 +218,36 @@
   }
 }
 
+.yakov-dryh-responses {
+  display: grid;
+  gap: 0.65rem;
+  margin-top: 0.9rem;
+}
+
+.yakov-dryh-response-row {
+  align-items: center;
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: auto minmax(0, 1fr);
+
+  &__checkbox {
+    accent-color: var(--yakov-dryh-accent);
+    cursor: pointer;
+    height: 1rem;
+    margin: 0;
+    width: 1rem;
+
+    &:disabled {
+      cursor: default;
+      opacity: 0.45;
+    }
+  }
+
+  &__select {
+    min-width: 0;
+  }
+}
+
 .yakov-dryh-range-field {
   align-items: center;
   display: grid;

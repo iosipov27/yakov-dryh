@@ -189,7 +189,7 @@ Use this section as the current checklist for development progress against the a
   - discipline
   - exhaustion display
   - permanent madness
-  - responses
+  - responses as three configurable Fight / Flight slots with checkboxes
   - talents as text
   - scars as text
 - Player roll flow currently supports:
@@ -250,7 +250,6 @@ Use this section as the current checklist for development progress against the a
 - Pain dominant is only partially rules-compliant:
   - `+1 Despair` is applied
   - the exception for GM shadow-casting or Pain dominance caused by GM intervention is not implemented
-- Responses are currently modeled as editable numeric values instead of a checked or unchecked consequence track.
 - Snap flow is not implemented:
   - un-check all Responses
   - convert `-1 Discipline` to `+1 Madness`

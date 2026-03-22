@@ -11,13 +11,25 @@ export const YAKOV_DRYH_ACTOR_TYPES = {
 export type YakovDryhActorType =
   (typeof YAKOV_DRYH_ACTOR_TYPES)[keyof typeof YAKOV_DRYH_ACTOR_TYPES];
 
+export const YAKOV_DRYH_RESPONSE_TYPES = {
+  fight: "fight",
+  flight: "flight"
+} as const;
+
+export type YakovDryhResponseType =
+  (typeof YAKOV_DRYH_RESPONSE_TYPES)[keyof typeof YAKOV_DRYH_RESPONSE_TYPES];
+
 export const DRYH_RESPONSE_MAX = 3;
 export const DRYH_EXHAUSTION_MAX = 6;
 export const DRYH_TEMP_MADNESS_MAX = 6;
 
+export interface YakovDryhResponseSlotData {
+  checked: boolean;
+  type: YakovDryhResponseType | "";
+}
+
 export interface YakovDryhResponsesData {
-  fight: number;
-  flight: number;
+  slots: YakovDryhResponseSlotData[];
   max: number;
 }
 
@@ -43,8 +55,7 @@ export function createDefaultCharacterSystemData(): YakovDryhCharacterSystemData
     exhaustion: 0,
     madnessPermanent: 0,
     responses: {
-      fight: 0,
-      flight: 0,
+      slots: createDefaultResponseSlots(),
       max: DRYH_RESPONSE_MAX
     },
     talents: {
@@ -56,27 +67,22 @@ export function createDefaultCharacterSystemData(): YakovDryhCharacterSystemData
 }
 
 export function normalizeResponses(
-  value: unknown,
-  changedField?: "fight" | "flight"
+  value: unknown
 ): YakovDryhResponsesData {
-  const defaults = createDefaultCharacterSystemData().responses;
   const source =
     value && typeof value === "object"
-      ? (value as Partial<YakovDryhResponsesData>)
+      ? (value as Partial<YakovDryhResponsesData> & {
+          fight?: unknown;
+          flight?: unknown;
+        })
       : {};
   const max = DRYH_RESPONSE_MAX;
-  let fight = normalizeInteger(source.fight, defaults.fight, { min: 0, max });
-  let flight = normalizeInteger(source.flight, defaults.flight, { min: 0, max });
 
-  if (fight + flight > max) {
-    if (changedField === "fight") {
-      flight = Math.max(max - fight, 0);
-    } else {
-      fight = Math.max(max - flight, 0);
-    }
-  }
+  const slots = Array.isArray(source.slots)
+    ? normalizeResponseSlots(source.slots, max)
+    : createLegacyResponseSlots(source.fight, source.flight, max);
 
-  return { fight, flight, max };
+  return { slots, max };
 }
 
 export function normalizeCharacterSystemData(
@@ -107,4 +113,76 @@ export function normalizeCharacterSystemData(
     },
     scars: normalizeStringArray(source.scars)
   };
+}
+
+function createDefaultResponseSlots(): YakovDryhResponseSlotData[] {
+  return Array.from({ length: DRYH_RESPONSE_MAX }, () => ({
+    checked: false,
+    type: ""
+  }));
+}
+
+function createLegacyResponseSlots(
+  fightValue: unknown,
+  flightValue: unknown,
+  max: number
+): YakovDryhResponseSlotData[] {
+  const flight = normalizeInteger(flightValue, 0, { min: 0, max });
+  const fight = normalizeInteger(fightValue, 0, {
+    min: 0,
+    max: Math.max(max - flight, 0)
+  });
+  const slots: YakovDryhResponseSlotData[] = [];
+
+  for (let index = 0; index < fight; index += 1) {
+    slots.push({
+      checked: true,
+      type: YAKOV_DRYH_RESPONSE_TYPES.fight
+    });
+  }
+
+  for (let index = 0; index < flight; index += 1) {
+    slots.push({
+      checked: true,
+      type: YAKOV_DRYH_RESPONSE_TYPES.flight
+    });
+  }
+
+  while (slots.length < max) {
+    slots.push({
+      checked: false,
+      type: ""
+    });
+  }
+
+  return slots.slice(0, max);
+}
+
+function normalizeResponseSlots(
+  value: unknown[],
+  max: number
+): YakovDryhResponseSlotData[] {
+  return Array.from({ length: max }, (_entry, index) =>
+    normalizeResponseSlot(value[index])
+  );
+}
+
+function normalizeResponseSlot(value: unknown): YakovDryhResponseSlotData {
+  const source =
+    value && typeof value === "object"
+      ? (value as Partial<YakovDryhResponseSlotData>)
+      : {};
+  const type = normalizeResponseType(source.type);
+
+  return {
+    checked: type === "" ? false : source.checked === true,
+    type
+  };
+}
+
+function normalizeResponseType(value: unknown): YakovDryhResponseType | "" {
+  return value === YAKOV_DRYH_RESPONSE_TYPES.fight ||
+    value === YAKOV_DRYH_RESPONSE_TYPES.flight
+    ? value
+    : "";
 }

@@ -160,41 +160,35 @@
       <div class="yakov-dryh-resource-card">
         <h3>{{localize "YAKOV_DRYH.SHEETS.Actor.Character.Fields.Responses"}}</h3>
         <p class="yakov-dryh-copy">
-          {{localize "YAKOV_DRYH.SHEETS.Actor.Character.Fields.ResponsesRemaining"}}
-          {{responsesRemaining}} / {{actorData.responses.max}}
+          {{localize "YAKOV_DRYH.SHEETS.Actor.Character.Fields.ResponsesHint"}}
         </p>
-
-        <label class="yakov-dryh-field">
-          <span>{{localize "YAKOV_DRYH.SHEETS.Actor.Character.Fields.Fight"}}</span>
-          <input
-            type="number"
-            min="0"
-            max="{{actorData.responses.max}}"
-            step="1"
-            value="{{actorData.responses.fight}}"
-            data-yakov-dryh-response="fight"
-          >
-        </label>
-        <div class="yakov-dryh-pip-track yakov-dryh-pip-track--response">
-          {{#each responseFightPips}}
-            <span class="yakov-dryh-pip {{#if filled}}yakov-dryh-pip--filled{{/if}}"></span>
-          {{/each}}
-        </div>
-
-        <label class="yakov-dryh-field">
-          <span>{{localize "YAKOV_DRYH.SHEETS.Actor.Character.Fields.Flight"}}</span>
-          <input
-            type="number"
-            min="0"
-            max="{{actorData.responses.max}}"
-            step="1"
-            value="{{actorData.responses.flight}}"
-            data-yakov-dryh-response="flight"
-          >
-        </label>
-        <div class="yakov-dryh-pip-track yakov-dryh-pip-track--response">
-          {{#each responseFlightPips}}
-            <span class="yakov-dryh-pip {{#if filled}}yakov-dryh-pip--filled{{/if}}"></span>
+        <div class="yakov-dryh-responses">
+          {{#each responseRows}}
+            <div class="yakov-dryh-response-row">
+              <input
+                class="yakov-dryh-response-row__checkbox"
+                type="checkbox"
+                aria-label="{{label}}"
+                data-yakov-dryh-response-check="{{index}}"
+                {{#if checked}}checked{{/if}}
+                {{#unless isConfigured}}disabled{{/unless}}
+              >
+              <select
+                class="yakov-dryh-response-row__select"
+                aria-label="{{label}}"
+                data-yakov-dryh-response-type="{{index}}"
+              >
+                <option value="" {{#unless isConfigured}}selected{{/unless}}>
+                  {{localize "YAKOV_DRYH.SHEETS.Actor.Character.Fields.SelectResponse"}}
+                </option>
+                <option value="fight" {{#if isFight}}selected{{/if}}>
+                  {{localize "YAKOV_DRYH.SHEETS.Actor.Character.Fields.Fight"}}
+                </option>
+                <option value="flight" {{#if isFlight}}selected{{/if}}>
+                  {{localize "YAKOV_DRYH.SHEETS.Actor.Character.Fields.Flight"}}
+                </option>
+              </select>
+            </div>
           {{/each}}
         </div>
       </div>

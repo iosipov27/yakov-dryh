@@ -1,5 +1,5 @@
 import { YakovDryhRollDialog } from "../dialogs/roll-dialog.js";
-import { DRYH_EXHAUSTION_MAX, DRYH_RESPONSE_MAX, normalizeCharacterSystemData, normalizeResponses, YAKOV_DRYH_ACTOR_TYPES } from "../../data/index.js";
+import { DRYH_EXHAUSTION_MAX, DRYH_RESPONSE_MAX, YAKOV_DRYH_RESPONSE_TYPES, normalizeCharacterSystemData, YAKOV_DRYH_ACTOR_TYPES } from "../../data/index.js";
 import { SYSTEM_ID, SYSTEM_TITLE, TEMPLATE_PATHS } from "../../constants.js";
 import { formatLineList, parseLineList } from "../../utils/index.js";
 const BaseSheet = foundry.applications.api.HandlebarsApplicationMixin(foundry.applications.sheets.ActorSheetV2);
@@ -41,11 +41,8 @@ export class YakovDryhCharacterSheet extends BaseSheet {
         const disciplineLabel = localize("YAKOV_DRYH.SHEETS.Actor.Character.Fields.Discipline", "Discipline");
         const exhaustionLabel = localize("YAKOV_DRYH.SHEETS.Actor.Character.Fields.Exhaustion", "Exhaustion");
         const madnessLabel = localize("YAKOV_DRYH.SHEETS.Actor.Character.Fields.PermanentMadness", "Madness");
-        const responseFightPips = createDisplayPips(actorData.responses.fight, actorData.responses.max);
-        const responseFlightPips = createDisplayPips(actorData.responses.flight, actorData.responses.max);
-        const responsesRemaining = Math.max(actorData.responses.max -
-            actorData.responses.fight -
-            actorData.responses.flight, 0);
+        const responsesLabel = localize("YAKOV_DRYH.SHEETS.Actor.Character.Fields.Responses", "Responses");
+        const responseRows = actorData.responses.slots.map((slot, index) => createResponseRow(slot, index, responsesLabel));
         Object.assign(context, {
             actorData,
             actorName: actor?.name ?? "",
@@ -60,9 +57,7 @@ export class YakovDryhCharacterSheet extends BaseSheet {
             madnessCardStyle: createStressCardStyle(actorData.madnessPermanent),
             madnessPipTotal: getEditablePoolTotal(actorData.madnessPermanent),
             moduleId: SYSTEM_ID,
-            responseFightPips,
-            responseFlightPips,
-            responsesRemaining,
+            responseRows,
             scarsText: formatLineList(actorData.scars)
         });
         return context;
@@ -74,16 +69,22 @@ export class YakovDryhCharacterSheet extends BaseSheet {
             return;
         }
         const rollButton = root.querySelector('[data-yakov-dryh-action="open-roll-dialog"]');
-        const responseInputs = root.querySelectorAll("[data-yakov-dryh-response]");
+        const responseChecks = root.querySelectorAll("[data-yakov-dryh-response-check]");
+        const responseTypes = root.querySelectorAll("[data-yakov-dryh-response-type]");
         const poolButtons = root.querySelectorAll("[data-yakov-dryh-pool-action]");
         const scarsInput = root.querySelector('textarea[data-yakov-dryh-field="scars"]');
         rollButton?.addEventListener("click", (event) => {
             event.preventDefault();
             void this.openRollDialog();
         });
-        responseInputs.forEach((input) => {
+        responseChecks.forEach((input) => {
             input.addEventListener("change", () => {
-                void this.updateResponses(input.dataset.yakovDryhResponse, input.value);
+                void this.updateResponseChecked(Number.parseInt(input.dataset.yakovDryhResponseCheck ?? "", 10), input.checked);
+            });
+        });
+        responseTypes.forEach((input) => {
+            input.addEventListener("change", () => {
+                void this.updateResponseType(Number.parseInt(input.dataset.yakovDryhResponseType ?? "", 10), input.value);
             });
         });
         poolButtons.forEach((button) => {
@@ -122,20 +123,47 @@ export class YakovDryhCharacterSheet extends BaseSheet {
             [`system.${field}`]: nextValue
         });
     }
-    async updateResponses(changedField, value) {
+    async updateResponseChecked(slotIndex, checked) {
         const actor = this.actor;
-        if (!actor) {
+        if (!actor || !Number.isInteger(slotIndex) || slotIndex < 0) {
             return;
         }
         const currentData = normalizeCharacterSystemData(actor.system);
-        const numericValue = Number.parseInt(value, 10);
-        const responses = normalizeResponses({
-            ...currentData.responses,
-            [changedField]: Number.isFinite(numericValue) ? numericValue : 0
-        }, changedField);
+        const currentSlot = currentData.responses.slots[slotIndex];
+        if (!currentSlot || currentSlot.type === "" || currentSlot.checked === checked) {
+            return;
+        }
         await actor.update({
-            "system.responses.fight": responses.fight,
-            "system.responses.flight": responses.flight,
+            "system.responses.slots": currentData.responses.slots.map((slot, index) => index === slotIndex
+                ? {
+                    ...slot,
+                    checked
+                }
+                : slot),
+            "system.responses.max": DRYH_RESPONSE_MAX
+        });
+    }
+    async updateResponseType(slotIndex, value) {
+        const actor = this.actor;
+        if (!actor || !Number.isInteger(slotIndex) || slotIndex < 0) {
+            return;
+        }
+        const currentData = normalizeCharacterSystemData(actor.system);
+        const currentSlot = currentData.responses.slots[slotIndex];
+        if (!currentSlot) {
+            return;
+        }
+        const type = normalizeResponseType(value);
+        if (currentSlot.type === type) {
+            return;
+        }
+        await actor.update({
+            "system.responses.slots": currentData.responses.slots.map((slot, index) => index === slotIndex
+                ? {
+                    checked: type === "" ? false : slot.checked,
+                    type
+                }
+                : slot),
             "system.responses.max": DRYH_RESPONSE_MAX
         });
     }
@@ -148,10 +176,15 @@ export class YakovDryhCharacterSheet extends BaseSheet {
         });
     }
 }
-function createDisplayPips(value, total) {
-    return Array.from({ length: Math.max(total, 0) }, (_entry, index) => ({
-        filled: index < value
-    }));
+function createResponseRow(slot, index, label) {
+    return {
+        checked: slot.checked,
+        index,
+        isConfigured: slot.type !== "",
+        isFight: slot.type === YAKOV_DRYH_RESPONSE_TYPES.fight,
+        isFlight: slot.type === YAKOV_DRYH_RESPONSE_TYPES.flight,
+        label: `${label} ${index + 1}`
+    };
 }
 function createEditablePips(field, value, total, label) {
     const normalizedTotal = Math.max(total, 0);
@@ -196,5 +229,11 @@ function localizeActorType(actorType) {
 function localize(key, fallback) {
     const localizedValue = game.i18n?.localize(key) ?? key;
     return localizedValue === key ? fallback : localizedValue;
+}
+function normalizeResponseType(value) {
+    return value === YAKOV_DRYH_RESPONSE_TYPES.fight ||
+        value === YAKOV_DRYH_RESPONSE_TYPES.flight
+        ? value
+        : "";
 }
 //# sourceMappingURL=character-sheet.js.map
