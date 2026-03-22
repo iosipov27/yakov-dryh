@@ -1,7 +1,7 @@
 import { YakovDryhChatInteractionDialog } from "../applications/dialogs/chat-interaction-dialog.js";
 import { YakovDryhPainRollDialog } from "../applications/dialogs/pain-roll-dialog.js";
 import { CHAT_CARD_COMMAND } from "../constants.js";
-import { applyDryhRollGmAction, getDryhRollCardData, hasDryhRollCard } from "./roll-card-service.js";
+import { applyDryhRollGmAction, finalizeDryhRoll, getDryhRollCardData, hasDryhRollCard } from "./roll-card-service.js";
 import { advanceChatCardStatus, getChatCardData, hasInteractiveChatCard, markChatCardDialogOpened } from "./chat-card-service.js";
 export async function openChatInteraction(message) {
     await markChatCardDialogOpened(message);
@@ -50,6 +50,11 @@ function activateDryhRollListeners(message, html) {
             event.preventDefault();
             if (action === "roll-pain") {
                 void YakovDryhPainRollDialog.openForMessage(message);
+                return;
+            }
+            if (action === "finalize") {
+                actionElement.setAttribute("disabled", "disabled");
+                void finalizeDryhRoll(message);
                 return;
             }
             if (!targetPool || (action !== "add6" && action !== "remove6")) {

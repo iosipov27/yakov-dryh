@@ -9,6 +9,7 @@
       "Chat": {
         "Dominant": "Dominant:",
         "Effect": "Effect",
+        "Finalize": "Finalize Result",
         "Finalized": "Initial result has been finalized.",
         "FinalTitle": "Final Result",
         "InitialTitle": "Roll Result",

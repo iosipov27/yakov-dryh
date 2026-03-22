@@ -93,13 +93,15 @@ function getPoolSummaries(rollResult) {
 async function renderRollCard(card) {
     const rollResult = getRollResult(card);
     const isInitial = card.stage === "initial";
-    const canModify = isInitial ? !card.finalized : false;
+    const canModify = isInitial ? !card.finalized && card.painRolled : false;
+    const canRollPain = isInitial ? !card.finalized && !card.painRolled : false;
     const finalMessageId = isInitial ? card.finalMessageId : null;
     const isResolved = isInitial ? card.finalized : true;
     const effectText = isInitial ? null : card.effectText;
     return foundry.applications.handlebars.renderTemplate(TEMPLATE_PATHS.dryhRollCard, {
         actorName: card.actorName,
         canModify,
+        canRollPain,
         dominantLabel: formatDominantPool(rollResult.dominant),
         effectText,
         finalMessageId,
@@ -139,6 +141,7 @@ function createInitialRollCardData(input) {
         actorUuid: input.actor.uuid,
         finalMessageId: null,
         finalized: false,
+        painRolled: false,
         rollResult: input.rollResult,
         stage: "initial"
     };
@@ -232,7 +235,7 @@ async function createFinalizedRollMessage(message, card, actor, modifiedResult) 
 }
 export async function applyDryhRollGmAction(message, action) {
     const card = getRollCardFlag(message);
-    if (!card || card.stage !== "initial" || card.finalized) {
+    if (!card || card.stage !== "initial" || card.finalized || !card.painRolled) {
         return null;
     }
     const updatedCard = {
@@ -241,9 +244,9 @@ export async function applyDryhRollGmAction(message, action) {
     };
     return updateInitialRollMessage(message, updatedCard);
 }
-export async function finalizeDryhRollWithPain(message, painDice) {
+export async function finalizeDryhRoll(message) {
     const card = getRollCardFlag(message);
-    if (!card || card.stage !== "initial" || card.finalized) {
+    if (!card || card.stage !== "initial" || card.finalized || !card.painRolled) {
         return null;
     }
     const actor = await resolveActor(card.actorUuid, card.actorId);
@@ -251,8 +254,19 @@ export async function finalizeDryhRollWithPain(message, painDice) {
         ui.notifications?.warn(localize("YAKOV_DRYH.UI.Warnings.ActorUnavailable", "Actor is no longer available."));
         return null;
     }
+    return createFinalizedRollMessage(message, card, actor, card.rollResult);
+}
+export async function finalizeDryhRollWithPain(message, painDice) {
+    const card = getRollCardFlag(message);
+    if (!card || card.stage !== "initial" || card.finalized || card.painRolled) {
+        return null;
+    }
     const normalizedPainDice = Math.max(Math.trunc(painDice), 1);
-    const modifiedResult = applyPainRollToRollResult(card.rollResult, normalizedPainDice);
-    return createFinalizedRollMessage(message, card, actor, modifiedResult);
+    const updatedCard = {
+        ...card,
+        painRolled: true,
+        rollResult: applyPainRollToRollResult(card.rollResult, normalizedPainDice)
+    };
+    return updateInitialRollMessage(message, updatedCard);
 }
 //# sourceMappingURL=roll-card-service.js.map

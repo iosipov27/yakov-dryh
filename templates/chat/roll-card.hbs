@@ -71,7 +71,7 @@
     {{/if}}
   </div>
 
-  {{#if canModify}}
+  {{#if canRollPain}}
     <footer class="yakov-dryh-actions">
       <button
         class="yakov-dryh-button"
@@ -79,6 +79,18 @@
         data-yakov-dryh-roll-action="roll-pain"
       >
         {{localize "YAKOV_DRYH.ROLL.Chat.RollPain"}}
+      </button>
+    </footer>
+  {{/if}}
+
+  {{#if canModify}}
+    <footer class="yakov-dryh-actions">
+      <button
+        class="yakov-dryh-button"
+        type="button"
+        data-yakov-dryh-roll-action="finalize"
+      >
+        {{localize "YAKOV_DRYH.ROLL.Chat.Finalize"}}
       </button>
     </footer>
   {{/if}}

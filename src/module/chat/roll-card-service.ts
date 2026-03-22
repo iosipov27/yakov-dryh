@@ -19,6 +19,7 @@ export interface YakovDryhInitialRollCardData {
   actorUuid: string | null;
   finalMessageId: string | null;
   finalized: boolean;
+  painRolled: boolean;
   rollResult: YakovDryhRollResult;
   stage: "initial";
 }
@@ -166,7 +167,8 @@ function getPoolSummaries(rollResult: YakovDryhRollResult): RollPoolSummary[] {
 async function renderRollCard(card: YakovDryhRollCardData): Promise<string> {
   const rollResult = getRollResult(card);
   const isInitial = card.stage === "initial";
-  const canModify = isInitial ? !card.finalized : false;
+  const canModify = isInitial ? !card.finalized && card.painRolled : false;
+  const canRollPain = isInitial ? !card.finalized && !card.painRolled : false;
   const finalMessageId = isInitial ? card.finalMessageId : null;
   const isResolved = isInitial ? card.finalized : true;
   const effectText = isInitial ? null : card.effectText;
@@ -174,6 +176,7 @@ async function renderRollCard(card: YakovDryhRollCardData): Promise<string> {
   return foundry.applications.handlebars.renderTemplate(TEMPLATE_PATHS.dryhRollCard, {
     actorName: card.actorName,
     canModify,
+    canRollPain,
     dominantLabel: formatDominantPool(rollResult.dominant),
     effectText,
     finalMessageId,
@@ -228,6 +231,7 @@ function createInitialRollCardData(
     actorUuid: input.actor.uuid,
     finalMessageId: null,
     finalized: false,
+    painRolled: false,
     rollResult: input.rollResult,
     stage: "initial"
   };
@@ -384,7 +388,7 @@ export async function applyDryhRollGmAction(
 ): Promise<YakovDryhInitialRollCardData | null> {
   const card = getRollCardFlag(message);
 
-  if (!card || card.stage !== "initial" || card.finalized) {
+  if (!card || card.stage !== "initial" || card.finalized || !card.painRolled) {
     return null;
   }
 
@@ -396,13 +400,12 @@ export async function applyDryhRollGmAction(
   return updateInitialRollMessage(message, updatedCard);
 }
 
-export async function finalizeDryhRollWithPain(
-  message: ChatMessage.Implementation,
-  painDice: number
+export async function finalizeDryhRoll(
+  message: ChatMessage.Implementation
 ): Promise<ChatMessage.Implementation | null> {
   const card = getRollCardFlag(message);
 
-  if (!card || card.stage !== "initial" || card.finalized) {
+  if (!card || card.stage !== "initial" || card.finalized || !card.painRolled) {
     return null;
   }
 
@@ -419,8 +422,25 @@ export async function finalizeDryhRollWithPain(
     return null;
   }
 
-  const normalizedPainDice = Math.max(Math.trunc(painDice), 1);
-  const modifiedResult = applyPainRollToRollResult(card.rollResult, normalizedPainDice);
+  return createFinalizedRollMessage(message, card, actor, card.rollResult);
+}
 
-  return createFinalizedRollMessage(message, card, actor, modifiedResult);
+export async function finalizeDryhRollWithPain(
+  message: ChatMessage.Implementation,
+  painDice: number
+): Promise<YakovDryhInitialRollCardData | null> {
+  const card = getRollCardFlag(message);
+
+  if (!card || card.stage !== "initial" || card.finalized || card.painRolled) {
+    return null;
+  }
+
+  const normalizedPainDice = Math.max(Math.trunc(painDice), 1);
+  const updatedCard: YakovDryhInitialRollCardData = {
+    ...card,
+    painRolled: true,
+    rollResult: applyPainRollToRollResult(card.rollResult, normalizedPainDice)
+  };
+
+  return updateInitialRollMessage(message, updatedCard);
 }

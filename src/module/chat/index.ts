@@ -4,6 +4,7 @@ import type { YakovDryhSystemApi } from "../api.js";
 import { CHAT_CARD_COMMAND } from "../constants.js";
 import {
   applyDryhRollGmAction,
+  finalizeDryhRoll,
   getDryhRollCardData,
   hasDryhRollCard
 } from "./roll-card-service.js";
@@ -119,6 +120,12 @@ function activateDryhRollListeners(
 
       if (action === "roll-pain") {
         void YakovDryhPainRollDialog.openForMessage(message);
+        return;
+      }
+
+      if (action === "finalize") {
+        actionElement.setAttribute("disabled", "disabled");
+        void finalizeDryhRoll(message);
         return;
       }
 

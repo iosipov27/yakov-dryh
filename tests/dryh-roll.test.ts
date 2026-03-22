@@ -80,4 +80,20 @@ describe("DRYH roll logic", () => {
     expect(modifiedResult.pools.pain).toEqual([6, 2, 6]);
     expect(modifiedResult.successes.pain).toBe(1);
   });
+
+  it("allows GM six adjustments on the pain pool after pain is rolled", () => {
+    const initialResult = createRollResult({
+      discipline: [3],
+      exhaustion: [5],
+      madness: [4],
+      pain: [2, 6]
+    });
+    const modifiedResult = applyGmActionToRollResult(initialResult, {
+      type: "remove6",
+      targetPool: "pain"
+    });
+
+    expect(modifiedResult.pools.pain).toEqual([2]);
+    expect(modifiedResult.successes.pain).toBe(1);
+  });
 });
