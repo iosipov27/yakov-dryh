@@ -132,6 +132,9 @@ async function renderRollCard(card) {
     const failureResolutionButtons = isInitial
         ? []
         : await getFailureResolutionButtons(card);
+    const failureResolutionPrompt = failureResolutionButtons.length > 1
+        ? localize("YAKOV_DRYH.ROLL.Chat.ChooseOne", "Choose one:")
+        : null;
     return foundry.applications.handlebars.renderTemplate(TEMPLATE_PATHS.dryhRollCard, {
         actorName: card.actorName,
         canAffordAdjustment,
@@ -141,6 +144,7 @@ async function renderRollCard(card) {
         dominantEffectText,
         failureEffectText,
         failureResolutionButtons,
+        failureResolutionPrompt,
         finalMessageId,
         hasEffectText: Boolean(dominantEffectText || failureEffectText),
         hasFailureResolutionButtons: failureResolutionButtons.length > 0,
@@ -222,7 +226,7 @@ async function applyDominantEffect(actor, rollResult) {
             await actor.update({
                 "system.exhaustion": nextExhaustion
             });
-            return localize("YAKOV_DRYH.ROLL.Effects.exhaustion", "Gain +1 Exhaustion.");
+            return formatActorNameEffect("YAKOV_DRYH.ROLL.Effects.exhaustion", "{name} gains +1 Exhaustion.", actor.name ?? localize("DOCUMENT.Actor", "Actor"));
         }
         case "madness":
             return localize("YAKOV_DRYH.ROLL.Effects.madness", "Mark a Response.");
@@ -372,7 +376,7 @@ export async function resolveDryhRollFailureAction(message, action) {
             await actor.update({
                 "system.exhaustion": nextExhaustion
             });
-            failureResolutionText = localize("YAKOV_DRYH.ROLL.Effects.FailureResolvedGainExhaustion", "GM applied +1 Exhaustion.");
+            failureResolutionText = formatActorNameEffect("YAKOV_DRYH.ROLL.Effects.FailureResolvedGainExhaustion", "{name} gains +1 Exhaustion.", actor.name ?? localize("DOCUMENT.Actor", "Actor"));
             break;
         }
         case "check-response": {
@@ -417,6 +421,9 @@ function formatResponseType(responseType) {
     return responseType === "flight"
         ? localize("YAKOV_DRYH.SHEETS.Actor.Character.Fields.Flight", "Flight")
         : localize("YAKOV_DRYH.SHEETS.Actor.Character.Fields.Fight", "Fight");
+}
+function formatActorNameEffect(key, fallback, actorName) {
+    return localize(key, fallback).replace("{name}", actorName);
 }
 export async function finalizeDryhRollWithPain(message, painDice) {
     const card = getRollCardFlag(message);

@@ -23,6 +23,15 @@
     gap: 0.85rem;
   }
 
+  &__resolution {
+    display: grid;
+    gap: 0.55rem;
+  }
+
+  &__resolution-copy {
+    margin: 0;
+  }
+
   &__summary,
   &__dominant {
     background: rgb(255 255 255 / 72%);

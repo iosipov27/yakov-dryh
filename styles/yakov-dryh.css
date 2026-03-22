@@ -411,6 +411,13 @@
   display: grid;
   gap: 0.85rem;
 }
+.yakov-dryh-roll-card__resolution {
+  display: grid;
+  gap: 0.55rem;
+}
+.yakov-dryh-roll-card__resolution-copy {
+  margin: 0;
+}
 .yakov-dryh-roll-card__summary, .yakov-dryh-roll-card__dominant {
   background: rgba(255, 255, 255, 0.72);
   border-radius: 14px;

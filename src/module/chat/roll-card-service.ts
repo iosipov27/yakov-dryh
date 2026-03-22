@@ -248,6 +248,10 @@ async function renderRollCard(card: YakovDryhRollCardData): Promise<string> {
   const failureResolutionButtons = isInitial
     ? []
     : await getFailureResolutionButtons(card);
+  const failureResolutionPrompt =
+    failureResolutionButtons.length > 1
+      ? localize("YAKOV_DRYH.ROLL.Chat.ChooseOne", "Choose one:")
+      : null;
 
   return foundry.applications.handlebars.renderTemplate(TEMPLATE_PATHS.dryhRollCard, {
     actorName: card.actorName,
@@ -258,6 +262,7 @@ async function renderRollCard(card: YakovDryhRollCardData): Promise<string> {
     dominantEffectText,
     failureEffectText,
     failureResolutionButtons,
+    failureResolutionPrompt,
     finalMessageId,
     hasEffectText: Boolean(dominantEffectText || failureEffectText),
     hasFailureResolutionButtons: failureResolutionButtons.length > 0,
@@ -387,9 +392,10 @@ async function applyDominantEffect(
         "system.exhaustion": nextExhaustion
       } as Record<string, unknown>);
 
-      return localize(
+      return formatActorNameEffect(
         "YAKOV_DRYH.ROLL.Effects.exhaustion",
-        "Gain +1 Exhaustion."
+        "{name} gains +1 Exhaustion.",
+        actor.name ?? localize("DOCUMENT.Actor", "Actor")
       );
     }
 
@@ -646,9 +652,10 @@ export async function resolveDryhRollFailureAction(
         "system.exhaustion": nextExhaustion
       } as Record<string, unknown>);
 
-      failureResolutionText = localize(
+      failureResolutionText = formatActorNameEffect(
         "YAKOV_DRYH.ROLL.Effects.FailureResolvedGainExhaustion",
-        "GM applied +1 Exhaustion."
+        "{name} gains +1 Exhaustion.",
+        actor.name ?? localize("DOCUMENT.Actor", "Actor")
       );
       break;
     }
@@ -729,6 +736,14 @@ function formatResponseType(responseType: YakovDryhResponseType): string {
   return responseType === "flight"
     ? localize("YAKOV_DRYH.SHEETS.Actor.Character.Fields.Flight", "Flight")
     : localize("YAKOV_DRYH.SHEETS.Actor.Character.Fields.Fight", "Fight");
+}
+
+function formatActorNameEffect(
+  key: string,
+  fallback: string,
+  actorName: string
+): string {
+  return localize(key, fallback).replace("{name}", actorName);
 }
 
 export async function finalizeDryhRollWithPain(

@@ -120,18 +120,25 @@
   {{/if}}
 
   {{#if hasFailureResolutionButtons}}
-    <footer class="yakov-dryh-actions">
-      {{#each failureResolutionButtons}}
-        <button
-          class="yakov-dryh-button yakov-dryh-button--secondary"
-          type="button"
-          data-yakov-dryh-roll-action="resolve-failure"
-          data-failure-action="{{type}}"
-          {{#if responseType}}data-response-type="{{responseType}}"{{/if}}
-        >
-          {{label}}
-        </button>
-      {{/each}}
+    <footer class="yakov-dryh-roll-card__resolution">
+      {{#if failureResolutionPrompt}}
+        <p class="yakov-dryh-copy yakov-dryh-roll-card__resolution-copy">
+          {{failureResolutionPrompt}}
+        </p>
+      {{/if}}
+      <div class="yakov-dryh-actions">
+        {{#each failureResolutionButtons}}
+          <button
+            class="yakov-dryh-button yakov-dryh-button--secondary"
+            type="button"
+            data-yakov-dryh-roll-action="resolve-failure"
+            data-failure-action="{{type}}"
+            {{#if responseType}}data-response-type="{{responseType}}"{{/if}}
+          >
+            {{label}}
+          </button>
+        {{/each}}
+      </div>
     </footer>
   {{/if}}
 </article>
