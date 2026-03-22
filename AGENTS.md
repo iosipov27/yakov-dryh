@@ -177,6 +177,92 @@ The aid sheet used here is `v2.2` from `miniver.itch.io`.
     - transform a Madness talent into a different one for the duration of the scene
     - transform a Madness talent into a different one permanently
 
+### Rules Compliance Tracker
+
+Use this section as the current checklist for development progress against the aid-sheet rules.
+
+#### Current Implemented Baseline
+
+- Character sheet supports:
+  - name
+  - concept
+  - discipline
+  - exhaustion display
+  - permanent madness
+  - responses
+  - talents as text
+  - scars as text
+- Player roll flow currently supports:
+  - optional `+1 Exhaustion` before the roll
+  - temporary Madness selection for the roll
+  - player-side rolling for Discipline, Exhaustion, and Madness
+- GM flow currently supports:
+  - a separate Pain roll dialog after the player roll
+  - one `+6` or `-6` intervention after Pain is rolled
+  - final result publication in chat
+- Dice engine currently supports:
+  - rolling pools
+  - counting successes on `1..3`
+  - dominant-pool calculation with priority `Discipline > Madness > Exhaustion > Pain`
+  - recalculation after GM intervention
+- Resolution currently supports:
+  - final success or failure comparison
+  - dominant-pool effect text
+  - automatic `+1 Exhaustion` when Exhaustion dominates
+  - automatic `+1 Despair` when Pain dominates
+
+#### Open Rules Compliance Gaps
+
+- Hope is still modeled as a character field instead of a shared player-side table pool.
+- Only GM Despair is currently shared table state; shared Hope is not implemented.
+- GM `+6` / `-6` intervention does not currently spend `-1 Despair` and convert it into `+1 Hope`.
+- Conflict resolution is staged as:
+  - player roll first
+  - GM Pain roll later
+  - GM intervention after that
+- The aid-sheet rules describe a single conflict roll against Pain, so this staged flow must be treated as a rules divergence until intentionally kept or replaced.
+- The player can currently take `+1 Exhaustion` only before the roll.
+- The rules also allow taking `+1 Exhaustion` after the roll, which is not implemented.
+- The player cannot currently spend shared Hope after the roll to add a `1` to Discipline.
+- The player cannot currently use Hope for:
+  - Get A Break
+  - Improve Success
+  - Restore Discipline
+- Failure consequences from the rules are not implemented:
+  - on failure, the GM should choose either `+1 Exhaustion` or checking a Response
+  - the dominant-pool restrictions on that choice are not enforced
+- Discipline dominant is only partially implemented:
+  - reminder text exists
+  - the actual choice to un-check a Response or remove `1 Exhaustion` is not implemented
+- Exhaustion dominant is only partially rules-compliant:
+  - `+1 Exhaustion` is applied
+  - Crash cannot happen while Exhaustion is clamped to `6`
+- Madness dominant is only partially implemented:
+  - reminder text exists
+  - choosing and checking a Response is not implemented
+  - Snap is not implemented
+- Pain dominant is only partially rules-compliant:
+  - `+1 Despair` is applied
+  - the exception for GM shadow-casting or Pain dominance caused by GM intervention is not implemented
+- Responses are currently modeled as editable numeric values instead of a checked or unchecked consequence track.
+- Snap flow is not implemented:
+  - un-check all Responses
+  - convert `-1 Discipline` to `+1 Madness`
+  - Nightmare transition at `0 Discipline`
+- Crash and Sleep flow is not implemented:
+  - Crash when Exhaustion exceeds `6`
+  - sleep aftermath values
+  - talent lock during recovery
+  - Discipline restoration after staying awake again
+- Helping other characters is not implemented.
+- Talent mechanics are not implemented beyond text storage.
+- Scar mechanics are not implemented beyond text storage.
+
+#### Tracker Usage Rule
+
+- When implementing DRYH mechanics, update this tracker if behavior changes in a way that affects rules compliance.
+- Treat items in `Open Rules Compliance Gaps` as the default backlog for mechanics parity unless the user explicitly chooses a house-rule divergence.
+
 ---
 
 ## Reference Application Strategy
