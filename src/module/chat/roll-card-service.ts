@@ -1,6 +1,7 @@
 import { DRYH_EXHAUSTION_MAX, normalizeCharacterSystemData } from "../data/index.js";
 import {
   DRYH_ROLL_FLAG,
+  SYSTEM_PATH,
   SYSTEM_ID,
   TEMPLATE_PATHS
 } from "../constants.js";
@@ -49,9 +50,16 @@ interface CreateInitialRollMessageInput {
   rollResult: YakovDryhRollResult;
 }
 
+interface RollDieSummary {
+  alt: string;
+  src: string;
+  value: number;
+}
+
 interface RollPoolSummary {
   cssClass: string;
-  dice: string;
+  dice: RollDieSummary[];
+  hasDice: boolean;
   hasSix: boolean;
   key: YakovDryhDominantPool;
   label: string;
@@ -129,15 +137,38 @@ function formatDominantPool(pool: YakovDryhDominantPool): string {
   );
 }
 
-function formatDice(dice: number[]): string {
-  return dice.length > 0 ? dice.join(", ") : "-";
+function getRollDieIconStyle(pool: YakovDryhDominantPool): "outline" | "solid" {
+  return pool === "discipline" ? "outline" : "solid";
+}
+
+function getRollDieIconSrc(
+  pool: YakovDryhDominantPool,
+  value: number
+): string {
+  const dieValue = Math.min(Math.max(Math.trunc(value), 1), 6);
+
+  return `${SYSTEM_PATH}/assets/d6-${getRollDieIconStyle(pool)}-${dieValue}.svg`;
+}
+
+function getRollDiceSummary(
+  pool: YakovDryhDominantPool,
+  dice: number[]
+): RollDieSummary[] {
+  const label = formatDominantPool(pool);
+
+  return dice.map((value) => ({
+    alt: `${label} ${value}`,
+    src: getRollDieIconSrc(pool, value),
+    value
+  }));
 }
 
 function getPoolSummaries(rollResult: YakovDryhRollResult): RollPoolSummary[] {
   return [
     {
       cssClass: "yakov-dryh-roll-pool--discipline",
-      dice: formatDice(rollResult.pools.discipline),
+      dice: getRollDiceSummary("discipline", rollResult.pools.discipline),
+      hasDice: rollResult.pools.discipline.length > 0,
       hasSix: rollResult.pools.discipline.includes(6),
       key: "discipline",
       label: formatDominantPool("discipline"),
@@ -145,7 +176,8 @@ function getPoolSummaries(rollResult: YakovDryhRollResult): RollPoolSummary[] {
     },
     {
       cssClass: "yakov-dryh-roll-pool--exhaustion",
-      dice: formatDice(rollResult.pools.exhaustion),
+      dice: getRollDiceSummary("exhaustion", rollResult.pools.exhaustion),
+      hasDice: rollResult.pools.exhaustion.length > 0,
       hasSix: rollResult.pools.exhaustion.includes(6),
       key: "exhaustion",
       label: formatDominantPool("exhaustion"),
@@ -153,7 +185,8 @@ function getPoolSummaries(rollResult: YakovDryhRollResult): RollPoolSummary[] {
     },
     {
       cssClass: "yakov-dryh-roll-pool--madness",
-      dice: formatDice(rollResult.pools.madness),
+      dice: getRollDiceSummary("madness", rollResult.pools.madness),
+      hasDice: rollResult.pools.madness.length > 0,
       hasSix: rollResult.pools.madness.includes(6),
       key: "madness",
       label: formatDominantPool("madness"),
@@ -161,7 +194,8 @@ function getPoolSummaries(rollResult: YakovDryhRollResult): RollPoolSummary[] {
     },
     {
       cssClass: "yakov-dryh-roll-pool--pain",
-      dice: formatDice(rollResult.pools.pain),
+      dice: getRollDiceSummary("pain", rollResult.pools.pain),
+      hasDice: rollResult.pools.pain.length > 0,
       hasSix: rollResult.pools.pain.includes(6),
       key: "pain",
       label: formatDominantPool("pain"),

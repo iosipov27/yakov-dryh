@@ -42,16 +42,83 @@
   justify-content: space-between;
   padding: 0.8rem 0.9rem;
 
+  &__content {
+    display: grid;
+    gap: 0.5rem;
+    min-width: 0;
+  }
+
+  &__result {
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem;
+  }
+
+  &__dice {
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.3rem;
+  }
+
+  &__die-shell {
+    border-radius: 0.35rem;
+    display: block;
+    flex: 0 0 auto;
+    height: 1.75rem;
+    overflow: hidden;
+    width: 1.75rem;
+  }
+
+  &__die-icon {
+    display: block;
+    height: 1.75rem;
+    width: 1.75rem;
+  }
+
+  &__successes {
+    color: var(--yakov-dryh-muted);
+    font-size: 0.95rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+  }
+
   &--exhaustion {
     border-left: 4px solid var(--yakov-dryh-exhaustion);
+
+    .yakov-dryh-roll-pool__die-shell {
+      background: var(--yakov-dryh-exhaustion);
+    }
+
+    .yakov-dryh-roll-pool__die-icon {
+      mix-blend-mode: screen;
+    }
   }
 
   &--madness {
     border-left: 4px solid var(--yakov-dryh-madness);
+
+    .yakov-dryh-roll-pool__die-shell {
+      background: var(--yakov-dryh-madness);
+    }
+
+    .yakov-dryh-roll-pool__die-icon {
+      mix-blend-mode: screen;
+    }
   }
 
   &--pain {
     border-left: 4px solid var(--yakov-dryh-pain);
+
+    .yakov-dryh-roll-pool__die-shell {
+      background: var(--yakov-dryh-pain);
+    }
+
+    .yakov-dryh-roll-pool__die-icon {
+      mix-blend-mode: screen;
+    }
   }
 
   &--discipline {

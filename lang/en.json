@@ -22,7 +22,7 @@
         "Discipline": "Discipline",
         "Exhaustion": "Exhaustion",
         "Eyebrow": "Dice Pool",
-        "PermanentMadness": "Permanent Madness",
+        "PermanentMadness": "Madness",
         "Roll": "Roll",
         "Subtitle": "Build the player pool before the chat card goes live.",
         "TemporaryMadness": "Temporary Madness"
@@ -79,13 +79,13 @@
           "Fields": {
             "Concept": "Concept",
             "Discipline": "Discipline",
-            "Exhaustion": "Current Exhaustion",
+            "Exhaustion": "Exhaustion",
             "ExhaustionTalent": "Exhaustion Talent",
             "Fight": "Fight",
             "Flight": "Flight",
             "MadnessTalent": "Madness Talent",
             "Name": "Name",
-            "PermanentMadness": "Permanent Madness",
+            "PermanentMadness": "Madness",
             "Responses": "Responses",
             "ResponsesRemaining": "Response capacity remaining:",
             "Scars": "Scars"

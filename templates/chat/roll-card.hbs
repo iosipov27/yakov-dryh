@@ -22,9 +22,28 @@
     <div class="yakov-dryh-roll-card__pools">
       {{#each poolSummaries}}
         <section class="yakov-dryh-roll-pool {{cssClass}}">
-          <div>
+          <div class="yakov-dryh-roll-pool__content">
             <strong>{{label}}</strong>
-            <p class="yakov-dryh-copy">{{dice}} => {{successes}}</p>
+            <div class="yakov-dryh-roll-pool__result">
+              {{#if hasDice}}
+                <div class="yakov-dryh-roll-pool__dice" aria-label="{{label}}">
+                  {{#each dice}}
+                    <span class="yakov-dryh-roll-pool__die-shell">
+                      <img
+                        class="yakov-dryh-roll-pool__die-icon"
+                        src="{{src}}"
+                        alt="{{alt}}"
+                        width="28"
+                        height="28"
+                      >
+                    </span>
+                  {{/each}}
+                </div>
+              {{else}}
+                <span class="yakov-dryh-copy">-</span>
+              {{/if}}
+              <span class="yakov-dryh-roll-pool__successes">=&gt; {{successes}}</span>
+            </div>
           </div>
 
           {{#if ../showAdjustments}}

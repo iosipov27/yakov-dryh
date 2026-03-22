@@ -74,11 +74,11 @@ export class YakovDryhCharacterSheet extends BaseSheet {
     );
     const exhaustionLabel = localize(
       "YAKOV_DRYH.SHEETS.Actor.Character.Fields.Exhaustion",
-      "Current Exhaustion"
+      "Exhaustion"
     );
     const madnessLabel = localize(
       "YAKOV_DRYH.SHEETS.Actor.Character.Fields.PermanentMadness",
-      "Permanent Madness"
+      "Madness"
     );
     const responseFightPips = createDisplayPips(
       actorData.responses.fight,
