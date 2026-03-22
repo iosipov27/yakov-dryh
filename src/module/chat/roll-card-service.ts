@@ -15,6 +15,7 @@ import {
   addDespair,
   spendDespairForHope
 } from "../resources/index.js";
+import { getFailureConsequence } from "./failure-consequence.js";
 
 export interface YakovDryhInitialRollCardData {
   actorId: string | null;
@@ -296,6 +297,43 @@ async function applyDominantEffect(
   );
 }
 
+function getFailureEffectText(
+  rollResult: YakovDryhRollResult
+): string | null {
+  switch (getFailureConsequence(rollResult)) {
+    case "gm-choice":
+      return localize(
+        "YAKOV_DRYH.ROLL.Effects.FailureChoice",
+        "GM narrates the failure and chooses either +1 Exhaustion or mark a Response."
+      );
+
+    case "gain-exhaustion":
+      return localize(
+        "YAKOV_DRYH.ROLL.Effects.FailureGainExhaustion",
+        "GM narrates the failure and must apply +1 Exhaustion because Madness already covers checking a Response."
+      );
+
+    case "mark-response":
+      return localize(
+        "YAKOV_DRYH.ROLL.Effects.FailureMarkResponse",
+        "GM narrates the failure and must mark a Response because Exhaustion already covers +1 Exhaustion."
+      );
+
+    default:
+      return null;
+  }
+}
+
+async function buildEffectText(
+  actor: Actor.Implementation,
+  rollResult: YakovDryhRollResult
+): Promise<string> {
+  const dominantEffect = await applyDominantEffect(actor, rollResult);
+  const failureEffect = getFailureEffectText(rollResult);
+
+  return failureEffect ? `${dominantEffect} ${failureEffect}` : dominantEffect;
+}
+
 export function hasDryhRollCard(
   message: ChatMessage.Implementation
 ): boolean {
@@ -351,7 +389,7 @@ async function createFinalizedRollMessage(
   actor: Actor.Implementation,
   modifiedResult: YakovDryhRollResult
 ): Promise<ChatMessage.Implementation> {
-  const effectText = await applyDominantEffect(actor, modifiedResult);
+  const effectText = await buildEffectText(actor, modifiedResult);
   const finalCard: YakovDryhFinalRollCardData = {
     actorId: card.actorId,
     actorName: card.actorName,

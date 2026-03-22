@@ -2,6 +2,7 @@ import { DRYH_EXHAUSTION_MAX, normalizeCharacterSystemData } from "../data/index
 import { DRYH_ROLL_FLAG, SYSTEM_ID, TEMPLATE_PATHS } from "../constants.js";
 import { applyPainRollToRollResult, applyGmActionToRollResult } from "../dice/index.js";
 import { addDespair, spendDespairForHope } from "../resources/index.js";
+import { getFailureConsequence } from "./failure-consequence.js";
 function cloneRollCardData(card) {
     if (card.stage === "initial") {
         return {
@@ -173,6 +174,23 @@ async function applyDominantEffect(actor, rollResult) {
     }
     return localize("YAKOV_DRYH.ROLL.Effects.discipline", "You may recover control.");
 }
+function getFailureEffectText(rollResult) {
+    switch (getFailureConsequence(rollResult)) {
+        case "gm-choice":
+            return localize("YAKOV_DRYH.ROLL.Effects.FailureChoice", "GM narrates the failure and chooses either +1 Exhaustion or mark a Response.");
+        case "gain-exhaustion":
+            return localize("YAKOV_DRYH.ROLL.Effects.FailureGainExhaustion", "GM narrates the failure and must apply +1 Exhaustion because Madness already covers checking a Response.");
+        case "mark-response":
+            return localize("YAKOV_DRYH.ROLL.Effects.FailureMarkResponse", "GM narrates the failure and must mark a Response because Exhaustion already covers +1 Exhaustion.");
+        default:
+            return null;
+    }
+}
+async function buildEffectText(actor, rollResult) {
+    const dominantEffect = await applyDominantEffect(actor, rollResult);
+    const failureEffect = getFailureEffectText(rollResult);
+    return failureEffect ? `${dominantEffect} ${failureEffect}` : dominantEffect;
+}
 export function hasDryhRollCard(message) {
     return Boolean(getRollCardFlag(message));
 }
@@ -205,7 +223,7 @@ async function updateInitialRollMessage(message, card) {
     return card;
 }
 async function createFinalizedRollMessage(message, card, actor, modifiedResult) {
-    const effectText = await applyDominantEffect(actor, modifiedResult);
+    const effectText = await buildEffectText(actor, modifiedResult);
     const finalCard = {
         actorId: card.actorId,
         actorName: card.actorName,

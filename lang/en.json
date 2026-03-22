@@ -8,7 +8,7 @@
     "ROLL": {
       "Chat": {
         "Dominant": "Dominant:",
-        "Effect": "Effect",
+        "Effect": "Effects",
         "Finalize": "Finalize Result",
         "Finalized": "Initial result has been finalized.",
         "FinalTitle": "Final Result",
@@ -35,6 +35,9 @@
       },
       "Effects": {
         "DespairTotal": "Total Despair:",
+        "FailureChoice": "GM narrates the failure and chooses either +1 Exhaustion or mark a Response.",
+        "FailureGainExhaustion": "GM narrates the failure and must apply +1 Exhaustion because Madness already covers checking a Response.",
+        "FailureMarkResponse": "GM narrates the failure and must mark a Response because Exhaustion already covers +1 Exhaustion.",
         "discipline": "You may recover control.",
         "exhaustion": "Gain +1 Exhaustion.",
         "madness": "Mark a Response.",

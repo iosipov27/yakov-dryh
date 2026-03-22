@@ -233,9 +233,10 @@ Use this section as the current checklist for development progress against the a
   - Get A Break
   - Improve Success
   - Restore Discipline
-- Failure consequences from the rules are not implemented:
-  - on failure, the GM should choose either `+1 Exhaustion` or checking a Response
-  - the dominant-pool restrictions on that choice are not enforced
+- Failure consequences are only partially implemented:
+  - the final chat card now tells the GM whether failure allows a choice or forces `+1 Exhaustion` / checking a Response because of dominant Exhaustion or Madness
+  - there is still no button-driven resolution for that choice
+  - there is still no actual Response check automation
 - Discipline dominant is only partially implemented:
   - reminder text exists
   - the actual choice to un-check a Response or remove `1 Exhaustion` is not implemented
