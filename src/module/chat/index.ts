@@ -1,8 +1,9 @@
 import { YakovDryhChatInteractionDialog } from "../applications/dialogs/chat-interaction-dialog.js";
+import { YakovDryhPainRollDialog } from "../applications/dialogs/pain-roll-dialog.js";
 import type { YakovDryhSystemApi } from "../api.js";
 import { CHAT_CARD_COMMAND } from "../constants.js";
 import {
-  finalizeDryhRoll,
+  applyDryhRollGmAction,
   getDryhRollCardData,
   hasDryhRollCard
 } from "./roll-card-service.js";
@@ -115,10 +116,9 @@ function activateDryhRollListeners(
 
     actionElement.addEventListener("click", (event: MouseEvent) => {
       event.preventDefault();
-      actionElement.setAttribute("disabled", "disabled");
 
-      if (action === "finalize") {
-        void finalizeDryhRoll(message);
+      if (action === "roll-pain") {
+        void YakovDryhPainRollDialog.openForMessage(message);
         return;
       }
 
@@ -126,7 +126,9 @@ function activateDryhRollListeners(
         return;
       }
 
-      void finalizeDryhRoll(message, {
+      actionElement.setAttribute("disabled", "disabled");
+
+      void applyDryhRollGmAction(message, {
         type: action,
         targetPool
       });

@@ -9,10 +9,10 @@
       "Chat": {
         "Dominant": "Dominant:",
         "Effect": "Effect",
-        "Finalize": "Finalize Result",
         "Finalized": "Initial result has been finalized.",
         "FinalTitle": "Final Result",
         "InitialTitle": "Roll Result",
+        "RollPain": "Roll Pain Dice",
         "Successes": "Successes:"
       },
       "Dialog": {
@@ -21,11 +21,16 @@
         "Discipline": "Discipline",
         "Exhaustion": "Exhaustion",
         "Eyebrow": "Dice Pool",
-        "Pain": "Pain Dice",
         "PermanentMadness": "Permanent Madness",
         "Roll": "Roll",
-        "Subtitle": "Build the pool before the chat card goes live.",
+        "Subtitle": "Build the player pool before the chat card goes live.",
         "TemporaryMadness": "Temporary Madness"
+      },
+      "PainDialog": {
+        "Eyebrow": "Pain Roll",
+        "Pain": "Pain Dice",
+        "Roll": "Roll Pain Dice",
+        "Subtitle": "The GM rolls pain after reviewing the initial result."
       },
       "Effects": {
         "DespairTotal": "Total Despair:",

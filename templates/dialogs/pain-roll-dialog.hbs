@@ -1,0 +1,33 @@
+<section class="yakov-dryh-dialog-shell">
+  <header class="yakov-dryh-header">
+    <div>
+      <p class="yakov-dryh-eyebrow">{{localize "YAKOV_DRYH.ROLL.PainDialog.Eyebrow"}}</p>
+      <h3>{{actorName}}</h3>
+      <p class="yakov-dryh-subtitle">{{localize "YAKOV_DRYH.ROLL.PainDialog.Subtitle"}}</p>
+    </div>
+  </header>
+
+  <div class="yakov-dryh-dialog-grid">
+    <label class="yakov-dryh-field">
+      <span>{{localize "YAKOV_DRYH.ROLL.PainDialog.Pain"}}</span>
+      <input type="number" name="painDice" min="1" step="1" value="1">
+    </label>
+  </div>
+
+  <footer class="yakov-dryh-actions">
+    <button
+      class="yakov-dryh-button"
+      type="button"
+      data-yakov-dryh-action="submit-pain-roll"
+    >
+      {{localize "YAKOV_DRYH.ROLL.PainDialog.Roll"}}
+    </button>
+    <button
+      class="yakov-dryh-button is-secondary"
+      type="button"
+      data-yakov-dryh-action="cancel-pain-roll"
+    >
+      {{localize "YAKOV_DRYH.ROLL.Dialog.Cancel"}}
+    </button>
+  </footer>
+</section>

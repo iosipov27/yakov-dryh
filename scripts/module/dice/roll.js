@@ -69,6 +69,11 @@ export function rollDryhCheck(poolSizes) {
         pain: rollD6Pool(poolSizes.pain)
     });
 }
+export function applyPainRollToRollResult(rollResult, painDice) {
+    const pools = clonePools(rollResult.pools);
+    pools.pain.push(...rollD6Pool(painDice));
+    return createRollResult(pools);
+}
 export function applyGmActionToRollResult(rollResult, action) {
     const pools = clonePools(rollResult.pools);
     if (action.type === "add6") {

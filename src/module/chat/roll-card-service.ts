@@ -6,6 +6,7 @@ import {
   TEMPLATE_PATHS
 } from "../constants.js";
 import {
+  applyPainRollToRollResult,
   applyGmActionToRollResult,
   type YakovDryhDominantPool,
   type YakovDryhGmAction,
@@ -325,32 +326,26 @@ export async function createDryhInitialRollMessage(
   } as Record<string, unknown>) as Promise<ChatMessage.Implementation>;
 }
 
-export async function finalizeDryhRoll(
+async function updateInitialRollMessage(
   message: ChatMessage.Implementation,
-  action?: YakovDryhGmAction
-): Promise<ChatMessage.Implementation | null> {
-  const card = getRollCardFlag(message);
+  card: YakovDryhInitialRollCardData
+): Promise<YakovDryhInitialRollCardData> {
+  const updatedContent = await renderRollCard(card);
 
-  if (!card || card.stage !== "initial" || card.finalized) {
-    return null;
-  }
+  await message.update({
+    [`flags.${SYSTEM_ID}.${DRYH_ROLL_FLAG}`]: card,
+    content: updatedContent
+  } as Record<string, unknown>);
 
-  const actor = await resolveActor(card.actorUuid, card.actorId);
+  return card;
+}
 
-  if (!actor) {
-    ui.notifications?.warn(
-      localize(
-        "YAKOV_DRYH.UI.Warnings.ActorUnavailable",
-        "Actor is no longer available."
-      )
-    );
-
-    return null;
-  }
-
-  const modifiedResult = action
-    ? applyGmActionToRollResult(card.rollResult, action)
-    : card.rollResult;
+async function createFinalizedRollMessage(
+  message: ChatMessage.Implementation,
+  card: YakovDryhInitialRollCardData,
+  actor: Actor.Implementation,
+  modifiedResult: YakovDryhRollResult
+): Promise<ChatMessage.Implementation> {
   const effectText = await applyDominantEffect(actor, modifiedResult);
   const finalCard: YakovDryhFinalRollCardData = {
     actorId: card.actorId,
@@ -374,14 +369,58 @@ export async function finalizeDryhRoll(
   const updatedInitialCard: YakovDryhInitialRollCardData = {
     ...card,
     finalMessageId: finalMessage.id ?? null,
-    finalized: true
+    finalized: true,
+    rollResult: modifiedResult
   };
-  const updatedInitialContent = await renderRollCard(updatedInitialCard);
 
-  await message.update({
-    [`flags.${SYSTEM_ID}.${DRYH_ROLL_FLAG}`]: updatedInitialCard,
-    content: updatedInitialContent
-  } as Record<string, unknown>);
+  await updateInitialRollMessage(message, updatedInitialCard);
 
   return finalMessage;
+}
+
+export async function applyDryhRollGmAction(
+  message: ChatMessage.Implementation,
+  action: YakovDryhGmAction
+): Promise<YakovDryhInitialRollCardData | null> {
+  const card = getRollCardFlag(message);
+
+  if (!card || card.stage !== "initial" || card.finalized) {
+    return null;
+  }
+
+  const updatedCard: YakovDryhInitialRollCardData = {
+    ...card,
+    rollResult: applyGmActionToRollResult(card.rollResult, action)
+  };
+
+  return updateInitialRollMessage(message, updatedCard);
+}
+
+export async function finalizeDryhRollWithPain(
+  message: ChatMessage.Implementation,
+  painDice: number
+): Promise<ChatMessage.Implementation | null> {
+  const card = getRollCardFlag(message);
+
+  if (!card || card.stage !== "initial" || card.finalized) {
+    return null;
+  }
+
+  const actor = await resolveActor(card.actorUuid, card.actorId);
+
+  if (!actor) {
+    ui.notifications?.warn(
+      localize(
+        "YAKOV_DRYH.UI.Warnings.ActorUnavailable",
+        "Actor is no longer available."
+      )
+    );
+
+    return null;
+  }
+
+  const normalizedPainDice = Math.max(Math.trunc(painDice), 1);
+  const modifiedResult = applyPainRollToRollResult(card.rollResult, normalizedPainDice);
+
+  return createFinalizedRollMessage(message, card, actor, modifiedResult);
 }

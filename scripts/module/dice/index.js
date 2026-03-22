@@ -1,5 +1,6 @@
 export {
     DRYH_POOL_PRIORITY,
+    applyPainRollToRollResult,
     applyGmActionToRollResult,
     countSuccesses,
     createRollResult,

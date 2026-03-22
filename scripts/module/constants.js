@@ -5,6 +5,7 @@ export const TEMPLATE_PATHS = {
     characterSheet: `${SYSTEM_PATH}/templates/sheets/character-sheet.hbs`,
     chatCard: `${SYSTEM_PATH}/templates/chat/interactive-card.hbs`,
     chatInteractionDialog: `${SYSTEM_PATH}/templates/dialogs/chat-interaction-dialog.hbs`,
+    dryhPainRollDialog: `${SYSTEM_PATH}/templates/dialogs/pain-roll-dialog.hbs`,
     dryhRollCard: `${SYSTEM_PATH}/templates/chat/roll-card.hbs`,
     dryhRollDialog: `${SYSTEM_PATH}/templates/dialogs/roll-dialog.hbs`
 };

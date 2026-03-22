@@ -1,6 +1,6 @@
 import { DRYH_EXHAUSTION_MAX, normalizeCharacterSystemData } from "../data/index.js";
 import { DRYH_SETTINGS, DRYH_ROLL_FLAG, SYSTEM_ID, TEMPLATE_PATHS } from "../constants.js";
-import { applyGmActionToRollResult } from "../dice/index.js";
+import { applyGmActionToRollResult, applyPainRollToRollResult } from "../dice/index.js";
 function cloneRollCardData(card) {
     if (card.stage === "initial") {
         return {
@@ -192,19 +192,15 @@ export async function createDryhInitialRollMessage(input) {
         speaker: getSpeaker(input.actor)
     });
 }
-export async function finalizeDryhRoll(message, action) {
-    const card = getRollCardFlag(message);
-    if (!card || card.stage !== "initial" || card.finalized) {
-        return null;
-    }
-    const actor = await resolveActor(card.actorUuid, card.actorId);
-    if (!actor) {
-        ui.notifications?.warn(localize("YAKOV_DRYH.UI.Warnings.ActorUnavailable", "Actor is no longer available."));
-        return null;
-    }
-    const modifiedResult = action
-        ? applyGmActionToRollResult(card.rollResult, action)
-        : card.rollResult;
+async function updateInitialRollMessage(message, card) {
+    const updatedContent = await renderRollCard(card);
+    await message.update({
+        [`flags.${SYSTEM_ID}.${DRYH_ROLL_FLAG}`]: card,
+        content: updatedContent
+    });
+    return card;
+}
+async function createFinalizedRollMessage(message, card, actor, modifiedResult) {
     const effectText = await applyDominantEffect(actor, modifiedResult);
     const finalCard = {
         actorId: card.actorId,
@@ -228,13 +224,35 @@ export async function finalizeDryhRoll(message, action) {
     const updatedInitialCard = {
         ...card,
         finalMessageId: finalMessage.id ?? null,
-        finalized: true
+        finalized: true,
+        rollResult: modifiedResult
     };
-    const updatedInitialContent = await renderRollCard(updatedInitialCard);
-    await message.update({
-        [`flags.${SYSTEM_ID}.${DRYH_ROLL_FLAG}`]: updatedInitialCard,
-        content: updatedInitialContent
-    });
+    await updateInitialRollMessage(message, updatedInitialCard);
     return finalMessage;
+}
+export async function applyDryhRollGmAction(message, action) {
+    const card = getRollCardFlag(message);
+    if (!card || card.stage !== "initial" || card.finalized) {
+        return null;
+    }
+    const updatedCard = {
+        ...card,
+        rollResult: applyGmActionToRollResult(card.rollResult, action)
+    };
+    return updateInitialRollMessage(message, updatedCard);
+}
+export async function finalizeDryhRollWithPain(message, painDice) {
+    const card = getRollCardFlag(message);
+    if (!card || card.stage !== "initial" || card.finalized) {
+        return null;
+    }
+    const actor = await resolveActor(card.actorUuid, card.actorId);
+    if (!actor) {
+        ui.notifications?.warn(localize("YAKOV_DRYH.UI.Warnings.ActorUnavailable", "Actor is no longer available."));
+        return null;
+    }
+    const normalizedPainDice = Math.max(Math.trunc(painDice), 1);
+    const modifiedResult = applyPainRollToRollResult(card.rollResult, normalizedPainDice);
+    return createFinalizedRollMessage(message, card, actor, modifiedResult);
 }
 //# sourceMappingURL=roll-card-service.js.map

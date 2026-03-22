@@ -119,6 +119,17 @@ export function rollDryhCheck(poolSizes: YakovDryhRollPoolSizes): YakovDryhRollR
   });
 }
 
+export function applyPainRollToRollResult(
+  rollResult: YakovDryhRollResult,
+  painDice: number
+): YakovDryhRollResult {
+  const pools = clonePools(rollResult.pools);
+
+  pools.pain.push(...rollD6Pool(painDice));
+
+  return createRollResult(pools);
+}
+
 export function applyGmActionToRollResult(
   rollResult: YakovDryhRollResult,
   action: YakovDryhGmAction

@@ -88,11 +88,9 @@ export class YakovDryhRollDialog extends BaseApplication {
         }
         const addExhaustionInput = this.form?.elements.namedItem("addExhaustion");
         const madnessInput = this.form?.elements.namedItem("madnessTemp");
-        const painInput = this.form?.elements.namedItem("painDice");
         const actorData = normalizeCharacterSystemData(actor.system);
         const addExhaustion = addExhaustionInput?.checked ?? false;
         const madnessTemp = Math.min(Math.max(Number.parseInt(madnessInput?.value ?? "0", 10) || 0, 0), DRYH_TEMP_MADNESS_MAX);
-        const painDice = Math.max(Number.parseInt(painInput?.value ?? "0", 10) || 0, 0);
         const nextExhaustion = addExhaustion
             ? Math.min(actorData.exhaustion + 1, DRYH_EXHAUSTION_MAX)
             : actorData.exhaustion;
@@ -107,7 +105,7 @@ export class YakovDryhRollDialog extends BaseApplication {
                 discipline: actorData.discipline,
                 exhaustion: nextExhaustion,
                 madness: actorData.madnessPermanent + madnessTemp,
-                pain: painDice
+                pain: 0
             })
         });
         await this.close();
