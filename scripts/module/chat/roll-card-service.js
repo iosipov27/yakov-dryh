@@ -174,7 +174,7 @@ function createInitialRollCardData(input) {
 async function applyDominantEffect(actor, rollResult) {
     switch (rollResult.dominant) {
         case "discipline":
-            return localize("YAKOV_DRYH.ROLL.Effects.discipline", "You may recover control.");
+            return localize("YAKOV_DRYH.ROLL.Effects.discipline", "Un-check a Response or remove 1 Exhaustion.");
         case "exhaustion": {
             const actorData = normalizeCharacterSystemData(actor.system);
             const nextExhaustion = Math.min(actorData.exhaustion + 1, DRYH_EXHAUSTION_MAX);
@@ -190,7 +190,7 @@ async function applyDominantEffect(actor, rollResult) {
             return `${localize("YAKOV_DRYH.ROLL.Effects.pain", "GM gains +1 Despair.")} ${localize("YAKOV_DRYH.ROLL.Effects.DespairTotal", "Total Despair:")} ${nextDespair}`;
         }
     }
-    return localize("YAKOV_DRYH.ROLL.Effects.discipline", "You may recover control.");
+    return localize("YAKOV_DRYH.ROLL.Effects.discipline", "Un-check a Response or remove 1 Exhaustion.");
 }
 function getFailureEffectText(rollResult) {
     switch (getFailureConsequence(rollResult)) {

@@ -292,7 +292,7 @@ async function applyDominantEffect(
     case "discipline":
       return localize(
         "YAKOV_DRYH.ROLL.Effects.discipline",
-        "You may recover control."
+        "Un-check a Response or remove 1 Exhaustion."
       );
 
     case "exhaustion": {
@@ -330,7 +330,7 @@ async function applyDominantEffect(
 
   return localize(
     "YAKOV_DRYH.ROLL.Effects.discipline",
-    "You may recover control."
+    "Un-check a Response or remove 1 Exhaustion."
   );
 }
 

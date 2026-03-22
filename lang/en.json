@@ -38,7 +38,7 @@
         "FailureChoice": "GM narrates the failure and chooses either +1 Exhaustion or mark a Response.",
         "FailureGainExhaustion": "GM narrates the failure and must apply +1 Exhaustion because Madness already covers checking a Response.",
         "FailureMarkResponse": "GM narrates the failure and must mark a Response because Exhaustion already covers +1 Exhaustion.",
-        "discipline": "You may recover control.",
+        "discipline": "Un-check a Response or remove 1 Exhaustion.",
         "exhaustion": "Gain +1 Exhaustion.",
         "madness": "Mark a Response.",
         "pain": "GM gains +1 Despair."
