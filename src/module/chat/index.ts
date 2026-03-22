@@ -7,6 +7,7 @@ import {
   finalizeDryhRoll,
   getDryhRollCardData,
   hasDryhRollCard,
+  resolveDryhRollFailureAction,
   rerenderDryhRollMessage
 } from "./roll-card-service.js";
 import {
@@ -117,11 +118,6 @@ function activateDryhRollListeners(
       return;
     }
 
-    if (card.stage !== "initial" || card.finalized) {
-      actionElement.setAttribute("disabled", "disabled");
-      return;
-    }
-
     const action = actionElement.dataset.yakovDryhRollAction;
     const targetPool = actionElement.dataset.targetPool as
       | "discipline"
@@ -129,6 +125,42 @@ function activateDryhRollListeners(
       | "madness"
       | "pain"
       | undefined;
+    const responseType = actionElement.dataset.responseType as
+      | "fight"
+      | "flight"
+      | undefined;
+
+    if (card.stage === "final") {
+      if (action !== "resolve-failure") {
+        actionElement.setAttribute("disabled", "disabled");
+        return;
+      }
+
+      actionElement.addEventListener("click", (event: MouseEvent) => {
+        event.preventDefault();
+
+        html
+          .querySelectorAll<HTMLElement>("[data-yakov-dryh-roll-action]")
+          .forEach((element) => element.setAttribute("disabled", "disabled"));
+
+        void resolveDryhRollFailureAction(message, {
+          responseType: actionElement.dataset.failureAction === "check-response"
+            ? (responseType ?? null)
+            : null,
+          type:
+            actionElement.dataset.failureAction === "check-response"
+              ? "check-response"
+              : "gain-exhaustion"
+        });
+      });
+
+      return;
+    }
+
+    if (card.finalized) {
+      actionElement.setAttribute("disabled", "disabled");
+      return;
+    }
 
     actionElement.addEventListener("click", (event: MouseEvent) => {
       event.preventDefault();

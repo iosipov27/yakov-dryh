@@ -1,4 +1,9 @@
-import { DRYH_EXHAUSTION_MAX, normalizeCharacterSystemData } from "../data/index.js";
+import {
+  checkFirstUncheckedResponse,
+  DRYH_EXHAUSTION_MAX,
+  normalizeCharacterSystemData,
+  type YakovDryhResponseType
+} from "../data/index.js";
 import {
   DRYH_ROLL_FLAG,
   SYSTEM_PATH,
@@ -17,7 +22,14 @@ import {
   getSharedDespairTotal,
   spendDespairForHope
 } from "../resources/index.js";
-import { getFailureConsequence } from "./failure-consequence.js";
+import {
+  getFailureConsequence,
+  type YakovDryhFailureConsequence
+} from "./failure-consequence.js";
+import {
+  getFailureResolutionActions,
+  type YakovDryhFailureResolutionAction
+} from "./failure-resolution.js";
 
 export interface YakovDryhInitialRollCardData {
   actorId: string | null;
@@ -35,7 +47,10 @@ export interface YakovDryhFinalRollCardData {
   actorId: string | null;
   actorName: string;
   actorUuid: string | null;
-  effectText: string;
+  dominantEffectText: string;
+  failureConsequence: YakovDryhFailureConsequence;
+  failureEffectText: string | null;
+  failureResolutionText: string | null;
   modifiedResult: YakovDryhRollResult;
   originalRollId: string | null;
   stage: "final";
@@ -64,6 +79,12 @@ interface RollPoolSummary {
   key: YakovDryhDominantPool;
   label: string;
   successes: number;
+}
+
+interface FailureResolutionButtonSummary {
+  label: string;
+  responseType: YakovDryhResponseType | null;
+  type: YakovDryhFailureResolutionAction["type"];
 }
 
 function cloneRollCardData(card: YakovDryhRollCardData): YakovDryhRollCardData {
@@ -215,7 +236,18 @@ async function renderRollCard(card: YakovDryhRollCardData): Promise<string> {
   const canRollPain = isInitial ? !card.finalized && !card.painRolled : false;
   const finalMessageId = isInitial ? card.finalMessageId : null;
   const isResolved = isInitial ? card.finalized : true;
-  const effectText = isInitial ? null : card.effectText;
+  const legacyEffectText = isInitial
+    ? null
+    : ((card as { effectText?: string }).effectText ?? null);
+  const dominantEffectText = isInitial
+    ? null
+    : card.dominantEffectText ?? legacyEffectText;
+  const failureEffectText = isInitial
+    ? null
+    : card.failureResolutionText ?? card.failureEffectText;
+  const failureResolutionButtons = isInitial
+    ? []
+    : await getFailureResolutionButtons(card);
 
   return foundry.applications.handlebars.renderTemplate(TEMPLATE_PATHS.dryhRollCard, {
     actorName: card.actorName,
@@ -223,8 +255,12 @@ async function renderRollCard(card: YakovDryhRollCardData): Promise<string> {
     canFinalize,
     canRollPain,
     dominantLabel: formatDominantPool(rollResult.dominant),
-    effectText,
+    dominantEffectText,
+    failureEffectText,
+    failureResolutionButtons,
     finalMessageId,
+    hasEffectText: Boolean(dominantEffectText || failureEffectText),
+    hasFailureResolutionButtons: failureResolutionButtons.length > 0,
     isFinal: card.stage === "final",
     isInitial,
     isResolved,
@@ -256,6 +292,54 @@ async function resolveActor(
   }
 
   return null;
+}
+
+function createFailureResolutionButtonLabel(
+  action: YakovDryhFailureResolutionAction
+): string {
+  switch (action.type) {
+    case "gain-exhaustion":
+      return localize(
+        "YAKOV_DRYH.ROLL.Actions.GainExhaustion",
+        "+1 Exhaustion"
+      );
+
+    case "check-response":
+      return action.responseType === "flight"
+        ? localize(
+            "YAKOV_DRYH.ROLL.Actions.CheckFlight",
+            "Check Flight"
+          )
+        : localize(
+            "YAKOV_DRYH.ROLL.Actions.CheckFight",
+            "Check Fight"
+          );
+  }
+}
+
+async function getFailureResolutionButtons(
+  card: YakovDryhFinalRollCardData
+): Promise<FailureResolutionButtonSummary[]> {
+  if (card.failureConsequence === null || card.failureResolutionText) {
+    return [];
+  }
+
+  const actor = await resolveActor(card.actorUuid, card.actorId);
+
+  if (!actor) {
+    return [];
+  }
+
+  const actorData = normalizeCharacterSystemData(actor.system);
+
+  return getFailureResolutionActions(
+    card.failureConsequence,
+    actorData.responses
+  ).map((action) => ({
+    label: createFailureResolutionButtonLabel(action),
+    responseType: action.responseType,
+    type: action.type
+  }));
 }
 
 function getSpeaker(
@@ -361,16 +445,6 @@ function getFailureEffectText(
   }
 }
 
-async function buildEffectText(
-  actor: Actor.Implementation,
-  rollResult: YakovDryhRollResult
-): Promise<string> {
-  const dominantEffect = await applyDominantEffect(actor, rollResult);
-  const failureEffect = getFailureEffectText(rollResult);
-
-  return failureEffect ? `${dominantEffect} ${failureEffect}` : dominantEffect;
-}
-
 export function hasDryhRollCard(
   message: ChatMessage.Implementation
 ): boolean {
@@ -420,6 +494,20 @@ async function updateInitialRollMessage(
   return card;
 }
 
+async function updateFinalRollMessage(
+  message: ChatMessage.Implementation,
+  card: YakovDryhFinalRollCardData
+): Promise<YakovDryhFinalRollCardData> {
+  const updatedContent = await renderRollCard(card);
+
+  await message.update({
+    [`flags.${SYSTEM_ID}.${DRYH_ROLL_FLAG}`]: card,
+    content: updatedContent
+  } as Record<string, unknown>);
+
+  return card;
+}
+
 export async function rerenderDryhRollMessage(
   message: ChatMessage.Implementation
 ): Promise<YakovDryhRollCardData | null> {
@@ -444,12 +532,17 @@ async function createFinalizedRollMessage(
   actor: Actor.Implementation,
   modifiedResult: YakovDryhRollResult
 ): Promise<ChatMessage.Implementation> {
-  const effectText = await buildEffectText(actor, modifiedResult);
+  const dominantEffectText = await applyDominantEffect(actor, modifiedResult);
+  const failureConsequence = getFailureConsequence(modifiedResult);
+  const failureEffectText = getFailureEffectText(modifiedResult);
   const finalCard: YakovDryhFinalRollCardData = {
     actorId: card.actorId,
     actorName: card.actorName,
     actorUuid: card.actorUuid,
-    effectText,
+    dominantEffectText,
+    failureConsequence,
+    failureEffectText,
+    failureResolutionText: null,
     modifiedResult,
     originalRollId: message.id ?? null,
     stage: "final"
@@ -514,6 +607,99 @@ export async function applyDryhRollGmAction(
   return updateInitialRollMessage(message, updatedCard);
 }
 
+export async function resolveDryhRollFailureAction(
+  message: ChatMessage.Implementation,
+  action: YakovDryhFailureResolutionAction
+): Promise<YakovDryhFinalRollCardData | null> {
+  const card = getRollCardFlag(message);
+
+  if (
+    !card ||
+    card.stage !== "final" ||
+    card.failureConsequence === null ||
+    card.failureResolutionText
+  ) {
+    return null;
+  }
+
+  const actor = await resolveActor(card.actorUuid, card.actorId);
+
+  if (!actor) {
+    ui.notifications?.warn(
+      localize(
+        "YAKOV_DRYH.UI.Warnings.ActorUnavailable",
+        "Actor is no longer available."
+      )
+    );
+
+    return null;
+  }
+
+  let failureResolutionText: string;
+
+  switch (action.type) {
+    case "gain-exhaustion": {
+      const actorData = normalizeCharacterSystemData(actor.system);
+      const nextExhaustion = Math.min(actorData.exhaustion + 1, DRYH_EXHAUSTION_MAX);
+
+      await actor.update({
+        "system.exhaustion": nextExhaustion
+      } as Record<string, unknown>);
+
+      failureResolutionText = localize(
+        "YAKOV_DRYH.ROLL.Effects.FailureResolvedGainExhaustion",
+        "GM applied +1 Exhaustion."
+      );
+      break;
+    }
+
+    case "check-response": {
+      if (!action.responseType) {
+        return null;
+      }
+
+      const actorData = normalizeCharacterSystemData(actor.system);
+      const responses = checkFirstUncheckedResponse(
+        actorData.responses,
+        action.responseType
+      );
+
+      if (!responses) {
+        ui.notifications?.warn(
+          `${formatResponseType(action.responseType)} ${localize(
+            "YAKOV_DRYH.UI.Warnings.ResponseUnavailable",
+            "Response is no longer available."
+          )}`
+        );
+
+        return null;
+      }
+
+      await actor.update({
+        "system.responses.slots": responses.slots,
+        "system.responses.max": responses.max
+      } as Record<string, unknown>);
+
+      failureResolutionText =
+        action.responseType === "flight"
+          ? localize(
+              "YAKOV_DRYH.ROLL.Effects.FailureResolvedCheckFlight",
+              "GM checked a Flight Response."
+            )
+          : localize(
+              "YAKOV_DRYH.ROLL.Effects.FailureResolvedCheckFight",
+              "GM checked a Fight Response."
+            );
+      break;
+    }
+  }
+
+  return updateFinalRollMessage(message, {
+    ...card,
+    failureResolutionText
+  });
+}
+
 export async function finalizeDryhRoll(
   message: ChatMessage.Implementation
 ): Promise<ChatMessage.Implementation | null> {
@@ -537,6 +723,12 @@ export async function finalizeDryhRoll(
   }
 
   return createFinalizedRollMessage(message, card, actor, card.rollResult);
+}
+
+function formatResponseType(responseType: YakovDryhResponseType): string {
+  return responseType === "flight"
+    ? localize("YAKOV_DRYH.SHEETS.Actor.Character.Fields.Flight", "Flight")
+    : localize("YAKOV_DRYH.SHEETS.Actor.Character.Fields.Fight", "Fight");
 }
 
 export async function finalizeDryhRollWithPain(

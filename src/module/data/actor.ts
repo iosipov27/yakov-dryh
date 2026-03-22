@@ -115,6 +115,48 @@ export function normalizeCharacterSystemData(
   };
 }
 
+export function getUncheckedResponseTypes(
+  responses: YakovDryhResponsesData
+): YakovDryhResponseType[] {
+  const availableTypes = new Set<YakovDryhResponseType>();
+
+  responses.slots.forEach((slot) => {
+    if (slot.type !== "" && !slot.checked) {
+      availableTypes.add(slot.type);
+    }
+  });
+
+  return [
+    YAKOV_DRYH_RESPONSE_TYPES.fight,
+    YAKOV_DRYH_RESPONSE_TYPES.flight
+  ].filter((type) => availableTypes.has(type));
+}
+
+export function checkFirstUncheckedResponse(
+  responses: YakovDryhResponsesData,
+  responseType: YakovDryhResponseType
+): YakovDryhResponsesData | null {
+  const slotIndex = responses.slots.findIndex(
+    (slot) => slot.type === responseType && !slot.checked
+  );
+
+  if (slotIndex < 0) {
+    return null;
+  }
+
+  return {
+    ...responses,
+    slots: responses.slots.map((slot, index) =>
+      index === slotIndex
+        ? {
+            ...slot,
+            checked: true
+          }
+        : slot
+    )
+  };
+}
+
 function createDefaultResponseSlots(): YakovDryhResponseSlotData[] {
   return Array.from({ length: DRYH_RESPONSE_MAX }, () => ({
     checked: false,

@@ -1,7 +1,7 @@
 import { YakovDryhChatInteractionDialog } from "../applications/dialogs/chat-interaction-dialog.js";
 import { YakovDryhPainRollDialog } from "../applications/dialogs/pain-roll-dialog.js";
 import { CHAT_CARD_COMMAND, DRYH_SETTINGS, SYSTEM_ID } from "../constants.js";
-import { applyDryhRollGmAction, finalizeDryhRoll, getDryhRollCardData, hasDryhRollCard, rerenderDryhRollMessage } from "./roll-card-service.js";
+import { applyDryhRollGmAction, finalizeDryhRoll, getDryhRollCardData, hasDryhRollCard, resolveDryhRollFailureAction, rerenderDryhRollMessage } from "./roll-card-service.js";
 import { advanceChatCardStatus, getChatCardData, hasInteractiveChatCard, markChatCardDialogOpened } from "./chat-card-service.js";
 export async function openChatInteraction(message) {
     await markChatCardDialogOpened(message);
@@ -67,12 +67,34 @@ function activateDryhRollListeners(message, html) {
             actionElement.hidden = true;
             return;
         }
-        if (card.stage !== "initial" || card.finalized) {
+        const action = actionElement.dataset.yakovDryhRollAction;
+        const targetPool = actionElement.dataset.targetPool;
+        const responseType = actionElement.dataset.responseType;
+        if (card.stage === "final") {
+            if (action !== "resolve-failure") {
+                actionElement.setAttribute("disabled", "disabled");
+                return;
+            }
+            actionElement.addEventListener("click", (event) => {
+                event.preventDefault();
+                html
+                    .querySelectorAll("[data-yakov-dryh-roll-action]")
+                    .forEach((element) => element.setAttribute("disabled", "disabled"));
+                void resolveDryhRollFailureAction(message, {
+                    responseType: actionElement.dataset.failureAction === "check-response"
+                        ? (responseType ?? null)
+                        : null,
+                    type: actionElement.dataset.failureAction === "check-response"
+                        ? "check-response"
+                        : "gain-exhaustion"
+                });
+            });
+            return;
+        }
+        if (card.finalized) {
             actionElement.setAttribute("disabled", "disabled");
             return;
         }
-        const action = actionElement.dataset.yakovDryhRollAction;
-        const targetPool = actionElement.dataset.targetPool;
         actionElement.addEventListener("click", (event) => {
             event.preventDefault();
             if (action === "roll-pain") {

@@ -27,6 +27,11 @@
         "Subtitle": "Build the player pool before the chat card goes live.",
         "TemporaryMadness": "Temporary Madness"
       },
+      "Actions": {
+        "CheckFight": "Check Fight",
+        "CheckFlight": "Check Flight",
+        "GainExhaustion": "+1 Exhaustion"
+      },
       "PainDialog": {
         "Eyebrow": "Pain Roll",
         "Pain": "Pain Dice",
@@ -38,6 +43,9 @@
         "FailureChoice": "GM narrates the failure and chooses either +1 Exhaustion or mark a Response.",
         "FailureGainExhaustion": "GM narrates the failure and must apply +1 Exhaustion because Madness already covers checking a Response.",
         "FailureMarkResponse": "GM narrates the failure and must mark a Response because Exhaustion already covers +1 Exhaustion.",
+        "FailureResolvedCheckFight": "GM checked a Fight Response.",
+        "FailureResolvedCheckFlight": "GM checked a Flight Response.",
+        "FailureResolvedGainExhaustion": "GM applied +1 Exhaustion.",
         "discipline": "Un-check a Response or remove 1 Exhaustion.",
         "exhaustion": "Gain +1 Exhaustion.",
         "madness": "Mark a Response.",
@@ -112,6 +120,7 @@
         "ActorUnavailable": "Actor is no longer available.",
         "ChatMessageUnavailable": "Chat message is no longer available.",
         "DespairRequired": "At least 1 Despair is required to adjust a six.",
+        "ResponseUnavailable": "Response is no longer available.",
         "SharedPoolsGmOnly": "Only the GM can change Hope / Despair."
       }
     }

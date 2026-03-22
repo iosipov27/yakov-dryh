@@ -210,6 +210,8 @@ Use this section as the current checklist for development progress against the a
   - dominant-pool effect text
   - automatic `+1 Exhaustion` when Exhaustion dominates
   - automatic `+1 Despair` when Pain dominates
+  - button-driven GM failure resolution from the final roll card
+  - automatic failure resolution updates for `+1 Exhaustion` and checking Fight / Flight responses
 - Shared resource flow currently supports:
   - a shared world-level Hope pool
   - a shared world-level Despair pool
@@ -233,10 +235,6 @@ Use this section as the current checklist for development progress against the a
   - Get A Break
   - Improve Success
   - Restore Discipline
-- Failure consequences are only partially implemented:
-  - the final chat card now tells the GM whether failure allows a choice or forces `+1 Exhaustion` / checking a Response because of dominant Exhaustion or Madness
-  - there is still no button-driven resolution for that choice
-  - there is still no actual Response check automation
 - Discipline dominant is only partially implemented:
   - reminder text exists
   - the actual choice to un-check a Response or remove `1 Exhaustion` is not implemented
