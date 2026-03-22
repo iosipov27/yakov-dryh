@@ -16,10 +16,10 @@ interface RollDialogContext extends Record<string, unknown> {
   addExhaustionMax: number;
   actorData: ReturnType<typeof normalizeCharacterSystemData>;
   actorName: string;
-  disciplineDots: string;
-  exhaustionDots: string;
   addExhaustionValue: number;
-  madnessDots: string;
+  disciplinePips: RollDialogDisplayPip[];
+  exhaustionPips: RollDialogDisplayPip[];
+  madnessPips: RollDialogDisplayPip[];
   madnessTempPips: RollDialogPip[];
   madnessTempValue: number;
   moduleId: string;
@@ -31,6 +31,10 @@ interface RollDialogPip {
   iconClass: string | null;
   index: number;
   tooltip: string | null;
+}
+
+interface RollDialogDisplayPip {
+  filled: boolean;
 }
 
 type RollDialogPoolName = "addExhaustion" | "madnessTemp";
@@ -105,9 +109,18 @@ export class YakovDryhRollDialog extends BaseApplication {
       actorData,
       actorName: actor?.name ?? localize("DOCUMENT.Actor", "Actor"),
       addExhaustionValue: 0,
-      disciplineDots: renderDots(actorData.discipline),
-      exhaustionDots: renderDots(actorData.exhaustion),
-      madnessDots: renderDots(actorData.madnessPermanent),
+      disciplinePips: createDisplayPips(
+        actorData.discipline,
+        actorData.discipline
+      ),
+      exhaustionPips: createDisplayPips(
+        actorData.exhaustion,
+        actorData.exhaustion
+      ),
+      madnessPips: createDisplayPips(
+        actorData.madnessPermanent,
+        actorData.madnessPermanent
+      ),
       madnessTempPips: createRollDialogPips(0, DRYH_TEMP_MADNESS_MAX, temporaryMadnessLabel),
       madnessTempValue: 0,
       moduleId: SYSTEM_ID
@@ -121,6 +134,7 @@ export class YakovDryhRollDialog extends BaseApplication {
     options: object
   ): Promise<void> {
     await super._onRender(context, options as never);
+    const actorData = normalizeCharacterSystemData(this.actor?.system);
 
     const addExhaustionInput = this.element.querySelector<HTMLInputElement>(
       'input[name="addExhaustion"]'
@@ -138,16 +152,16 @@ export class YakovDryhRollDialog extends BaseApplication {
       '[data-yakov-dryh-action="submit-roll"]'
     );
     const syncDialogPools = () => {
-      syncDialogPool(
+      syncAddExhaustionPool(
         this.element,
-        "addExhaustion",
+        actorData.exhaustion,
         addExhaustionInput?.value ?? "0",
         getDialogPoolMax(this.element, "addExhaustion"),
         localize("YAKOV_DRYH.ROLL.Dialog.AddExhaustion", "Take +1 Exhaustion")
       );
-      syncDialogPool(
+      syncMadnessPool(
         this.element,
-        "madnessTemp",
+        actorData.madnessPermanent,
         madnessInput?.value ?? "0",
         DRYH_TEMP_MADNESS_MAX,
         localize("YAKOV_DRYH.ROLL.Dialog.TemporaryMadness", "Temporary Madness")
@@ -279,9 +293,18 @@ function createRollDialogPips(
   });
 }
 
-function syncDialogPool(
+function createDisplayPips(
+  value: number,
+  total: number
+): RollDialogDisplayPip[] {
+  return Array.from({ length: total }, (_entry, index) => ({
+    filled: index < value
+  }));
+}
+
+function syncAddExhaustionPool(
   root: HTMLElement,
-  poolName: RollDialogPoolName,
+  currentExhaustion: number,
   rawValue: string,
   total: number,
   label: string
@@ -290,16 +313,67 @@ function syncDialogPool(
     Math.max(Number.parseInt(rawValue, 10) || 0, 0),
     total
   );
-  const output = root.querySelector<HTMLElement>(
-    `[data-yakov-dryh-dialog-pool-value="${poolName}"]`
-  );
   const buttons = root.querySelectorAll<HTMLButtonElement>(
-    `[data-yakov-dryh-dialog-pool="${poolName}"]`
+    '[data-yakov-dryh-dialog-pool="addExhaustion"]'
   );
 
-  if (output) {
-    output.textContent = `${normalizedValue} / ${total}`;
-  }
+  buttons.forEach((button) => {
+    const pip = button.querySelector<HTMLElement>(".yakov-dryh-pip");
+    const icon = button.querySelector<HTMLElement>(".yakov-dryh-dice-picker__action-icon");
+    const canDecrease = normalizedValue > 0;
+    const canIncrease = normalizedValue < total;
+    const action = canDecrease ? "decrease" : canIncrease ? "increase" : null;
+    const tooltip = canDecrease
+      ? `${localize("YAKOV_DRYH.UI.Actions.RemoveDie", "Remove 1 die")} (${label})`
+      : canIncrease
+        ? `${localize("YAKOV_DRYH.UI.Actions.AddDie", "Add 1 die")} (${label})`
+        : "";
+
+    button.disabled = action === null;
+    button.dataset.yakovDryhDialogPoolAction = action ?? "";
+    button.classList.toggle("yakov-dryh-dice-picker__pip-control--increase", action === "increase");
+    button.classList.toggle("yakov-dryh-dice-picker__pip-control--decrease", action === "decrease");
+    button.title = tooltip;
+    if (tooltip) {
+      button.setAttribute("aria-label", tooltip);
+    } else {
+      button.removeAttribute("aria-label");
+    }
+    pip?.classList.toggle("yakov-dryh-pip--filled", normalizedValue > 0);
+
+    if (icon) {
+      icon.classList.remove(
+        "yakov-dryh-dice-picker__action-icon--increase",
+        "yakov-dryh-dice-picker__action-icon--decrease"
+      );
+      icon.innerHTML =
+        action === "increase"
+          ? '<i class="fa-solid fa-plus"></i>'
+          : action === "decrease"
+            ? '<i class="fa-solid fa-trash-can"></i>'
+            : "";
+
+      if (action) {
+        icon.classList.add(`yakov-dryh-dice-picker__action-icon--${action}`);
+      }
+    }
+  });
+}
+
+function syncMadnessPool(
+  root: HTMLElement,
+  permanentMadness: number,
+  rawValue: string,
+  total: number,
+  label: string
+): void {
+  const normalizedValue = Math.min(
+    Math.max(Number.parseInt(rawValue, 10) || 0, 0),
+    total
+  );
+  const buttons = root.querySelectorAll<HTMLButtonElement>(
+    '[data-yakov-dryh-dialog-pool="madnessTemp"]'
+  );
 
   buttons.forEach((button, index) => {
     const pip = button.querySelector<HTMLElement>(".yakov-dryh-pip");
@@ -361,12 +435,4 @@ function getDialogPoolMax(
 function localize(key: string, fallback: string): string {
   const localizedValue = game.i18n?.localize(key) ?? key;
   return localizedValue === key ? fallback : localizedValue;
-}
-
-function renderDots(value: number): string {
-  if (value <= 0) {
-    return "0";
-  }
-
-  return "●".repeat(value);
 }

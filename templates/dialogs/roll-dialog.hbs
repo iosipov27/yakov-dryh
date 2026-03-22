@@ -9,27 +9,34 @@
 
   <div class="yakov-dryh-dialog-grid">
     <div class="yakov-dryh-card-panel">
-      <strong>{{localize "YAKOV_DRYH.ROLL.Dialog.Discipline"}}</strong>
-      <p class="yakov-dryh-copy">{{disciplineDots}}</p>
+      <div class="yakov-dryh-dice-picker">
+        <div class="yakov-dryh-dice-picker__header">
+          <strong>{{localize "YAKOV_DRYH.ROLL.Dialog.Discipline"}}</strong>
+        </div>
+        <div class="yakov-dryh-pip-track yakov-dryh-dice-picker__track">
+          {{#each disciplinePips}}
+            <span class="yakov-dryh-dice-picker__pip-shell">
+              <span class="yakov-dryh-pip {{#if filled}}yakov-dryh-pip--filled{{/if}}"></span>
+            </span>
+          {{/each}}
+        </div>
+      </div>
     </div>
 
     <div class="yakov-dryh-card-panel">
-      <strong>{{localize "YAKOV_DRYH.ROLL.Dialog.Exhaustion"}}</strong>
-      <p class="yakov-dryh-copy">{{exhaustionDots}}</p>
-      <input type="hidden" name="addExhaustion" value="{{addExhaustionValue}}">
-      <input type="hidden" data-yakov-dryh-dialog-pool-max="addExhaustion" value="{{addExhaustionMax}}">
-      {{#if addExhaustionMax}}
-        <div class="yakov-dryh-dice-picker">
-          <div class="yakov-dryh-dice-picker__header">
-            <strong>{{localize "YAKOV_DRYH.ROLL.Dialog.AddExhaustion"}}</strong>
-            <span
-              class="yakov-dryh-dice-picker__value"
-              data-yakov-dryh-dialog-pool-value="addExhaustion"
-            >
-              {{addExhaustionValue}} / 1
+      <div class="yakov-dryh-dice-picker">
+        <div class="yakov-dryh-dice-picker__header">
+          <strong>{{localize "YAKOV_DRYH.ROLL.Dialog.Exhaustion"}}</strong>
+        </div>
+        <div class="yakov-dryh-pip-track yakov-dryh-pip-track--exhaustion yakov-dryh-dice-picker__track">
+          {{#each exhaustionPips}}
+            <span class="yakov-dryh-dice-picker__pip-shell">
+              <span class="yakov-dryh-pip {{#if filled}}yakov-dryh-pip--filled{{/if}}"></span>
             </span>
-          </div>
-          <div class="yakov-dryh-pip-track yakov-dryh-pip-track--exhaustion yakov-dryh-dice-picker__track">
+          {{/each}}
+          <input type="hidden" name="addExhaustion" value="{{addExhaustionValue}}">
+          <input type="hidden" data-yakov-dryh-dialog-pool-max="addExhaustion" value="{{addExhaustionMax}}">
+          {{#if addExhaustionMax}}
             {{#each addExhaustionPips}}
               <button
                 class="yakov-dryh-dice-picker__pip-control {{#if action}}yakov-dryh-dice-picker__pip-control--{{action}}{{/if}}"
@@ -46,26 +53,23 @@
                 </span>
               </button>
             {{/each}}
-          </div>
+          {{/if}}
         </div>
-      {{/if}}
+      </div>
     </div>
 
     <div class="yakov-dryh-card-panel">
-      <strong>{{localize "YAKOV_DRYH.ROLL.Dialog.PermanentMadness"}}</strong>
-      <p class="yakov-dryh-copy">{{madnessDots}}</p>
-      <input type="hidden" name="madnessTemp" value="{{madnessTempValue}}">
       <div class="yakov-dryh-dice-picker">
         <div class="yakov-dryh-dice-picker__header">
-          <strong>{{localize "YAKOV_DRYH.ROLL.Dialog.TemporaryMadness"}}</strong>
-          <span
-            class="yakov-dryh-dice-picker__value"
-            data-yakov-dryh-dialog-pool-value="madnessTemp"
-          >
-            {{madnessTempValue}} / 6
-          </span>
+          <strong>{{localize "YAKOV_DRYH.ROLL.Pools.madness"}}</strong>
         </div>
         <div class="yakov-dryh-pip-track yakov-dryh-pip-track--madness yakov-dryh-dice-picker__track">
+          {{#each madnessPips}}
+            <span class="yakov-dryh-dice-picker__pip-shell">
+              <span class="yakov-dryh-pip {{#if filled}}yakov-dryh-pip--filled{{/if}}"></span>
+            </span>
+          {{/each}}
+          <input type="hidden" name="madnessTemp" value="{{madnessTempValue}}">
           {{#each madnessTempPips}}
             <button
               class="yakov-dryh-dice-picker__pip-control {{#if action}}yakov-dryh-dice-picker__pip-control--{{action}}{{/if}}"

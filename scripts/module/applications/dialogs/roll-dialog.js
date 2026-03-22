@@ -55,9 +55,9 @@ export class YakovDryhRollDialog extends BaseApplication {
             actorData,
             actorName: actor?.name ?? localize("DOCUMENT.Actor", "Actor"),
             addExhaustionValue: 0,
-            disciplineDots: renderDots(actorData.discipline),
-            exhaustionDots: renderDots(actorData.exhaustion),
-            madnessDots: renderDots(actorData.madnessPermanent),
+            disciplinePips: createDisplayPips(actorData.discipline, actorData.discipline),
+            exhaustionPips: createDisplayPips(actorData.exhaustion, actorData.exhaustion),
+            madnessPips: createDisplayPips(actorData.madnessPermanent, actorData.madnessPermanent),
             madnessTempPips: createRollDialogPips(0, DRYH_TEMP_MADNESS_MAX, temporaryMadnessLabel),
             madnessTempValue: 0,
             moduleId: SYSTEM_ID
@@ -66,14 +66,15 @@ export class YakovDryhRollDialog extends BaseApplication {
     }
     async _onRender(context, options) {
         await super._onRender(context, options);
+        const actorData = normalizeCharacterSystemData(this.actor?.system);
         const addExhaustionInput = this.element.querySelector('input[name="addExhaustion"]');
         const madnessInput = this.element.querySelector('input[name="madnessTemp"]');
         const poolButtons = this.element.querySelectorAll("[data-yakov-dryh-dialog-pool]");
         const cancelButton = this.element.querySelector('[data-yakov-dryh-action="cancel-roll"]');
         const rollButton = this.element.querySelector('[data-yakov-dryh-action="submit-roll"]');
         const syncDialogPools = () => {
-            syncDialogPool(this.element, "addExhaustion", addExhaustionInput?.value ?? "0", getDialogPoolMax(this.element, "addExhaustion"), localize("YAKOV_DRYH.ROLL.Dialog.AddExhaustion", "Take +1 Exhaustion"));
-            syncDialogPool(this.element, "madnessTemp", madnessInput?.value ?? "0", DRYH_TEMP_MADNESS_MAX, localize("YAKOV_DRYH.ROLL.Dialog.TemporaryMadness", "Temporary Madness"));
+            syncAddExhaustionPool(this.element, actorData.exhaustion, addExhaustionInput?.value ?? "0", getDialogPoolMax(this.element, "addExhaustion"), localize("YAKOV_DRYH.ROLL.Dialog.AddExhaustion", "Take +1 Exhaustion"));
+            syncMadnessPool(this.element, actorData.madnessPermanent, madnessInput?.value ?? "0", DRYH_TEMP_MADNESS_MAX, localize("YAKOV_DRYH.ROLL.Dialog.TemporaryMadness", "Temporary Madness"));
         };
         poolButtons.forEach((button) => {
             button.addEventListener("click", (event) => {
@@ -159,13 +160,54 @@ function createRollDialogPips(value, total, label) {
         };
     });
 }
-function syncDialogPool(root, poolName, rawValue, total, label) {
+function createDisplayPips(value, total) {
+    return Array.from({ length: total }, (_entry, index) => ({
+        filled: index < value
+    }));
+}
+function syncAddExhaustionPool(root, currentExhaustion, rawValue, total, label) {
     const normalizedValue = Math.min(Math.max(Number.parseInt(rawValue, 10) || 0, 0), total);
-    const output = root.querySelector(`[data-yakov-dryh-dialog-pool-value="${poolName}"]`);
-    const buttons = root.querySelectorAll(`[data-yakov-dryh-dialog-pool="${poolName}"]`);
-    if (output) {
-        output.textContent = `${normalizedValue} / ${total}`;
-    }
+    const buttons = root.querySelectorAll('[data-yakov-dryh-dialog-pool="addExhaustion"]');
+    buttons.forEach((button) => {
+        const pip = button.querySelector(".yakov-dryh-pip");
+        const icon = button.querySelector(".yakov-dryh-dice-picker__action-icon");
+        const canDecrease = normalizedValue > 0;
+        const canIncrease = normalizedValue < total;
+        const action = canDecrease ? "decrease" : canIncrease ? "increase" : null;
+        const tooltip = canDecrease
+            ? `${localize("YAKOV_DRYH.UI.Actions.RemoveDie", "Remove 1 die")} (${label})`
+            : canIncrease
+                ? `${localize("YAKOV_DRYH.UI.Actions.AddDie", "Add 1 die")} (${label})`
+                : "";
+        button.disabled = action === null;
+        button.dataset.yakovDryhDialogPoolAction = action ?? "";
+        button.classList.toggle("yakov-dryh-dice-picker__pip-control--increase", action === "increase");
+        button.classList.toggle("yakov-dryh-dice-picker__pip-control--decrease", action === "decrease");
+        button.title = tooltip;
+        if (tooltip) {
+            button.setAttribute("aria-label", tooltip);
+        }
+        else {
+            button.removeAttribute("aria-label");
+        }
+        pip?.classList.toggle("yakov-dryh-pip--filled", normalizedValue > 0);
+        if (icon) {
+            icon.classList.remove("yakov-dryh-dice-picker__action-icon--increase", "yakov-dryh-dice-picker__action-icon--decrease");
+            icon.innerHTML =
+                action === "increase"
+                    ? '<i class="fa-solid fa-plus"></i>'
+                    : action === "decrease"
+                        ? '<i class="fa-solid fa-trash-can"></i>'
+                        : "";
+            if (action) {
+                icon.classList.add(`yakov-dryh-dice-picker__action-icon--${action}`);
+            }
+        }
+    });
+}
+function syncMadnessPool(root, permanentMadness, rawValue, total, label) {
+    const normalizedValue = Math.min(Math.max(Number.parseInt(rawValue, 10) || 0, 0), total);
+    const buttons = root.querySelectorAll('[data-yakov-dryh-dialog-pool="madnessTemp"]');
     buttons.forEach((button, index) => {
         const pip = button.querySelector(".yakov-dryh-pip");
         const icon = button.querySelector(".yakov-dryh-dice-picker__action-icon");
@@ -209,11 +251,5 @@ function getDialogPoolMax(root, poolName) {
 function localize(key, fallback) {
     const localizedValue = game.i18n?.localize(key) ?? key;
     return localizedValue === key ? fallback : localizedValue;
-}
-function renderDots(value) {
-    if (value <= 0) {
-        return "0";
-    }
-    return "●".repeat(value);
 }
 //# sourceMappingURL=roll-dialog.js.map
