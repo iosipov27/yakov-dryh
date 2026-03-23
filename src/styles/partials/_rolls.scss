@@ -18,6 +18,12 @@
 }
 
 .yakov-dryh-roll-card {
+  &__arrow {
+    color: var(--yakov-dryh-muted);
+    font-size: 0.85em;
+    margin-inline: 0.15rem;
+  }
+
   &__pools {
     display: grid;
     gap: 0.85rem;
@@ -87,11 +93,23 @@
   }
 
   &__successes {
+    align-items: center;
     color: var(--yakov-dryh-muted);
+    display: inline-flex;
     font-size: 0.95rem;
     font-weight: 700;
+    gap: 0.35rem;
     letter-spacing: 0.02em;
     white-space: nowrap;
+  }
+
+  &__successes-count {
+    color: var(--yakov-dryh-success-player);
+    font-size: large;
+  }
+
+  &__arrow {
+    font-size: 0.8em;
   }
 
   &--exhaustion {
@@ -127,6 +145,10 @@
 
     .yakov-dryh-roll-pool__die-icon {
       mix-blend-mode: screen;
+    }
+
+    .yakov-dryh-roll-pool__successes-count {
+      color: var(--yakov-dryh-success-pain);
     }
   }
 

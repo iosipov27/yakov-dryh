@@ -6,7 +6,9 @@
       <p class="yakov-dryh-subtitle">{{card.summary}}</p>
     </div>
 
-    <span class="yakov-dryh-status yakov-dryh-status--{{card.status}}">{{statusLabel}}</span>
+    <span
+      class="yakov-dryh-status yakov-dryh-status--{{card.status}}"
+    >{{statusLabel}}</span>
   </header>
 
   <div class="yakov-dryh-chat-card__body">
@@ -30,7 +32,7 @@
     </dl>
   </div>
 
-  <footer class="yakov-dryh-actions">
+  <footer class="yakov-dryh-actions mt12">
     {{#if canOpenDialog}}
       <button
         class="yakov-dryh-button"

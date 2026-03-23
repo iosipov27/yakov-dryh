@@ -1,0 +1,41 @@
+@use "sass:math";
+
+// Margin utility classes.
+// Examples:
+// - `mt1` => `margin-top: 1rem`
+// - `mb02` => `margin-bottom: 0.2rem`
+// - `ml15` => `margin-left: 1.5rem`
+// - `mr5` => `margin-right: 5rem`
+// - `m0` => `margin: 0`
+
+$yakov-dryh-margin-utility-properties: (
+  "m": margin,
+  "mt": margin-top,
+  "mb": margin-bottom,
+  "ml": margin-left,
+  "mr": margin-right
+);
+
+@function yakov-dryh-margin-utility-suffix($step) {
+  @if $step == 0 {
+    @return "0";
+  }
+
+  @if $step % 10 == 0 {
+    @return "#{math.div($step, 10)}";
+  }
+
+  @if $step < 10 {
+    @return "0#{$step}";
+  }
+
+  @return "#{$step}";
+}
+
+@each $prefix, $property in $yakov-dryh-margin-utility-properties {
+  @for $step from 0 through 50 {
+    .#{$prefix}#{yakov-dryh-margin-utility-suffix($step)} {
+      #{$property}: math.div($step, 10) * 1rem;
+    }
+  }
+}
