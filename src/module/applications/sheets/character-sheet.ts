@@ -1,11 +1,17 @@
 import { YakovDryhRollDialog } from "../dialogs/roll-dialog.js";
 import {
+  addResponseSlot as addResponseSlotData,
   DRYH_EXHAUSTION_MAX,
   DRYH_RESPONSE_MAX,
   YAKOV_DRYH_RESPONSE_TYPES,
+  countConfiguredResponses,
+  countResponsesByType,
+  createDefaultResponsesData,
+  hasCheckedResponses,
   normalizeCharacterSystemData,
   type YakovDryhResponseSlotData,
   type YakovDryhResponseType,
+  type YakovDryhResponsesData,
   YAKOV_DRYH_ACTOR_TYPES
 } from "../../data/index.js";
 import { SYSTEM_ID, SYSTEM_TITLE, TEMPLATE_PATHS } from "../../constants.js";
@@ -28,19 +34,39 @@ interface EditableSheetPip extends SheetPip {
   tooltip: string | null;
 }
 
-interface SheetResponseRow {
+interface SheetResponseAllocationIndicator {
+  label: string;
+}
+
+interface SheetResponseAllocationRow {
+  addLabel: string;
+  checkboxes: SheetResponseAllocationIndicator[];
+  label: string;
+  type: YakovDryhResponseType;
+}
+
+interface SheetResponsePlayCheckbox {
   checked: boolean;
   index: number;
-  isConfigured: boolean;
-  isFight: boolean;
-  isFlight: boolean;
   label: string;
+}
+
+interface SheetResponsePlayRow {
+  checkboxes: SheetResponsePlayCheckbox[];
+  label: string;
+  type: YakovDryhResponseType;
 }
 
 const SHEET_DICE_POOL_BASE_TOTAL = 6;
 const STRESS_CARD_VISUAL_MAX = 6;
+const RESPONSE_TYPE_ORDER: YakovDryhResponseType[] = [
+  YAKOV_DRYH_RESPONSE_TYPES.fight,
+  YAKOV_DRYH_RESPONSE_TYPES.flight
+];
 
 export class YakovDryhCharacterSheet extends BaseSheet {
+  private responseEditSlots: YakovDryhResponseSlotData[] | null = null;
+
   static DEFAULT_OPTIONS = {
     classes: ["actor", SYSTEM_ID, "yakov-dryh-sheet"],
     form: {
@@ -95,9 +121,23 @@ export class YakovDryhCharacterSheet extends BaseSheet {
       "YAKOV_DRYH.SHEETS.Actor.Character.Fields.Responses",
       "Responses"
     );
-    const responseRows = actorData.responses.slots.map((slot, index) =>
-      createResponseRow(slot, index, responsesLabel)
+    const fightLabel = localize(
+      "YAKOV_DRYH.SHEETS.Actor.Character.Fields.Fight",
+      "Fight"
     );
+    const flightLabel = localize(
+      "YAKOV_DRYH.SHEETS.Actor.Character.Fields.Flight",
+      "Flight"
+    );
+    const liveResponses = actorData.responses;
+    const responseEditorData = createResponseEditorData(
+      this.responseEditSlots,
+      liveResponses
+    );
+    const configuredResponseCount = countConfiguredResponses(responseEditorData);
+    const isEditingResponses = this.responseEditSlots !== null;
+    const isPlayMode = !isEditingResponses && configuredResponseCount === DRYH_RESPONSE_MAX;
+    const responseRemaining = Math.max(DRYH_RESPONSE_MAX - configuredResponseCount, 0);
 
     Object.assign(context, {
       actorData,
@@ -128,7 +168,26 @@ export class YakovDryhCharacterSheet extends BaseSheet {
       madnessCardStyle: createStressCardStyle(actorData.madnessPermanent),
       madnessPipTotal: getEditablePoolTotal(actorData.madnessPermanent),
       moduleId: SYSTEM_ID,
-      responseRows,
+      responseAllocationRows: createResponseAllocationRows(responseEditorData, {
+        fightLabel,
+        flightLabel
+      }),
+      responseCanAddMore: configuredResponseCount < DRYH_RESPONSE_MAX,
+      responseCanSave: isEditingResponses && configuredResponseCount === DRYH_RESPONSE_MAX,
+      responseIsAllocationMode: !isEditingResponses && configuredResponseCount < DRYH_RESPONSE_MAX,
+      responseIsEditMode: isEditingResponses,
+      responseIsPlayMode: isPlayMode,
+      responseMax: DRYH_RESPONSE_MAX,
+      responsePlayRows: createResponsePlayRows(liveResponses, {
+        fightLabel,
+        flightLabel,
+        responsesLabel
+      }),
+      responseRemainingLabel: formatLocalization(
+        "YAKOV_DRYH.SHEETS.Actor.Character.Fields.ResponsesRemaining",
+        { remaining: responseRemaining },
+        `Remaining: ${responseRemaining}`
+      ),
       scarsText: formatLineList(actorData.scars)
     });
 
@@ -150,12 +209,18 @@ export class YakovDryhCharacterSheet extends BaseSheet {
     const rollButton = root.querySelector(
       '[data-yakov-dryh-action="open-roll-dialog"]'
     ) as HTMLElement | null;
-    const responseChecks = root.querySelectorAll(
-      "[data-yakov-dryh-response-check]"
+    const responseAddButtons = root.querySelectorAll(
+      "[data-yakov-dryh-response-add]"
+    ) as NodeListOf<HTMLButtonElement>;
+    const responseEditButton = root.querySelector(
+      '[data-yakov-dryh-response-action="edit"]'
+    ) as HTMLButtonElement | null;
+    const responseSaveButton = root.querySelector(
+      '[data-yakov-dryh-response-action="save"]'
+    ) as HTMLButtonElement | null;
+    const responseToggles = root.querySelectorAll(
+      "[data-yakov-dryh-response-toggle]"
     ) as NodeListOf<HTMLInputElement>;
-    const responseTypes = root.querySelectorAll(
-      "[data-yakov-dryh-response-type]"
-    ) as NodeListOf<HTMLSelectElement>;
     const poolButtons = root.querySelectorAll(
       "[data-yakov-dryh-pool-action]"
     ) as NodeListOf<HTMLButtonElement>;
@@ -167,19 +232,25 @@ export class YakovDryhCharacterSheet extends BaseSheet {
       event.preventDefault();
       void this.openRollDialog();
     });
-    responseChecks.forEach((input: HTMLInputElement) => {
-      input.addEventListener("change", () => {
-        void this.updateResponseChecked(
-          Number.parseInt(input.dataset.yakovDryhResponseCheck ?? "", 10),
-          input.checked
-        );
+    responseAddButtons.forEach((button: HTMLButtonElement) => {
+      button.addEventListener("click", (event: MouseEvent) => {
+        event.preventDefault();
+        void this.addResponseSlot(button.dataset.yakovDryhResponseAdd ?? "");
       });
     });
-    responseTypes.forEach((input: HTMLSelectElement) => {
+    responseEditButton?.addEventListener("click", (event: MouseEvent) => {
+      event.preventDefault();
+      void this.startResponseEdit();
+    });
+    responseSaveButton?.addEventListener("click", (event: MouseEvent) => {
+      event.preventDefault();
+      void this.saveResponseEdit();
+    });
+    responseToggles.forEach((input: HTMLInputElement) => {
       input.addEventListener("change", () => {
-        void this.updateResponseType(
-          Number.parseInt(input.dataset.yakovDryhResponseType ?? "", 10),
-          input.value
+        void this.updateResponseChecked(
+          Number.parseInt(input.dataset.yakovDryhResponseToggle ?? "", 10),
+          input.checked
         );
       });
     });
@@ -265,40 +336,115 @@ export class YakovDryhCharacterSheet extends BaseSheet {
     } as Record<string, unknown>);
   }
 
-  private async updateResponseType(
-    slotIndex: number,
-    value: string
-  ): Promise<void> {
+  private async addResponseSlot(value: string): Promise<void> {
     const actor = this.actor;
-
-    if (!actor || !Number.isInteger(slotIndex) || slotIndex < 0) {
-      return;
-    }
-
-    const currentData = normalizeCharacterSystemData(actor.system);
-    const currentSlot = currentData.responses.slots[slotIndex];
-
-    if (!currentSlot) {
-      return;
-    }
-
     const type = normalizeResponseType(value);
 
-    if (currentSlot.type === type) {
+    if (!actor || type === "") {
+      return;
+    }
+
+    const currentResponses = createResponseEditorData(
+      this.responseEditSlots,
+      normalizeCharacterSystemData(actor.system).responses
+    );
+    const updatedResponses = addResponseSlotData(currentResponses, type);
+
+    if (!updatedResponses) {
+      return;
+    }
+
+    if (this.responseEditSlots !== null) {
+      this.responseEditSlots = updatedResponses.slots;
+      await this.render({ force: true });
       return;
     }
 
     await actor.update({
-      "system.responses.slots": currentData.responses.slots.map((slot, index) =>
-        index === slotIndex
-          ? {
-              checked: type === "" ? false : slot.checked,
-              type
-            }
-          : slot
-      ),
+      "system.responses.slots": updatedResponses.slots,
       "system.responses.max": DRYH_RESPONSE_MAX
     } as Record<string, unknown>);
+  }
+
+  private async startResponseEdit(): Promise<void> {
+    const actor = this.actor;
+
+    if (!actor) {
+      return;
+    }
+
+    const currentResponses = normalizeCharacterSystemData(actor.system).responses;
+
+    if (hasCheckedResponses(currentResponses)) {
+      const confirmed = await this.confirmResponseEditReset();
+
+      if (!confirmed) {
+        return;
+      }
+    }
+
+    this.responseEditSlots = createDefaultResponsesData().slots;
+    await this.render({ force: true });
+  }
+
+  private async saveResponseEdit(): Promise<void> {
+    const actor = this.actor;
+
+    if (!actor || this.responseEditSlots === null) {
+      return;
+    }
+
+    const updatedResponses = createResponseEditorData(
+      this.responseEditSlots,
+      normalizeCharacterSystemData(actor.system).responses
+    );
+
+    if (countConfiguredResponses(updatedResponses) !== DRYH_RESPONSE_MAX) {
+      return;
+    }
+
+    const editSlots = this.responseEditSlots;
+    this.responseEditSlots = null;
+
+    try {
+      await actor.update({
+        "system.responses.slots": updatedResponses.slots,
+        "system.responses.max": DRYH_RESPONSE_MAX
+      } as Record<string, unknown>);
+    } catch (error) {
+      this.responseEditSlots = editSlots;
+      throw error;
+    }
+  }
+
+  private async confirmResponseEditReset(): Promise<boolean> {
+    const action = await foundry.applications.api.DialogV2.wait({
+      buttons: [
+        {
+          action: "cancel",
+          label: localize("YAKOV_DRYH.SHEETS.Actor.Character.Actions.Cancel", "Cancel")
+        },
+        {
+          action: "edit",
+          default: true,
+          label: localize(
+            "YAKOV_DRYH.SHEETS.Actor.Character.Actions.EditResponses",
+            "Edit Responses"
+          )
+        }
+      ],
+      content: [
+        `<p>${localize("YAKOV_DRYH.SHEETS.Actor.Character.Prompts.EditResponses", "Edit Responses?")}</p>`,
+        `<p>${localize("YAKOV_DRYH.SHEETS.Actor.Character.Prompts.EditResponsesWarning", "This will clear all marks.")}</p>`
+      ].join(""),
+      modal: true,
+      rejectClose: false,
+      window: {
+        title: localize("YAKOV_DRYH.SHEETS.Actor.Character.Actions.EditResponses", "Edit Responses")
+      }
+    });
+
+    return action === "edit";
   }
 
   private async updateScars(value: string): Promise<void> {
@@ -312,19 +458,83 @@ export class YakovDryhCharacterSheet extends BaseSheet {
   }
 }
 
-function createResponseRow(
-  slot: YakovDryhResponseSlotData,
-  index: number,
-  label: string
-): SheetResponseRow {
-  return {
-    checked: slot.checked,
-    index,
-    isConfigured: slot.type !== "",
-    isFight: slot.type === YAKOV_DRYH_RESPONSE_TYPES.fight,
-    isFlight: slot.type === YAKOV_DRYH_RESPONSE_TYPES.flight,
-    label: `${label} ${index + 1}`
-  };
+function createResponseEditorData(
+  editSlots: YakovDryhResponseSlotData[] | null,
+  liveResponses: YakovDryhResponsesData
+): YakovDryhResponsesData {
+  return editSlots === null
+    ? liveResponses
+    : {
+        max: DRYH_RESPONSE_MAX,
+        slots: editSlots
+      };
+}
+
+function createResponseAllocationRows(
+  responses: YakovDryhResponsesData,
+  labels: {
+    fightLabel: string;
+    flightLabel: string;
+  }
+): SheetResponseAllocationRow[] {
+  const configuredCount = countConfiguredResponses(responses);
+
+  return RESPONSE_TYPE_ORDER
+    .map((type) => {
+      const count = countResponsesByType(responses, type);
+
+      if (configuredCount === DRYH_RESPONSE_MAX && count === 0) {
+        return null;
+      }
+
+      const label =
+        type === YAKOV_DRYH_RESPONSE_TYPES.fight ? labels.fightLabel : labels.flightLabel;
+
+      return {
+        addLabel: `${localize(
+          "YAKOV_DRYH.SHEETS.Actor.Character.Actions.AddResponse",
+          "Add Response"
+        )} (${label})`,
+        checkboxes: Array.from({ length: count }, (_entry, index) => ({
+          label: `${label} ${index + 1}`
+        })),
+        label,
+        type
+      };
+    })
+    .filter((row): row is SheetResponseAllocationRow => row !== null);
+}
+
+function createResponsePlayRows(
+  responses: YakovDryhResponsesData,
+  labels: {
+    fightLabel: string;
+    flightLabel: string;
+    responsesLabel: string;
+  }
+): SheetResponsePlayRow[] {
+  return RESPONSE_TYPE_ORDER
+    .map((type) => {
+      const label =
+        type === YAKOV_DRYH_RESPONSE_TYPES.fight ? labels.fightLabel : labels.flightLabel;
+      const checkboxes = responses.slots
+        .map((slot, index) => ({ index, slot }))
+        .filter(({ slot }) => slot.type === type)
+        .map(({ index, slot }, slotIndex) => ({
+          checked: slot.checked,
+          index,
+          label: `${labels.responsesLabel} ${label} ${slotIndex + 1}`
+        }));
+
+      return checkboxes.length > 0
+        ? {
+            checkboxes,
+            label,
+            type
+          }
+        : null;
+    })
+    .filter((row): row is SheetResponsePlayRow => row !== null);
 }
 
 function createEditablePips(
@@ -382,6 +592,19 @@ function localizeActorType(actorType: string): string {
 
 function localize(key: string, fallback: string): string {
   const localizedValue = game.i18n?.localize(key) ?? key;
+
+  return localizedValue === key ? fallback : localizedValue;
+}
+
+function formatLocalization(
+  key: string,
+  data: Record<string, string | number>,
+  fallback: string
+): string {
+  const formatData = Object.fromEntries(
+    Object.entries(data).map(([entryKey, value]) => [entryKey, String(value)])
+  );
+  const localizedValue = game.i18n?.format(key, formatData) ?? key;
 
   return localizedValue === key ? fallback : localizedValue;
 }

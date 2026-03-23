@@ -153,39 +153,87 @@
       </div>
 
       <div class="yakov-dryh-resource-card">
-        <h4>{{localize "YAKOV_DRYH.SHEETS.Actor.Character.Fields.Responses"}}</h4>
-        <p class="yakov-dryh-copy">
-          {{localize "YAKOV_DRYH.SHEETS.Actor.Character.Fields.ResponsesHint"}}
-        </p>
-        <div class="yakov-dryh-responses">
-          {{#each responseRows}}
-            <div class="yakov-dryh-response-row">
-              <input
-                class="yakov-dryh-response-row__checkbox"
-                type="checkbox"
-                aria-label="{{label}}"
-                data-yakov-dryh-response-check="{{index}}"
-                {{#if checked}}checked{{/if}}
-                {{#unless isConfigured}}disabled{{/unless}}
+        <h4>{{localize "YAKOV_DRYH.SHEETS.Actor.Character.Fields.Responses"}} ({{responseMax}})</h4>
+
+        {{#if responseIsPlayMode}}
+          <div class="yakov-dryh-responses yakov-dryh-responses--play mt09">
+            {{#each responsePlayRows}}
+              <div class="yakov-dryh-response-line yakov-dryh-response-line--play">
+                <span class="yakov-dryh-response-line__label">{{label}}:</span>
+                <div class="yakov-dryh-response-line__checkboxes">
+                  {{#each checkboxes}}
+                    <input
+                      class="yakov-dryh-response-line__checkbox"
+                      type="checkbox"
+                      aria-label="{{label}}"
+                      data-yakov-dryh-response-toggle="{{index}}"
+                      {{#if checked}}checked{{/if}}
+                    >
+                  {{/each}}
+                </div>
+              </div>
+            {{/each}}
+          </div>
+
+          <div class="yakov-dryh-actions mt12">
+            <button
+              class="yakov-dryh-button yakov-dryh-button--secondary"
+              type="button"
+              data-yakov-dryh-response-action="edit"
+            >
+              {{localize "YAKOV_DRYH.SHEETS.Actor.Character.Actions.EditResponses"}}
+            </button>
+          </div>
+        {{else}}
+          <p class="yakov-dryh-copy mt09">
+            {{localize "YAKOV_DRYH.SHEETS.Actor.Character.Fields.ResponsesHint"}}
+          </p>
+
+          <div class="yakov-dryh-responses mt09">
+            {{#each responseAllocationRows}}
+              <div class="yakov-dryh-response-line">
+                <span class="yakov-dryh-response-line__label">{{label}}</span>
+                <div class="yakov-dryh-response-line__checkboxes">
+                  {{#each checkboxes}}
+                    <input
+                      class="yakov-dryh-response-line__checkbox yakov-dryh-response-line__checkbox--static"
+                      type="checkbox"
+                      checked
+                      tabindex="-1"
+                      aria-label="{{label}}"
+                    >
+                  {{/each}}
+                </div>
+                {{#if ../responseCanAddMore}}
+                  <button
+                    class="yakov-dryh-button yakov-dryh-button--secondary yakov-dryh-button--compact yakov-dryh-response-line__add-button"
+                    type="button"
+                    data-yakov-dryh-response-add="{{type}}"
+                    aria-label="{{addLabel}}"
+                    title="{{addLabel}}"
+                  >
+                    +
+                  </button>
+                {{/if}}
+              </div>
+            {{/each}}
+          </div>
+
+          <p class="yakov-dryh-copy mt09">{{responseRemainingLabel}}</p>
+
+          {{#if responseIsEditMode}}
+            <div class="yakov-dryh-actions mt12">
+              <button
+                class="yakov-dryh-button"
+                type="button"
+                data-yakov-dryh-response-action="save"
+                {{#unless responseCanSave}}disabled{{/unless}}
               >
-              <select
-                class="yakov-dryh-response-row__select"
-                aria-label="{{label}}"
-                data-yakov-dryh-response-type="{{index}}"
-              >
-                <option value="" {{#unless isConfigured}}selected{{/unless}}>
-                  {{localize "YAKOV_DRYH.SHEETS.Actor.Character.Fields.SelectResponse"}}
-                </option>
-                <option value="fight" {{#if isFight}}selected{{/if}}>
-                  {{localize "YAKOV_DRYH.SHEETS.Actor.Character.Fields.Fight"}}
-                </option>
-                <option value="flight" {{#if isFlight}}selected{{/if}}>
-                  {{localize "YAKOV_DRYH.SHEETS.Actor.Character.Fields.Flight"}}
-                </option>
-              </select>
+                {{localize "YAKOV_DRYH.SHEETS.Actor.Character.Actions.SaveResponses"}}
+              </button>
             </div>
-          {{/each}}
-        </div>
+          {{/if}}
+        {{/if}}
       </div>
     </aside>
   </div>

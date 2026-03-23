@@ -15,15 +15,18 @@ export function createDefaultCharacterSystemData() {
         discipline: 3,
         exhaustion: 0,
         madnessPermanent: 0,
-        responses: {
-            slots: createDefaultResponseSlots(),
-            max: DRYH_RESPONSE_MAX
-        },
+        responses: createDefaultResponsesData(),
         talents: {
             exhaustion: "",
             madness: ""
         },
         scars: []
+    };
+}
+export function createDefaultResponsesData() {
+    return {
+        slots: createDefaultResponseSlots(),
+        max: DRYH_RESPONSE_MAX
     };
 }
 export function normalizeResponses(value) {
@@ -68,6 +71,39 @@ export function getUncheckedResponseTypes(responses) {
         YAKOV_DRYH_RESPONSE_TYPES.fight,
         YAKOV_DRYH_RESPONSE_TYPES.flight
     ].filter((type) => availableTypes.has(type));
+}
+export function countConfiguredResponses(responses) {
+    return responses.slots.filter((slot) => slot.type !== "").length;
+}
+export function countResponsesByType(responses, responseType) {
+    return responses.slots.filter((slot) => slot.type === responseType).length;
+}
+export function hasCheckedResponses(responses) {
+    return responses.slots.some((slot) => slot.checked);
+}
+export function addResponseSlot(responses, responseType) {
+    const slotIndex = responses.slots.findIndex((slot) => slot.type === "");
+    if (slotIndex < 0) {
+        return null;
+    }
+    return {
+        ...responses,
+        slots: responses.slots.map((slot, index) => index === slotIndex
+            ? {
+                checked: false,
+                type: responseType
+            }
+            : slot)
+    };
+}
+export function clearResponseChecks(responses) {
+    return {
+        ...responses,
+        slots: responses.slots.map((slot) => ({
+            ...slot,
+            checked: false
+        }))
+    };
 }
 export function checkFirstUncheckedResponse(responses, responseType) {
     const slotIndex = responses.slots.findIndex((slot) => slot.type === responseType && !slot.checked);

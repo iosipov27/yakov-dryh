@@ -54,15 +54,19 @@ export function createDefaultCharacterSystemData(): YakovDryhCharacterSystemData
     discipline: 3,
     exhaustion: 0,
     madnessPermanent: 0,
-    responses: {
-      slots: createDefaultResponseSlots(),
-      max: DRYH_RESPONSE_MAX
-    },
+    responses: createDefaultResponsesData(),
     talents: {
       exhaustion: "",
       madness: ""
     },
     scars: []
+  };
+}
+
+export function createDefaultResponsesData(): YakovDryhResponsesData {
+  return {
+    slots: createDefaultResponseSlots(),
+    max: DRYH_RESPONSE_MAX
   };
 }
 
@@ -130,6 +134,60 @@ export function getUncheckedResponseTypes(
     YAKOV_DRYH_RESPONSE_TYPES.fight,
     YAKOV_DRYH_RESPONSE_TYPES.flight
   ].filter((type) => availableTypes.has(type));
+}
+
+export function countConfiguredResponses(
+  responses: YakovDryhResponsesData
+): number {
+  return responses.slots.filter((slot) => slot.type !== "").length;
+}
+
+export function countResponsesByType(
+  responses: YakovDryhResponsesData,
+  responseType: YakovDryhResponseType
+): number {
+  return responses.slots.filter((slot) => slot.type === responseType).length;
+}
+
+export function hasCheckedResponses(
+  responses: YakovDryhResponsesData
+): boolean {
+  return responses.slots.some((slot) => slot.checked);
+}
+
+export function addResponseSlot(
+  responses: YakovDryhResponsesData,
+  responseType: YakovDryhResponseType
+): YakovDryhResponsesData | null {
+  const slotIndex = responses.slots.findIndex((slot) => slot.type === "");
+
+  if (slotIndex < 0) {
+    return null;
+  }
+
+  return {
+    ...responses,
+    slots: responses.slots.map((slot, index) =>
+      index === slotIndex
+        ? {
+            checked: false,
+            type: responseType
+          }
+        : slot
+    )
+  };
+}
+
+export function clearResponseChecks(
+  responses: YakovDryhResponsesData
+): YakovDryhResponsesData {
+  return {
+    ...responses,
+    slots: responses.slots.map((slot) => ({
+      ...slot,
+      checked: false
+    }))
+  };
 }
 
 export function checkFirstUncheckedResponse(

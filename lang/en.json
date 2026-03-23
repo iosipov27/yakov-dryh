@@ -96,18 +96,27 @@
             "Name": "Name",
             "PermanentMadness": "Madness",
             "Responses": "Responses",
-            "ResponsesHint": "Choose Fight or Flight for each response slot.",
+            "ResponsesHint": "Choose Fight or Flight until you have 3 Responses.",
+            "ResponsesRemaining": "Remaining: {remaining}",
             "Scars": "Scars",
             "SelectResponse": "Select a Response"
           },
           "Label": "Yakov Dryh Character Sheet",
+          "Prompts": {
+            "EditResponses": "Edit Responses?",
+            "EditResponsesWarning": "This will clear all marks."
+          },
           "Sections": {
             "Talents": "Talents"
           },
           "Actions": {
+            "AddResponse": "Add Response",
             "AddExhaustion": "+ Exhaustion",
+            "Cancel": "Cancel",
             "CreateChatCard": "Create interactive chat card",
-            "Roll": "Roll"
+            "EditResponses": "Edit Responses",
+            "Roll": "Roll",
+            "SaveResponses": "Save"
           }
         }
       }
