@@ -4,6 +4,8 @@ import { rollDryhCheck } from "../../dice/index.js";
 import { SYSTEM_ID, SYSTEM_TITLE, TEMPLATE_PATHS } from "../../constants.js";
 const BaseApplication = foundry.applications.api.HandlebarsApplicationMixin(foundry.applications.api.ApplicationV2);
 export class YakovDryhRollDialog extends BaseApplication {
+    boundRoot = null;
+    handleRootClickBound;
     static DEFAULT_OPTIONS = {
         classes: [SYSTEM_ID, "yakov-dryh-dialog", "yakov-dryh-roll-dialog"],
         form: {
@@ -30,6 +32,7 @@ export class YakovDryhRollDialog extends BaseApplication {
     constructor(actor) {
         super();
         this.actorDocument = actor;
+        this.handleRootClickBound = this.handleRootClick.bind(this);
     }
     static async openForActor(actor) {
         const dialog = new YakovDryhRollDialog(actor);
@@ -67,46 +70,17 @@ export class YakovDryhRollDialog extends BaseApplication {
     async _onRender(context, options) {
         await super._onRender(context, options);
         const actorData = normalizeCharacterSystemData(this.actor?.system);
-        const addExhaustionInput = this.element.querySelector('input[name="addExhaustion"]');
-        const madnessInput = this.element.querySelector('input[name="madnessTemp"]');
-        const poolButtons = this.element.querySelectorAll("[data-yakov-dryh-dialog-pool]");
-        const cancelButton = this.element.querySelector('[data-yakov-dryh-action="cancel-roll"]');
-        const rollButton = this.element.querySelector('[data-yakov-dryh-action="submit-roll"]');
+        const root = this.element;
+        if (!(root instanceof HTMLElement)) {
+            return;
+        }
+        const addExhaustionInput = root.querySelector('input[name="addExhaustion"]');
+        const madnessInput = root.querySelector('input[name="madnessTemp"]');
         const syncDialogPools = () => {
-            syncAddExhaustionPool(this.element, actorData.exhaustion, addExhaustionInput?.value ?? "0", getDialogPoolMax(this.element, "addExhaustion"), localize("YAKOV_DRYH.ROLL.Dialog.AddExhaustion", "Take +1 Exhaustion"));
-            syncMadnessPool(this.element, actorData.madnessPermanent, madnessInput?.value ?? "0", DRYH_TEMP_MADNESS_MAX, localize("YAKOV_DRYH.ROLL.Dialog.TemporaryMadness", "Temporary Madness"));
+            syncAddExhaustionPool(root, actorData.exhaustion, addExhaustionInput?.value ?? "0", getDialogPoolMax(root, "addExhaustion"), localize("YAKOV_DRYH.ROLL.Dialog.AddExhaustion", "Take +1 Exhaustion"));
+            syncMadnessPool(root, actorData.madnessPermanent, madnessInput?.value ?? "0", DRYH_TEMP_MADNESS_MAX, localize("YAKOV_DRYH.ROLL.Dialog.TemporaryMadness", "Temporary Madness"));
         };
-        poolButtons.forEach((button) => {
-            button.addEventListener("click", (event) => {
-                event.preventDefault();
-                const poolName = button.dataset.yakovDryhDialogPool;
-                const action = button.dataset.yakovDryhDialogPoolAction;
-                if (!poolName || !action) {
-                    return;
-                }
-                const input = this.form?.elements.namedItem(poolName);
-                if (!input) {
-                    return;
-                }
-                const maxValue = poolName === "addExhaustion"
-                    ? getDialogPoolMax(this.element, "addExhaustion")
-                    : DRYH_TEMP_MADNESS_MAX;
-                const currentValue = Math.min(Math.max(Number.parseInt(input.value, 10) || 0, 0), maxValue);
-                const nextValue = action === "increase"
-                    ? Math.min(currentValue + 1, maxValue)
-                    : Math.max(currentValue - 1, 0);
-                input.value = String(nextValue);
-                syncDialogPools();
-            });
-        });
-        cancelButton?.addEventListener("click", (event) => {
-            event.preventDefault();
-            void this.close();
-        });
-        rollButton?.addEventListener("click", (event) => {
-            event.preventDefault();
-            void this.submitRoll();
-        });
+        this.bindRootListeners(root);
         syncDialogPools();
     }
     async submitRoll() {
@@ -139,6 +113,52 @@ export class YakovDryhRollDialog extends BaseApplication {
         });
         await this.close();
     }
+    bindRootListeners(root) {
+        if (this.boundRoot === root) {
+            return;
+        }
+        this.boundRoot?.removeEventListener("click", this.handleRootClickBound);
+        root.addEventListener("click", this.handleRootClickBound);
+        this.boundRoot = root;
+    }
+    handleRootClick(event) {
+        const target = event.target;
+        if (!(target instanceof Element)) {
+            return;
+        }
+        const actionElement = target.closest("[data-yakov-dryh-dialog-pool], [data-yakov-dryh-action]");
+        if (!actionElement) {
+            return;
+        }
+        event.preventDefault();
+        if (actionElement.dataset.yakovDryhAction === "cancel-roll") {
+            void this.close();
+            return;
+        }
+        if (actionElement.dataset.yakovDryhAction === "submit-roll") {
+            void this.submitRoll();
+            return;
+        }
+        const poolName = actionElement.dataset.yakovDryhDialogPool;
+        const action = actionElement.dataset.yakovDryhDialogPoolAction;
+        if (!poolName || !action) {
+            return;
+        }
+        const root = this.boundRoot;
+        const input = this.form?.elements.namedItem(poolName);
+        if (!root || !input) {
+            return;
+        }
+        const maxValue = poolName === "addExhaustion"
+            ? getDialogPoolMax(root, "addExhaustion")
+            : DRYH_TEMP_MADNESS_MAX;
+        const currentValue = Math.min(Math.max(Number.parseInt(input.value, 10) || 0, 0), maxValue);
+        const nextValue = action === "increase"
+            ? Math.min(currentValue + 1, maxValue)
+            : Math.max(currentValue - 1, 0);
+        input.value = String(nextValue);
+        syncRootDialogPools(root, this.actor?.system);
+    }
 }
 function createRollDialogPips(value, total, label) {
     const normalizedValue = Math.min(Math.max(value, 0), total);
@@ -164,6 +184,13 @@ function createDisplayPips(value, total) {
     return Array.from({ length: total }, (_entry, index) => ({
         filled: index < value
     }));
+}
+function syncRootDialogPools(root, actorSystem) {
+    const actorData = normalizeCharacterSystemData(actorSystem);
+    const addExhaustionInput = root.querySelector('input[name="addExhaustion"]');
+    const madnessInput = root.querySelector('input[name="madnessTemp"]');
+    syncAddExhaustionPool(root, actorData.exhaustion, addExhaustionInput?.value ?? "0", getDialogPoolMax(root, "addExhaustion"), localize("YAKOV_DRYH.ROLL.Dialog.AddExhaustion", "Take +1 Exhaustion"));
+    syncMadnessPool(root, actorData.madnessPermanent, madnessInput?.value ?? "0", DRYH_TEMP_MADNESS_MAX, localize("YAKOV_DRYH.ROLL.Dialog.TemporaryMadness", "Temporary Madness"));
 }
 function syncAddExhaustionPool(root, currentExhaustion, rawValue, total, label) {
     const normalizedValue = Math.min(Math.max(Number.parseInt(rawValue, 10) || 0, 0), total);

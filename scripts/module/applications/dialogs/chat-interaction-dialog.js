@@ -2,6 +2,8 @@ import { advanceChatCardStatus, createDefaultChatCardData, formatChatCardStatus,
 import { CHAT_CARD_STATUSES, SYSTEM_ID, SYSTEM_TITLE, TEMPLATE_PATHS } from "../../constants.js";
 const BaseApplication = foundry.applications.api.HandlebarsApplicationMixin(foundry.applications.api.ApplicationV2);
 export class YakovDryhChatInteractionDialog extends BaseApplication {
+    boundRoot = null;
+    handleRootClickBound;
     static DEFAULT_OPTIONS = {
         classes: [SYSTEM_ID, "yakov-dryh-dialog"],
         position: {
@@ -25,6 +27,7 @@ export class YakovDryhChatInteractionDialog extends BaseApplication {
     constructor(message) {
         super();
         this.messageId = message.id ?? "";
+        this.handleRootClickBound = this.handleRootClick.bind(this);
     }
     get message() {
         if (!this.messageId) {
@@ -59,16 +62,7 @@ export class YakovDryhChatInteractionDialog extends BaseApplication {
         if (!(root instanceof HTMLElement)) {
             return;
         }
-        const applyButton = root.querySelector('[data-yakov-dryh-action="apply-updates"]');
-        const advanceButton = root.querySelector('[data-yakov-dryh-action="advance-status"]');
-        applyButton?.addEventListener("click", (event) => {
-            event.preventDefault();
-            void this.applyUpdates(root);
-        });
-        advanceButton?.addEventListener("click", (event) => {
-            event.preventDefault();
-            void this.advanceStatus();
-        });
+        this.bindRootListeners(root);
     }
     async applyUpdates(root) {
         const message = this.message;
@@ -96,6 +90,36 @@ export class YakovDryhChatInteractionDialog extends BaseApplication {
         }
         await advanceChatCardStatus(message);
         await this.render({ force: true });
+    }
+    bindRootListeners(root) {
+        if (this.boundRoot === root) {
+            return;
+        }
+        this.boundRoot?.removeEventListener("click", this.handleRootClickBound);
+        root.addEventListener("click", this.handleRootClickBound);
+        this.boundRoot = root;
+    }
+    handleRootClick(event) {
+        const target = event.target;
+        if (!(target instanceof Element)) {
+            return;
+        }
+        const actionElement = target.closest("[data-yakov-dryh-action]");
+        if (!actionElement) {
+            return;
+        }
+        const root = this.boundRoot;
+        event.preventDefault();
+        switch (actionElement.dataset.yakovDryhAction) {
+            case "apply-updates":
+                if (root) {
+                    void this.applyUpdates(root);
+                }
+                break;
+            case "advance-status":
+                void this.advanceStatus();
+                break;
+        }
     }
 }
 //# sourceMappingURL=chat-interaction-dialog.js.map

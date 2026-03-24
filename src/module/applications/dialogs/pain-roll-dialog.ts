@@ -14,6 +14,9 @@ interface PainRollDialogContext extends Record<string, unknown> {
 }
 
 export class YakovDryhPainRollDialog extends BaseApplication {
+  private boundRoot: HTMLElement | null = null;
+  private readonly handleRootClickBound: (event: MouseEvent) => void;
+
   static override DEFAULT_OPTIONS = {
     classes: [SYSTEM_ID, "yakov-dryh-dialog", "yakov-dryh-pain-roll-dialog"],
     form: {
@@ -43,6 +46,7 @@ export class YakovDryhPainRollDialog extends BaseApplication {
   constructor(message: ChatMessage.Implementation) {
     super();
     this.messageId = message.id ?? "";
+    this.handleRootClickBound = this.handleRootClick.bind(this);
   }
 
   static async openForMessage(
@@ -91,21 +95,13 @@ export class YakovDryhPainRollDialog extends BaseApplication {
   ): Promise<void> {
     await super._onRender(context, options as never);
 
-    const cancelButton = this.element.querySelector<HTMLElement>(
-      '[data-yakov-dryh-action="cancel-pain-roll"]'
-    );
-    const rollButton = this.element.querySelector<HTMLElement>(
-      '[data-yakov-dryh-action="submit-pain-roll"]'
-    );
+    const root = this.element;
 
-    cancelButton?.addEventListener("click", (event) => {
-      event.preventDefault();
-      void this.close();
-    });
-    rollButton?.addEventListener("click", (event) => {
-      event.preventDefault();
-      void this.submitPainRoll();
-    });
+    if (!(root instanceof HTMLElement)) {
+      return;
+    }
+
+    this.bindRootListeners(root);
   }
 
   private async submitPainRoll(): Promise<void> {
@@ -129,6 +125,42 @@ export class YakovDryhPainRollDialog extends BaseApplication {
 
     await finalizeDryhRollWithPain(message, painDice);
     await this.close();
+  }
+
+  private bindRootListeners(root: HTMLElement): void {
+    if (this.boundRoot === root) {
+      return;
+    }
+
+    this.boundRoot?.removeEventListener("click", this.handleRootClickBound);
+    root.addEventListener("click", this.handleRootClickBound);
+    this.boundRoot = root;
+  }
+
+  private handleRootClick(event: MouseEvent): void {
+    const target = event.target;
+
+    if (!(target instanceof Element)) {
+      return;
+    }
+
+    const actionElement = target.closest<HTMLElement>("[data-yakov-dryh-action]");
+
+    if (!actionElement) {
+      return;
+    }
+
+    event.preventDefault();
+
+    switch (actionElement.dataset.yakovDryhAction) {
+      case "cancel-pain-roll":
+        void this.close();
+        break;
+
+      case "submit-pain-roll":
+        void this.submitPainRoll();
+        break;
+    }
   }
 }
 

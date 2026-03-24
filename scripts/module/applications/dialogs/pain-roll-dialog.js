@@ -2,6 +2,8 @@ import { finalizeDryhRollWithPain, getDryhRollCardData } from "../../chat/roll-c
 import { SYSTEM_ID, SYSTEM_TITLE, TEMPLATE_PATHS } from "../../constants.js";
 const BaseApplication = foundry.applications.api.HandlebarsApplicationMixin(foundry.applications.api.ApplicationV2);
 export class YakovDryhPainRollDialog extends BaseApplication {
+    boundRoot = null;
+    handleRootClickBound;
     static DEFAULT_OPTIONS = {
         classes: [SYSTEM_ID, "yakov-dryh-dialog", "yakov-dryh-pain-roll-dialog"],
         form: {
@@ -28,6 +30,7 @@ export class YakovDryhPainRollDialog extends BaseApplication {
     constructor(message) {
         super();
         this.messageId = message.id ?? "";
+        this.handleRootClickBound = this.handleRootClick.bind(this);
     }
     static async openForMessage(message) {
         const dialog = new YakovDryhPainRollDialog(message);
@@ -58,16 +61,11 @@ export class YakovDryhPainRollDialog extends BaseApplication {
     }
     async _onRender(context, options) {
         await super._onRender(context, options);
-        const cancelButton = this.element.querySelector('[data-yakov-dryh-action="cancel-pain-roll"]');
-        const rollButton = this.element.querySelector('[data-yakov-dryh-action="submit-pain-roll"]');
-        cancelButton?.addEventListener("click", (event) => {
-            event.preventDefault();
-            void this.close();
-        });
-        rollButton?.addEventListener("click", (event) => {
-            event.preventDefault();
-            void this.submitPainRoll();
-        });
+        const root = this.element;
+        if (!(root instanceof HTMLElement)) {
+            return;
+        }
+        this.bindRootListeners(root);
     }
     async submitPainRoll() {
         const message = this.message;
@@ -79,6 +77,33 @@ export class YakovDryhPainRollDialog extends BaseApplication {
         const painDice = Math.max(Number.parseInt(painInput?.value ?? "1", 10) || 1, 1);
         await finalizeDryhRollWithPain(message, painDice);
         await this.close();
+    }
+    bindRootListeners(root) {
+        if (this.boundRoot === root) {
+            return;
+        }
+        this.boundRoot?.removeEventListener("click", this.handleRootClickBound);
+        root.addEventListener("click", this.handleRootClickBound);
+        this.boundRoot = root;
+    }
+    handleRootClick(event) {
+        const target = event.target;
+        if (!(target instanceof Element)) {
+            return;
+        }
+        const actionElement = target.closest("[data-yakov-dryh-action]");
+        if (!actionElement) {
+            return;
+        }
+        event.preventDefault();
+        switch (actionElement.dataset.yakovDryhAction) {
+            case "cancel-pain-roll":
+                void this.close();
+                break;
+            case "submit-pain-roll":
+                void this.submitPainRoll();
+                break;
+        }
     }
 }
 function localize(key, fallback) {

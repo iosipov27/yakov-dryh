@@ -1,0 +1,34 @@
+<aside class="yakov-dryh-sheet-shell__column yakov-dryh-sheet-shell__column--sidebar">
+  <div class="yakov-dryh-sheet-shell__header-side">
+    <button
+      class="yakov-dryh-button yakov-dryh-button--secondary"
+      type="button"
+      data-yakov-dryh-action="open-roll-dialog"
+    >
+      {{localize "YAKOV_DRYH.SHEETS.Actor.Character.Actions.Roll"}}
+    </button>
+
+    {{> "systems/yakov-dryh/templates/sheets/parts/character-sheet-resource-card.hbs"
+      cardClasses="yakov-dryh-resource-card--stress yakov-dryh-resource-card--exhaustion"
+      cardStyle=exhaustionCardStyle
+      label=(localize "YAKOV_DRYH.SHEETS.Actor.Character.Fields.Exhaustion")
+      pips=exhaustionPips
+      trackClass="yakov-dryh-pip-track--exhaustion"
+    }}
+  </div>
+
+  {{> "systems/yakov-dryh/templates/sheets/parts/character-sheet-resource-card.hbs"
+    label=(localize "YAKOV_DRYH.SHEETS.Actor.Character.Fields.Discipline")
+    pips=disciplinePips
+  }}
+
+  {{> "systems/yakov-dryh/templates/sheets/parts/character-sheet-resource-card.hbs"
+    cardClasses="yakov-dryh-resource-card--stress yakov-dryh-resource-card--madness"
+    cardStyle=madnessCardStyle
+    label=(localize "YAKOV_DRYH.SHEETS.Actor.Character.Fields.PermanentMadness")
+    pips=madnessPips
+    trackClass="yakov-dryh-pip-track--madness"
+  }}
+
+  {{> "systems/yakov-dryh/templates/sheets/parts/character-sheet-responses-card.hbs"}}
+</aside>

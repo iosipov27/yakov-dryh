@@ -2,9 +2,8 @@ import { YakovDryhChatInteractionDialog } from "../applications/dialogs/chat-int
 import { YakovDryhPainRollDialog } from "../applications/dialogs/pain-roll-dialog.js";
 import { CHAT_CARD_COMMAND, DRYH_SETTINGS, SYSTEM_ID } from "../constants.js";
 import { applyDryhRollGmAction, finalizeDryhRoll, getDryhRollCardData, hasDryhRollCard, resolveDryhRollFailureAction, rerenderDryhRollMessage } from "./roll-card-service.js";
-import { advanceChatCardStatus, getChatCardData, hasInteractiveChatCard, markChatCardDialogOpened } from "./chat-card-service.js";
+import { advanceChatCardStatus, getChatCardData, hasInteractiveChatCard } from "./chat-card-service.js";
 export async function openChatInteraction(message) {
-    await markChatCardDialogOpened(message);
     const liveMessage = (message.id ? game.messages?.get(message.id) : null) ?? message;
     const dialog = new YakovDryhChatInteractionDialog(liveMessage);
     await dialog.render({ force: true });
@@ -35,10 +34,18 @@ export function registerChatHooks(api) {
         if (setting.key !== `${SYSTEM_ID}.${DRYH_SETTINGS.gmDespair}`) {
             return;
         }
-        const rollMessages = (game.messages?.contents ?? []).filter((message) => hasDryhRollCard(message));
-        rollMessages.forEach((message) => {
-            void rerenderDryhRollMessage(message);
-        });
+        const latestMessage = (game.messages?.contents ?? []).at(-1);
+        if (!latestMessage || !hasDryhRollCard(latestMessage)) {
+            return;
+        }
+        const card = getDryhRollCardData(latestMessage);
+        if (card.stage !== "initial" ||
+            card.finalized ||
+            !card.painRolled ||
+            card.gmActionUsed) {
+            return;
+        }
+        void rerenderDryhRollMessage(latestMessage);
     });
 }
 function activateChatCardListeners(message, html, api) {

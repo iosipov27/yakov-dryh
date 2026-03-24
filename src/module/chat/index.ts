@@ -13,15 +13,12 @@ import {
 import {
   advanceChatCardStatus,
   getChatCardData,
-  hasInteractiveChatCard,
-  markChatCardDialogOpened
+  hasInteractiveChatCard
 } from "./chat-card-service.js";
 
 export async function openChatInteraction(
   message: ChatMessage.Implementation
 ): Promise<YakovDryhChatInteractionDialog> {
-  await markChatCardDialogOpened(message);
-
   const liveMessage =
     (message.id ? game.messages?.get(message.id) : null) ?? message;
   const dialog = new YakovDryhChatInteractionDialog(liveMessage);
@@ -65,13 +62,26 @@ export function registerChatHooks(api: YakovDryhSystemApi): void {
       return;
     }
 
-    const rollMessages = (game.messages?.contents ?? []).filter((message) =>
-      hasDryhRollCard(message as ChatMessage.Implementation)
-    ) as ChatMessage.Implementation[];
+    const latestMessage = (game.messages?.contents ?? []).at(-1) as
+      | ChatMessage.Implementation
+      | undefined;
 
-    rollMessages.forEach((message) => {
-      void rerenderDryhRollMessage(message);
-    });
+    if (!latestMessage || !hasDryhRollCard(latestMessage)) {
+      return;
+    }
+
+    const card = getDryhRollCardData(latestMessage);
+
+    if (
+      card.stage !== "initial" ||
+      card.finalized ||
+      !card.painRolled ||
+      card.gmActionUsed
+    ) {
+      return;
+    }
+
+    void rerenderDryhRollMessage(latestMessage);
   });
 }
 

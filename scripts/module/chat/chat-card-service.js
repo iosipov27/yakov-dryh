@@ -25,7 +25,6 @@ export function createDefaultChatCardData(overrides = {}) {
         actorName: overrides.actorName ?? null,
         actorUuid: overrides.actorUuid ?? null,
         detail: overrides.detail?.trim() ?? "",
-        dialogOpens: overrides.dialogOpens ?? 0,
         status: normalizeChatCardStatus(overrides.status),
         summary: overrides.summary?.trim() || DEFAULT_SUMMARY,
         updatedAt: overrides.updatedAt ?? nowIsoString()
@@ -113,12 +112,6 @@ export async function advanceChatCardStatus(message) {
     const nextIndex = currentIndex === CHAT_CARD_STATUSES.length - 1 ? 0 : currentIndex + 1;
     return updateChatCard(message, {
         status: CHAT_CARD_STATUSES[nextIndex]
-    });
-}
-export async function markChatCardDialogOpened(message) {
-    const currentCard = getChatCardData(message);
-    return updateChatCard(message, {
-        dialogOpens: currentCard.dialogOpens + 1
     });
 }
 //# sourceMappingURL=chat-card-service.js.map

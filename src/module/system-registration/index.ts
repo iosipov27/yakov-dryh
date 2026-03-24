@@ -4,9 +4,10 @@ import { renderHopeDespairTracker } from "../applications/ui/hope-despair-tracke
 import { registerDocumentClasses } from "./documents.js";
 import { registerSettings } from "./settings.js";
 import { registerApplicationSheets } from "./sheets.js";
+import { preloadHandlebarsTemplates } from "./templates.js";
 
 export function registerSystem(api: YakovDryhSystemApi): void {
-  Hooks.once("init", () => {
+  Hooks.once("init", async () => {
     const systemData = game.system as typeof game.system & {
       api?: YakovDryhSystemApi;
     };
@@ -17,6 +18,7 @@ export function registerSystem(api: YakovDryhSystemApi): void {
     registerSettings();
     registerApplicationSheets();
     registerChatHooks(api);
+    await preloadHandlebarsTemplates();
   });
 
   Hooks.once("ready", () => {

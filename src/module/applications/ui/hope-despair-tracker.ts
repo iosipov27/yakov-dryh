@@ -56,16 +56,24 @@ export class YakovDryhHopeDespairTracker extends BaseApplication {
   private readonly handleSettingUpdateBound: (setting: SettingDocumentLike) => void;
   private readonly handlePointerMoveBound: (event: PointerEvent) => void;
   private readonly handlePointerUpBound: (event: PointerEvent) => void;
+  private readonly handleRootClickBound: (event: MouseEvent) => void;
+  private readonly handleRootPointerDownBound: (event: PointerEvent) => void;
+  private boundRoot: HTMLElement | null;
   private dragPosition: TrackerDragPosition | null;
   private dragState: TrackerDragState | null;
+  private settingRenderTimeout: number | null;
 
   constructor(options: object = {}) {
     super(options);
     this.handleSettingUpdateBound = this.handleSettingUpdate.bind(this);
     this.handlePointerMoveBound = this.handlePointerMove.bind(this);
     this.handlePointerUpBound = this.handlePointerUp.bind(this);
+    this.handleRootClickBound = this.handleRootClick.bind(this);
+    this.handleRootPointerDownBound = this.handleRootPointerDown.bind(this);
+    this.boundRoot = null;
     this.dragPosition = null;
     this.dragState = null;
+    this.settingRenderTimeout = null;
     Hooks.on("updateSetting", this.handleSettingUpdateBound);
   }
 
@@ -100,37 +108,7 @@ export class YakovDryhHopeDespairTracker extends BaseApplication {
     }
 
     this.applyDragPosition(root);
-
-    const dragHandle = root.querySelector(
-      "[data-yakov-dryh-drag-handle]"
-    ) as HTMLElement | null;
-    const actionButtons = root.querySelectorAll<HTMLElement>(
-      "[data-yakov-dryh-resource-pool]"
-    );
-
-    dragHandle?.addEventListener("pointerdown", (event) => {
-      this.beginDrag(event, root);
-    });
-
-    actionButtons.forEach((button) => {
-      button.addEventListener("click", (event) => {
-        event.preventDefault();
-
-        const pool = button.dataset.yakovDryhResourcePool as
-          | YakovDryhSharedPool
-          | undefined;
-        const delta = Number.parseInt(
-          button.dataset.yakovDryhResourceDelta ?? "0",
-          10
-        );
-
-        if (!pool || !Number.isFinite(delta)) {
-          return;
-        }
-
-        void this.adjustPool(pool, delta);
-      });
-    });
+    this.bindRootListeners(root);
   }
 
   override async close(
@@ -141,6 +119,10 @@ export class YakovDryhHopeDespairTracker extends BaseApplication {
     }
 
     this.stopDragging();
+    this.clearScheduledRender();
+    this.boundRoot?.removeEventListener("click", this.handleRootClickBound);
+    this.boundRoot?.removeEventListener("pointerdown", this.handleRootPointerDownBound);
+    this.boundRoot = null;
     Hooks.off("updateSetting", this.handleSettingUpdateBound);
 
     return super.close(
@@ -161,7 +143,6 @@ export class YakovDryhHopeDespairTracker extends BaseApplication {
     }
 
     await adjustSharedPool(pool, delta);
-    await this.render({ force: true });
   }
 
   private beginDrag(event: PointerEvent, root: HTMLElement): void {
@@ -186,6 +167,64 @@ export class YakovDryhHopeDespairTracker extends BaseApplication {
     window.addEventListener("pointerup", this.handlePointerUpBound);
     window.addEventListener("pointercancel", this.handlePointerUpBound);
     event.preventDefault();
+  }
+
+  private bindRootListeners(root: HTMLElement): void {
+    if (this.boundRoot === root) {
+      return;
+    }
+
+    this.boundRoot?.removeEventListener("click", this.handleRootClickBound);
+    this.boundRoot?.removeEventListener("pointerdown", this.handleRootPointerDownBound);
+    root.addEventListener("click", this.handleRootClickBound);
+    root.addEventListener("pointerdown", this.handleRootPointerDownBound);
+    this.boundRoot = root;
+  }
+
+  private handleRootClick(event: MouseEvent): void {
+    const target = event.target;
+
+    if (!(target instanceof Element)) {
+      return;
+    }
+
+    const actionElement = target.closest<HTMLElement>("[data-yakov-dryh-resource-pool]");
+
+    if (!actionElement) {
+      return;
+    }
+
+    const pool = actionElement.dataset.yakovDryhResourcePool as
+      | YakovDryhSharedPool
+      | undefined;
+    const delta = Number.parseInt(
+      actionElement.dataset.yakovDryhResourceDelta ?? "0",
+      10
+    );
+
+    if (!pool || !Number.isFinite(delta)) {
+      return;
+    }
+
+    event.preventDefault();
+    void this.adjustPool(pool, delta);
+  }
+
+  private handleRootPointerDown(event: PointerEvent): void {
+    const target = event.target;
+
+    if (!(target instanceof Element)) {
+      return;
+    }
+
+    const dragHandle = target.closest<HTMLElement>("[data-yakov-dryh-drag-handle]");
+    const root = this.boundRoot;
+
+    if (!dragHandle || !root) {
+      return;
+    }
+
+    this.beginDrag(event, root);
   }
 
   private handlePointerMove(event: PointerEvent): void {
@@ -269,7 +308,23 @@ export class YakovDryhHopeDespairTracker extends BaseApplication {
       return;
     }
 
-    void this.render();
+    if (this.settingRenderTimeout !== null) {
+      return;
+    }
+
+    this.settingRenderTimeout = window.setTimeout(() => {
+      this.settingRenderTimeout = null;
+      void this.render();
+    }, 0);
+  }
+
+  private clearScheduledRender(): void {
+    if (this.settingRenderTimeout === null) {
+      return;
+    }
+
+    window.clearTimeout(this.settingRenderTimeout);
+    this.settingRenderTimeout = null;
   }
 }
 

@@ -65,6 +65,13 @@ const RESPONSE_TYPE_ORDER: YakovDryhResponseType[] = [
 ];
 
 export class YakovDryhCharacterSheet extends BaseSheet {
+  private boundRoot: HTMLElement | null = null;
+  private readonly handleRootChangeBound = (event: Event): void => {
+    this.handleRootChange(event);
+  };
+  private readonly handleRootClickBound = (event: MouseEvent): void => {
+    this.handleRootClick(event);
+  };
   private responseEditSlots: YakovDryhResponseSlotData[] | null = null;
 
   static DEFAULT_OPTIONS = {
@@ -206,66 +213,7 @@ export class YakovDryhCharacterSheet extends BaseSheet {
       return;
     }
 
-    const rollButton = root.querySelector(
-      '[data-yakov-dryh-action="open-roll-dialog"]'
-    ) as HTMLElement | null;
-    const responseAddButtons = root.querySelectorAll(
-      "[data-yakov-dryh-response-add]"
-    ) as NodeListOf<HTMLButtonElement>;
-    const responseEditButton = root.querySelector(
-      '[data-yakov-dryh-response-action="edit"]'
-    ) as HTMLButtonElement | null;
-    const responseSaveButton = root.querySelector(
-      '[data-yakov-dryh-response-action="save"]'
-    ) as HTMLButtonElement | null;
-    const responseToggles = root.querySelectorAll(
-      "[data-yakov-dryh-response-toggle]"
-    ) as NodeListOf<HTMLInputElement>;
-    const poolButtons = root.querySelectorAll(
-      "[data-yakov-dryh-pool-action]"
-    ) as NodeListOf<HTMLButtonElement>;
-    const scarsInput = root.querySelector(
-      'textarea[data-yakov-dryh-field="scars"]'
-    ) as HTMLTextAreaElement | null;
-
-    rollButton?.addEventListener("click", (event: MouseEvent) => {
-      event.preventDefault();
-      void this.openRollDialog();
-    });
-    responseAddButtons.forEach((button: HTMLButtonElement) => {
-      button.addEventListener("click", (event: MouseEvent) => {
-        event.preventDefault();
-        void this.addResponseSlot(button.dataset.yakovDryhResponseAdd ?? "");
-      });
-    });
-    responseEditButton?.addEventListener("click", (event: MouseEvent) => {
-      event.preventDefault();
-      void this.startResponseEdit();
-    });
-    responseSaveButton?.addEventListener("click", (event: MouseEvent) => {
-      event.preventDefault();
-      void this.saveResponseEdit();
-    });
-    responseToggles.forEach((input: HTMLInputElement) => {
-      input.addEventListener("change", () => {
-        void this.updateResponseChecked(
-          Number.parseInt(input.dataset.yakovDryhResponseToggle ?? "", 10),
-          input.checked
-        );
-      });
-    });
-    poolButtons.forEach((button) => {
-      button.addEventListener("click", (event: MouseEvent) => {
-        event.preventDefault();
-        void this.updatePoolFromAction(
-          button.dataset.yakovDryhPoolField as EditableSheetPoolField,
-          button.dataset.yakovDryhPoolAction as "decrease" | "increase"
-        );
-      });
-    });
-    scarsInput?.addEventListener("change", () => {
-      void this.updateScars(scarsInput.value);
-    });
+    this.bindRootListeners(root);
   }
 
   private async openRollDialog(): Promise<void> {
@@ -274,6 +222,87 @@ export class YakovDryhCharacterSheet extends BaseSheet {
     }
 
     await YakovDryhRollDialog.openForActor(this.actor);
+  }
+
+  private bindRootListeners(root: HTMLElement): void {
+    if (this.boundRoot === root) {
+      return;
+    }
+
+    this.boundRoot?.removeEventListener("click", this.handleRootClickBound);
+    this.boundRoot?.removeEventListener("change", this.handleRootChangeBound);
+    root.addEventListener("click", this.handleRootClickBound);
+    root.addEventListener("change", this.handleRootChangeBound);
+    this.boundRoot = root;
+  }
+
+  private handleRootClick(event: MouseEvent): void {
+    const target = event.target;
+
+    if (!(target instanceof Element)) {
+      return;
+    }
+
+    const actionElement = target.closest<HTMLElement>(
+      "[data-yakov-dryh-action], [data-yakov-dryh-response-action], [data-yakov-dryh-response-add], [data-yakov-dryh-pool-action]"
+    );
+
+    if (!actionElement) {
+      return;
+    }
+
+    event.preventDefault();
+
+    if (actionElement.dataset.yakovDryhAction === "open-roll-dialog") {
+      void this.openRollDialog();
+      return;
+    }
+
+    if (actionElement.dataset.yakovDryhResponseAdd) {
+      void this.addResponseSlot(actionElement.dataset.yakovDryhResponseAdd);
+      return;
+    }
+
+    switch (actionElement.dataset.yakovDryhResponseAction) {
+      case "edit":
+        void this.startResponseEdit();
+        return;
+
+      case "save":
+        void this.saveResponseEdit();
+        return;
+    }
+
+    const field = actionElement.dataset.yakovDryhPoolField as EditableSheetPoolField | undefined;
+    const action = actionElement.dataset.yakovDryhPoolAction as
+      | "decrease"
+      | "increase"
+      | undefined;
+
+    if (!field || !action) {
+      return;
+    }
+
+    void this.updatePoolFromAction(field, action);
+  }
+
+  private handleRootChange(event: Event): void {
+    const target = event.target;
+
+    if (target instanceof HTMLInputElement && target.dataset.yakovDryhResponseToggle) {
+      void this.updateResponseChecked(
+        Number.parseInt(target.dataset.yakovDryhResponseToggle, 10),
+        target.checked
+      );
+      return;
+    }
+
+    if (
+      target instanceof HTMLTextAreaElement &&
+      target.dataset.yakovDryhField === "scars"
+    ) {
+      void this.updateScars(target.value);
+    }
   }
 
   private async updatePoolFromAction(

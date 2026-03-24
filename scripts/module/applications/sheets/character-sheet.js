@@ -10,6 +10,13 @@ const RESPONSE_TYPE_ORDER = [
     YAKOV_DRYH_RESPONSE_TYPES.flight
 ];
 export class YakovDryhCharacterSheet extends BaseSheet {
+    boundRoot = null;
+    handleRootChangeBound = (event) => {
+        this.handleRootChange(event);
+    };
+    handleRootClickBound = (event) => {
+        this.handleRootClick(event);
+    };
     responseEditSlots = null;
     static DEFAULT_OPTIONS = {
         classes: ["actor", SYSTEM_ID, "yakov-dryh-sheet"],
@@ -95,51 +102,67 @@ export class YakovDryhCharacterSheet extends BaseSheet {
         if (!(root instanceof HTMLElement)) {
             return;
         }
-        const rollButton = root.querySelector('[data-yakov-dryh-action="open-roll-dialog"]');
-        const responseAddButtons = root.querySelectorAll("[data-yakov-dryh-response-add]");
-        const responseEditButton = root.querySelector('[data-yakov-dryh-response-action="edit"]');
-        const responseSaveButton = root.querySelector('[data-yakov-dryh-response-action="save"]');
-        const responseToggles = root.querySelectorAll("[data-yakov-dryh-response-toggle]");
-        const poolButtons = root.querySelectorAll("[data-yakov-dryh-pool-action]");
-        const scarsInput = root.querySelector('textarea[data-yakov-dryh-field="scars"]');
-        rollButton?.addEventListener("click", (event) => {
-            event.preventDefault();
-            void this.openRollDialog();
-        });
-        responseAddButtons.forEach((button) => {
-            button.addEventListener("click", (event) => {
-                event.preventDefault();
-                void this.addResponseSlot(button.dataset.yakovDryhResponseAdd ?? "");
-            });
-        });
-        responseEditButton?.addEventListener("click", (event) => {
-            event.preventDefault();
-            void this.startResponseEdit();
-        });
-        responseSaveButton?.addEventListener("click", (event) => {
-            event.preventDefault();
-            void this.saveResponseEdit();
-        });
-        responseToggles.forEach((input) => {
-            input.addEventListener("change", () => {
-                void this.updateResponseChecked(Number.parseInt(input.dataset.yakovDryhResponseToggle ?? "", 10), input.checked);
-            });
-        });
-        poolButtons.forEach((button) => {
-            button.addEventListener("click", (event) => {
-                event.preventDefault();
-                void this.updatePoolFromAction(button.dataset.yakovDryhPoolField, button.dataset.yakovDryhPoolAction);
-            });
-        });
-        scarsInput?.addEventListener("change", () => {
-            void this.updateScars(scarsInput.value);
-        });
+        this.bindRootListeners(root);
     }
     async openRollDialog() {
         if (!this.actor) {
             return;
         }
         await YakovDryhRollDialog.openForActor(this.actor);
+    }
+    bindRootListeners(root) {
+        if (this.boundRoot === root) {
+            return;
+        }
+        this.boundRoot?.removeEventListener("click", this.handleRootClickBound);
+        this.boundRoot?.removeEventListener("change", this.handleRootChangeBound);
+        root.addEventListener("click", this.handleRootClickBound);
+        root.addEventListener("change", this.handleRootChangeBound);
+        this.boundRoot = root;
+    }
+    handleRootClick(event) {
+        const target = event.target;
+        if (!(target instanceof Element)) {
+            return;
+        }
+        const actionElement = target.closest("[data-yakov-dryh-action], [data-yakov-dryh-response-action], [data-yakov-dryh-response-add], [data-yakov-dryh-pool-action]");
+        if (!actionElement) {
+            return;
+        }
+        event.preventDefault();
+        if (actionElement.dataset.yakovDryhAction === "open-roll-dialog") {
+            void this.openRollDialog();
+            return;
+        }
+        if (actionElement.dataset.yakovDryhResponseAdd) {
+            void this.addResponseSlot(actionElement.dataset.yakovDryhResponseAdd);
+            return;
+        }
+        switch (actionElement.dataset.yakovDryhResponseAction) {
+            case "edit":
+                void this.startResponseEdit();
+                return;
+            case "save":
+                void this.saveResponseEdit();
+                return;
+        }
+        const field = actionElement.dataset.yakovDryhPoolField;
+        const action = actionElement.dataset.yakovDryhPoolAction;
+        if (!field || !action) {
+            return;
+        }
+        void this.updatePoolFromAction(field, action);
+    }
+    handleRootChange(event) {
+        const target = event.target;
+        if (target instanceof HTMLInputElement && target.dataset.yakovDryhResponseToggle) {
+            void this.updateResponseChecked(Number.parseInt(target.dataset.yakovDryhResponseToggle, 10), target.checked);
+            return;
+        }
+        if (target instanceof HTMLTextAreaElement &&
+            target.dataset.yakovDryhField === "scars") {
+            void this.updateScars(target.value);
+        }
     }
     async updatePoolFromAction(field, action) {
         const actor = this.actor;

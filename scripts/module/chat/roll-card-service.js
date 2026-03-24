@@ -161,14 +161,17 @@ async function renderRollCard(card) {
     });
 }
 async function resolveActor(actorUuid, actorId) {
+    if (actorId) {
+        const actor = game.actors?.get(actorId) ?? null;
+        if (actor) {
+            return actor;
+        }
+    }
     if (actorUuid) {
         const document = await fromUuid(actorUuid);
         if (document instanceof Actor) {
             return document;
         }
-    }
-    if (actorId) {
-        return game.actors?.get(actorId) ?? null;
     }
     return null;
 }

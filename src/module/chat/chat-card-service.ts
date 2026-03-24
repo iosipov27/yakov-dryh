@@ -10,7 +10,6 @@ export interface YakovDryhChatCardData {
   actorName: string | null;
   actorUuid: string | null;
   detail: string;
-  dialogOpens: number;
   status: YakovDryhChatCardStatus;
   summary: string;
   updatedAt: string;
@@ -28,7 +27,6 @@ export interface UpdateInteractiveChatCardInput {
   actorName?: string | null;
   actorUuid?: string | null;
   detail?: string;
-  dialogOpens?: number;
   status?: YakovDryhChatCardStatus;
   summary?: string;
 }
@@ -71,7 +69,6 @@ export function createDefaultChatCardData(
     actorName: overrides.actorName ?? null,
     actorUuid: overrides.actorUuid ?? null,
     detail: overrides.detail?.trim() ?? "",
-    dialogOpens: overrides.dialogOpens ?? 0,
     status: normalizeChatCardStatus(overrides.status),
     summary: overrides.summary?.trim() || DEFAULT_SUMMARY,
     updatedAt: overrides.updatedAt ?? nowIsoString()
@@ -211,15 +208,5 @@ export async function advanceChatCardStatus(
 
   return updateChatCard(message, {
     status: CHAT_CARD_STATUSES[nextIndex]
-  });
-}
-
-export async function markChatCardDialogOpened(
-  message: ChatMessage.Implementation
-): Promise<YakovDryhChatCardData> {
-  const currentCard = getChatCardData(message);
-
-  return updateChatCard(message, {
-    dialogOpens: currentCard.dialogOpens + 1
   });
 }

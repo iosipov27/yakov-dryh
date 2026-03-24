@@ -3,14 +3,16 @@ import { renderHopeDespairTracker } from "../applications/ui/hope-despair-tracke
 import { registerDocumentClasses } from "./documents.js";
 import { registerSettings } from "./settings.js";
 import { registerApplicationSheets } from "./sheets.js";
+import { preloadHandlebarsTemplates } from "./templates.js";
 export function registerSystem(api) {
-    Hooks.once("init", () => {
+    Hooks.once("init", async () => {
         const systemData = game.system;
         systemData.api = api;
         registerDocumentClasses();
         registerSettings();
         registerApplicationSheets();
         registerChatHooks(api);
+        await preloadHandlebarsTemplates();
     });
     Hooks.once("ready", () => {
         void renderHopeDespairTracker();

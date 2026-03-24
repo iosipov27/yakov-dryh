@@ -1,0 +1,32 @@
+<div
+  class="yakov-dryh-resource-card{{#if cardClasses}} {{cardClasses}}{{/if}}"
+  {{#if cardStyle}}style="{{cardStyle}}"{{/if}}
+>
+  <div class="yakov-dryh-dice-picker">
+    <div class="yakov-dryh-dice-picker__header">
+      <h4>{{label}}</h4>
+    </div>
+    <div class="yakov-dryh-pip-track{{#if trackClass}} {{trackClass}}{{/if}} yakov-dryh-dice-picker__track">
+      {{#each pips}}
+        {{#if action}}
+          <button
+            class="yakov-dryh-dice-picker__pip-control yakov-dryh-dice-picker__pip-control--{{action}}"
+            type="button"
+            data-yakov-dryh-pool-field="{{field}}"
+            data-yakov-dryh-pool-action="{{action}}"
+            {{#if tooltip}}title="{{tooltip}}" aria-label="{{tooltip}}"{{/if}}
+          >
+            <span class="yakov-dryh-pip {{#if filled}}yakov-dryh-pip--filled{{/if}}"></span>
+            <span class="yakov-dryh-dice-picker__action-icon yakov-dryh-dice-picker__action-icon--{{action}}">
+              <i class="{{iconClass}}"></i>
+            </span>
+          </button>
+        {{else}}
+          <span class="yakov-dryh-dice-picker__pip-shell">
+            <span class="yakov-dryh-pip {{#if filled}}yakov-dryh-pip--filled{{/if}}"></span>
+          </span>
+        {{/if}}
+      {{/each}}
+    </div>
+  </div>
+</div>

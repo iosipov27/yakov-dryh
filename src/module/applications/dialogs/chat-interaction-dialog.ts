@@ -31,6 +31,9 @@ interface ChatInteractionDialogContext extends Record<string, unknown> {
 }
 
 export class YakovDryhChatInteractionDialog extends BaseApplication {
+  private boundRoot: HTMLElement | null = null;
+  private readonly handleRootClickBound: (event: MouseEvent) => void;
+
   static override DEFAULT_OPTIONS = {
     classes: [SYSTEM_ID, "yakov-dryh-dialog"],
     position: {
@@ -57,6 +60,7 @@ export class YakovDryhChatInteractionDialog extends BaseApplication {
   constructor(message: ChatMessage.Implementation) {
     super();
     this.messageId = message.id ?? "";
+    this.handleRootClickBound = this.handleRootClick.bind(this);
   }
 
   get message(): ChatMessage.Implementation | null {
@@ -107,22 +111,7 @@ export class YakovDryhChatInteractionDialog extends BaseApplication {
       return;
     }
 
-    const applyButton = root.querySelector<HTMLElement>(
-      '[data-yakov-dryh-action="apply-updates"]'
-    );
-    const advanceButton = root.querySelector<HTMLElement>(
-      '[data-yakov-dryh-action="advance-status"]'
-    );
-
-    applyButton?.addEventListener("click", (event) => {
-      event.preventDefault();
-      void this.applyUpdates(root);
-    });
-
-    advanceButton?.addEventListener("click", (event) => {
-      event.preventDefault();
-      void this.advanceStatus();
-    });
+    this.bindRootListeners(root);
   }
 
   private async applyUpdates(root: HTMLElement): Promise<void> {
@@ -170,5 +159,45 @@ export class YakovDryhChatInteractionDialog extends BaseApplication {
 
     await advanceChatCardStatus(message);
     await this.render({ force: true });
+  }
+
+  private bindRootListeners(root: HTMLElement): void {
+    if (this.boundRoot === root) {
+      return;
+    }
+
+    this.boundRoot?.removeEventListener("click", this.handleRootClickBound);
+    root.addEventListener("click", this.handleRootClickBound);
+    this.boundRoot = root;
+  }
+
+  private handleRootClick(event: MouseEvent): void {
+    const target = event.target;
+
+    if (!(target instanceof Element)) {
+      return;
+    }
+
+    const actionElement = target.closest<HTMLElement>("[data-yakov-dryh-action]");
+
+    if (!actionElement) {
+      return;
+    }
+
+    const root = this.boundRoot;
+
+    event.preventDefault();
+
+    switch (actionElement.dataset.yakovDryhAction) {
+      case "apply-updates":
+        if (root) {
+          void this.applyUpdates(root);
+        }
+        break;
+
+      case "advance-status":
+        void this.advanceStatus();
+        break;
+    }
   }
 }
