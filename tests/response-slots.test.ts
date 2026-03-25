@@ -2,10 +2,12 @@ import { describe, expect, it } from "vitest";
 
 import {
   addResponseSlot,
+  getCheckedResponseTypes,
   countConfiguredResponses,
   countResponsesByType,
   createDefaultResponsesData,
-  hasCheckedResponses
+  hasCheckedResponses,
+  uncheckFirstCheckedResponse
 } from "../src/module/data/index.ts";
 
 describe("response slot helpers", () => {
@@ -96,5 +98,41 @@ describe("response slot helpers", () => {
         ]
       })
     ).toBe(true);
+  });
+
+  it("lists only the response types that are currently checked", () => {
+    expect(
+      getCheckedResponseTypes({
+        max: 3,
+        slots: [
+          { checked: true, type: "fight" },
+          { checked: false, type: "fight" },
+          { checked: true, type: "flight" }
+        ]
+      })
+    ).toEqual(["fight", "flight"]);
+  });
+
+  it("unchecks the first checked response of the selected type", () => {
+    expect(
+      uncheckFirstCheckedResponse(
+        {
+          max: 3,
+          slots: [
+            { checked: true, type: "fight" },
+            { checked: true, type: "fight" },
+            { checked: false, type: "flight" }
+          ]
+        },
+        "fight"
+      )
+    ).toEqual({
+      max: 3,
+      slots: [
+        { checked: false, type: "fight" },
+        { checked: true, type: "fight" },
+        { checked: false, type: "flight" }
+      ]
+    });
   });
 });

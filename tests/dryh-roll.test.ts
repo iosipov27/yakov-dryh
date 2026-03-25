@@ -1,7 +1,9 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 import {
+  applyHopeBoostToRollResult,
   applyPainRollToRollResult,
+  applyPostRollExhaustionToRollResult,
   applyGmActionToRollResult,
   createRollResult,
   getDominantPool
@@ -95,5 +97,37 @@ describe("DRYH roll logic", () => {
 
     expect(modifiedResult.pools.pain).toEqual([2]);
     expect(modifiedResult.successes.pain).toBe(1);
+  });
+
+  it("adds a Discipline die showing 1 when Hope improves the roll", () => {
+    const initialResult = createRollResult({
+      discipline: [4],
+      exhaustion: [5],
+      madness: [6],
+      pain: [1]
+    });
+    const modifiedResult = applyHopeBoostToRollResult(initialResult);
+
+    expect(modifiedResult.pools.discipline).toEqual([4, 1]);
+    expect(modifiedResult.successes.player).toBe(1);
+  });
+
+  it("rolls one extra Exhaustion die for the post-roll Exhaustion option", () => {
+    testGlobal.CONFIG = {
+      Dice: {
+        randomUniform: vi.fn().mockReturnValueOnce(0.4)
+      }
+    };
+
+    const initialResult = createRollResult({
+      discipline: [4],
+      exhaustion: [5],
+      madness: [6],
+      pain: [6]
+    });
+    const modifiedResult = applyPostRollExhaustionToRollResult(initialResult);
+
+    expect(modifiedResult.pools.exhaustion).toEqual([5, 3]);
+    expect(modifiedResult.successes.player).toBe(1);
   });
 });

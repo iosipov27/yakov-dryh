@@ -130,6 +130,26 @@ export function applyPainRollToRollResult(
   return createRollResult(pools);
 }
 
+export function applyPostRollExhaustionToRollResult(
+  rollResult: YakovDryhRollResult
+): YakovDryhRollResult {
+  const pools = clonePools(rollResult.pools);
+
+  pools.exhaustion.push(...rollD6Pool(1));
+
+  return createRollResult(pools);
+}
+
+export function applyHopeBoostToRollResult(
+  rollResult: YakovDryhRollResult
+): YakovDryhRollResult {
+  const pools = clonePools(rollResult.pools);
+
+  pools.discipline.push(1);
+
+  return createRollResult(pools);
+}
+
 export function applyGmActionToRollResult(
   rollResult: YakovDryhRollResult,
   action: YakovDryhGmAction

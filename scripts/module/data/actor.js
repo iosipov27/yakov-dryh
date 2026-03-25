@@ -72,6 +72,18 @@ export function getUncheckedResponseTypes(responses) {
         YAKOV_DRYH_RESPONSE_TYPES.flight
     ].filter((type) => availableTypes.has(type));
 }
+export function getCheckedResponseTypes(responses) {
+    const availableTypes = new Set();
+    responses.slots.forEach((slot) => {
+        if (slot.type !== "" && slot.checked) {
+            availableTypes.add(slot.type);
+        }
+    });
+    return [
+        YAKOV_DRYH_RESPONSE_TYPES.fight,
+        YAKOV_DRYH_RESPONSE_TYPES.flight
+    ].filter((type) => availableTypes.has(type));
+}
 export function countConfiguredResponses(responses) {
     return responses.slots.filter((slot) => slot.type !== "").length;
 }
@@ -116,6 +128,21 @@ export function checkFirstUncheckedResponse(responses, responseType) {
             ? {
                 ...slot,
                 checked: true
+            }
+            : slot)
+    };
+}
+export function uncheckFirstCheckedResponse(responses, responseType) {
+    const slotIndex = responses.slots.findIndex((slot) => slot.type === responseType && slot.checked);
+    if (slotIndex < 0) {
+        return null;
+    }
+    return {
+        ...responses,
+        slots: responses.slots.map((slot, index) => index === slotIndex
+            ? {
+                ...slot,
+                checked: false
             }
             : slot)
     };

@@ -4,6 +4,7 @@ export {
   getSharedDespairTotal,
   getSharedHopeTotal,
   getSharedPools,
+  spendHope,
   spendDespairForHope,
   type YakovDryhSharedPool,
   type YakovDryhSharedPools

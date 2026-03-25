@@ -3,10 +3,12 @@ import { YakovDryhPainRollDialog } from "../applications/dialogs/pain-roll-dialo
 import type { YakovDryhSystemApi } from "../api.js";
 import { CHAT_CARD_COMMAND, DRYH_SETTINGS, SYSTEM_ID } from "../constants.js";
 import {
+  applyDryhRollPlayerAction,
   applyDryhRollGmAction,
   finalizeDryhRoll,
   getDryhRollCardData,
   hasDryhRollCard,
+  resolveDryhRollDominantAction,
   resolveDryhRollFailureAction,
   rerenderDryhRollMessage
 } from "./roll-card-service.js";
@@ -58,7 +60,10 @@ export function registerChatHooks(api: YakovDryhSystemApi): void {
   });
 
   Hooks.on("updateSetting", (setting: { key?: string }) => {
-    if (setting.key !== `${SYSTEM_ID}.${DRYH_SETTINGS.gmDespair}`) {
+    if (
+      setting.key !== `${SYSTEM_ID}.${DRYH_SETTINGS.gmDespair}` &&
+      setting.key !== `${SYSTEM_ID}.${DRYH_SETTINGS.sharedHope}`
+    ) {
       return;
     }
 
@@ -72,12 +77,7 @@ export function registerChatHooks(api: YakovDryhSystemApi): void {
 
     const card = getDryhRollCardData(latestMessage);
 
-    if (
-      card.stage !== "initial" ||
-      card.finalized ||
-      !card.painRolled ||
-      card.gmActionUsed
-    ) {
+    if (card.stage !== "initial" || card.finalized) {
       return;
     }
 
@@ -118,16 +118,15 @@ function activateDryhRollListeners(
   html: HTMLElement
 ): void {
   const card = getDryhRollCardData(message);
+  const actor = card.actorId
+    ? game.actors?.get(card.actorId) ?? null
+    : null;
+  const canUseActorOwnerActions = actor?.isOwner ?? false;
   const actionElements = html.querySelectorAll<HTMLElement>(
     "[data-yakov-dryh-roll-action]"
   );
 
   actionElements.forEach((actionElement) => {
-    if (game.user && !game.user.isGM) {
-      actionElement.hidden = true;
-      return;
-    }
-
     const action = actionElement.dataset.yakovDryhRollAction;
     const targetPool = actionElement.dataset.targetPool as
       | "discipline"
@@ -140,8 +139,28 @@ function activateDryhRollListeners(
       | "flight"
       | undefined;
 
+    const isGmAction =
+      action === "roll-pain" ||
+      action === "finalize" ||
+      action === "add6" ||
+      action === "remove6" ||
+      action === "resolve-failure";
+    const isPlayerAction =
+      action === "spend-hope" || action === "take-post-roll-exhaustion";
+    const isActorOwnerResolutionAction = action === "resolve-dominant";
+
+    if (isGmAction && game.user && !game.user.isGM) {
+      actionElement.hidden = true;
+      return;
+    }
+
+    if ((isPlayerAction || isActorOwnerResolutionAction) && !canUseActorOwnerActions) {
+      actionElement.hidden = true;
+      return;
+    }
+
     if (card.stage === "final") {
-      if (action !== "resolve-failure") {
+      if (action !== "resolve-failure" && action !== "resolve-dominant") {
         actionElement.setAttribute("disabled", "disabled");
         return;
       }
@@ -149,18 +168,35 @@ function activateDryhRollListeners(
       actionElement.addEventListener("click", (event: MouseEvent) => {
         event.preventDefault();
 
+        if (action === "resolve-failure") {
+          html
+            .querySelectorAll<HTMLElement>("[data-yakov-dryh-roll-action='resolve-failure']")
+            .forEach((element) => element.setAttribute("disabled", "disabled"));
+
+          void resolveDryhRollFailureAction(message, {
+            responseType: actionElement.dataset.failureAction === "check-response"
+              ? (responseType ?? null)
+              : null,
+            type:
+              actionElement.dataset.failureAction === "check-response"
+                ? "check-response"
+                : "gain-exhaustion"
+          });
+          return;
+        }
+
         html
-          .querySelectorAll<HTMLElement>("[data-yakov-dryh-roll-action]")
+          .querySelectorAll<HTMLElement>("[data-yakov-dryh-roll-action='resolve-dominant']")
           .forEach((element) => element.setAttribute("disabled", "disabled"));
 
-        void resolveDryhRollFailureAction(message, {
-          responseType: actionElement.dataset.failureAction === "check-response"
+        void resolveDryhRollDominantAction(message, {
+          responseType: actionElement.dataset.dominantAction === "uncheck-response"
             ? (responseType ?? null)
             : null,
           type:
-            actionElement.dataset.failureAction === "check-response"
-              ? "check-response"
-              : "gain-exhaustion"
+            actionElement.dataset.dominantAction === "uncheck-response"
+              ? "uncheck-response"
+              : "remove-exhaustion"
         });
       });
 
@@ -174,6 +210,14 @@ function activateDryhRollListeners(
 
     actionElement.addEventListener("click", (event: MouseEvent) => {
       event.preventDefault();
+
+      if (action === "spend-hope" || action === "take-post-roll-exhaustion") {
+        actionElement.setAttribute("disabled", "disabled");
+        void applyDryhRollPlayerAction(message, {
+          type: action
+        });
+        return;
+      }
 
       if (action === "roll-pain") {
         void YakovDryhPainRollDialog.openForMessage(message);

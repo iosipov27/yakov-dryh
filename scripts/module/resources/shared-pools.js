@@ -23,6 +23,15 @@ export async function adjustSharedPool(pool, delta) {
 export async function addDespair(value) {
     return adjustSharedPool("despair", value);
 }
+export async function spendHope() {
+    const currentHope = getSharedHopeTotal();
+    if (currentHope < 1) {
+        return null;
+    }
+    const nextHope = currentHope - 1;
+    await setSharedPoolTotal("hope", nextHope);
+    return nextHope;
+}
 export async function spendDespairForHope() {
     const currentDespair = getSharedDespairTotal();
     if (currentDespair < 1) {

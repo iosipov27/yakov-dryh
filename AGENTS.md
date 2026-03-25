@@ -196,6 +196,8 @@ Use this section as the current checklist for development progress against the a
   - optional `+1 Exhaustion` before the roll
   - temporary Madness selection for the roll
   - player-side rolling for Discipline, Exhaustion, and Madness
+  - optional post-roll `+1 Exhaustion` if the pre-roll option was not used
+  - optional post-roll `-1 Hope` to add a `1` to the Discipline pool
 - GM flow currently supports:
   - a separate Pain roll dialog after the player roll
   - one `+6` or `-6` intervention after Pain is rolled
@@ -208,6 +210,9 @@ Use this section as the current checklist for development progress against the a
 - Resolution currently supports:
   - final success or failure comparison
   - dominant-pool effect text
+  - button-driven player resolution for `Discipline` dominant:
+    - un-check a checked Fight / Flight Response
+    - remove `1 Exhaustion`
   - automatic `+1 Exhaustion` when Exhaustion dominates
   - automatic `+1 Despair` when Pain dominates
   - button-driven GM failure resolution from the final roll card
@@ -224,20 +229,20 @@ Use this section as the current checklist for development progress against the a
 - Conflict resolution is staged as:
   - player roll first
   - GM Pain roll later
-  - GM intervention after that
-- The aid-sheet rules describe a single conflict roll against Pain, so this staged flow must be treated as a rules divergence until intentionally kept or replaced.
-- Hope gained from GM intervention is immediately visible in the shared tracker.
-- The rules state that this Hope is unavailable until the next scene, and that availability gate is not yet modeled.
-- The player can currently take `+1 Exhaustion` only before the roll.
-- The rules also allow taking `+1 Exhaustion` after the roll, which is not implemented.
-- The player cannot currently spend shared Hope after the roll to add a `1` to Discipline.
-- The player cannot currently use Hope for:
-  - Get A Break
-  - Improve Success
-  - Restore Discipline
-- Discipline dominant is only partially implemented:
-  - reminder text exists
-  - the actual choice to un-check a Response or remove `1 Exhaustion` is not implemented
+  - optional GM intervention after that
+  - finalization in a separate step
+- `RULES.pdf` describes a single conflict roll against Pain, so this staged flow remains a rules divergence until intentionally kept or replaced.
+- GM shadow-casting is only partially modeled:
+  - Hope gained from converting `-1 Despair` to `+1 Hope` is immediately available
+  - the rules say this Hope is unavailable until the next scene
+  - the current flow allows only one `+6` or `-6` intervention per conflict
+  - if GM intervention causes Pain to dominate, the current code still awards `+1 Despair`
+- Player post-roll options are incomplete:
+  - they are still attached to the staged flow instead of a single conflict-resolution pipeline
+- Shared Hope lifecycle is incomplete:
+  - Get A Break is not implemented
+  - Restore Discipline is not implemented
+  - Hope coins do not automatically vanish at session end
 - Exhaustion dominant is only partially rules-compliant:
   - `+1 Exhaustion` is applied
   - Crash cannot happen while Exhaustion is clamped to `6`
@@ -245,21 +250,26 @@ Use this section as the current checklist for development progress against the a
   - reminder text exists
   - choosing and checking a Response is not implemented
   - Snap is not implemented
-- Pain dominant is only partially rules-compliant:
-  - `+1 Despair` is applied
-  - the exception for GM shadow-casting or Pain dominance caused by GM intervention is not implemented
+- Failure aftermath is only partially implemented:
+  - GM can resolve `+1 Exhaustion` or check a Fight / Flight Response from the final roll card
+  - Snap and Crash side effects from those choices are not implemented
 - Snap flow is not implemented:
   - un-check all Responses
   - convert `-1 Discipline` to `+1 Madness`
   - Nightmare transition at `0 Discipline`
 - Crash and Sleep flow is not implemented:
   - Crash when Exhaustion exceeds `6`
+  - falling asleep or dying by scene end
   - sleep aftermath values
   - talent lock during recovery
   - Discipline restoration after staying awake again
 - Helping other characters is not implemented.
-- Talent mechanics are not implemented beyond text storage.
-- Scar mechanics are not implemented beyond text storage.
+- Talent mechanics are not implemented beyond text storage:
+  - Exhaustion talent requirements and rewards are not modeled
+  - Madness talent scaling from added Madness dice is not modeled
+- Scar mechanics are not implemented beyond text storage:
+  - Recall A Scar rerolls are not modeled
+  - Transform A Scar effects are not modeled
 
 #### Tracker Usage Rule
 

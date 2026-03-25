@@ -14,6 +14,7 @@
         "Finalized": "Initial result has been finalized.",
         "FinalTitle": "Final Result",
         "InitialTitle": "Roll Result",
+        "PlayerActions": "Player post-roll actions:",
         "RollPain": "Roll Pain Dice",
         "Successes": "Successes:"
       },
@@ -31,7 +32,12 @@
       "Actions": {
         "CheckFight": "Check Fight",
         "CheckFlight": "Check Flight",
-        "GainExhaustion": "+1 Exhaustion"
+        "GainExhaustion": "+1 Exhaustion",
+        "RemoveExhaustion": "Remove 1 Exhaustion",
+        "SpendHopeForDiscipline": "-1 Hope -> add 1 to Discipline",
+        "TakePostRollExhaustion": "+1 Exhaustion after roll",
+        "UncheckFightResponse": "Un-check Fight Response",
+        "UncheckFlightResponse": "Un-check Flight Response"
       },
       "PainDialog": {
         "Eyebrow": "Pain Roll",
@@ -41,6 +47,9 @@
       },
       "Effects": {
         "DespairTotal": "Total Despair:",
+        "DisciplineResolvedRemoveExhaustion": "{name} removes 1 Exhaustion.",
+        "DisciplineResolvedUncheckFight": "A Fight Response was un-checked.",
+        "DisciplineResolvedUncheckFlight": "A Flight Response was un-checked.",
         "FailureChoice": "GM narrates the failure and chooses either +1 Exhaustion or mark a Response.",
         "FailureGainExhaustion": "GM narrates the failure and must apply +1 Exhaustion because Madness already covers checking a Response.",
         "FailureMarkResponse": "GM narrates the failure and must mark a Response because Exhaustion already covers +1 Exhaustion.",
@@ -130,6 +139,7 @@
         "ActorUnavailable": "Actor is no longer available.",
         "ChatMessageUnavailable": "Chat message is no longer available.",
         "DespairRequired": "At least 1 Despair is required to adjust a six.",
+        "HopeRequired": "At least 1 Hope is required to improve Discipline.",
         "ResponseUnavailable": "Response is no longer available.",
         "SharedPoolsGmOnly": "Only the GM can change Hope / Despair."
       }

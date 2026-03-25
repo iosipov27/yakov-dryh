@@ -1,7 +1,9 @@
 import {
   checkFirstUncheckedResponse,
   DRYH_EXHAUSTION_MAX,
+  getCheckedResponseTypes,
   normalizeCharacterSystemData,
+  uncheckFirstCheckedResponse,
   type YakovDryhResponseType
 } from "../data/index.js";
 import {
@@ -11,7 +13,9 @@ import {
   TEMPLATE_PATHS
 } from "../constants.js";
 import {
+  applyHopeBoostToRollResult,
   applyPainRollToRollResult,
+  applyPostRollExhaustionToRollResult,
   applyGmActionToRollResult,
   type YakovDryhDominantPool,
   type YakovDryhGmAction,
@@ -20,6 +24,8 @@ import {
 import {
   addDespair,
   getSharedDespairTotal,
+  getSharedHopeTotal,
+  spendHope,
   spendDespairForHope
 } from "../resources/index.js";
 import {
@@ -31,6 +37,12 @@ import {
   type YakovDryhFailureResolutionAction
 } from "./failure-resolution.js";
 
+export interface YakovDryhPlayerAdjustmentsData {
+  hopeBoostUsed: boolean;
+  postRollExhaustionTaken: boolean;
+  preRollExhaustionTaken: boolean;
+}
+
 export interface YakovDryhInitialRollCardData {
   actorId: string | null;
   actorName: string;
@@ -39,6 +51,7 @@ export interface YakovDryhInitialRollCardData {
   finalized: boolean;
   gmActionUsed: boolean;
   painRolled: boolean;
+  playerAdjustments: YakovDryhPlayerAdjustmentsData;
   rollResult: YakovDryhRollResult;
   stage: "initial";
 }
@@ -48,6 +61,7 @@ export interface YakovDryhFinalRollCardData {
   actorName: string;
   actorUuid: string | null;
   dominantEffectText: string;
+  dominantResolutionText: string | null;
   failureConsequence: YakovDryhFailureConsequence;
   failureEffectText: string | null;
   failureResolutionText: string | null;
@@ -62,6 +76,7 @@ export type YakovDryhRollCardData =
 
 interface CreateInitialRollMessageInput {
   actor: Actor.Implementation;
+  preRollExhaustionTaken: boolean;
   rollResult: YakovDryhRollResult;
 }
 
@@ -87,10 +102,44 @@ interface FailureResolutionButtonSummary {
   type: YakovDryhFailureResolutionAction["type"];
 }
 
+export interface YakovDryhPlayerRollAction {
+  type: "spend-hope" | "take-post-roll-exhaustion";
+}
+
+interface PlayerActionButtonSummary {
+  label: string;
+  type: YakovDryhPlayerRollAction["type"];
+}
+
+export interface YakovDryhDominantResolutionAction {
+  responseType: YakovDryhResponseType | null;
+  type: "remove-exhaustion" | "uncheck-response";
+}
+
+interface DominantResolutionButtonSummary {
+  label: string;
+  responseType: YakovDryhResponseType | null;
+  type: YakovDryhDominantResolutionAction["type"];
+}
+
+function createDefaultPlayerAdjustmentsData(): YakovDryhPlayerAdjustmentsData {
+  return {
+    hopeBoostUsed: false,
+    postRollExhaustionTaken: false,
+    preRollExhaustionTaken: false
+  };
+}
+
 function cloneRollCardData(card: YakovDryhRollCardData): YakovDryhRollCardData {
   if (card.stage === "initial") {
+    const playerAdjustments = {
+      ...createDefaultPlayerAdjustmentsData(),
+      ...card.playerAdjustments
+    };
+
     return {
       ...card,
+      playerAdjustments,
       rollResult: {
         ...card.rollResult,
         pools: {
@@ -225,6 +274,51 @@ function getPoolSummaries(rollResult: YakovDryhRollResult): RollPoolSummary[] {
   ];
 }
 
+function canTakePostRollExhaustion(
+  card: YakovDryhInitialRollCardData
+): boolean {
+  return (
+    card.painRolled &&
+    !card.playerAdjustments.preRollExhaustionTaken &&
+    !card.playerAdjustments.postRollExhaustionTaken &&
+    card.rollResult.pools.exhaustion.length < DRYH_EXHAUSTION_MAX
+  );
+}
+
+function canSpendHopeForDiscipline(
+  card: YakovDryhInitialRollCardData
+): boolean {
+  return card.painRolled && !card.playerAdjustments.hopeBoostUsed && getSharedHopeTotal() >= 1;
+}
+
+function getPlayerActionButtons(
+  card: YakovDryhInitialRollCardData
+): PlayerActionButtonSummary[] {
+  const buttons: PlayerActionButtonSummary[] = [];
+
+  if (canSpendHopeForDiscipline(card)) {
+    buttons.push({
+      label: localize(
+        "YAKOV_DRYH.ROLL.Actions.SpendHopeForDiscipline",
+        "-1 Hope -> add 1 to Discipline"
+      ),
+      type: "spend-hope"
+    });
+  }
+
+  if (canTakePostRollExhaustion(card)) {
+    buttons.push({
+      label: localize(
+        "YAKOV_DRYH.ROLL.Actions.TakePostRollExhaustion",
+        "+1 Exhaustion after roll"
+      ),
+      type: "take-post-roll-exhaustion"
+    });
+  }
+
+  return buttons;
+}
+
 async function renderRollCard(card: YakovDryhRollCardData): Promise<string> {
   const rollResult = getRollResult(card);
   const isInitial = card.stage === "initial";
@@ -241,16 +335,31 @@ async function renderRollCard(card: YakovDryhRollCardData): Promise<string> {
     : ((card as { effectText?: string }).effectText ?? null);
   const dominantEffectText = isInitial
     ? null
-    : card.dominantEffectText ?? legacyEffectText;
+    : card.dominantResolutionText ?? card.dominantEffectText ?? legacyEffectText;
   const failureEffectText = isInitial
     ? null
     : card.failureResolutionText ?? card.failureEffectText;
+  const dominantResolutionButtons = isInitial
+    ? []
+    : await getDominantResolutionButtons(card);
+  const dominantResolutionPrompt =
+    dominantResolutionButtons.length > 1
+      ? localize("YAKOV_DRYH.ROLL.Chat.ChooseOne", "Choose one:")
+      : null;
   const failureResolutionButtons = isInitial
     ? []
     : await getFailureResolutionButtons(card);
+  const playerActionButtons = isInitial ? getPlayerActionButtons(card) : [];
   const failureResolutionPrompt =
     failureResolutionButtons.length > 1
       ? localize("YAKOV_DRYH.ROLL.Chat.ChooseOne", "Choose one:")
+      : null;
+  const playerActionPrompt =
+    playerActionButtons.length > 0
+      ? localize(
+          "YAKOV_DRYH.ROLL.Chat.PlayerActions",
+          "Player post-roll actions:"
+        )
       : null;
 
   return foundry.applications.handlebars.renderTemplate(TEMPLATE_PATHS.dryhRollCard, {
@@ -260,16 +369,22 @@ async function renderRollCard(card: YakovDryhRollCardData): Promise<string> {
     canRollPain,
     dominantLabel: formatDominantPool(rollResult.dominant),
     dominantEffectText,
+    dominantResolutionButtons,
+    dominantResolutionPrompt,
     failureEffectText,
     failureResolutionButtons,
     failureResolutionPrompt,
     finalMessageId,
     hasEffectText: Boolean(dominantEffectText || failureEffectText),
+    hasDominantResolutionButtons: dominantResolutionButtons.length > 0,
     hasFailureResolutionButtons: failureResolutionButtons.length > 0,
+    hasPlayerActionButtons: playerActionButtons.length > 0,
     isFinal: card.stage === "final",
     isInitial,
     isResolved,
     outcomeLabel: formatOutcome(rollResult.outcome),
+    playerActionButtons,
+    playerActionPrompt,
     poolSummaries: getPoolSummaries(rollResult),
     rollResult,
     showAdjustments,
@@ -326,6 +441,70 @@ function createFailureResolutionButtonLabel(
   }
 }
 
+function createDominantResolutionButtonLabel(
+  action: YakovDryhDominantResolutionAction
+): string {
+  switch (action.type) {
+    case "remove-exhaustion":
+      return localize(
+        "YAKOV_DRYH.ROLL.Actions.RemoveExhaustion",
+        "Remove 1 Exhaustion"
+      );
+
+    case "uncheck-response":
+      return action.responseType === "flight"
+        ? localize(
+            "YAKOV_DRYH.ROLL.Actions.UncheckFlightResponse",
+            "Un-check Flight Response"
+          )
+        : localize(
+            "YAKOV_DRYH.ROLL.Actions.UncheckFightResponse",
+            "Un-check Fight Response"
+          );
+  }
+}
+
+async function getDominantResolutionButtons(
+  card: YakovDryhFinalRollCardData
+): Promise<DominantResolutionButtonSummary[]> {
+  if (card.modifiedResult.dominant !== "discipline" || card.dominantResolutionText) {
+    return [];
+  }
+
+  const actor = await resolveActor(card.actorUuid, card.actorId);
+
+  if (!actor) {
+    return [];
+  }
+
+  const actorData = normalizeCharacterSystemData(actor.system);
+  const buttons: DominantResolutionButtonSummary[] = [];
+
+  if (actorData.exhaustion > 0) {
+    buttons.push({
+      label: createDominantResolutionButtonLabel({
+        responseType: null,
+        type: "remove-exhaustion"
+      }),
+      responseType: null,
+      type: "remove-exhaustion"
+    });
+  }
+
+  getCheckedResponseTypes(actorData.responses).forEach((responseType) => {
+    buttons.push({
+      label: createDominantResolutionButtonLabel({
+        responseType,
+        type: "uncheck-response"
+      }),
+      responseType,
+      type: "uncheck-response"
+    });
+  });
+
+  return buttons;
+}
+
 async function getFailureResolutionButtons(
   card: YakovDryhFinalRollCardData
 ): Promise<FailureResolutionButtonSummary[]> {
@@ -372,6 +551,10 @@ function createInitialRollCardData(
     finalized: false,
     gmActionUsed: false,
     painRolled: false,
+    playerAdjustments: {
+      ...createDefaultPlayerAdjustmentsData(),
+      preRollExhaustionTaken: input.preRollExhaustionTaken
+    },
     rollResult: input.rollResult,
     stage: "initial"
   };
@@ -550,6 +733,7 @@ async function createFinalizedRollMessage(
     actorName: card.actorName,
     actorUuid: card.actorUuid,
     dominantEffectText,
+    dominantResolutionText: null,
     failureConsequence,
     failureEffectText,
     failureResolutionText: null,
@@ -615,6 +799,86 @@ export async function applyDryhRollGmAction(
   };
 
   return updateInitialRollMessage(message, updatedCard);
+}
+
+export async function applyDryhRollPlayerAction(
+  message: ChatMessage.Implementation,
+  action: YakovDryhPlayerRollAction
+): Promise<YakovDryhInitialRollCardData | null> {
+  const card = getRollCardFlag(message);
+
+  if (!card || card.stage !== "initial" || card.finalized) {
+    return null;
+  }
+
+  switch (action.type) {
+    case "spend-hope": {
+      if (!canSpendHopeForDiscipline(card)) {
+        return null;
+      }
+
+      const nextHope = await spendHope();
+
+      if (nextHope === null) {
+        ui.notifications?.warn(
+          localize(
+            "YAKOV_DRYH.UI.Warnings.HopeRequired",
+            "At least 1 Hope is required to improve Discipline."
+          )
+        );
+
+        return null;
+      }
+
+      return updateInitialRollMessage(message, {
+        ...card,
+        playerAdjustments: {
+          ...card.playerAdjustments,
+          hopeBoostUsed: true
+        },
+        rollResult: applyHopeBoostToRollResult(card.rollResult)
+      });
+    }
+
+    case "take-post-roll-exhaustion": {
+      if (!canTakePostRollExhaustion(card)) {
+        return null;
+      }
+
+      const actor = await resolveActor(card.actorUuid, card.actorId);
+
+      if (!actor) {
+        ui.notifications?.warn(
+          localize(
+            "YAKOV_DRYH.UI.Warnings.ActorUnavailable",
+            "Actor is no longer available."
+          )
+        );
+
+        return null;
+      }
+
+      const actorData = normalizeCharacterSystemData(actor.system);
+      const nextExhaustion = Math.min(actorData.exhaustion + 1, DRYH_EXHAUSTION_MAX);
+
+      if (nextExhaustion === actorData.exhaustion) {
+        return null;
+      }
+
+      await actor.update({
+        "system.exhaustion": nextExhaustion
+      } as Record<string, unknown>);
+
+      return updateInitialRollMessage(message, {
+        ...card,
+        playerAdjustments: {
+          ...card.playerAdjustments,
+          postRollExhaustionTaken: true
+        },
+        rollResult: applyPostRollExhaustionToRollResult(card.rollResult)
+      });
+    }
+  }
 }
 
 export async function resolveDryhRollFailureAction(
@@ -708,6 +972,103 @@ export async function resolveDryhRollFailureAction(
   return updateFinalRollMessage(message, {
     ...card,
     failureResolutionText
+  });
+}
+
+export async function resolveDryhRollDominantAction(
+  message: ChatMessage.Implementation,
+  action: YakovDryhDominantResolutionAction
+): Promise<YakovDryhFinalRollCardData | null> {
+  const card = getRollCardFlag(message);
+
+  if (
+    !card ||
+    card.stage !== "final" ||
+    card.modifiedResult.dominant !== "discipline" ||
+    card.dominantResolutionText
+  ) {
+    return null;
+  }
+
+  const actor = await resolveActor(card.actorUuid, card.actorId);
+
+  if (!actor) {
+    ui.notifications?.warn(
+      localize(
+        "YAKOV_DRYH.UI.Warnings.ActorUnavailable",
+        "Actor is no longer available."
+      )
+    );
+
+    return null;
+  }
+
+  let dominantResolutionText: string;
+
+  switch (action.type) {
+    case "remove-exhaustion": {
+      const actorData = normalizeCharacterSystemData(actor.system);
+
+      if (actorData.exhaustion < 1) {
+        return null;
+      }
+
+      await actor.update({
+        "system.exhaustion": actorData.exhaustion - 1
+      } as Record<string, unknown>);
+
+      dominantResolutionText = formatActorNameEffect(
+        "YAKOV_DRYH.ROLL.Effects.DisciplineResolvedRemoveExhaustion",
+        "{name} removes 1 Exhaustion.",
+        actor.name ?? localize("DOCUMENT.Actor", "Actor")
+      );
+      break;
+    }
+
+    case "uncheck-response": {
+      if (!action.responseType) {
+        return null;
+      }
+
+      const actorData = normalizeCharacterSystemData(actor.system);
+      const responses = uncheckFirstCheckedResponse(
+        actorData.responses,
+        action.responseType
+      );
+
+      if (!responses) {
+        ui.notifications?.warn(
+          `${formatResponseType(action.responseType)} ${localize(
+            "YAKOV_DRYH.UI.Warnings.ResponseUnavailable",
+            "Response is no longer available."
+          )}`
+        );
+
+        return null;
+      }
+
+      await actor.update({
+        "system.responses.slots": responses.slots,
+        "system.responses.max": responses.max
+      } as Record<string, unknown>);
+
+      dominantResolutionText =
+        action.responseType === "flight"
+          ? localize(
+              "YAKOV_DRYH.ROLL.Effects.DisciplineResolvedUncheckFlight",
+              "A Flight Response was un-checked."
+            )
+          : localize(
+              "YAKOV_DRYH.ROLL.Effects.DisciplineResolvedUncheckFight",
+              "A Fight Response was un-checked."
+            );
+      break;
+    }
+  }
+
+  return updateFinalRollMessage(message, {
+    ...card,
+    dominantResolutionText
   });
 }
 

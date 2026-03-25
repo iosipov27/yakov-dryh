@@ -1,6 +1,8 @@
 export {
+  applyHopeBoostToRollResult,
   DRYH_POOL_PRIORITY,
   applyPainRollToRollResult,
+  applyPostRollExhaustionToRollResult,
   applyGmActionToRollResult,
   countSuccesses,
   createRollResult,

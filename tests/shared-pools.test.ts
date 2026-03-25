@@ -4,6 +4,7 @@ import { DRYH_SETTINGS, SYSTEM_ID } from "../src/module/constants.ts";
 import {
   adjustSharedPool,
   getSharedPools,
+  spendHope,
   spendDespairForHope
 } from "../src/module/resources/index.ts";
 
@@ -93,6 +94,30 @@ describe("shared DRYH pools", () => {
     testGlobal.game = { settings };
 
     await expect(spendDespairForHope()).resolves.toBeNull();
+    expect(settings.set).not.toHaveBeenCalled();
+  });
+
+  it("spends one Hope when the player improves Discipline", async () => {
+    const values = new Map<string, number>([[DRYH_SETTINGS.sharedHope, 2]]);
+    const settings = createMockSettings(values);
+
+    testGlobal.game = { settings };
+
+    await expect(spendHope()).resolves.toBe(1);
+    expect(settings.set).toHaveBeenCalledWith(
+      SYSTEM_ID,
+      DRYH_SETTINGS.sharedHope,
+      1
+    );
+  });
+
+  it("blocks spending Hope when none is available", async () => {
+    const values = new Map<string, number>([[DRYH_SETTINGS.sharedHope, 0]]);
+    const settings = createMockSettings(values);
+
+    testGlobal.game = { settings };
+
+    await expect(spendHope()).resolves.toBeNull();
     expect(settings.set).not.toHaveBeenCalled();
   });
 });

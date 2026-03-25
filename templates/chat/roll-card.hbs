@@ -110,6 +110,27 @@
     </footer>
   {{/if}}
 
+  {{#if hasPlayerActionButtons}}
+    <footer class="yakov-dryh-roll-card__resolution">
+      {{#if playerActionPrompt}}
+        <p class="yakov-dryh-copy yakov-dryh-roll-card__resolution-copy">
+          {{playerActionPrompt}}
+        </p>
+      {{/if}}
+      <div class="yakov-dryh-actions mt12">
+        {{#each playerActionButtons}}
+          <button
+            class="yakov-dryh-button yakov-dryh-button--secondary"
+            type="button"
+            data-yakov-dryh-roll-action="{{type}}"
+          >
+            {{label}}
+          </button>
+        {{/each}}
+      </div>
+    </footer>
+  {{/if}}
+
   {{#if canFinalize}}
     <footer class="yakov-dryh-actions mt12">
       <button
@@ -119,6 +140,29 @@
       >
         {{localize "YAKOV_DRYH.ROLL.Chat.Finalize"}}
       </button>
+    </footer>
+  {{/if}}
+
+  {{#if hasDominantResolutionButtons}}
+    <footer class="yakov-dryh-roll-card__resolution">
+      {{#if dominantResolutionPrompt}}
+        <p class="yakov-dryh-copy yakov-dryh-roll-card__resolution-copy">
+          {{dominantResolutionPrompt}}
+        </p>
+      {{/if}}
+      <div class="yakov-dryh-actions mt12">
+        {{#each dominantResolutionButtons}}
+          <button
+            class="yakov-dryh-button yakov-dryh-button--secondary"
+            type="button"
+            data-yakov-dryh-roll-action="resolve-dominant"
+            data-dominant-action="{{type}}"
+            {{#if responseType}}data-response-type="{{responseType}}"{{/if}}
+          >
+            {{label}}
+          </button>
+        {{/each}}
+      </div>
     </footer>
   {{/if}}
 

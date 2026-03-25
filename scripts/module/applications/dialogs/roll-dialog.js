@@ -104,6 +104,7 @@ export class YakovDryhRollDialog extends BaseApplication {
         }
         await createDryhInitialRollMessage({
             actor,
+            preRollExhaustionTaken: addExhaustion,
             rollResult: rollDryhCheck({
                 discipline: actorData.discipline,
                 exhaustion: nextExhaustion,
