@@ -103,12 +103,16 @@ interface FailureResolutionButtonSummary {
 }
 
 export interface YakovDryhPlayerRollAction {
-  type: "spend-hope" | "take-post-roll-exhaustion";
+  type: YakovDryhPlayerRollActionType;
 }
+
+export type YakovDryhPlayerRollActionType =
+  | "spend-hope"
+  | "take-post-roll-exhaustion";
 
 interface PlayerActionButtonSummary {
   label: string;
-  type: YakovDryhPlayerRollAction["type"];
+  type: YakovDryhPlayerRollActionType;
 }
 
 export interface YakovDryhDominantResolutionAction {
@@ -274,7 +278,7 @@ function getPoolSummaries(rollResult: YakovDryhRollResult): RollPoolSummary[] {
   ];
 }
 
-function canTakePostRollExhaustion(
+export function canTakePostRollExhaustion(
   card: YakovDryhInitialRollCardData
 ): boolean {
   return (
@@ -285,38 +289,46 @@ function canTakePostRollExhaustion(
   );
 }
 
-function canSpendHopeForDiscipline(
-  card: YakovDryhInitialRollCardData
+export function canSpendHopeForDiscipline(
+  card: YakovDryhInitialRollCardData,
+  hopeTotal = getSharedHopeTotal()
 ): boolean {
-  return card.painRolled && !card.playerAdjustments.hopeBoostUsed && getSharedHopeTotal() >= 1;
+  return card.painRolled && !card.playerAdjustments.hopeBoostUsed && hopeTotal >= 1;
+}
+
+export function getAvailablePlayerRollActionTypes(
+  card: YakovDryhInitialRollCardData,
+  hopeTotal = getSharedHopeTotal()
+): YakovDryhPlayerRollActionType[] {
+  const actions: YakovDryhPlayerRollActionType[] = [];
+
+  if (canSpendHopeForDiscipline(card, hopeTotal)) {
+    actions.push("spend-hope");
+  }
+
+  if (canTakePostRollExhaustion(card)) {
+    actions.push("take-post-roll-exhaustion");
+  }
+
+  return actions;
 }
 
 function getPlayerActionButtons(
   card: YakovDryhInitialRollCardData
 ): PlayerActionButtonSummary[] {
-  const buttons: PlayerActionButtonSummary[] = [];
-
-  if (canSpendHopeForDiscipline(card)) {
-    buttons.push({
-      label: localize(
-        "YAKOV_DRYH.ROLL.Actions.SpendHopeForDiscipline",
-        "-1 Hope -> add 1 to Discipline"
-      ),
-      type: "spend-hope"
-    });
-  }
-
-  if (canTakePostRollExhaustion(card)) {
-    buttons.push({
-      label: localize(
-        "YAKOV_DRYH.ROLL.Actions.TakePostRollExhaustion",
-        "+1 Exhaustion after roll"
-      ),
-      type: "take-post-roll-exhaustion"
-    });
-  }
-
-  return buttons;
+  return getAvailablePlayerRollActionTypes(card).map((type) => ({
+    label:
+      type === "spend-hope"
+        ? localize(
+            "YAKOV_DRYH.ROLL.Actions.SpendHopeForDiscipline",
+            "-1 Hope -> add 1 to Discipline"
+          )
+        : localize(
+            "YAKOV_DRYH.ROLL.Actions.TakePostRollExhaustion",
+            "+1 Exhaustion after roll"
+          ),
+    type
+  }));
 }
 
 async function renderRollCard(card: YakovDryhRollCardData): Promise<string> {

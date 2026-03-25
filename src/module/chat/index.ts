@@ -17,6 +17,7 @@ import {
   getChatCardData,
   hasInteractiveChatCard
 } from "./chat-card-service.js";
+import { shouldHideDryhRollAction } from "./roll-card-visibility.js";
 
 export async function openChatInteraction(
   message: ChatMessage.Implementation
@@ -139,22 +140,12 @@ function activateDryhRollListeners(
       | "flight"
       | undefined;
 
-    const isGmAction =
-      action === "roll-pain" ||
-      action === "finalize" ||
-      action === "add6" ||
-      action === "remove6" ||
-      action === "resolve-failure";
-    const isPlayerAction =
-      action === "spend-hope" || action === "take-post-roll-exhaustion";
-    const isActorOwnerResolutionAction = action === "resolve-dominant";
-
-    if (isGmAction && game.user && !game.user.isGM) {
-      actionElement.hidden = true;
-      return;
-    }
-
-    if ((isPlayerAction || isActorOwnerResolutionAction) && !canUseActorOwnerActions) {
+    if (
+      shouldHideDryhRollAction(action, {
+        isActorOwner: canUseActorOwnerActions,
+        isGm: game.user?.isGM ?? false
+      })
+    ) {
       actionElement.hidden = true;
       return;
     }

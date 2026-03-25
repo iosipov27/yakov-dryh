@@ -121,30 +121,32 @@ function getPoolSummaries(rollResult) {
         }
     ];
 }
-function canTakePostRollExhaustion(card) {
+export function canTakePostRollExhaustion(card) {
     return (card.painRolled &&
         !card.playerAdjustments.preRollExhaustionTaken &&
         !card.playerAdjustments.postRollExhaustionTaken &&
         card.rollResult.pools.exhaustion.length < DRYH_EXHAUSTION_MAX);
 }
-function canSpendHopeForDiscipline(card) {
-    return card.painRolled && !card.playerAdjustments.hopeBoostUsed && getSharedHopeTotal() >= 1;
+export function canSpendHopeForDiscipline(card, hopeTotal = getSharedHopeTotal()) {
+    return card.painRolled && !card.playerAdjustments.hopeBoostUsed && hopeTotal >= 1;
 }
-function getPlayerActionButtons(card) {
-    const buttons = [];
-    if (canSpendHopeForDiscipline(card)) {
-        buttons.push({
-            label: localize("YAKOV_DRYH.ROLL.Actions.SpendHopeForDiscipline", "-1 Hope -> add 1 to Discipline"),
-            type: "spend-hope"
-        });
+export function getAvailablePlayerRollActionTypes(card, hopeTotal = getSharedHopeTotal()) {
+    const actions = [];
+    if (canSpendHopeForDiscipline(card, hopeTotal)) {
+        actions.push("spend-hope");
     }
     if (canTakePostRollExhaustion(card)) {
-        buttons.push({
-            label: localize("YAKOV_DRYH.ROLL.Actions.TakePostRollExhaustion", "+1 Exhaustion after roll"),
-            type: "take-post-roll-exhaustion"
-        });
+        actions.push("take-post-roll-exhaustion");
     }
-    return buttons;
+    return actions;
+}
+function getPlayerActionButtons(card) {
+    return getAvailablePlayerRollActionTypes(card).map((type) => ({
+        label: type === "spend-hope"
+            ? localize("YAKOV_DRYH.ROLL.Actions.SpendHopeForDiscipline", "-1 Hope -> add 1 to Discipline")
+            : localize("YAKOV_DRYH.ROLL.Actions.TakePostRollExhaustion", "+1 Exhaustion after roll"),
+        type
+    }));
 }
 async function renderRollCard(card) {
     const rollResult = getRollResult(card);

@@ -275,6 +275,8 @@ Use this section as the current checklist for development progress against the a
 
 - When implementing DRYH mechanics, update this tracker if behavior changes in a way that affects rules compliance.
 - Treat items in `Open Rules Compliance Gaps` as the default backlog for mechanics parity unless the user explicitly chooses a house-rule divergence.
+- When implementing new runtime or gameplay logic, add or update automated tests for that behavior in the same task.
+- Do not consider new application logic complete until its expected behavior is covered by tests, unless the change is documentation-only, style-only, or the user explicitly agrees to defer tests.
 
 ---
 
@@ -566,6 +568,11 @@ tools/
 - Prefer configuration over hardcoded values.
 - Avoid using jquery
 - Use Typescript, prefer using types
+- Treat tests as part of the feature:
+  - new behavior should ship with tests
+  - changed behavior should update existing tests or add new ones
+  - prefer small focused tests for gameplay rules, chat-card actions, shared resources, and actor-state transitions
+  - if logic is hard to test because it is mixed with Foundry runtime code, split pure decision logic into small helpers before adding more behavior
 - Follow the Single Responsibility Principle:
   - each file, class, and function should have one clear reason to change
   - keep domain modules focused on domain logic
@@ -600,7 +607,8 @@ Before finishing a task, the agent should:
 
 1. Confirm changed files are intentional.
 2. Check for obvious path or manifest mistakes.
-3. Summarize what changed and what still needs to be done.
+3. Run the relevant automated tests for the changed logic, or explicitly state why tests were not run.
+4. Summarize what changed and what still needs to be done.
 
 ## Open Setup Items
 
