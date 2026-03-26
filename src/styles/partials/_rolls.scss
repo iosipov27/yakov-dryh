@@ -45,6 +45,28 @@
     margin: 0;
     padding: 0.8rem 0.9rem;
   }
+
+  &__snap-effect {
+    background: rgb(176 28 46 / 10%);
+    border: 1px solid rgb(176 28 46 / 26%);
+    border-left: 4px solid var(--yakov-dryh-madness);
+    border-radius: 12px;
+    color: var(--yakov-dryh-madness);
+    margin-top: 0.75rem;
+    padding: 0.8rem 0.9rem;
+
+    strong {
+      display: block;
+      font-size: 0.98rem;
+      letter-spacing: 0.02em;
+      margin: 0;
+      text-transform: uppercase;
+    }
+
+    p {
+      margin: 0.35rem 0 0;
+    }
+  }
 }
 
 .yakov-dryh-roll-pool {

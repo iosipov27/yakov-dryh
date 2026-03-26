@@ -5,6 +5,7 @@ import {
   canTakePostRollExhaustion,
   canSpendHopeForDiscipline,
   getAvailablePlayerRollActionTypes,
+  getVisibleRollPools,
   getRollCardPresentationState,
   type YakovDryhFinalRollCardData,
   type YakovDryhInitialRollCardData
@@ -62,6 +63,7 @@ function createFinalCard(
       pain: [3]
     }),
     originalRollId: "message-1",
+    snapEffectText: null,
     stage: "final",
     ...overrides
   };
@@ -131,6 +133,25 @@ describe("DRYH player post-roll action availability", () => {
 });
 
 describe("DRYH roll-card presentation state", () => {
+  it("hides the Pain pool before Pain is rolled", () => {
+    expect(
+      getVisibleRollPools(
+        createInitialCard({
+          painRolled: false
+        })
+      )
+    ).toEqual(["discipline", "exhaustion", "madness"]);
+  });
+
+  it("shows the Pain pool after Pain is rolled", () => {
+    expect(getVisibleRollPools(createInitialCard())).toEqual([
+      "discipline",
+      "exhaustion",
+      "madness",
+      "pain"
+    ]);
+  });
+
   it("hides outcome and dominant sections before Pain is rolled", () => {
     expect(
       getRollCardPresentationState(

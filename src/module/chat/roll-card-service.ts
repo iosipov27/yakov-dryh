@@ -30,6 +30,11 @@ import {
   type YakovDryhShadowCastingData
 } from "./shadow-casting.js";
 import {
+  applySnapToCharacterData,
+  hasNoUncheckedResponses,
+  shouldAutoApplySnap
+} from "./snap.js";
+import {
   addHope,
   addDespair,
   getSharedDespairTotal,
@@ -81,6 +86,7 @@ export interface YakovDryhFinalRollCardData {
   failureResolutionText: string | null;
   modifiedResult: YakovDryhRollResult;
   originalRollId: string | null;
+  snapEffectText: string | null;
   stage: "final";
 }
 
@@ -257,45 +263,42 @@ function getRollDiceSummary(
   }));
 }
 
-function getPoolSummaries(rollResult: YakovDryhRollResult): RollPoolSummary[] {
-  return [
-    {
-      cssClass: "yakov-dryh-roll-pool--discipline",
-      dice: getRollDiceSummary("discipline", rollResult.pools.discipline),
-      hasDice: rollResult.pools.discipline.length > 0,
-      hasSix: rollResult.pools.discipline.includes(6),
-      key: "discipline",
-      label: formatDominantPool("discipline"),
-      successes: rollResult.pools.discipline.filter((die) => die <= 3).length
-    },
-    {
-      cssClass: "yakov-dryh-roll-pool--exhaustion",
-      dice: getRollDiceSummary("exhaustion", rollResult.pools.exhaustion),
-      hasDice: rollResult.pools.exhaustion.length > 0,
-      hasSix: rollResult.pools.exhaustion.includes(6),
-      key: "exhaustion",
-      label: formatDominantPool("exhaustion"),
-      successes: rollResult.pools.exhaustion.filter((die) => die <= 3).length
-    },
-    {
-      cssClass: "yakov-dryh-roll-pool--madness",
-      dice: getRollDiceSummary("madness", rollResult.pools.madness),
-      hasDice: rollResult.pools.madness.length > 0,
-      hasSix: rollResult.pools.madness.includes(6),
-      key: "madness",
-      label: formatDominantPool("madness"),
-      successes: rollResult.pools.madness.filter((die) => die <= 3).length
-    },
-    {
-      cssClass: "yakov-dryh-roll-pool--pain",
-      dice: getRollDiceSummary("pain", rollResult.pools.pain),
-      hasDice: rollResult.pools.pain.length > 0,
-      hasSix: rollResult.pools.pain.includes(6),
-      key: "pain",
-      label: formatDominantPool("pain"),
-      successes: rollResult.pools.pain.filter((die) => die <= 3).length
-    }
-  ];
+function createPoolSummary(
+  key: YakovDryhDominantPool,
+  rollResult: YakovDryhRollResult
+): RollPoolSummary {
+  return {
+    cssClass: `yakov-dryh-roll-pool--${key}`,
+    dice: getRollDiceSummary(key, rollResult.pools[key]),
+    hasDice: rollResult.pools[key].length > 0,
+    hasSix: rollResult.pools[key].includes(6),
+    key,
+    label: formatDominantPool(key),
+    successes: rollResult.pools[key].filter((die) => die <= 3).length
+  };
+}
+
+export function getVisibleRollPools(
+  card: YakovDryhRollCardData
+): YakovDryhDominantPool[] {
+  if (card.stage === "final" || card.painRolled) {
+    return ["discipline", "exhaustion", "madness", "pain"];
+  }
+
+  return ["discipline", "exhaustion", "madness"];
+}
+
+function getPoolSummaries(
+  rollResult: YakovDryhRollResult,
+  visiblePools: YakovDryhDominantPool[]
+): RollPoolSummary[] {
+  return visiblePools.map((key) => createPoolSummary(key, rollResult));
+}
+
+function getVisiblePoolSummaries(
+  card: YakovDryhRollCardData
+): RollPoolSummary[] {
+  return getPoolSummaries(getRollResult(card), getVisibleRollPools(card));
 }
 
 export function canTakePostRollExhaustion(
@@ -385,6 +388,7 @@ async function renderRollCard(card: YakovDryhRollCardData): Promise<string> {
   const failureEffectText = isInitial
     ? null
     : card.failureResolutionText ?? card.failureEffectText;
+  const snapEffectText = isInitial ? null : card.snapEffectText;
   const dominantResolutionButtons = isInitial
     ? []
     : await getDominantResolutionButtons(card);
@@ -421,7 +425,7 @@ async function renderRollCard(card: YakovDryhRollCardData): Promise<string> {
     failureResolutionButtons,
     failureResolutionPrompt,
     finalMessageId,
-    hasEffectText: Boolean(dominantEffectText || failureEffectText),
+    hasEffectText: Boolean(dominantEffectText || failureEffectText || snapEffectText),
     hasDominantResolutionButtons: dominantResolutionButtons.length > 0,
     hasFailureResolutionButtons: failureResolutionButtons.length > 0,
     hasPlayerActionButtons: playerActionButtons.length > 0,
@@ -431,12 +435,13 @@ async function renderRollCard(card: YakovDryhRollCardData): Promise<string> {
     outcomeLabel: formatOutcome(rollResult.outcome),
     playerActionButtons,
     playerActionPrompt,
-    poolSummaries: getPoolSummaries(rollResult),
+    poolSummaries: getVisiblePoolSummaries(card),
     rollResult,
     showDominant: presentationState.showDominant,
     showAdjustments,
     showOutcome: presentationState.showOutcome,
     showPainRollWaiting: presentationState.showPainRollWaiting,
+    snapEffectText,
     stageLabel:
       card.stage === "initial"
         ? localize("YAKOV_DRYH.ROLL.Chat.InitialTitle", "Roll Result")
@@ -534,7 +539,8 @@ async function getDominantResolutionButtons(
   if (
     (card.modifiedResult.dominant !== "discipline" &&
       card.modifiedResult.dominant !== "madness") ||
-    card.dominantResolutionText
+    card.dominantResolutionText ||
+    card.snapEffectText
   ) {
     return [];
   }
@@ -560,7 +566,7 @@ async function getDominantResolutionButtons(
 async function getFailureResolutionButtons(
   card: YakovDryhFinalRollCardData
 ): Promise<FailureResolutionButtonSummary[]> {
-  if (card.failureConsequence === null || card.failureResolutionText) {
+  if (card.failureConsequence === null || card.failureResolutionText || card.snapEffectText) {
     return [];
   }
 
@@ -590,6 +596,29 @@ function getSpeaker(
   }
 
   return ChatMessage.getSpeaker();
+}
+
+function createSnapEffectText(): string {
+  return localize(
+    "YAKOV_DRYH.ROLL.Effects.Snap",
+    "All Responses are un-checked. Convert -1 Discipline to +1 Madness."
+  );
+}
+
+async function applySnapToActor(
+  actor: Actor.Implementation,
+  actorData: ReturnType<typeof normalizeCharacterSystemData>
+): Promise<string> {
+  const snappedData = applySnapToCharacterData(actorData);
+
+  await actor.update({
+    "system.discipline": snappedData.discipline,
+    "system.madnessPermanent": snappedData.madnessPermanent,
+    "system.responses.slots": snappedData.responses.slots,
+    "system.responses.max": snappedData.responses.max
+  } as Record<string, unknown>);
+
+  return createSnapEffectText();
 }
 
 function createInitialRollCardData(
@@ -825,6 +854,14 @@ async function createFinalizedRollMessage(
   );
   const failureConsequence = getFailureConsequence(modifiedResult);
   const failureEffectText = getFailureEffectText(modifiedResult);
+  const actorData = normalizeCharacterSystemData(actor.system);
+  const snapEffectText = shouldAutoApplySnap({
+    dominant: modifiedResult.dominant,
+    failureConsequence,
+    responses: actorData.responses
+  })
+    ? await applySnapToActor(actor, actorData)
+    : null;
   const finalCard: YakovDryhFinalRollCardData = {
     actorId: card.actorId,
     actorName: card.actorName,
@@ -836,6 +873,7 @@ async function createFinalizedRollMessage(
     failureResolutionText: null,
     modifiedResult,
     originalRollId: message.id ?? null,
+    snapEffectText,
     stage: "final"
   };
   const finalContent = await renderRollCard(finalCard);
@@ -1047,6 +1085,14 @@ export async function resolveDryhRollFailureAction(
       );
 
       if (!responses) {
+        if (hasNoUncheckedResponses(actorData.responses)) {
+          return updateFinalRollMessage(message, {
+            ...card,
+            failureResolutionText: null,
+            snapEffectText: await applySnapToActor(actor, actorData)
+          });
+        }
+
         ui.notifications?.warn(
           `${formatResponseType(action.responseType)} ${localize(
             "YAKOV_DRYH.UI.Warnings.ResponseUnavailable",
@@ -1126,6 +1172,14 @@ export async function resolveDryhRollDominantAction(
       );
 
       if (!responses) {
+        if (hasNoUncheckedResponses(actorData.responses)) {
+          return updateFinalRollMessage(message, {
+            ...card,
+            dominantResolutionText: null,
+            snapEffectText: await applySnapToActor(actor, actorData)
+          });
+        }
+
         ui.notifications?.warn(
           `${formatResponseType(action.responseType)} ${localize(
             "YAKOV_DRYH.UI.Warnings.ResponseUnavailable",

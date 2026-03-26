@@ -16,6 +16,7 @@
         "InitialTitle": "Roll Result",
         "PlayerActions": "Player post-roll actions:",
         "RollPain": "Roll Pain Dice",
+        "Snap": "Snap",
         "Successes": "Successes:",
         "WaitingForPain": "⏳ Waiting for GM Pain roll..."
       },
@@ -62,6 +63,7 @@
         "MadnessResolvedCheckFight": "A Fight Response was checked.",
         "MadnessResolvedCheckFlight": "A Flight Response was checked.",
         "PainNoDespairAfterShadowCasting": "GM does not gain +1 Despair because Pain was made dominant by shadow-casting.",
+        "Snap": "All Responses are un-checked. Convert -1 Discipline to +1 Madness.",
         "discipline": "Un-check a Response or remove 1 Exhaustion.",
         "exhaustion": "{name} gains +1 Exhaustion.",
         "madness": "Choose a Response to check.",
