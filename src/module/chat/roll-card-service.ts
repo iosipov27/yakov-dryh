@@ -250,13 +250,17 @@ function getRollDieIconSrc(
   return `${SYSTEM_PATH}/assets/d6-${getRollDieIconStyle(pool)}-${dieValue}.svg`;
 }
 
+export function sortRollDiceForDisplay(dice: number[]): number[] {
+  return [...dice].sort((left, right) => right - left);
+}
+
 function getRollDiceSummary(
   pool: YakovDryhDominantPool,
   dice: number[]
 ): RollDieSummary[] {
   const label = formatDominantPool(pool);
 
-  return dice.map((value) => ({
+  return sortRollDiceForDisplay(dice).map((value) => ({
     alt: `${label} ${value}`,
     src: getRollDieIconSrc(pool, value),
     value

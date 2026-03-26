@@ -81,9 +81,12 @@ function getRollDieIconSrc(pool, value) {
     const dieValue = Math.min(Math.max(Math.trunc(value), 1), 6);
     return `${SYSTEM_PATH}/assets/d6-${getRollDieIconStyle(pool)}-${dieValue}.svg`;
 }
+export function sortRollDiceForDisplay(dice) {
+    return [...dice].sort((left, right) => right - left);
+}
 function getRollDiceSummary(pool, dice) {
     const label = formatDominantPool(pool);
-    return dice.map((value) => ({
+    return sortRollDiceForDisplay(dice).map((value) => ({
         alt: `${label} ${value}`,
         src: getRollDieIconSrc(pool, value),
         value

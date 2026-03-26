@@ -7,6 +7,7 @@ import {
   getAvailablePlayerRollActionTypes,
   getVisibleRollPools,
   getRollCardPresentationState,
+  sortRollDiceForDisplay,
   type YakovDryhFinalRollCardData,
   type YakovDryhInitialRollCardData
 } from "../src/module/chat/roll-card-service.ts";
@@ -133,6 +134,10 @@ describe("DRYH player post-roll action availability", () => {
 });
 
 describe("DRYH roll-card presentation state", () => {
+  it("sorts displayed dice from highest to lowest", () => {
+    expect(sortRollDiceForDisplay([2, 6, 1, 4, 2, 6])).toEqual([6, 6, 4, 2, 2, 1]);
+  });
+
   it("hides the Pain pool before Pain is rolled", () => {
     expect(
       getVisibleRollPools(
