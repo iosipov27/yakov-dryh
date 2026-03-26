@@ -13,6 +13,13 @@ export interface YakovDryhPainDominantEffectTextOptions {
   shadowCastingMadePainDominant: boolean;
 }
 
+export interface YakovDryhHopeEffectTextOptions {
+  gainedHope: number;
+  gainsHopeText: string;
+  hopeTotalText: string;
+  nextHopeTotal: number;
+}
+
 export function createDefaultShadowCastingData(): YakovDryhShadowCastingData {
   return {
     deferredHope: 0,
@@ -54,4 +61,25 @@ export function createPainDominantEffectText(
   }
 
   return `${options.gainsDespairText} ${options.despairTotalText} ${options.nextDespairTotal}`;
+}
+
+export function createHopeEffectText(
+  options: YakovDryhHopeEffectTextOptions
+): string | null {
+  if (options.gainedHope < 1) {
+    return null;
+  }
+
+  return `${options.gainsHopeText.replace("{amount}", String(options.gainedHope))} ${options.hopeTotalText} ${options.nextHopeTotal}`;
+}
+
+export function appendEffectText(
+  currentEffectText: string,
+  appendedEffectText: string | null
+): string {
+  if (!appendedEffectText) {
+    return currentEffectText;
+  }
+
+  return `${currentEffectText} ${appendedEffectText}`;
 }

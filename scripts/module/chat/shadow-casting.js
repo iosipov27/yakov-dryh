@@ -23,4 +23,16 @@ export function createPainDominantEffectText(options) {
     }
     return `${options.gainsDespairText} ${options.despairTotalText} ${options.nextDespairTotal}`;
 }
+export function createHopeEffectText(options) {
+    if (options.gainedHope < 1) {
+        return null;
+    }
+    return `${options.gainsHopeText.replace("{amount}", String(options.gainedHope))} ${options.hopeTotalText} ${options.nextHopeTotal}`;
+}
+export function appendEffectText(currentEffectText, appendedEffectText) {
+    if (!appendedEffectText) {
+        return currentEffectText;
+    }
+    return `${currentEffectText} ${appendedEffectText}`;
+}
 //# sourceMappingURL=shadow-casting.js.map

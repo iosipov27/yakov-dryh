@@ -22,7 +22,9 @@ import {
   type YakovDryhRollResult
 } from "../dice/index.js";
 import {
+  appendEffectText,
   createDefaultShadowCastingData,
+  createHopeEffectText,
   createPainDominantEffectText,
   shouldAwardPainDominantDespair,
   updateShadowCastingData,
@@ -619,11 +621,27 @@ async function applyDominantEffect(
   rollResult: YakovDryhRollResult,
   shadowCasting: YakovDryhShadowCastingData
 ): Promise<string> {
+  const hopeEffectText = createHopeEffectText({
+    gainedHope: shadowCasting.deferredHope,
+    gainsHopeText: localize(
+      "YAKOV_DRYH.ROLL.Effects.HopeGain",
+      "Players gain +{amount} Hope."
+    ),
+    hopeTotalText: localize(
+      "YAKOV_DRYH.ROLL.Effects.HopeTotal",
+      "Total Hope:"
+    ),
+    nextHopeTotal: getSharedHopeTotal() + shadowCasting.deferredHope
+  });
+
   switch (rollResult.dominant) {
     case "discipline":
-      return localize(
-        "YAKOV_DRYH.ROLL.Effects.discipline",
-        "Un-check a Response or remove 1 Exhaustion."
+      return appendEffectText(
+        localize(
+          "YAKOV_DRYH.ROLL.Effects.discipline",
+          "Un-check a Response or remove 1 Exhaustion."
+        ),
+        hopeEffectText
       );
 
     case "exhaustion": {
@@ -634,17 +652,23 @@ async function applyDominantEffect(
         "system.exhaustion": nextExhaustion
       } as Record<string, unknown>);
 
-      return formatActorNameEffect(
-        "YAKOV_DRYH.ROLL.Effects.exhaustion",
-        "{name} gains +1 Exhaustion.",
-        actor.name ?? localize("DOCUMENT.Actor", "Actor")
+      return appendEffectText(
+        formatActorNameEffect(
+          "YAKOV_DRYH.ROLL.Effects.exhaustion",
+          "{name} gains +1 Exhaustion.",
+          actor.name ?? localize("DOCUMENT.Actor", "Actor")
+        ),
+        hopeEffectText
       );
     }
 
     case "madness":
-      return localize(
-        "YAKOV_DRYH.ROLL.Effects.madness",
-        "Mark a Response."
+      return appendEffectText(
+        localize(
+          "YAKOV_DRYH.ROLL.Effects.madness",
+          "Mark a Response."
+        ),
+        hopeEffectText
       );
 
     case "pain": {
@@ -652,28 +676,34 @@ async function applyDominantEffect(
         ? await addDespair(1)
         : getSharedDespairTotal();
 
-      return createPainDominantEffectText({
-        despairTotalText: localize(
-          "YAKOV_DRYH.ROLL.Effects.DespairTotal",
-          "Total Despair:"
-        ),
-        gainsDespairText: localize(
-          "YAKOV_DRYH.ROLL.Effects.pain",
-          "GM gains +1 Despair."
-        ),
-        nextDespairTotal: nextDespair,
-        noDespairFromShadowCastingText: localize(
-          "YAKOV_DRYH.ROLL.Effects.PainNoDespairAfterShadowCasting",
-          "GM does not gain +1 Despair because Pain was made dominant by shadow-casting."
-        ),
-        shadowCastingMadePainDominant: shadowCasting.madePainDominant
-      });
+      return appendEffectText(
+        createPainDominantEffectText({
+          despairTotalText: localize(
+            "YAKOV_DRYH.ROLL.Effects.DespairTotal",
+            "Total Despair:"
+          ),
+          gainsDespairText: localize(
+            "YAKOV_DRYH.ROLL.Effects.pain",
+            "GM gains +1 Despair."
+          ),
+          nextDespairTotal: nextDespair,
+          noDespairFromShadowCastingText: localize(
+            "YAKOV_DRYH.ROLL.Effects.PainNoDespairAfterShadowCasting",
+            "GM does not gain +1 Despair because Pain was made dominant by shadow-casting."
+          ),
+          shadowCastingMadePainDominant: shadowCasting.madePainDominant
+        }),
+        hopeEffectText
+      );
     }
   }
 
-  return localize(
-    "YAKOV_DRYH.ROLL.Effects.discipline",
-    "Un-check a Response or remove 1 Exhaustion."
+  return appendEffectText(
+    localize(
+      "YAKOV_DRYH.ROLL.Effects.discipline",
+      "Un-check a Response or remove 1 Exhaustion."
+    ),
+    hopeEffectText
   );
 }
 

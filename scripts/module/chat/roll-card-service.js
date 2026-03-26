@@ -1,7 +1,7 @@
 import { checkFirstUncheckedResponse, DRYH_EXHAUSTION_MAX, getCheckedResponseTypes, normalizeCharacterSystemData, uncheckFirstCheckedResponse } from "../data/index.js";
 import { DRYH_ROLL_FLAG, SYSTEM_PATH, SYSTEM_ID, TEMPLATE_PATHS } from "../constants.js";
 import { applyHopeBoostToRollResult, applyPainRollToRollResult, applyPostRollExhaustionToRollResult, applyGmActionToRollResult } from "../dice/index.js";
-import { createDefaultShadowCastingData, createPainDominantEffectText, shouldAwardPainDominantDespair, updateShadowCastingData } from "./shadow-casting.js";
+import { appendEffectText, createDefaultShadowCastingData, createHopeEffectText, createPainDominantEffectText, shouldAwardPainDominantDespair, updateShadowCastingData } from "./shadow-casting.js";
 import { addHope, addDespair, getSharedDespairTotal, getSharedHopeTotal, spendDespair, spendHope, } from "../resources/index.js";
 import { getFailureConsequence } from "./failure-consequence.js";
 import { getFailureResolutionActions } from "./failure-resolution.js";
@@ -341,33 +341,39 @@ function createInitialRollCardData(input) {
     };
 }
 async function applyDominantEffect(actor, rollResult, shadowCasting) {
+    const hopeEffectText = createHopeEffectText({
+        gainedHope: shadowCasting.deferredHope,
+        gainsHopeText: localize("YAKOV_DRYH.ROLL.Effects.HopeGain", "Players gain +{amount} Hope."),
+        hopeTotalText: localize("YAKOV_DRYH.ROLL.Effects.HopeTotal", "Total Hope:"),
+        nextHopeTotal: getSharedHopeTotal() + shadowCasting.deferredHope
+    });
     switch (rollResult.dominant) {
         case "discipline":
-            return localize("YAKOV_DRYH.ROLL.Effects.discipline", "Un-check a Response or remove 1 Exhaustion.");
+            return appendEffectText(localize("YAKOV_DRYH.ROLL.Effects.discipline", "Un-check a Response or remove 1 Exhaustion."), hopeEffectText);
         case "exhaustion": {
             const actorData = normalizeCharacterSystemData(actor.system);
             const nextExhaustion = Math.min(actorData.exhaustion + 1, DRYH_EXHAUSTION_MAX);
             await actor.update({
                 "system.exhaustion": nextExhaustion
             });
-            return formatActorNameEffect("YAKOV_DRYH.ROLL.Effects.exhaustion", "{name} gains +1 Exhaustion.", actor.name ?? localize("DOCUMENT.Actor", "Actor"));
+            return appendEffectText(formatActorNameEffect("YAKOV_DRYH.ROLL.Effects.exhaustion", "{name} gains +1 Exhaustion.", actor.name ?? localize("DOCUMENT.Actor", "Actor")), hopeEffectText);
         }
         case "madness":
-            return localize("YAKOV_DRYH.ROLL.Effects.madness", "Mark a Response.");
+            return appendEffectText(localize("YAKOV_DRYH.ROLL.Effects.madness", "Mark a Response."), hopeEffectText);
         case "pain": {
             const nextDespair = shouldAwardPainDominantDespair(shadowCasting)
                 ? await addDespair(1)
                 : getSharedDespairTotal();
-            return createPainDominantEffectText({
+            return appendEffectText(createPainDominantEffectText({
                 despairTotalText: localize("YAKOV_DRYH.ROLL.Effects.DespairTotal", "Total Despair:"),
                 gainsDespairText: localize("YAKOV_DRYH.ROLL.Effects.pain", "GM gains +1 Despair."),
                 nextDespairTotal: nextDespair,
                 noDespairFromShadowCastingText: localize("YAKOV_DRYH.ROLL.Effects.PainNoDespairAfterShadowCasting", "GM does not gain +1 Despair because Pain was made dominant by shadow-casting."),
                 shadowCastingMadePainDominant: shadowCasting.madePainDominant
-            });
+            }), hopeEffectText);
         }
     }
-    return localize("YAKOV_DRYH.ROLL.Effects.discipline", "Un-check a Response or remove 1 Exhaustion.");
+    return appendEffectText(localize("YAKOV_DRYH.ROLL.Effects.discipline", "Un-check a Response or remove 1 Exhaustion."), hopeEffectText);
 }
 function getFailureEffectText(rollResult) {
     switch (getFailureConsequence(rollResult)) {

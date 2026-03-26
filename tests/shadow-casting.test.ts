@@ -5,7 +5,9 @@ import {
   createRollResult
 } from "../src/module/dice/index.ts";
 import {
+  appendEffectText,
   createDefaultShadowCastingData,
+  createHopeEffectText,
   createPainDominantEffectText,
   shouldAwardPainDominantDespair,
   updateShadowCastingData
@@ -98,5 +100,25 @@ describe("DRYH shadow-casting", () => {
         shadowCastingMadePainDominant: false
       })
     ).toBe("GM gains +1 Despair. Total Despair: 3");
+  });
+
+  it("describes Hope gains on the final card when shadow-casting generated Hope", () => {
+    expect(
+      createHopeEffectText({
+        gainedHope: 1,
+        gainsHopeText: "Players gain +{amount} Hope.",
+        hopeTotalText: "Total Hope:",
+        nextHopeTotal: 2
+      })
+    ).toBe("Players gain +1 Hope. Total Hope: 2");
+  });
+
+  it("appends Hope gain text to another effect when both apply", () => {
+    expect(
+      appendEffectText(
+        "GM gains +1 Despair. Total Despair: 3",
+        "Players gain +1 Hope. Total Hope: 2"
+      )
+    ).toBe("GM gains +1 Despair. Total Despair: 3 Players gain +1 Hope. Total Hope: 2");
   });
 });
