@@ -213,6 +213,8 @@ Use this section as the current checklist for development progress against the a
   - button-driven player resolution for `Discipline` dominant:
     - un-check a checked Fight / Flight Response
     - remove `1 Exhaustion`
+  - button-driven player resolution for `Madness` dominant:
+    - check an unchecked Fight / Flight Response
   - automatic `+1 Exhaustion` when Exhaustion dominates
   - automatic `+1 Despair` when Pain dominates, except when GM shadow-casting made Pain dominant
   - button-driven GM failure resolution from the final roll card
@@ -247,8 +249,6 @@ Use this section as the current checklist for development progress against the a
   - `+1 Exhaustion` is applied
   - Crash cannot happen while Exhaustion is clamped to `6`
 - Madness dominant is only partially implemented:
-  - reminder text exists
-  - choosing and checking a Response is not implemented
   - Snap is not implemented
 - Failure aftermath is only partially implemented:
   - GM can resolve `+1 Exhaustion` or check a Fight / Flight Response from the final roll card

@@ -196,13 +196,16 @@ function activateDryhRollListeners(
           .querySelectorAll<HTMLElement>("[data-yakov-dryh-roll-action='resolve-dominant']")
           .forEach((element) => element.setAttribute("disabled", "disabled"));
 
+        const dominantAction = actionElement.dataset.dominantAction;
+
         void resolveDryhRollDominantAction(message, {
-          responseType: actionElement.dataset.dominantAction === "uncheck-response"
-            ? (responseType ?? null)
-            : null,
+          responseType:
+            dominantAction === "uncheck-response" || dominantAction === "check-response"
+              ? (responseType ?? null)
+              : null,
           type:
-            actionElement.dataset.dominantAction === "uncheck-response"
-              ? "uncheck-response"
+            dominantAction === "uncheck-response" || dominantAction === "check-response"
+              ? dominantAction
               : "remove-exhaustion"
         });
       });

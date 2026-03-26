@@ -1,8 +1,9 @@
-import { checkFirstUncheckedResponse, DRYH_EXHAUSTION_MAX, getCheckedResponseTypes, normalizeCharacterSystemData, uncheckFirstCheckedResponse } from "../data/index.js";
+import { checkFirstUncheckedResponse, DRYH_EXHAUSTION_MAX, normalizeCharacterSystemData, uncheckFirstCheckedResponse } from "../data/index.js";
 import { DRYH_ROLL_FLAG, SYSTEM_PATH, SYSTEM_ID, TEMPLATE_PATHS } from "../constants.js";
 import { applyHopeBoostToRollResult, applyPainRollToRollResult, applyPostRollExhaustionToRollResult, applyGmActionToRollResult } from "../dice/index.js";
 import { appendEffectText, createDefaultShadowCastingData, createHopeEffectText, createPainDominantEffectText, shouldAwardPainDominantDespair, updateShadowCastingData } from "./shadow-casting.js";
 import { addHope, addDespair, getSharedDespairTotal, getSharedHopeTotal, spendDespair, spendHope, } from "../resources/index.js";
+import { getDominantResolutionActions } from "./dominant-resolution.js";
 import { getFailureConsequence } from "./failure-consequence.js";
 import { getFailureResolutionActions } from "./failure-resolution.js";
 function createDefaultPlayerAdjustmentsData() {
@@ -261,6 +262,10 @@ function createFailureResolutionButtonLabel(action) {
 }
 function createDominantResolutionButtonLabel(action) {
     switch (action.type) {
+        case "check-response":
+            return action.responseType === "flight"
+                ? localize("YAKOV_DRYH.ROLL.Actions.CheckFlight", "Check Flight")
+                : localize("YAKOV_DRYH.ROLL.Actions.CheckFight", "Check Fight");
         case "remove-exhaustion":
             return localize("YAKOV_DRYH.ROLL.Actions.RemoveExhaustion", "Remove 1 Exhaustion");
         case "uncheck-response":
@@ -270,7 +275,9 @@ function createDominantResolutionButtonLabel(action) {
     }
 }
 async function getDominantResolutionButtons(card) {
-    if (card.modifiedResult.dominant !== "discipline" || card.dominantResolutionText) {
+    if ((card.modifiedResult.dominant !== "discipline" &&
+        card.modifiedResult.dominant !== "madness") ||
+        card.dominantResolutionText) {
         return [];
     }
     const actor = await resolveActor(card.actorUuid, card.actorId);
@@ -278,28 +285,11 @@ async function getDominantResolutionButtons(card) {
         return [];
     }
     const actorData = normalizeCharacterSystemData(actor.system);
-    const buttons = [];
-    if (actorData.exhaustion > 0) {
-        buttons.push({
-            label: createDominantResolutionButtonLabel({
-                responseType: null,
-                type: "remove-exhaustion"
-            }),
-            responseType: null,
-            type: "remove-exhaustion"
-        });
-    }
-    getCheckedResponseTypes(actorData.responses).forEach((responseType) => {
-        buttons.push({
-            label: createDominantResolutionButtonLabel({
-                responseType,
-                type: "uncheck-response"
-            }),
-            responseType,
-            type: "uncheck-response"
-        });
-    });
-    return buttons;
+    return getDominantResolutionActions(card.modifiedResult.dominant, actorData.responses, actorData.exhaustion).map((action) => ({
+        label: createDominantResolutionButtonLabel(action),
+        responseType: action.responseType,
+        type: action.type
+    }));
 }
 async function getFailureResolutionButtons(card) {
     if (card.failureConsequence === null || card.failureResolutionText) {
@@ -605,7 +595,8 @@ export async function resolveDryhRollDominantAction(message, action) {
     const card = getRollCardFlag(message);
     if (!card ||
         card.stage !== "final" ||
-        card.modifiedResult.dominant !== "discipline" ||
+        (card.modifiedResult.dominant !== "discipline" &&
+            card.modifiedResult.dominant !== "madness") ||
         card.dominantResolutionText) {
         return null;
     }
@@ -616,6 +607,26 @@ export async function resolveDryhRollDominantAction(message, action) {
     }
     let dominantResolutionText;
     switch (action.type) {
+        case "check-response": {
+            if (!action.responseType) {
+                return null;
+            }
+            const actorData = normalizeCharacterSystemData(actor.system);
+            const responses = checkFirstUncheckedResponse(actorData.responses, action.responseType);
+            if (!responses) {
+                ui.notifications?.warn(`${formatResponseType(action.responseType)} ${localize("YAKOV_DRYH.UI.Warnings.ResponseUnavailable", "Response is no longer available.")}`);
+                return null;
+            }
+            await actor.update({
+                "system.responses.slots": responses.slots,
+                "system.responses.max": responses.max
+            });
+            dominantResolutionText =
+                action.responseType === "flight"
+                    ? localize("YAKOV_DRYH.ROLL.Effects.MadnessResolvedCheckFlight", "A Flight Response was checked.")
+                    : localize("YAKOV_DRYH.ROLL.Effects.MadnessResolvedCheckFight", "A Fight Response was checked.");
+            break;
+        }
         case "remove-exhaustion": {
             const actorData = normalizeCharacterSystemData(actor.system);
             if (actorData.exhaustion < 1) {

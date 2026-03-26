@@ -59,10 +59,12 @@
         "FailureResolvedGainExhaustion": "{name} gains +1 Exhaustion.",
         "HopeGain": "Players gain +{amount} Hope.",
         "HopeTotal": "Total Hope:",
+        "MadnessResolvedCheckFight": "A Fight Response was checked.",
+        "MadnessResolvedCheckFlight": "A Flight Response was checked.",
         "PainNoDespairAfterShadowCasting": "GM does not gain +1 Despair because Pain was made dominant by shadow-casting.",
         "discipline": "Un-check a Response or remove 1 Exhaustion.",
         "exhaustion": "{name} gains +1 Exhaustion.",
-        "madness": "Mark a Response.",
+        "madness": "Choose a Response to check.",
         "pain": "GM gains +1 Despair."
       },
       "Outcomes": {
