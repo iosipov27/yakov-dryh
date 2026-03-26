@@ -22,11 +22,19 @@ import {
   type YakovDryhRollResult
 } from "../dice/index.js";
 import {
+  createDefaultShadowCastingData,
+  createPainDominantEffectText,
+  shouldAwardPainDominantDespair,
+  updateShadowCastingData,
+  type YakovDryhShadowCastingData
+} from "./shadow-casting.js";
+import {
+  addHope,
   addDespair,
   getSharedDespairTotal,
   getSharedHopeTotal,
+  spendDespair,
   spendHope,
-  spendDespairForHope
 } from "../resources/index.js";
 import {
   getFailureConsequence,
@@ -53,6 +61,7 @@ export interface YakovDryhInitialRollCardData {
   painRolled: boolean;
   playerAdjustments: YakovDryhPlayerAdjustmentsData;
   rollResult: YakovDryhRollResult;
+  shadowCasting: YakovDryhShadowCastingData;
   stage: "initial";
 }
 
@@ -140,10 +149,15 @@ function cloneRollCardData(card: YakovDryhRollCardData): YakovDryhRollCardData {
       ...createDefaultPlayerAdjustmentsData(),
       ...card.playerAdjustments
     };
+    const shadowCasting = {
+      ...createDefaultShadowCastingData(),
+      ...card.shadowCasting
+    };
 
     return {
       ...card,
       playerAdjustments,
+      shadowCasting,
       rollResult: {
         ...card.rollResult,
         pools: {
@@ -568,13 +582,15 @@ function createInitialRollCardData(
       preRollExhaustionTaken: input.preRollExhaustionTaken
     },
     rollResult: input.rollResult,
+    shadowCasting: createDefaultShadowCastingData(),
     stage: "initial"
   };
 }
 
 async function applyDominantEffect(
   actor: Actor.Implementation,
-  rollResult: YakovDryhRollResult
+  rollResult: YakovDryhRollResult,
+  shadowCasting: YakovDryhShadowCastingData
 ): Promise<string> {
   switch (rollResult.dominant) {
     case "discipline":
@@ -605,15 +621,26 @@ async function applyDominantEffect(
       );
 
     case "pain": {
-      const nextDespair = await addDespair(1);
+      const nextDespair = shouldAwardPainDominantDespair(shadowCasting)
+        ? await addDespair(1)
+        : getSharedDespairTotal();
 
-      return `${localize(
-        "YAKOV_DRYH.ROLL.Effects.pain",
-        "GM gains +1 Despair."
-      )} ${localize(
-        "YAKOV_DRYH.ROLL.Effects.DespairTotal",
-        "Total Despair:"
-      )} ${nextDespair}`;
+      return createPainDominantEffectText({
+        despairTotalText: localize(
+          "YAKOV_DRYH.ROLL.Effects.DespairTotal",
+          "Total Despair:"
+        ),
+        gainsDespairText: localize(
+          "YAKOV_DRYH.ROLL.Effects.pain",
+          "GM gains +1 Despair."
+        ),
+        nextDespairTotal: nextDespair,
+        noDespairFromShadowCastingText: localize(
+          "YAKOV_DRYH.ROLL.Effects.PainNoDespairAfterShadowCasting",
+          "GM does not gain +1 Despair because Pain was made dominant by shadow-casting."
+        ),
+        shadowCastingMadePainDominant: shadowCasting.madePainDominant
+      });
     }
   }
 
@@ -737,7 +764,11 @@ async function createFinalizedRollMessage(
   actor: Actor.Implementation,
   modifiedResult: YakovDryhRollResult
 ): Promise<ChatMessage.Implementation> {
-  const dominantEffectText = await applyDominantEffect(actor, modifiedResult);
+  const dominantEffectText = await applyDominantEffect(
+    actor,
+    modifiedResult,
+    card.shadowCasting
+  );
   const failureConsequence = getFailureConsequence(modifiedResult);
   const failureEffectText = getFailureEffectText(modifiedResult);
   const finalCard: YakovDryhFinalRollCardData = {
@@ -772,6 +803,10 @@ async function createFinalizedRollMessage(
 
   await updateInitialRollMessage(message, updatedInitialCard);
 
+  if (card.shadowCasting.deferredHope > 0) {
+    await addHope(card.shadowCasting.deferredHope);
+  }
+
   return finalMessage;
 }
 
@@ -791,9 +826,9 @@ export async function applyDryhRollGmAction(
     return null;
   }
 
-  const updatedPools = await spendDespairForHope();
+  const nextDespair = await spendDespair();
 
-  if (!updatedPools) {
+  if (nextDespair === null) {
     ui.notifications?.warn(
       localize(
         "YAKOV_DRYH.UI.Warnings.DespairRequired",
@@ -804,10 +839,16 @@ export async function applyDryhRollGmAction(
     return null;
   }
 
+  const updatedRollResult = applyGmActionToRollResult(card.rollResult, action);
   const updatedCard: YakovDryhInitialRollCardData = {
     ...card,
     gmActionUsed: true,
-    rollResult: applyGmActionToRollResult(card.rollResult, action)
+    rollResult: updatedRollResult,
+    shadowCasting: updateShadowCastingData(
+      card.shadowCasting,
+      card.rollResult,
+      updatedRollResult
+    )
   };
 
   return updateInitialRollMessage(message, updatedCard);

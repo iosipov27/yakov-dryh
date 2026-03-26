@@ -23,6 +23,9 @@ export async function adjustSharedPool(pool, delta) {
 export async function addDespair(value) {
     return adjustSharedPool("despair", value);
 }
+export async function addHope(value) {
+    return adjustSharedPool("hope", value);
+}
 export async function spendHope() {
     const currentHope = getSharedHopeTotal();
     if (currentHope < 1) {
@@ -32,19 +35,14 @@ export async function spendHope() {
     await setSharedPoolTotal("hope", nextHope);
     return nextHope;
 }
-export async function spendDespairForHope() {
+export async function spendDespair() {
     const currentDespair = getSharedDespairTotal();
     if (currentDespair < 1) {
         return null;
     }
     const nextDespair = currentDespair - 1;
-    const nextHope = getSharedHopeTotal() + 1;
     await setSharedPoolTotal("despair", nextDespair);
-    await setSharedPoolTotal("hope", nextHope);
-    return {
-        despair: nextDespair,
-        hope: nextHope
-    };
+    return nextDespair;
 }
 function normalizeSharedPoolTotal(value) {
     const numericValue = typeof value === "number" ? value : Number.parseInt(String(value), 10);

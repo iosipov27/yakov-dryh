@@ -1,11 +1,12 @@
 export {
+  addHope,
   addDespair,
   adjustSharedPool,
   getSharedDespairTotal,
   getSharedHopeTotal,
   getSharedPools,
+  spendDespair,
   spendHope,
-  spendDespairForHope,
   type YakovDryhSharedPool,
   type YakovDryhSharedPools
 } from "./shared-pools.js";

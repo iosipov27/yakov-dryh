@@ -1,7 +1,8 @@
 import { checkFirstUncheckedResponse, DRYH_EXHAUSTION_MAX, getCheckedResponseTypes, normalizeCharacterSystemData, uncheckFirstCheckedResponse } from "../data/index.js";
 import { DRYH_ROLL_FLAG, SYSTEM_PATH, SYSTEM_ID, TEMPLATE_PATHS } from "../constants.js";
 import { applyHopeBoostToRollResult, applyPainRollToRollResult, applyPostRollExhaustionToRollResult, applyGmActionToRollResult } from "../dice/index.js";
-import { addDespair, getSharedDespairTotal, getSharedHopeTotal, spendHope, spendDespairForHope } from "../resources/index.js";
+import { createDefaultShadowCastingData, createPainDominantEffectText, shouldAwardPainDominantDespair, updateShadowCastingData } from "./shadow-casting.js";
+import { addHope, addDespair, getSharedDespairTotal, getSharedHopeTotal, spendDespair, spendHope, } from "../resources/index.js";
 import { getFailureConsequence } from "./failure-consequence.js";
 import { getFailureResolutionActions } from "./failure-resolution.js";
 function createDefaultPlayerAdjustmentsData() {
@@ -17,9 +18,14 @@ function cloneRollCardData(card) {
             ...createDefaultPlayerAdjustmentsData(),
             ...card.playerAdjustments
         };
+        const shadowCasting = {
+            ...createDefaultShadowCastingData(),
+            ...card.shadowCasting
+        };
         return {
             ...card,
             playerAdjustments,
+            shadowCasting,
             rollResult: {
                 ...card.rollResult,
                 pools: {
@@ -317,10 +323,11 @@ function createInitialRollCardData(input) {
             preRollExhaustionTaken: input.preRollExhaustionTaken
         },
         rollResult: input.rollResult,
+        shadowCasting: createDefaultShadowCastingData(),
         stage: "initial"
     };
 }
-async function applyDominantEffect(actor, rollResult) {
+async function applyDominantEffect(actor, rollResult, shadowCasting) {
     switch (rollResult.dominant) {
         case "discipline":
             return localize("YAKOV_DRYH.ROLL.Effects.discipline", "Un-check a Response or remove 1 Exhaustion.");
@@ -335,8 +342,16 @@ async function applyDominantEffect(actor, rollResult) {
         case "madness":
             return localize("YAKOV_DRYH.ROLL.Effects.madness", "Mark a Response.");
         case "pain": {
-            const nextDespair = await addDespair(1);
-            return `${localize("YAKOV_DRYH.ROLL.Effects.pain", "GM gains +1 Despair.")} ${localize("YAKOV_DRYH.ROLL.Effects.DespairTotal", "Total Despair:")} ${nextDespair}`;
+            const nextDespair = shouldAwardPainDominantDespair(shadowCasting)
+                ? await addDespair(1)
+                : getSharedDespairTotal();
+            return createPainDominantEffectText({
+                despairTotalText: localize("YAKOV_DRYH.ROLL.Effects.DespairTotal", "Total Despair:"),
+                gainsDespairText: localize("YAKOV_DRYH.ROLL.Effects.pain", "GM gains +1 Despair."),
+                nextDespairTotal: nextDespair,
+                noDespairFromShadowCastingText: localize("YAKOV_DRYH.ROLL.Effects.PainNoDespairAfterShadowCasting", "GM does not gain +1 Despair because Pain was made dominant by shadow-casting."),
+                shadowCastingMadePainDominant: shadowCasting.madePainDominant
+            });
         }
     }
     return localize("YAKOV_DRYH.ROLL.Effects.discipline", "Un-check a Response or remove 1 Exhaustion.");
@@ -404,7 +419,7 @@ export async function rerenderDryhRollMessage(message) {
     return card;
 }
 async function createFinalizedRollMessage(message, card, actor, modifiedResult) {
-    const dominantEffectText = await applyDominantEffect(actor, modifiedResult);
+    const dominantEffectText = await applyDominantEffect(actor, modifiedResult, card.shadowCasting);
     const failureConsequence = getFailureConsequence(modifiedResult);
     const failureEffectText = getFailureEffectText(modifiedResult);
     const finalCard = {
@@ -437,6 +452,9 @@ async function createFinalizedRollMessage(message, card, actor, modifiedResult) 
         rollResult: modifiedResult
     };
     await updateInitialRollMessage(message, updatedInitialCard);
+    if (card.shadowCasting.deferredHope > 0) {
+        await addHope(card.shadowCasting.deferredHope);
+    }
     return finalMessage;
 }
 export async function applyDryhRollGmAction(message, action) {
@@ -448,15 +466,17 @@ export async function applyDryhRollGmAction(message, action) {
         card.gmActionUsed) {
         return null;
     }
-    const updatedPools = await spendDespairForHope();
-    if (!updatedPools) {
+    const nextDespair = await spendDespair();
+    if (nextDespair === null) {
         ui.notifications?.warn(localize("YAKOV_DRYH.UI.Warnings.DespairRequired", "At least 1 Despair is required to adjust a six."));
         return null;
     }
+    const updatedRollResult = applyGmActionToRollResult(card.rollResult, action);
     const updatedCard = {
         ...card,
         gmActionUsed: true,
-        rollResult: applyGmActionToRollResult(card.rollResult, action)
+        rollResult: updatedRollResult,
+        shadowCasting: updateShadowCastingData(card.shadowCasting, card.rollResult, updatedRollResult)
     };
     return updateInitialRollMessage(message, updatedCard);
 }

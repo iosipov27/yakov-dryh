@@ -7,6 +7,7 @@ import {
   getAvailablePlayerRollActionTypes,
   type YakovDryhInitialRollCardData
 } from "../src/module/chat/roll-card-service.ts";
+import { createDefaultShadowCastingData } from "../src/module/chat/shadow-casting.ts";
 import { shouldHideDryhRollAction } from "../src/module/chat/roll-card-visibility.ts";
 
 function createInitialCard(
@@ -31,6 +32,7 @@ function createInitialCard(
       madness: [6],
       pain: [3]
     }),
+    shadowCasting: createDefaultShadowCastingData(),
     stage: "initial",
     ...overrides
   };

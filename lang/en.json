@@ -56,6 +56,7 @@
         "FailureResolvedCheckFight": "GM checked a Fight Response.",
         "FailureResolvedCheckFlight": "GM checked a Flight Response.",
         "FailureResolvedGainExhaustion": "{name} gains +1 Exhaustion.",
+        "PainNoDespairAfterShadowCasting": "GM does not gain +1 Despair because Pain was made dominant by shadow-casting.",
         "discipline": "Un-check a Response or remove 1 Exhaustion.",
         "exhaustion": "{name} gains +1 Exhaustion.",
         "madness": "Mark a Response.",

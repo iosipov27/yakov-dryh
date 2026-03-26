@@ -214,7 +214,7 @@ Use this section as the current checklist for development progress against the a
     - un-check a checked Fight / Flight Response
     - remove `1 Exhaustion`
   - automatic `+1 Exhaustion` when Exhaustion dominates
-  - automatic `+1 Despair` when Pain dominates
+  - automatic `+1 Despair` when Pain dominates, except when GM shadow-casting made Pain dominant
   - button-driven GM failure resolution from the final roll card
   - automatic failure resolution updates for `+1 Exhaustion` and checking Fight / Flight responses
 - Shared resource flow currently supports:
@@ -222,7 +222,8 @@ Use this section as the current checklist for development progress against the a
   - a shared world-level Despair pool
   - an always-visible Hope / Despair tracker window
   - manual `+ / -` adjustment for both shared pools
-  - GM `+6` / `-6` intervention spending `-1 Despair` and converting it into `+1 Hope`
+  - GM `+6` / `-6` intervention spending `-1 Despair`
+  - the converted `+1 Hope` is added when the conflict is finalized
 
 #### Open Rules Compliance Gaps
 
@@ -233,10 +234,9 @@ Use this section as the current checklist for development progress against the a
   - finalization in a separate step
 - `RULES.pdf` describes a single conflict roll against Pain, so this staged flow remains a rules divergence until intentionally kept or replaced.
 - GM shadow-casting is only partially modeled:
-  - Hope gained from converting `-1 Despair` to `+1 Hope` is immediately available
-  - the rules say this Hope is unavailable until the next scene
+  - Hope gained from converting `-1 Despair` to `+1 Hope` is granted on conflict finalization
+  - `RULES.pdf` says this Hope is unavailable until the next scene, so the current implementation is still a rules divergence
   - the current flow allows only one `+6` or `-6` intervention per conflict
-  - if GM intervention causes Pain to dominate, the current code still awards `+1 Despair`
 - Player post-roll options are incomplete:
   - they are still attached to the staged flow instead of a single conflict-resolution pipeline
 - Shared Hope lifecycle is incomplete:

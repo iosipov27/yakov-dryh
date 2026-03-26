@@ -2,10 +2,11 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 
 import { DRYH_SETTINGS, SYSTEM_ID } from "../src/module/constants.ts";
 import {
+  addHope,
   adjustSharedPool,
   getSharedPools,
+  spendDespair,
   spendHope,
-  spendDespairForHope
 } from "../src/module/resources/index.ts";
 
 interface MockSettingsApi {
@@ -55,7 +56,7 @@ describe("shared DRYH pools", () => {
     });
   });
 
-  it("converts one Despair into one Hope for GM intervention", async () => {
+  it("spends one Despair for GM intervention without adding Hope immediately", async () => {
     const values = new Map<string, number>([
       [DRYH_SETTINGS.sharedHope, 2],
       [DRYH_SETTINGS.gmDespair, 1]
@@ -64,24 +65,14 @@ describe("shared DRYH pools", () => {
 
     testGlobal.game = { settings };
 
-    const updatedPools = await spendDespairForHope();
-
-    expect(updatedPools).toEqual({
-      despair: 0,
-      hope: 3
-    });
-    expect(settings.set).toHaveBeenNthCalledWith(
-      1,
+    await expect(spendDespair()).resolves.toBe(0);
+    expect(settings.set).toHaveBeenCalledTimes(1);
+    expect(settings.set).toHaveBeenCalledWith(
       SYSTEM_ID,
       DRYH_SETTINGS.gmDespair,
       0
     );
-    expect(settings.set).toHaveBeenNthCalledWith(
-      2,
-      SYSTEM_ID,
-      DRYH_SETTINGS.sharedHope,
-      3
-    );
+    expect(values.get(DRYH_SETTINGS.sharedHope)).toBe(2);
   });
 
   it("blocks the conversion when no Despair is available", async () => {
@@ -93,8 +84,22 @@ describe("shared DRYH pools", () => {
 
     testGlobal.game = { settings };
 
-    await expect(spendDespairForHope()).resolves.toBeNull();
+    await expect(spendDespair()).resolves.toBeNull();
     expect(settings.set).not.toHaveBeenCalled();
+  });
+
+  it("adds deferred Hope when the conflict is finalized", async () => {
+    const values = new Map<string, number>([[DRYH_SETTINGS.sharedHope, 2]]);
+    const settings = createMockSettings(values);
+
+    testGlobal.game = { settings };
+
+    await expect(addHope(1)).resolves.toBe(3);
+    expect(settings.set).toHaveBeenCalledWith(
+      SYSTEM_ID,
+      DRYH_SETTINGS.sharedHope,
+      3
+    );
   });
 
   it("spends one Hope when the player improves Discipline", async () => {
