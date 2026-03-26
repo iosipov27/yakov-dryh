@@ -154,9 +154,18 @@ function getPlayerActionButtons(card) {
         type
     }));
 }
+export function getRollCardPresentationState(card) {
+    const showOutcome = card.stage === "final" || card.painRolled;
+    return {
+        showDominant: showOutcome,
+        showOutcome,
+        showPainRollWaiting: card.stage === "initial" && !card.finalized && !card.painRolled
+    };
+}
 async function renderRollCard(card) {
     const rollResult = getRollResult(card);
     const isInitial = card.stage === "initial";
+    const presentationState = getRollCardPresentationState(card);
     const showAdjustments = isInitial
         ? !card.finalized && card.painRolled && !card.gmActionUsed
         : false;
@@ -215,10 +224,14 @@ async function renderRollCard(card) {
         playerActionPrompt,
         poolSummaries: getPoolSummaries(rollResult),
         rollResult,
+        showDominant: presentationState.showDominant,
         showAdjustments,
+        showOutcome: presentationState.showOutcome,
+        showPainRollWaiting: presentationState.showPainRollWaiting,
         stageLabel: card.stage === "initial"
             ? localize("YAKOV_DRYH.ROLL.Chat.InitialTitle", "Roll Result")
-            : localize("YAKOV_DRYH.ROLL.Chat.FinalTitle", "Final Result")
+            : localize("YAKOV_DRYH.ROLL.Chat.FinalTitle", "Final Result"),
+        waitingForPainLabel: localize("YAKOV_DRYH.ROLL.Chat.WaitingForPain", "⏳ Waiting for GM Pain roll...")
     });
 }
 async function resolveActor(actorUuid, actorId) {

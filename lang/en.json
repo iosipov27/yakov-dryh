@@ -16,7 +16,8 @@
         "InitialTitle": "Roll Result",
         "PlayerActions": "Player post-roll actions:",
         "RollPain": "Roll Pain Dice",
-        "Successes": "Successes:"
+        "Successes": "Successes:",
+        "WaitingForPain": "⏳ Waiting for GM Pain roll..."
       },
       "Dialog": {
         "AddExhaustion": "Take +1 Exhaustion",

@@ -17,7 +17,10 @@ import {
   getChatCardData,
   hasInteractiveChatCard
 } from "./chat-card-service.js";
-import { shouldHideDryhRollAction } from "./roll-card-visibility.js";
+import {
+  shouldHideDryhRollAction,
+  shouldShowPainRollWaitingMessage
+} from "./roll-card-visibility.js";
 
 export async function openChatInteraction(
   message: ChatMessage.Implementation
@@ -147,6 +150,19 @@ function activateDryhRollListeners(
       })
     ) {
       actionElement.hidden = true;
+
+      if (
+        shouldShowPainRollWaitingMessage(action, {
+          isActorOwner: canUseActorOwnerActions,
+          isGm: game.user?.isGM ?? false
+        })
+      ) {
+        actionElement
+          .closest<HTMLElement>(".yakov-dryh-actions")
+          ?.querySelector<HTMLElement>("[data-yakov-dryh-roll-waiting]")
+          ?.removeAttribute("hidden");
+      }
+
       return;
     }
 

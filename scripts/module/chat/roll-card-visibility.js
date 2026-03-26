@@ -14,4 +14,7 @@ export function shouldHideDryhRollAction(action, options) {
     }
     return false;
 }
+export function shouldShowPainRollWaitingMessage(action, options) {
+    return action === "roll-pain" && !options.isGm;
+}
 //# sourceMappingURL=roll-card-visibility.js.map

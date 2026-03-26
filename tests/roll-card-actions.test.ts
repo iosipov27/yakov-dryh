@@ -5,10 +5,15 @@ import {
   canTakePostRollExhaustion,
   canSpendHopeForDiscipline,
   getAvailablePlayerRollActionTypes,
+  getRollCardPresentationState,
+  type YakovDryhFinalRollCardData,
   type YakovDryhInitialRollCardData
 } from "../src/module/chat/roll-card-service.ts";
 import { createDefaultShadowCastingData } from "../src/module/chat/shadow-casting.ts";
-import { shouldHideDryhRollAction } from "../src/module/chat/roll-card-visibility.ts";
+import {
+  shouldHideDryhRollAction,
+  shouldShowPainRollWaitingMessage
+} from "../src/module/chat/roll-card-visibility.ts";
 
 function createInitialCard(
   overrides: Partial<YakovDryhInitialRollCardData> = {}
@@ -34,6 +39,30 @@ function createInitialCard(
     }),
     shadowCasting: createDefaultShadowCastingData(),
     stage: "initial",
+    ...overrides
+  };
+}
+
+function createFinalCard(
+  overrides: Partial<YakovDryhFinalRollCardData> = {}
+): YakovDryhFinalRollCardData {
+  return {
+    actorId: "actor-1",
+    actorName: "Test Actor",
+    actorUuid: "Actor.actor-1",
+    dominantEffectText: "GM gains +1 Despair.",
+    dominantResolutionText: null,
+    failureConsequence: null,
+    failureEffectText: null,
+    failureResolutionText: null,
+    modifiedResult: createRollResult({
+      discipline: [4],
+      exhaustion: [5],
+      madness: [6],
+      pain: [3]
+    }),
+    originalRollId: "message-1",
+    stage: "final",
     ...overrides
   };
 }
@@ -101,6 +130,38 @@ describe("DRYH player post-roll action availability", () => {
   });
 });
 
+describe("DRYH roll-card presentation state", () => {
+  it("hides outcome and dominant sections before Pain is rolled", () => {
+    expect(
+      getRollCardPresentationState(
+        createInitialCard({
+          painRolled: false
+        })
+      )
+    ).toEqual({
+      showDominant: false,
+      showOutcome: false,
+      showPainRollWaiting: true
+    });
+  });
+
+  it("reveals outcome and dominant sections after Pain is rolled", () => {
+    expect(getRollCardPresentationState(createInitialCard())).toEqual({
+      showDominant: true,
+      showOutcome: true,
+      showPainRollWaiting: false
+    });
+  });
+
+  it("keeps outcome and dominant sections visible on final cards", () => {
+    expect(getRollCardPresentationState(createFinalCard())).toEqual({
+      showDominant: true,
+      showOutcome: true,
+      showPainRollWaiting: false
+    });
+  });
+});
+
 describe("DRYH roll-card action visibility", () => {
   it("shows GM actions only to the GM", () => {
     expect(
@@ -114,6 +175,38 @@ describe("DRYH roll-card action visibility", () => {
       shouldHideDryhRollAction("roll-pain", {
         isActorOwner: false,
         isGm: true
+      })
+    ).toBe(false);
+  });
+
+  it("shows a waiting message to non-GM users instead of the Pain button", () => {
+    expect(
+      shouldShowPainRollWaitingMessage("roll-pain", {
+        isActorOwner: true,
+        isGm: false
+      })
+    ).toBe(true);
+
+    expect(
+      shouldShowPainRollWaitingMessage("roll-pain", {
+        isActorOwner: false,
+        isGm: true
+      })
+    ).toBe(false);
+  });
+
+  it("does not show the waiting message for other GM-only actions", () => {
+    expect(
+      shouldShowPainRollWaitingMessage("finalize", {
+        isActorOwner: true,
+        isGm: false
+      })
+    ).toBe(false);
+
+    expect(
+      shouldShowPainRollWaitingMessage("add6", {
+        isActorOwner: false,
+        isGm: false
       })
     ).toBe(false);
   });

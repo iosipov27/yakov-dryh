@@ -5,18 +5,22 @@
       <p class="yakov-dryh-subtitle">{{actorName}}</p>
     </div>
 
-    <span class="yakov-dryh-status yakov-dryh-status--{{rollResult.outcome}}">{{outcomeLabel}}</span>
+    {{#if showOutcome}}
+      <span class="yakov-dryh-status yakov-dryh-status--{{rollResult.outcome}}">{{outcomeLabel}}</span>
+    {{/if}}
   </header>
 
   <div class="yakov-dryh-chat-card__body">
-    <p class="yakov-dryh-roll-card__summary">
-      {{localize "YAKOV_DRYH.ROLL.Chat.Successes"}}
-      {{rollResult.successes.player}}
-      vs
-      {{rollResult.successes.pain}}
-      <i class="fa-solid fa-arrow-right yakov-dryh-roll-card__arrow" aria-hidden="true"></i>
-      <strong>{{outcomeLabel}}</strong>
-    </p>
+    {{#if showOutcome}}
+      <p class="yakov-dryh-roll-card__summary">
+        {{localize "YAKOV_DRYH.ROLL.Chat.Successes"}}
+        {{rollResult.successes.player}}
+        vs
+        {{rollResult.successes.pain}}
+        <i class="fa-solid fa-arrow-right yakov-dryh-roll-card__arrow" aria-hidden="true"></i>
+        <strong>{{outcomeLabel}}</strong>
+      </p>
+    {{/if}}
 
     <div class="yakov-dryh-roll-card__pools">
       {{#each poolSummaries}}
@@ -74,10 +78,12 @@
       {{/each}}
     </div>
 
-    <p class="yakov-dryh-roll-card__dominant">
-      <strong>{{localize "YAKOV_DRYH.ROLL.Chat.Dominant"}}</strong>
-      {{dominantLabel}}
-    </p>
+    {{#if showDominant}}
+      <p class="yakov-dryh-roll-card__dominant">
+        <strong>{{localize "YAKOV_DRYH.ROLL.Chat.Dominant"}}</strong>
+        {{dominantLabel}}
+      </p>
+    {{/if}}
 
     {{#if hasEffectText}}
       <div class="yakov-dryh-chat-card__detail">
@@ -107,6 +113,15 @@
       >
         {{localize "YAKOV_DRYH.ROLL.Chat.RollPain"}}
       </button>
+      {{#if showPainRollWaiting}}
+        <p
+          class="yakov-dryh-copy"
+          data-yakov-dryh-roll-waiting
+          hidden
+        >
+          {{waitingForPainLabel}}
+        </p>
+      {{/if}}
     </footer>
   {{/if}}
 

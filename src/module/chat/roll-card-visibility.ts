@@ -27,3 +27,10 @@ export function shouldHideDryhRollAction(
 
   return false;
 }
+
+export function shouldShowPainRollWaitingMessage(
+  action: string | undefined,
+  options: DryhRollActionVisibilityOptions
+): boolean {
+  return action === "roll-pain" && !options.isGm;
+}
