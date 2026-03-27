@@ -8,7 +8,6 @@ import {
   countResponsesByType,
   createDefaultResponsesData,
   hasCheckedResponses,
-  isNightmareDiscipline,
   normalizeCharacterSystemData,
   type YakovDryhResponseSlotData,
   type YakovDryhResponseType,
@@ -186,7 +185,6 @@ export class YakovDryhCharacterSheet extends BaseSheet {
       responseIsEditMode: isEditingResponses,
       responseIsPlayMode: isPlayMode,
       responseMax: DRYH_RESPONSE_MAX,
-      showDisciplineCard: !isNightmareDiscipline(actorData.discipline),
       responsePlayRows: createResponsePlayRows(liveResponses, {
         fightLabel,
         flightLabel,

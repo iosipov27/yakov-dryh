@@ -1,5 +1,5 @@
 import { YakovDryhRollDialog } from "../dialogs/roll-dialog.js";
-import { addResponseSlot as addResponseSlotData, DRYH_EXHAUSTION_MAX, DRYH_RESPONSE_MAX, YAKOV_DRYH_RESPONSE_TYPES, countConfiguredResponses, countResponsesByType, createDefaultResponsesData, hasCheckedResponses, isNightmareDiscipline, normalizeCharacterSystemData, YAKOV_DRYH_ACTOR_TYPES } from "../../data/index.js";
+import { addResponseSlot as addResponseSlotData, DRYH_EXHAUSTION_MAX, DRYH_RESPONSE_MAX, YAKOV_DRYH_RESPONSE_TYPES, countConfiguredResponses, countResponsesByType, createDefaultResponsesData, hasCheckedResponses, normalizeCharacterSystemData, YAKOV_DRYH_ACTOR_TYPES } from "../../data/index.js";
 import { SYSTEM_ID, SYSTEM_TITLE, TEMPLATE_PATHS } from "../../constants.js";
 import { formatLineList, parseLineList } from "../../utils/index.js";
 const BaseSheet = foundry.applications.api.HandlebarsApplicationMixin(foundry.applications.sheets.ActorSheetV2);
@@ -86,7 +86,6 @@ export class YakovDryhCharacterSheet extends BaseSheet {
             responseIsEditMode: isEditingResponses,
             responseIsPlayMode: isPlayMode,
             responseMax: DRYH_RESPONSE_MAX,
-            showDisciplineCard: !isNightmareDiscipline(actorData.discipline),
             responsePlayRows: createResponsePlayRows(liveResponses, {
                 fightLabel,
                 flightLabel,

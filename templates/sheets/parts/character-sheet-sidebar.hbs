@@ -17,12 +17,10 @@
     }}
   </div>
 
-  {{#if showDisciplineCard}}
-    {{> "systems/yakov-dryh/templates/sheets/parts/character-sheet-resource-card.hbs"
-      label=(localize "YAKOV_DRYH.SHEETS.Actor.Character.Fields.Discipline")
-      pips=disciplinePips
-    }}
-  {{/if}}
+  {{> "systems/yakov-dryh/templates/sheets/parts/character-sheet-resource-card.hbs"
+    label=(localize "YAKOV_DRYH.SHEETS.Actor.Character.Fields.Discipline")
+    pips=disciplinePips
+  }}
 
   {{> "systems/yakov-dryh/templates/sheets/parts/character-sheet-resource-card.hbs"
     cardClasses="yakov-dryh-resource-card--stress yakov-dryh-resource-card--madness"
