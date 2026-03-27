@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import { applySnapToCharacterData, hasNoUncheckedResponses, shouldAutoApplySnap } from "../src/module/chat/snap.ts";
-import { createDefaultCharacterSystemData } from "../src/module/data/index.ts";
+import { createDefaultCharacterSystemData, isNightmareDiscipline } from "../src/module/data/index.ts";
 import { createRollResult } from "../src/module/dice/index.ts";
 
 describe("DRYH snap helpers", () => {
@@ -96,5 +96,26 @@ describe("DRYH snap helpers", () => {
         ]
       }
     });
+  });
+
+  it("turns the character into a Nightmare when snap drops Discipline to 0", () => {
+    const actorData = {
+      ...createDefaultCharacterSystemData(),
+      discipline: 1,
+      madnessPermanent: 2,
+      responses: {
+        max: 3,
+        slots: [
+          { checked: true, type: "fight" },
+          { checked: true, type: "flight" },
+          { checked: true, type: "fight" }
+        ]
+      }
+    };
+    const snappedData = applySnapToCharacterData(actorData);
+
+    expect(snappedData.discipline).toBe(0);
+    expect(snappedData.madnessPermanent).toBe(3);
+    expect(isNightmareDiscipline(snappedData.discipline)).toBe(true);
   });
 });

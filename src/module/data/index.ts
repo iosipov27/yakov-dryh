@@ -11,6 +11,7 @@ export {
   getCheckedResponseTypes,
   getUncheckedResponseTypes,
   hasCheckedResponses,
+  isNightmareDiscipline,
   uncheckFirstCheckedResponse,
   YAKOV_DRYH_RESPONSE_TYPES,
   normalizeCharacterSystemData,

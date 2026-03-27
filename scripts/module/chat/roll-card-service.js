@@ -1,4 +1,4 @@
-import { checkFirstUncheckedResponse, DRYH_EXHAUSTION_MAX, normalizeCharacterSystemData, uncheckFirstCheckedResponse } from "../data/index.js";
+import { checkFirstUncheckedResponse, DRYH_EXHAUSTION_MAX, isNightmareDiscipline, normalizeCharacterSystemData, uncheckFirstCheckedResponse } from "../data/index.js";
 import { DRYH_ROLL_FLAG, SYSTEM_PATH, SYSTEM_ID, TEMPLATE_PATHS } from "../constants.js";
 import { applyHopeBoostToRollResult, applyPainRollToRollResult, applyPostRollExhaustionToRollResult, applyGmActionToRollResult } from "../dice/index.js";
 import { appendEffectText, createDefaultShadowCastingData, createHopeEffectText, createPainDominantEffectText, shouldAwardPainDominantDespair, updateShadowCastingData } from "./shadow-casting.js";
@@ -151,6 +151,21 @@ export function getRollCardPresentationState(card) {
         showPainRollWaiting: card.stage === "initial" && !card.finalized && !card.painRolled
     };
 }
+export function getDisplayedFinalEffectTexts(card) {
+    const dominantEffectText = card.dominantResolutionText ?? card.dominantEffectText;
+    const failureEffectText = card.failureResolutionText ?? card.failureEffectText;
+    const hasSnap = Boolean(card.snapEffectText);
+    return {
+        dominantEffectText: card.crashCause === "dominant-exhaustion" ||
+            (hasSnap && card.modifiedResult.dominant === "madness")
+            ? null
+            : dominantEffectText,
+        failureEffectText: card.crashCause === "failure-exhaustion" ||
+            (hasSnap && card.failureConsequence === "mark-response")
+            ? null
+            : failureEffectText
+    };
+}
 async function renderRollCard(card) {
     const rollResult = getRollResult(card);
     const isInitial = card.stage === "initial";
@@ -166,12 +181,12 @@ async function renderRollCard(card) {
     const legacyEffectText = isInitial
         ? null
         : (card.effectText ?? null);
-    const dominantEffectText = isInitial
+    const finalEffectTexts = isInitial
         ? null
-        : card.dominantResolutionText ?? card.dominantEffectText ?? legacyEffectText;
-    const failureEffectText = isInitial
-        ? null
-        : card.failureResolutionText ?? card.failureEffectText;
+        : getDisplayedFinalEffectTexts({
+            ...card,
+            dominantEffectText: card.dominantResolutionText ?? card.dominantEffectText ?? legacyEffectText
+        });
     const crashEffectText = isInitial ? null : card.crashResolutionText;
     const snapEffectText = isInitial ? null : card.snapEffectText;
     const dominantResolutionButtons = isInitial
@@ -197,12 +212,12 @@ async function renderRollCard(card) {
     const playerActionPrompt = playerActionButtons.length > 0
         ? localize("YAKOV_DRYH.ROLL.Chat.PlayerActions", "Player post-roll actions:")
         : null;
-    const displayDominantEffectText = !isInitial && card.crashCause === "dominant-exhaustion"
+    const displayDominantEffectText = isInitial
         ? null
-        : dominantEffectText;
-    const displayFailureEffectText = !isInitial && card.crashCause === "failure-exhaustion"
+        : finalEffectTexts?.dominantEffectText ?? null;
+    const displayFailureEffectText = isInitial
         ? null
-        : failureEffectText;
+        : finalEffectTexts?.failureEffectText ?? null;
     return foundry.applications.handlebars.renderTemplate(TEMPLATE_PATHS.dryhRollCard, {
         actorName: card.actorName,
         canAffordAdjustment,
@@ -357,18 +372,22 @@ function getSpeaker(actor) {
     }
     return ChatMessage.getSpeaker();
 }
-function createSnapEffectText() {
+function createSnapEffectText(actorName, discipline) {
+    if (isNightmareDiscipline(discipline)) {
+        return formatActorNameEffect("YAKOV_DRYH.ROLL.Effects.SnapNightmare", "{name} becomes a Nightmare. All Responses are un-checked. Convert -1 Discipline to +1 Madness.", actorName);
+    }
     return localize("YAKOV_DRYH.ROLL.Effects.Snap", "All Responses are un-checked. Convert -1 Discipline to +1 Madness.");
 }
 async function applySnapToActor(actor, actorData) {
     const snappedData = applySnapToCharacterData(actorData);
+    const actorName = actor.name ?? localize("DOCUMENT.Actor", "Actor");
     await actor.update({
         "system.discipline": snappedData.discipline,
         "system.madnessPermanent": snappedData.madnessPermanent,
         "system.responses.slots": snappedData.responses.slots,
         "system.responses.max": snappedData.responses.max
     });
-    return createSnapEffectText();
+    return createSnapEffectText(actorName, snappedData.discipline);
 }
 function createInitialRollCardData(input) {
     return {

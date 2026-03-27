@@ -5,6 +5,7 @@ import {
   canTakePostRollExhaustion,
   canSpendHopeForDiscipline,
   getAvailablePlayerRollActionTypes,
+  getDisplayedFinalEffectTexts,
   getVisibleRollPools,
   getRollCardPresentationState,
   sortRollDiceForDisplay,
@@ -186,6 +187,43 @@ describe("DRYH roll-card presentation state", () => {
       showDominant: true,
       showOutcome: true,
       showPainRollWaiting: false
+    });
+  });
+
+  it("hides the madness response-check text when snap already resolved it", () => {
+    const card = createFinalCard({
+      dominantEffectText: "Choose a Response to check.",
+      modifiedResult: createRollResult({
+        discipline: [2],
+        exhaustion: [3],
+        madness: [6],
+        pain: [4]
+      }),
+      snapEffectText: "Test Actor becomes a Nightmare."
+    });
+
+    expect(getDisplayedFinalEffectTexts(card)).toEqual({
+      dominantEffectText: null,
+      failureEffectText: null
+    });
+  });
+
+  it("hides the failure response-check text when snap already resolved it", () => {
+    const card = createFinalCard({
+      failureConsequence: "mark-response",
+      failureEffectText: "GM narrates the failure and chooses either +1 Exhaustion or mark a Response.",
+      modifiedResult: createRollResult({
+        discipline: [2],
+        exhaustion: [6],
+        madness: [4],
+        pain: [1]
+      }),
+      snapEffectText: "All Responses are un-checked."
+    });
+
+    expect(getDisplayedFinalEffectTexts(card)).toEqual({
+      dominantEffectText: "GM gains +1 Despair.",
+      failureEffectText: null
     });
   });
 });

@@ -1,6 +1,7 @@
 import {
   checkFirstUncheckedResponse,
   DRYH_EXHAUSTION_MAX,
+  isNightmareDiscipline,
   normalizeCharacterSystemData,
   uncheckFirstCheckedResponse,
   type YakovDryhResponseType
@@ -384,6 +385,30 @@ export function getRollCardPresentationState(
   };
 }
 
+export function getDisplayedFinalEffectTexts(
+  card: YakovDryhFinalRollCardData
+): {
+  dominantEffectText: string | null;
+  failureEffectText: string | null;
+} {
+  const dominantEffectText = card.dominantResolutionText ?? card.dominantEffectText;
+  const failureEffectText = card.failureResolutionText ?? card.failureEffectText;
+  const hasSnap = Boolean(card.snapEffectText);
+
+  return {
+    dominantEffectText:
+      card.crashCause === "dominant-exhaustion" ||
+      (hasSnap && card.modifiedResult.dominant === "madness")
+        ? null
+        : dominantEffectText,
+    failureEffectText:
+      card.crashCause === "failure-exhaustion" ||
+      (hasSnap && card.failureConsequence === "mark-response")
+        ? null
+        : failureEffectText
+  };
+}
+
 async function renderRollCard(card: YakovDryhRollCardData): Promise<string> {
   const rollResult = getRollResult(card);
   const isInitial = card.stage === "initial";
@@ -399,12 +424,12 @@ async function renderRollCard(card: YakovDryhRollCardData): Promise<string> {
   const legacyEffectText = isInitial
     ? null
     : ((card as { effectText?: string }).effectText ?? null);
-  const dominantEffectText = isInitial
+  const finalEffectTexts = isInitial
     ? null
-    : card.dominantResolutionText ?? card.dominantEffectText ?? legacyEffectText;
-  const failureEffectText = isInitial
-    ? null
-    : card.failureResolutionText ?? card.failureEffectText;
+    : getDisplayedFinalEffectTexts({
+        ...card,
+        dominantEffectText: card.dominantResolutionText ?? card.dominantEffectText ?? legacyEffectText
+      });
   const crashEffectText = isInitial ? null : card.crashResolutionText;
   const snapEffectText = isInitial ? null : card.snapEffectText;
   const dominantResolutionButtons = isInitial
@@ -441,14 +466,12 @@ async function renderRollCard(card: YakovDryhRollCardData): Promise<string> {
           "Player post-roll actions:"
         )
       : null;
-  const displayDominantEffectText =
-    !isInitial && card.crashCause === "dominant-exhaustion"
-      ? null
-      : dominantEffectText;
-  const displayFailureEffectText =
-    !isInitial && card.crashCause === "failure-exhaustion"
-      ? null
-      : failureEffectText;
+  const displayDominantEffectText = isInitial
+    ? null
+    : finalEffectTexts?.dominantEffectText ?? null;
+  const displayFailureEffectText = isInitial
+    ? null
+    : finalEffectTexts?.failureEffectText ?? null;
 
   return foundry.applications.handlebars.renderTemplate(TEMPLATE_PATHS.dryhRollCard, {
     actorName: card.actorName,
@@ -699,7 +722,18 @@ function getSpeaker(
   return ChatMessage.getSpeaker();
 }
 
-function createSnapEffectText(): string {
+function createSnapEffectText(
+  actorName: string,
+  discipline: number
+): string {
+  if (isNightmareDiscipline(discipline)) {
+    return formatActorNameEffect(
+      "YAKOV_DRYH.ROLL.Effects.SnapNightmare",
+      "{name} becomes a Nightmare. All Responses are un-checked. Convert -1 Discipline to +1 Madness.",
+      actorName
+    );
+  }
+
   return localize(
     "YAKOV_DRYH.ROLL.Effects.Snap",
     "All Responses are un-checked. Convert -1 Discipline to +1 Madness."
@@ -711,6 +745,7 @@ async function applySnapToActor(
   actorData: ReturnType<typeof normalizeCharacterSystemData>
 ): Promise<string> {
   const snappedData = applySnapToCharacterData(actorData);
+  const actorName = actor.name ?? localize("DOCUMENT.Actor", "Actor");
 
   await actor.update({
     "system.discipline": snappedData.discipline,
@@ -719,7 +754,7 @@ async function applySnapToActor(
     "system.responses.max": snappedData.responses.max
   } as Record<string, unknown>);
 
-  return createSnapEffectText();
+  return createSnapEffectText(actorName, snappedData.discipline);
 }
 
 function createInitialRollCardData(

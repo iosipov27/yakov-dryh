@@ -59,6 +59,9 @@ export function normalizeCharacterSystemData(value) {
         scars: normalizeStringArray(source.scars)
     };
 }
+export function isNightmareDiscipline(discipline) {
+    return discipline <= 0;
+}
 export function getUncheckedResponseTypes(responses) {
     const availableTypes = new Set();
     responses.slots.forEach((slot) => {

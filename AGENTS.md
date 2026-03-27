@@ -217,10 +217,11 @@ Use this section as the current checklist for development progress against the a
     - check an unchecked Fight / Flight Response
   - automatic `+1 Exhaustion` when Exhaustion dominates
   - automatic `+1 Despair` when Pain dominates, except when GM shadow-casting made Pain dominant
-  - partial `Snap` handling when a required Response check has no unchecked Responses:
+  - `Snap` handling when a required Response check has no unchecked Responses:
     - all Responses are un-checked
     - `-1 Discipline`
     - `+1 Madness`
+    - if Discipline drops to `0`, the character becomes a Nightmare and the sheet hides Discipline
   - button-driven GM failure resolution from the final roll card
   - automatic failure resolution updates for `+1 Exhaustion` and checking Fight / Flight responses
   - crash resolution from the final roll card when Exhaustion exceeds `6`:
@@ -263,13 +264,9 @@ Use this section as the current checklist for development progress against the a
 - Exhaustion dominant is only partially rules-compliant:
   - `+1 Exhaustion` is applied
   - Crash now triggers only after Exhaustion goes above `6`
-- Madness dominant is only partially implemented:
-  - Snap does not yet handle Nightmare transition at `0 Discipline`
 - Failure aftermath is only partially implemented:
   - GM can resolve `+1 Exhaustion` or check a Fight / Flight Response from the final roll card
   - Crash can now follow those choices once Exhaustion exceeds `6`
-- Snap flow is not implemented:
-  - Nightmare transition at `0 Discipline`
 - Crash and Sleep flow is only partially implemented:
   - current implementation uses a GM choice in the final roll card instead of automatic by-scene-end handling
   - sleeping characters attracting Nightmares is not implemented

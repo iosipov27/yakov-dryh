@@ -118,6 +118,10 @@ export function normalizeCharacterSystemData(
   };
 }
 
+export function isNightmareDiscipline(discipline: number): boolean {
+  return discipline <= 0;
+}
+
 export function getUncheckedResponseTypes(
   responses: YakovDryhResponsesData
 ): YakovDryhResponseType[] {
