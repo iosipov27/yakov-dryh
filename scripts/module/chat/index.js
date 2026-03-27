@@ -33,7 +33,8 @@ export function registerChatHooks(api) {
     });
     Hooks.on("updateSetting", (setting) => {
         if (setting.key !== `${SYSTEM_ID}.${DRYH_SETTINGS.gmDespair}` &&
-            setting.key !== `${SYSTEM_ID}.${DRYH_SETTINGS.sharedHope}`) {
+            setting.key !== `${SYSTEM_ID}.${DRYH_SETTINGS.sharedHope}` &&
+            setting.key !== `${SYSTEM_ID}.${DRYH_SETTINGS.pendingHope}`) {
             return;
         }
         const latestMessage = (game.messages?.contents ?? []).at(-1);
@@ -111,7 +112,9 @@ function activateDryhRollListeners(message, html) {
                             : null,
                         type: actionElement.dataset.failureAction === "check-response"
                             ? "check-response"
-                            : "gain-exhaustion"
+                            : actionElement.dataset.failureAction === "snap"
+                                ? "snap"
+                                : "gain-exhaustion"
                     });
                     return;
                 }

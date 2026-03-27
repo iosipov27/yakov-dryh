@@ -27,7 +27,7 @@ export function createHopeEffectText(options) {
     if (options.gainedHope < 1) {
         return null;
     }
-    return `${options.gainsHopeText.replace("{amount}", String(options.gainedHope))} ${options.hopeTotalText} ${options.nextHopeTotal}`;
+    return `${options.gainsHopeText.replace("{amount}", String(options.gainedHope))} ${options.pendingHopeText} ${options.pendingHopeTotal} ${options.availabilityNoteText}`;
 }
 export function appendEffectText(currentEffectText, appendedEffectText) {
     if (!appendedEffectText) {

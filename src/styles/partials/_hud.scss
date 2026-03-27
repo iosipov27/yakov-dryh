@@ -53,13 +53,36 @@
     }
 
     .yakov-dryh-copy {
-      font-size: 1.1rem;
-      font-weight: 700;
       margin-top: 0.2rem;
     }
+  }
+
+  &__actions {
+    align-items: center;
+    display: flex;
+    gap: 0.5rem;
 
     .yakov-dryh-inline-actions {
       margin-top: 0;
+    }
+  }
+
+  &__values {
+    align-items: baseline;
+    display: flex;
+    gap: 0.85rem;
+    margin-top: 0.2rem;
+  }
+
+  &__value {
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin: 0;
+
+    &--pending {
+      color: var(--yakov-dryh-muted);
+      font-size: 1rem;
+      font-weight: 600;
     }
   }
 }

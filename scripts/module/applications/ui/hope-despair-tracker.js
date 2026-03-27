@@ -1,5 +1,5 @@
 import { SYSTEM_ID, TEMPLATE_PATHS } from "../../constants.js";
-import { adjustSharedPool, getSharedPools } from "../../resources/index.js";
+import { adjustSharedPool, endHopeScene, getSharedPools } from "../../resources/index.js";
 const BaseApplication = foundry.applications.api.HandlebarsApplicationMixin(foundry.applications.api.ApplicationV2);
 let trackerApplication = null;
 const DRAGGING_CLASS = "yakov-dryh-hope-despair-tracker--dragging";
@@ -48,7 +48,9 @@ export class YakovDryhHopeDespairTracker extends BaseApplication {
         const sharedPools = getSharedPools();
         context.canEdit = game.user?.isGM ?? false;
         context.despair = sharedPools.despair;
+        context.hasPendingHope = sharedPools.pendingHope > 0;
         context.hope = sharedPools.hope;
+        context.pendingHope = sharedPools.pendingHope;
         return context;
     }
     async _onRender(context, options) {
@@ -82,6 +84,14 @@ export class YakovDryhHopeDespairTracker extends BaseApplication {
             return;
         }
         await adjustSharedPool(pool, delta);
+    }
+    async endScene() {
+        if (!game.user?.isGM) {
+            ui.notifications?.warn(game.i18n?.localize("YAKOV_DRYH.UI.Warnings.SharedPoolsGmOnly") ??
+                "Only the GM can change Hope / Despair.");
+            return;
+        }
+        await endHopeScene();
     }
     beginDrag(event, root) {
         if (event.button !== 0) {
@@ -118,8 +128,13 @@ export class YakovDryhHopeDespairTracker extends BaseApplication {
         if (!(target instanceof Element)) {
             return;
         }
-        const actionElement = target.closest("[data-yakov-dryh-resource-pool]");
+        const actionElement = target.closest("[data-yakov-dryh-resource-pool], [data-yakov-dryh-resource-action]");
         if (!actionElement) {
+            return;
+        }
+        if (actionElement.dataset.yakovDryhResourceAction === "end-scene") {
+            event.preventDefault();
+            void this.endScene();
             return;
         }
         const pool = actionElement.dataset.yakovDryhResourcePool;
@@ -194,6 +209,7 @@ export class YakovDryhHopeDespairTracker extends BaseApplication {
             return;
         }
         if (setting.key !== `${SYSTEM_ID}.sharedHope` &&
+            setting.key !== `${SYSTEM_ID}.pendingHope` &&
             setting.key !== `${SYSTEM_ID}.gmDespair`) {
             return;
         }

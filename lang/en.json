@@ -65,6 +65,8 @@
         "FailureResolvedCheckFlight": "GM checked a Flight Response.",
         "FailureResolvedGainExhaustion": "{name} gains +1 Exhaustion.",
         "HopeGain": "Players gain +{amount} Hope.",
+        "HopeNextSceneOnly": "This Hope token can only be used starting next scene.",
+        "PendingHopeTotal": "Pending Hope:",
         "HopeTotal": "Total Hope:",
         "MadnessResolvedCheckFight": "A Fight Response was checked.",
         "MadnessResolvedCheckFlight": "A Flight Response was checked.",
@@ -92,6 +94,10 @@
         "Hint": "Tracks the shared player Hope pool for DRYH.",
         "Name": "Shared Hope"
       },
+      "PendingHope": {
+        "Hint": "Tracks Hope tokens that become available on the next scene.",
+        "Name": "Pending Hope"
+      },
       "GmDespair": {
         "Hint": "Tracks the current GM Despair total for DRYH pain effects.",
         "Name": "GM Despair"
@@ -102,6 +108,7 @@
       "Title": "Hope / Despair",
       "Hope": "Hope",
       "Despair": "Despair",
+      "EndScene": "End Scene",
       "ReadOnly": "Only the GM can change shared pools."
     },
     "SHEETS": {

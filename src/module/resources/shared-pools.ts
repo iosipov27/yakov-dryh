@@ -1,10 +1,12 @@
 import { DRYH_SETTINGS, SYSTEM_ID } from "../constants.js";
 
 export type YakovDryhSharedPool = "hope" | "despair";
+type YakovDryhStoredSharedPool = YakovDryhSharedPool | "pendingHope";
 
 export interface YakovDryhSharedPools {
   despair: number;
   hope: number;
+  pendingHope: number;
 }
 
 export function getSharedHopeTotal(): number {
@@ -19,10 +21,17 @@ export function getSharedDespairTotal(): number {
   return normalizeSharedPoolTotal(despair);
 }
 
+export function getPendingHopeTotal(): number {
+  const pendingHope = game.settings?.get(SYSTEM_ID, DRYH_SETTINGS.pendingHope);
+
+  return normalizeSharedPoolTotal(pendingHope);
+}
+
 export function getSharedPools(): YakovDryhSharedPools {
   return {
     despair: getSharedDespairTotal(),
-    hope: getSharedHopeTotal()
+    hope: getSharedHopeTotal(),
+    pendingHope: getPendingHopeTotal()
   };
 }
 
@@ -46,6 +55,15 @@ export async function addDespair(value: number): Promise<number> {
 
 export async function addHope(value: number): Promise<number> {
   return adjustSharedPool("hope", value);
+}
+
+export async function addPendingHope(value: number): Promise<number> {
+  const normalizedValue = Math.max(Math.trunc(value), 0);
+  const nextPendingHope = getPendingHopeTotal() + normalizedValue;
+
+  await setSharedPoolTotal("pendingHope", nextPendingHope);
+
+  return nextPendingHope;
 }
 
 export async function spendHope(): Promise<number | null> {
@@ -76,6 +94,21 @@ export async function spendDespair(): Promise<number | null> {
   return nextDespair;
 }
 
+export async function endHopeScene(): Promise<YakovDryhSharedPools> {
+  const currentHope = getSharedHopeTotal();
+  const pendingHope = getPendingHopeTotal();
+  const nextHope = currentHope + pendingHope;
+
+  await setSharedPoolTotal("hope", nextHope);
+  await setSharedPoolTotal("pendingHope", 0);
+
+  return {
+    despair: getSharedDespairTotal(),
+    hope: nextHope,
+    pendingHope: 0
+  };
+}
+
 function normalizeSharedPoolTotal(value: unknown): number {
   const numericValue =
     typeof value === "number" ? value : Number.parseInt(String(value), 10);
@@ -88,11 +121,15 @@ function normalizeSharedPoolTotal(value: unknown): number {
 }
 
 async function setSharedPoolTotal(
-  pool: YakovDryhSharedPool,
+  pool: YakovDryhStoredSharedPool,
   value: number
 ): Promise<void> {
   const settingKey =
-    pool === "hope" ? DRYH_SETTINGS.sharedHope : DRYH_SETTINGS.gmDespair;
+    pool === "hope"
+      ? DRYH_SETTINGS.sharedHope
+      : pool === "pendingHope"
+        ? DRYH_SETTINGS.pendingHope
+        : DRYH_SETTINGS.gmDespair;
 
   await game.settings?.set(SYSTEM_ID, settingKey, Math.max(Math.trunc(value), 0));
 }

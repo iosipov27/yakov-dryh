@@ -4,6 +4,10 @@ export function getFailureResolutionActions(consequence, responses) {
         responseType,
         type: "check-response"
     }));
+    const snapAction = {
+        responseType: null,
+        type: "snap"
+    };
     switch (consequence) {
         case "gain-exhaustion":
             return [
@@ -18,10 +22,10 @@ export function getFailureResolutionActions(consequence, responses) {
                     responseType: null,
                     type: "gain-exhaustion"
                 },
-                ...responseActions
+                ...(responseActions.length > 0 ? responseActions : [snapAction])
             ];
         case "mark-response":
-            return responseActions;
+            return responseActions.length > 0 ? responseActions : [snapAction];
         default:
             return [];
     }

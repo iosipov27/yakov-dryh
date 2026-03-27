@@ -34,6 +34,31 @@ describe("DRYH failure resolution actions", () => {
     ]);
   });
 
+  it("offers snap when a response must be checked but none remain", () => {
+    expect(
+      getFailureResolutionActions("mark-response", createResponses([
+        { checked: true, type: "fight" },
+        { checked: true, type: "flight" },
+        { checked: true, type: "fight" }
+      ]))
+    ).toEqual([
+      { responseType: null, type: "snap" }
+    ]);
+  });
+
+  it("keeps the GM choice between exhaustion and snap when all responses are already checked", () => {
+    expect(
+      getFailureResolutionActions("gm-choice", createResponses([
+        { checked: true, type: "fight" },
+        { checked: true, type: "flight" },
+        { checked: true, type: "fight" }
+      ]))
+    ).toEqual([
+      { responseType: null, type: "gain-exhaustion" },
+      { responseType: null, type: "snap" }
+    ]);
+  });
+
   it("checks the first unchecked response of the selected type", () => {
     expect(
       checkFirstUncheckedResponse(

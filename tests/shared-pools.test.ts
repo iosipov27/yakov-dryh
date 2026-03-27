@@ -2,8 +2,9 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 
 import { DRYH_SETTINGS, SYSTEM_ID } from "../src/module/constants.ts";
 import {
-  addHope,
+  addPendingHope,
   adjustSharedPool,
+  endHopeScene,
   getSharedPools,
   spendDespair,
   spendHope,
@@ -52,7 +53,8 @@ describe("shared DRYH pools", () => {
 
     expect(getSharedPools()).toEqual({
       despair: 2,
-      hope: 3
+      hope: 3,
+      pendingHope: 0
     });
   });
 
@@ -88,18 +90,38 @@ describe("shared DRYH pools", () => {
     expect(settings.set).not.toHaveBeenCalled();
   });
 
-  it("adds deferred Hope when the conflict is finalized", async () => {
+  it("stores deferred Hope as pending until the scene ends", async () => {
     const values = new Map<string, number>([[DRYH_SETTINGS.sharedHope, 2]]);
     const settings = createMockSettings(values);
 
     testGlobal.game = { settings };
 
-    await expect(addHope(1)).resolves.toBe(3);
+    await expect(addPendingHope(1)).resolves.toBe(1);
     expect(settings.set).toHaveBeenCalledWith(
       SYSTEM_ID,
-      DRYH_SETTINGS.sharedHope,
-      3
+      DRYH_SETTINGS.pendingHope,
+      1
     );
+    expect(values.get(DRYH_SETTINGS.sharedHope)).toBe(2);
+  });
+
+  it("moves pending Hope into active Hope when the GM ends the scene", async () => {
+    const values = new Map<string, number>([
+      [DRYH_SETTINGS.sharedHope, 6],
+      [DRYH_SETTINGS.pendingHope, 2],
+      [DRYH_SETTINGS.gmDespair, 1]
+    ]);
+    const settings = createMockSettings(values);
+
+    testGlobal.game = { settings };
+
+    await expect(endHopeScene()).resolves.toEqual({
+      despair: 1,
+      hope: 8,
+      pendingHope: 0
+    });
+    expect(values.get(DRYH_SETTINGS.sharedHope)).toBe(8);
+    expect(values.get(DRYH_SETTINGS.pendingHope)).toBe(0);
   });
 
   it("spends one Hope when the player improves Discipline", async () => {

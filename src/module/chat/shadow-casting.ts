@@ -14,10 +14,11 @@ export interface YakovDryhPainDominantEffectTextOptions {
 }
 
 export interface YakovDryhHopeEffectTextOptions {
+  availabilityNoteText: string;
   gainedHope: number;
   gainsHopeText: string;
-  hopeTotalText: string;
-  nextHopeTotal: number;
+  pendingHopeText: string;
+  pendingHopeTotal: number;
 }
 
 export function createDefaultShadowCastingData(): YakovDryhShadowCastingData {
@@ -70,7 +71,7 @@ export function createHopeEffectText(
     return null;
   }
 
-  return `${options.gainsHopeText.replace("{amount}", String(options.gainedHope))} ${options.hopeTotalText} ${options.nextHopeTotal}`;
+  return `${options.gainsHopeText.replace("{amount}", String(options.gainedHope))} ${options.pendingHopeText} ${options.pendingHopeTotal} ${options.availabilityNoteText}`;
 }
 
 export function appendEffectText(

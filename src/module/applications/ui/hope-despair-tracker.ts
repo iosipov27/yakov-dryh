@@ -1,6 +1,7 @@
 import { SYSTEM_ID, TEMPLATE_PATHS } from "../../constants.js";
 import {
   adjustSharedPool,
+  endHopeScene,
   getSharedPools,
   type YakovDryhSharedPool
 } from "../../resources/index.js";
@@ -12,7 +13,9 @@ const BaseApplication = foundry.applications.api.HandlebarsApplicationMixin(
 interface HopeDespairTrackerContext extends Record<string, unknown> {
   canEdit: boolean;
   despair: number;
+  hasPendingHope: boolean;
   hope: number;
+  pendingHope: number;
 }
 
 interface TrackerDragPosition {
@@ -86,7 +89,9 @@ export class YakovDryhHopeDespairTracker extends BaseApplication {
 
     context.canEdit = game.user?.isGM ?? false;
     context.despair = sharedPools.despair;
+    context.hasPendingHope = sharedPools.pendingHope > 0;
     context.hope = sharedPools.hope;
+    context.pendingHope = sharedPools.pendingHope;
 
     return context as foundry.applications.api.HandlebarsApplicationMixin.RenderContext;
   }
@@ -145,6 +150,18 @@ export class YakovDryhHopeDespairTracker extends BaseApplication {
     await adjustSharedPool(pool, delta);
   }
 
+  private async endScene(): Promise<void> {
+    if (!game.user?.isGM) {
+      ui.notifications?.warn(
+        game.i18n?.localize("YAKOV_DRYH.UI.Warnings.SharedPoolsGmOnly") ??
+          "Only the GM can change Hope / Despair."
+      );
+      return;
+    }
+
+    await endHopeScene();
+  }
+
   private beginDrag(event: PointerEvent, root: HTMLElement): void {
     if (event.button !== 0) {
       return;
@@ -188,9 +205,17 @@ export class YakovDryhHopeDespairTracker extends BaseApplication {
       return;
     }
 
-    const actionElement = target.closest<HTMLElement>("[data-yakov-dryh-resource-pool]");
+    const actionElement = target.closest<HTMLElement>(
+      "[data-yakov-dryh-resource-pool], [data-yakov-dryh-resource-action]"
+    );
 
     if (!actionElement) {
+      return;
+    }
+
+    if (actionElement.dataset.yakovDryhResourceAction === "end-scene") {
+      event.preventDefault();
+      void this.endScene();
       return;
     }
 
@@ -303,6 +328,7 @@ export class YakovDryhHopeDespairTracker extends BaseApplication {
 
     if (
       setting.key !== `${SYSTEM_ID}.sharedHope` &&
+      setting.key !== `${SYSTEM_ID}.pendingHope` &&
       setting.key !== `${SYSTEM_ID}.gmDespair`
     ) {
       return;

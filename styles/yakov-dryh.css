@@ -1646,12 +1646,31 @@
   border-left: 4px solid var(--yakov-dryh-pain);
 }
 .yakov-dryh-resource-tracker__row .yakov-dryh-copy {
-  font-size: 1.1rem;
-  font-weight: 700;
   margin-top: 0.2rem;
 }
-.yakov-dryh-resource-tracker__row .yakov-dryh-inline-actions {
+.yakov-dryh-resource-tracker__actions {
+  align-items: center;
+  display: flex;
+  gap: 0.5rem;
+}
+.yakov-dryh-resource-tracker__actions .yakov-dryh-inline-actions {
   margin-top: 0;
+}
+.yakov-dryh-resource-tracker__values {
+  align-items: baseline;
+  display: flex;
+  gap: 0.85rem;
+  margin-top: 0.2rem;
+}
+.yakov-dryh-resource-tracker__value {
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin: 0;
+}
+.yakov-dryh-resource-tracker__value--pending {
+  color: var(--yakov-dryh-muted);
+  font-size: 1rem;
+  font-weight: 600;
 }
 
 @media (max-width: 760px) {

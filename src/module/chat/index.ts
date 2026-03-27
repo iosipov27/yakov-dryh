@@ -67,7 +67,8 @@ export function registerChatHooks(api: YakovDryhSystemApi): void {
   Hooks.on("updateSetting", (setting: { key?: string }) => {
     if (
       setting.key !== `${SYSTEM_ID}.${DRYH_SETTINGS.gmDespair}` &&
-      setting.key !== `${SYSTEM_ID}.${DRYH_SETTINGS.sharedHope}`
+      setting.key !== `${SYSTEM_ID}.${DRYH_SETTINGS.sharedHope}` &&
+      setting.key !== `${SYSTEM_ID}.${DRYH_SETTINGS.pendingHope}`
     ) {
       return;
     }
@@ -192,6 +193,8 @@ function activateDryhRollListeners(
             type:
               actionElement.dataset.failureAction === "check-response"
                 ? "check-response"
+                : actionElement.dataset.failureAction === "snap"
+                  ? "snap"
                 : "gain-exhaustion"
           });
           return;

@@ -7,10 +7,15 @@ export function getSharedDespairTotal() {
     const despair = game.settings?.get(SYSTEM_ID, DRYH_SETTINGS.gmDespair);
     return normalizeSharedPoolTotal(despair);
 }
+export function getPendingHopeTotal() {
+    const pendingHope = game.settings?.get(SYSTEM_ID, DRYH_SETTINGS.pendingHope);
+    return normalizeSharedPoolTotal(pendingHope);
+}
 export function getSharedPools() {
     return {
         despair: getSharedDespairTotal(),
-        hope: getSharedHopeTotal()
+        hope: getSharedHopeTotal(),
+        pendingHope: getPendingHopeTotal()
     };
 }
 export async function adjustSharedPool(pool, delta) {
@@ -25,6 +30,12 @@ export async function addDespair(value) {
 }
 export async function addHope(value) {
     return adjustSharedPool("hope", value);
+}
+export async function addPendingHope(value) {
+    const normalizedValue = Math.max(Math.trunc(value), 0);
+    const nextPendingHope = getPendingHopeTotal() + normalizedValue;
+    await setSharedPoolTotal("pendingHope", nextPendingHope);
+    return nextPendingHope;
 }
 export async function spendHope() {
     const currentHope = getSharedHopeTotal();
@@ -44,6 +55,18 @@ export async function spendDespair() {
     await setSharedPoolTotal("despair", nextDespair);
     return nextDespair;
 }
+export async function endHopeScene() {
+    const currentHope = getSharedHopeTotal();
+    const pendingHope = getPendingHopeTotal();
+    const nextHope = currentHope + pendingHope;
+    await setSharedPoolTotal("hope", nextHope);
+    await setSharedPoolTotal("pendingHope", 0);
+    return {
+        despair: getSharedDespairTotal(),
+        hope: nextHope,
+        pendingHope: 0
+    };
+}
 function normalizeSharedPoolTotal(value) {
     const numericValue = typeof value === "number" ? value : Number.parseInt(String(value), 10);
     if (!Number.isFinite(numericValue)) {
@@ -52,7 +75,11 @@ function normalizeSharedPoolTotal(value) {
     return Math.max(Math.trunc(numericValue), 0);
 }
 async function setSharedPoolTotal(pool, value) {
-    const settingKey = pool === "hope" ? DRYH_SETTINGS.sharedHope : DRYH_SETTINGS.gmDespair;
+    const settingKey = pool === "hope"
+        ? DRYH_SETTINGS.sharedHope
+        : pool === "pendingHope"
+            ? DRYH_SETTINGS.pendingHope
+            : DRYH_SETTINGS.gmDespair;
     await game.settings?.set(SYSTEM_ID, settingKey, Math.max(Math.trunc(value), 0));
 }
 //# sourceMappingURL=shared-pools.js.map

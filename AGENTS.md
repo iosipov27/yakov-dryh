@@ -223,7 +223,7 @@ Use this section as the current checklist for development progress against the a
     - `+1 Madness`
     - if Discipline drops to `0`, the character becomes a Nightmare and the sheet hides Discipline
   - button-driven GM failure resolution from the final roll card
-  - automatic failure resolution updates for `+1 Exhaustion` and checking Fight / Flight responses
+  - automatic failure resolution updates for `+1 Exhaustion`, checking Fight / Flight responses, and `Snap` when the response branch has no unchecked Responses left
   - crash resolution from the final roll card when Exhaustion exceeds `6`:
     - GM chooses either `Sleep for 1 day` or `Die`
     - `Sleep for 1 day` applies:
@@ -234,11 +234,13 @@ Use this section as the current checklist for development progress against the a
     - `Die` currently publishes only a death effect text
 - Shared resource flow currently supports:
   - a shared world-level Hope pool
+  - a separate pending Hope pool for tokens that unlock on the next scene
   - a shared world-level Despair pool
   - an always-visible Hope / Despair tracker window
   - manual `+ / -` adjustment for both shared pools
   - GM `+6` / `-6` intervention spending `-1 Despair`
-  - the converted `+1 Hope` is added when the conflict is finalized
+  - shadow-casting adds converted `Hope` as pending Hope when the conflict is finalized
+  - a manual `End Scene` button moves pending Hope into active Hope
 
 #### Open Rules Compliance Gaps
 
@@ -249,8 +251,9 @@ Use this section as the current checklist for development progress against the a
   - finalization in a separate step
 - `RULES.pdf` describes a single conflict roll against Pain, so this staged flow remains a rules divergence until intentionally kept or replaced.
 - GM shadow-casting is only partially modeled:
-  - Hope gained from converting `-1 Despair` to `+1 Hope` is granted on conflict finalization
-  - `RULES.pdf` says this Hope is unavailable until the next scene, so the current implementation is still a rules divergence
+  - Hope gained from converting `-1 Despair` to `+1 Hope` is stored as pending Hope on conflict finalization
+  - the final effect text warns that this Hope is only usable starting next scene
+  - because the system cannot detect scenes automatically, scene progression is a manual GM action through the tracker
   - the current flow allows only one `+6` or `-6` intervention per conflict
 - Player post-roll options are incomplete:
   - they are still attached to the staged flow instead of a single conflict-resolution pipeline
@@ -265,7 +268,7 @@ Use this section as the current checklist for development progress against the a
   - `+1 Exhaustion` is applied
   - Crash now triggers only after Exhaustion goes above `6`
 - Failure aftermath is only partially implemented:
-  - GM can resolve `+1 Exhaustion` or check a Fight / Flight Response from the final roll card
+  - GM can resolve `+1 Exhaustion`, check a Fight / Flight Response, or trigger `Snap` when no unchecked Responses remain
   - Crash can now follow those choices once Exhaustion exceeds `6`
 - Crash and Sleep flow is only partially implemented:
   - current implementation uses a GM choice in the final roll card instead of automatic by-scene-end handling

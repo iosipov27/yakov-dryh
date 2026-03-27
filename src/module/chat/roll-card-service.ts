@@ -36,10 +36,11 @@ import {
   shouldAutoApplySnap
 } from "./snap.js";
 import {
-  addHope,
+  addPendingHope,
   addDespair,
   getSharedDespairTotal,
   getSharedHopeTotal,
+  getPendingHopeTotal,
   spendDespair,
   spendHope,
 } from "../resources/index.js";
@@ -569,6 +570,12 @@ function createFailureResolutionButtonLabel(
             "YAKOV_DRYH.ROLL.Actions.CheckFight",
             "Check Fight"
           );
+
+    case "snap":
+      return localize(
+        "YAKOV_DRYH.ROLL.Chat.Snap",
+        "Snap"
+      );
   }
 }
 
@@ -784,16 +791,20 @@ async function applyDominantEffect(
   shadowCasting: YakovDryhShadowCastingData
 ): Promise<string> {
   const hopeEffectText = createHopeEffectText({
+    availabilityNoteText: localize(
+      "YAKOV_DRYH.ROLL.Effects.HopeNextSceneOnly",
+      "This Hope token can only be used starting next scene."
+    ),
     gainedHope: shadowCasting.deferredHope,
     gainsHopeText: localize(
       "YAKOV_DRYH.ROLL.Effects.HopeGain",
       "Players gain +{amount} Hope."
     ),
-    hopeTotalText: localize(
-      "YAKOV_DRYH.ROLL.Effects.HopeTotal",
-      "Total Hope:"
+    pendingHopeText: localize(
+      "YAKOV_DRYH.ROLL.Effects.PendingHopeTotal",
+      "Pending Hope:"
     ),
-    nextHopeTotal: getSharedHopeTotal() + shadowCasting.deferredHope
+    pendingHopeTotal: getPendingHopeTotal() + shadowCasting.deferredHope
   });
 
   switch (rollResult.dominant) {
@@ -1038,7 +1049,7 @@ async function createFinalizedRollMessage(
   await updateInitialRollMessage(message, updatedInitialCard);
 
   if (card.shadowCasting.deferredHope > 0) {
-    await addHope(card.shadowCasting.deferredHope);
+    await addPendingHope(card.shadowCasting.deferredHope);
   }
 
   return finalMessage;
@@ -1219,6 +1230,16 @@ export async function resolveDryhRollFailureAction(
           ? "failure-exhaustion"
           : card.crashCause,
         failureResolutionText
+      });
+    }
+
+    case "snap": {
+      const actorData = normalizeCharacterSystemData(actor.system);
+
+      return updateFinalRollMessage(message, {
+        ...card,
+        failureResolutionText: null,
+        snapEffectText: await applySnapToActor(actor, actorData)
       });
     }
 

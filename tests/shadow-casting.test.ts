@@ -105,20 +105,21 @@ describe("DRYH shadow-casting", () => {
   it("describes Hope gains on the final card when shadow-casting generated Hope", () => {
     expect(
       createHopeEffectText({
+        availabilityNoteText: "This Hope token can only be used starting next scene.",
         gainedHope: 1,
         gainsHopeText: "Players gain +{amount} Hope.",
-        hopeTotalText: "Total Hope:",
-        nextHopeTotal: 2
+        pendingHopeText: "Pending Hope:",
+        pendingHopeTotal: 1
       })
-    ).toBe("Players gain +1 Hope. Total Hope: 2");
+    ).toBe("Players gain +1 Hope. Pending Hope: 1 This Hope token can only be used starting next scene.");
   });
 
   it("appends Hope gain text to another effect when both apply", () => {
     expect(
       appendEffectText(
         "GM gains +1 Despair. Total Despair: 3",
-        "Players gain +1 Hope. Total Hope: 2"
+        "Players gain +1 Hope. Pending Hope: 1 This Hope token can only be used starting next scene."
       )
-    ).toBe("GM gains +1 Despair. Total Despair: 3 Players gain +1 Hope. Total Hope: 2");
+    ).toBe("GM gains +1 Despair. Total Despair: 3 Players gain +1 Hope. Pending Hope: 1 This Hope token can only be used starting next scene.");
   });
 });

@@ -1,2 +1,2 @@
-export { addHope, addDespair, adjustSharedPool, getSharedDespairTotal, getSharedHopeTotal, getSharedPools, spendDespair, spendHope } from "./shared-pools.js";
+export { addHope, addPendingHope, addDespair, adjustSharedPool, endHopeScene, getSharedDespairTotal, getSharedHopeTotal, getPendingHopeTotal, getSharedPools, spendDespair, spendHope } from "./shared-pools.js";
 //# sourceMappingURL=index.js.map

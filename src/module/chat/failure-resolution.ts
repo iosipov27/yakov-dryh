@@ -7,7 +7,7 @@ import type { YakovDryhFailureConsequence } from "./failure-consequence.js";
 
 export interface YakovDryhFailureResolutionAction {
   responseType: YakovDryhResponseType | null;
-  type: "check-response" | "gain-exhaustion";
+  type: "check-response" | "gain-exhaustion" | "snap";
 }
 
 export function getFailureResolutionActions(
@@ -18,6 +18,10 @@ export function getFailureResolutionActions(
     responseType,
     type: "check-response" as const
   }));
+  const snapAction: YakovDryhFailureResolutionAction = {
+    responseType: null,
+    type: "snap"
+  };
 
   switch (consequence) {
     case "gain-exhaustion":
@@ -34,11 +38,11 @@ export function getFailureResolutionActions(
           responseType: null,
           type: "gain-exhaustion"
         },
-        ...responseActions
+        ...(responseActions.length > 0 ? responseActions : [snapAction])
       ];
 
     case "mark-response":
-      return responseActions;
+      return responseActions.length > 0 ? responseActions : [snapAction];
 
     default:
       return [];

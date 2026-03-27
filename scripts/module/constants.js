@@ -22,6 +22,7 @@ export const CHAT_CARD_STATUSES = ["draft", "review", "resolved"];
 export const DRYH_ROLL_FLAG = "dryhRoll";
 export const DRYH_SETTINGS = {
     gmDespair: "gmDespair",
+    pendingHope: "pendingHope",
     sharedHope: "sharedHope"
 };
 export const LOCALIZATION_PREFIX = "YAKOV_DRYH";

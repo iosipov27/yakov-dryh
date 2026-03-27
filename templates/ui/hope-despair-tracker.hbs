@@ -11,25 +11,42 @@
     <section class="yakov-dryh-resource-tracker__row yakov-dryh-resource-tracker__row--hope">
       <div>
         <strong>{{localize "YAKOV_DRYH.RESOURCES.Hope"}}</strong>
-        <p class="yakov-dryh-copy">{{hope}}</p>
+        <div class="yakov-dryh-resource-tracker__values">
+          <p class="yakov-dryh-copy yakov-dryh-resource-tracker__value">{{hope}}</p>
+          {{#if hasPendingHope}}
+            <p class="yakov-dryh-copy yakov-dryh-resource-tracker__value yakov-dryh-resource-tracker__value--pending">
+              {{pendingHope}}
+            </p>
+          {{/if}}
+        </div>
       </div>
 
-      <div class="yakov-dryh-inline-actions">
+      <div class="yakov-dryh-resource-tracker__actions">
+        <div class="yakov-dryh-inline-actions">
+          <button
+            class="yakov-dryh-button yakov-dryh-button--secondary yakov-dryh-button--compact"
+            type="button"
+            data-yakov-dryh-resource-pool="hope"
+            data-yakov-dryh-resource-delta="-1"
+          >
+            -
+          </button>
+          <button
+            class="yakov-dryh-button yakov-dryh-button--compact"
+            type="button"
+            data-yakov-dryh-resource-pool="hope"
+            data-yakov-dryh-resource-delta="1"
+          >
+            +
+          </button>
+        </div>
         <button
           class="yakov-dryh-button yakov-dryh-button--secondary yakov-dryh-button--compact"
           type="button"
-          data-yakov-dryh-resource-pool="hope"
-          data-yakov-dryh-resource-delta="-1"
+          data-yakov-dryh-resource-action="end-scene"
+          {{#unless hasPendingHope}}disabled{{/unless}}
         >
-          -
-        </button>
-        <button
-          class="yakov-dryh-button yakov-dryh-button--compact"
-          type="button"
-          data-yakov-dryh-resource-pool="hope"
-          data-yakov-dryh-resource-delta="1"
-        >
-          +
+          {{localize "YAKOV_DRYH.RESOURCES.EndScene"}}
         </button>
       </div>
     </section>

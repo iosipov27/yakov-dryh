@@ -3,7 +3,7 @@ import { DRYH_ROLL_FLAG, SYSTEM_PATH, SYSTEM_ID, TEMPLATE_PATHS } from "../const
 import { applyHopeBoostToRollResult, applyPainRollToRollResult, applyPostRollExhaustionToRollResult, applyGmActionToRollResult } from "../dice/index.js";
 import { appendEffectText, createDefaultShadowCastingData, createHopeEffectText, createPainDominantEffectText, shouldAwardPainDominantDespair, updateShadowCastingData } from "./shadow-casting.js";
 import { applySnapToCharacterData, hasNoUncheckedResponses, shouldAutoApplySnap } from "./snap.js";
-import { addHope, addDespair, getSharedDespairTotal, getSharedHopeTotal, spendDespair, spendHope, } from "../resources/index.js";
+import { addPendingHope, addDespair, getSharedDespairTotal, getSharedHopeTotal, getPendingHopeTotal, spendDespair, spendHope, } from "../resources/index.js";
 import { getDominantResolutionActions } from "./dominant-resolution.js";
 import { getFailureConsequence } from "./failure-consequence.js";
 import { getFailureResolutionActions } from "./failure-resolution.js";
@@ -287,6 +287,8 @@ function createFailureResolutionButtonLabel(action) {
             return action.responseType === "flight"
                 ? localize("YAKOV_DRYH.ROLL.Actions.CheckFlight", "Check Flight")
                 : localize("YAKOV_DRYH.ROLL.Actions.CheckFight", "Check Fight");
+        case "snap":
+            return localize("YAKOV_DRYH.ROLL.Chat.Snap", "Snap");
     }
 }
 function createDominantResolutionButtonLabel(action) {
@@ -409,10 +411,11 @@ function createInitialRollCardData(input) {
 }
 async function applyDominantEffect(actor, rollResult, shadowCasting) {
     const hopeEffectText = createHopeEffectText({
+        availabilityNoteText: localize("YAKOV_DRYH.ROLL.Effects.HopeNextSceneOnly", "This Hope token can only be used starting next scene."),
         gainedHope: shadowCasting.deferredHope,
         gainsHopeText: localize("YAKOV_DRYH.ROLL.Effects.HopeGain", "Players gain +{amount} Hope."),
-        hopeTotalText: localize("YAKOV_DRYH.ROLL.Effects.HopeTotal", "Total Hope:"),
-        nextHopeTotal: getSharedHopeTotal() + shadowCasting.deferredHope
+        pendingHopeText: localize("YAKOV_DRYH.ROLL.Effects.PendingHopeTotal", "Pending Hope:"),
+        pendingHopeTotal: getPendingHopeTotal() + shadowCasting.deferredHope
     });
     switch (rollResult.dominant) {
         case "discipline":
@@ -553,7 +556,7 @@ async function createFinalizedRollMessage(message, card, actor, modifiedResult) 
     };
     await updateInitialRollMessage(message, updatedInitialCard);
     if (card.shadowCasting.deferredHope > 0) {
-        await addHope(card.shadowCasting.deferredHope);
+        await addPendingHope(card.shadowCasting.deferredHope);
     }
     return finalMessage;
 }
@@ -660,6 +663,14 @@ export async function resolveDryhRollFailureAction(message, action) {
                     ? "failure-exhaustion"
                     : card.crashCause,
                 failureResolutionText
+            });
+        }
+        case "snap": {
+            const actorData = normalizeCharacterSystemData(actor.system);
+            return updateFinalRollMessage(message, {
+                ...card,
+                failureResolutionText: null,
+                snapEffectText: await applySnapToActor(actor, actorData)
             });
         }
         case "check-response": {
