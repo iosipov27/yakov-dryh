@@ -8,6 +8,8 @@
     "ROLL": {
       "Chat": {
         "ChooseOne": "Choose one:",
+        "Crash": "Crash",
+        "MakeChoice": "Make a choice:",
         "Dominant": "Dominant:",
         "Effect": "Effects",
         "Finalize": "Finalize Result",
@@ -34,8 +36,10 @@
       "Actions": {
         "CheckFight": "Check Fight",
         "CheckFlight": "Check Flight",
+        "Die": "Die",
         "GainExhaustion": "+1 Exhaustion",
         "RemoveExhaustion": "Remove 1 Exhaustion",
+        "SleepForOneDay": "Sleep for 1 day",
         "SpendHopeForDiscipline": "-1 Hope -> add 1 to Discipline",
         "TakePostRollExhaustion": "+1 Exhaustion after roll",
         "UncheckFightResponse": "Un-check Fight Response",
@@ -48,6 +52,8 @@
         "Subtitle": "The GM rolls pain after reviewing the initial result."
       },
       "Effects": {
+        "CrashDie": "{name} dies.",
+        "CrashSleep": "{name} sleeps for 1 day. Discipline = 1. Exhaustion = 0. All Responses are un-checked. Talents are temporarily unavailable.",
         "DespairTotal": "Total Despair:",
         "DisciplineResolvedRemoveExhaustion": "{name} removes 1 Exhaustion.",
         "DisciplineResolvedUncheckFight": "A Fight Response was un-checked.",

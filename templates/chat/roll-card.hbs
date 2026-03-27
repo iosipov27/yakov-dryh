@@ -88,11 +88,19 @@
     {{#if hasEffectText}}
       <div class="yakov-dryh-chat-card__detail">
         <strong>{{localize "YAKOV_DRYH.ROLL.Chat.Effect"}}</strong>
+        {{#if hasPendingCrash}}
+          <div class="yakov-dryh-roll-card__crash-alert">
+            <strong>{{crashLabel}}</strong>
+          </div>
+        {{/if}}
         {{#if dominantEffectText}}
           <p>{{dominantEffectText}}</p>
         {{/if}}
         {{#if failureEffectText}}
           <p>{{failureEffectText}}</p>
+        {{/if}}
+        {{#if crashEffectText}}
+          <p>{{crashEffectText}}</p>
         {{/if}}
         {{#if snapEffectText}}
           <div class="yakov-dryh-roll-card__snap-effect">
@@ -202,6 +210,28 @@
             data-yakov-dryh-roll-action="resolve-failure"
             data-failure-action="{{type}}"
             {{#if responseType}}data-response-type="{{responseType}}"{{/if}}
+          >
+            {{label}}
+          </button>
+        {{/each}}
+      </div>
+    </footer>
+  {{/if}}
+
+  {{#if hasCrashResolutionButtons}}
+    <footer class="yakov-dryh-roll-card__resolution">
+      {{#if crashResolutionPrompt}}
+        <p class="yakov-dryh-copy yakov-dryh-roll-card__resolution-copy">
+          {{crashResolutionPrompt}}
+        </p>
+      {{/if}}
+      <div class="yakov-dryh-actions mt12">
+        {{#each crashResolutionButtons}}
+          <button
+            class="yakov-dryh-button yakov-dryh-button--secondary"
+            type="button"
+            data-yakov-dryh-roll-action="resolve-crash"
+            data-crash-action="{{type}}"
           >
             {{label}}
           </button>

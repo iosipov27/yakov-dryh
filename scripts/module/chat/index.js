@@ -1,7 +1,7 @@
 import { YakovDryhChatInteractionDialog } from "../applications/dialogs/chat-interaction-dialog.js";
 import { YakovDryhPainRollDialog } from "../applications/dialogs/pain-roll-dialog.js";
 import { CHAT_CARD_COMMAND, DRYH_SETTINGS, SYSTEM_ID } from "../constants.js";
-import { applyDryhRollPlayerAction, applyDryhRollGmAction, finalizeDryhRoll, getDryhRollCardData, hasDryhRollCard, resolveDryhRollDominantAction, resolveDryhRollFailureAction, rerenderDryhRollMessage } from "./roll-card-service.js";
+import { applyDryhRollPlayerAction, applyDryhRollGmAction, finalizeDryhRoll, getDryhRollCardData, hasDryhRollCard, resolveDryhRollCrashAction, resolveDryhRollDominantAction, resolveDryhRollFailureAction, rerenderDryhRollMessage } from "./roll-card-service.js";
 import { advanceChatCardStatus, getChatCardData, hasInteractiveChatCard } from "./chat-card-service.js";
 import { shouldHideDryhRollAction, shouldShowPainRollWaitingMessage } from "./roll-card-visibility.js";
 export async function openChatInteraction(message) {
@@ -93,7 +93,9 @@ function activateDryhRollListeners(message, html) {
             return;
         }
         if (card.stage === "final") {
-            if (action !== "resolve-failure" && action !== "resolve-dominant") {
+            if (action !== "resolve-failure" &&
+                action !== "resolve-dominant" &&
+                action !== "resolve-crash") {
                 actionElement.setAttribute("disabled", "disabled");
                 return;
             }
@@ -110,6 +112,15 @@ function activateDryhRollListeners(message, html) {
                         type: actionElement.dataset.failureAction === "check-response"
                             ? "check-response"
                             : "gain-exhaustion"
+                    });
+                    return;
+                }
+                if (action === "resolve-crash") {
+                    html
+                        .querySelectorAll("[data-yakov-dryh-roll-action='resolve-crash']")
+                        .forEach((element) => element.setAttribute("disabled", "disabled"));
+                    void resolveDryhRollCrashAction(message, {
+                        type: actionElement.dataset.crashAction === "die" ? "die" : "sleep"
                     });
                     return;
                 }

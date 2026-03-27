@@ -1488,6 +1488,23 @@
 .yakov-dryh-roll-card__snap-effect p {
   margin: 0.35rem 0 0;
 }
+.yakov-dryh-roll-card__crash-alert {
+  background: rgba(176, 28, 46, 0.1);
+  border: 1px solid rgba(176, 28, 46, 0.26);
+  border-left: 4px solid var(--yakov-dryh-madness);
+  border-radius: 12px;
+  color: var(--yakov-dryh-madness);
+  margin-top: 0.75rem;
+  padding: 0.8rem 0.9rem;
+}
+.yakov-dryh-roll-card__crash-alert strong {
+  display: block;
+  font-size: 1.5rem;
+  letter-spacing: 0.04em;
+  line-height: 1;
+  margin: 0;
+  text-transform: uppercase;
+}
 
 .yakov-dryh-roll-pool {
   align-items: center;

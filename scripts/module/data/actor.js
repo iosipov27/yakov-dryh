@@ -48,8 +48,7 @@ export function normalizeCharacterSystemData(value) {
         concept: normalizeString(source.concept),
         discipline: normalizeInteger(source.discipline, defaults.discipline, { min: 0 }),
         exhaustion: normalizeInteger(source.exhaustion, defaults.exhaustion, {
-            min: 0,
-            max: DRYH_EXHAUSTION_MAX
+            min: 0
         }),
         madnessPermanent: normalizeInteger(source.madnessPermanent, defaults.madnessPermanent, { min: 0 }),
         responses: normalizeResponses(source.responses),

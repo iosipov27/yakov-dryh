@@ -7,6 +7,7 @@ import { addHope, addDespair, getSharedDespairTotal, getSharedHopeTotal, spendDe
 import { getDominantResolutionActions } from "./dominant-resolution.js";
 import { getFailureConsequence } from "./failure-consequence.js";
 import { getFailureResolutionActions } from "./failure-resolution.js";
+import { applyCrashSleepToCharacterData, shouldAutoApplyCrash, shouldOfferCrashResolution } from "./crash.js";
 function createDefaultPlayerAdjustmentsData() {
     return {
         hopeBoostUsed: false,
@@ -119,7 +120,7 @@ export function canTakePostRollExhaustion(card) {
     return (card.painRolled &&
         !card.playerAdjustments.preRollExhaustionTaken &&
         !card.playerAdjustments.postRollExhaustionTaken &&
-        card.rollResult.pools.exhaustion.length < DRYH_EXHAUSTION_MAX);
+        card.rollResult.pools.exhaustion.length <= DRYH_EXHAUSTION_MAX);
 }
 export function canSpendHopeForDiscipline(card, hopeTotal = getSharedHopeTotal()) {
     return card.painRolled && !card.playerAdjustments.hopeBoostUsed && hopeTotal >= 1;
@@ -171,6 +172,7 @@ async function renderRollCard(card) {
     const failureEffectText = isInitial
         ? null
         : card.failureResolutionText ?? card.failureEffectText;
+    const crashEffectText = isInitial ? null : card.crashResolutionText;
     const snapEffectText = isInitial ? null : card.snapEffectText;
     const dominantResolutionButtons = isInitial
         ? []
@@ -181,29 +183,52 @@ async function renderRollCard(card) {
     const failureResolutionButtons = isInitial
         ? []
         : await getFailureResolutionButtons(card);
+    const crashResolutionButtons = isInitial
+        ? []
+        : await getCrashResolutionButtons(card, dominantResolutionButtons.length > 0, failureResolutionButtons.length > 0);
+    const hasPendingCrash = !isInitial && !card.crashResolutionText && crashResolutionButtons.length > 0;
     const playerActionButtons = isInitial ? getPlayerActionButtons(card) : [];
     const failureResolutionPrompt = failureResolutionButtons.length > 1
         ? localize("YAKOV_DRYH.ROLL.Chat.ChooseOne", "Choose one:")
         : null;
+    const crashResolutionPrompt = crashResolutionButtons.length > 0
+        ? localize("YAKOV_DRYH.ROLL.Chat.MakeChoice", "Make a choice:")
+        : null;
     const playerActionPrompt = playerActionButtons.length > 0
         ? localize("YAKOV_DRYH.ROLL.Chat.PlayerActions", "Player post-roll actions:")
         : null;
+    const displayDominantEffectText = !isInitial && card.crashCause === "dominant-exhaustion"
+        ? null
+        : dominantEffectText;
+    const displayFailureEffectText = !isInitial && card.crashCause === "failure-exhaustion"
+        ? null
+        : failureEffectText;
     return foundry.applications.handlebars.renderTemplate(TEMPLATE_PATHS.dryhRollCard, {
         actorName: card.actorName,
         canAffordAdjustment,
         canFinalize,
         canRollPain,
+        crashEffectText,
+        crashLabel: localize("YAKOV_DRYH.ROLL.Chat.Crash", "Crash"),
+        crashResolutionButtons,
+        crashResolutionPrompt,
         dominantLabel: formatDominantPool(rollResult.dominant),
-        dominantEffectText,
+        dominantEffectText: displayDominantEffectText,
         dominantResolutionButtons,
         dominantResolutionPrompt,
-        failureEffectText,
+        failureEffectText: displayFailureEffectText,
         failureResolutionButtons,
         failureResolutionPrompt,
         finalMessageId,
-        hasEffectText: Boolean(dominantEffectText || failureEffectText || snapEffectText),
+        hasEffectText: Boolean(displayDominantEffectText ||
+            displayFailureEffectText ||
+            crashEffectText ||
+            snapEffectText ||
+            hasPendingCrash),
+        hasCrashResolutionButtons: crashResolutionButtons.length > 0,
         hasDominantResolutionButtons: dominantResolutionButtons.length > 0,
         hasFailureResolutionButtons: failureResolutionButtons.length > 0,
+        hasPendingCrash,
         hasPlayerActionButtons: playerActionButtons.length > 0,
         isFinal: card.stage === "final",
         isInitial,
@@ -263,6 +288,11 @@ function createDominantResolutionButtonLabel(action) {
                 : localize("YAKOV_DRYH.ROLL.Actions.UncheckFightResponse", "Un-check Fight Response");
     }
 }
+function createCrashResolutionButtonLabel(action) {
+    return action.type === "die"
+        ? localize("YAKOV_DRYH.ROLL.Actions.Die", "Die")
+        : localize("YAKOV_DRYH.ROLL.Actions.SleepForOneDay", "Sleep for 1 day");
+}
 async function getDominantResolutionButtons(card) {
     if ((card.modifiedResult.dominant !== "discipline" &&
         card.modifiedResult.dominant !== "madness") ||
@@ -293,6 +323,31 @@ async function getFailureResolutionButtons(card) {
     return getFailureResolutionActions(card.failureConsequence, actorData.responses).map((action) => ({
         label: createFailureResolutionButtonLabel(action),
         responseType: action.responseType,
+        type: action.type
+    }));
+}
+async function getCrashResolutionButtons(card, hasPendingDominantResolution, hasPendingFailureResolution) {
+    if (card.crashResolutionText) {
+        return [];
+    }
+    const actor = await resolveActor(card.actorUuid, card.actorId);
+    if (!actor) {
+        return [];
+    }
+    const actorData = normalizeCharacterSystemData(actor.system);
+    if (!shouldOfferCrashResolution({
+        crashResolved: false,
+        exhaustion: actorData.exhaustion,
+        hasPendingDominantResolution,
+        hasPendingFailureResolution
+    })) {
+        return [];
+    }
+    return [
+        { type: "sleep" },
+        { type: "die" }
+    ].map((action) => ({
+        label: createCrashResolutionButtonLabel(action),
         type: action.type
     }));
 }
@@ -345,7 +400,7 @@ async function applyDominantEffect(actor, rollResult, shadowCasting) {
             return appendEffectText(localize("YAKOV_DRYH.ROLL.Effects.discipline", "Un-check a Response or remove 1 Exhaustion."), hopeEffectText);
         case "exhaustion": {
             const actorData = normalizeCharacterSystemData(actor.system);
-            const nextExhaustion = Math.min(actorData.exhaustion + 1, DRYH_EXHAUSTION_MAX);
+            const nextExhaustion = actorData.exhaustion + 1;
             await actor.update({
                 "system.exhaustion": nextExhaustion
             });
@@ -446,6 +501,11 @@ async function createFinalizedRollMessage(message, card, actor, modifiedResult) 
         actorId: card.actorId,
         actorName: card.actorName,
         actorUuid: card.actorUuid,
+        crashCause: shouldAutoApplyCrash(actorData.exhaustion) &&
+            modifiedResult.dominant === "exhaustion"
+            ? "dominant-exhaustion"
+            : null,
+        crashResolutionText: null,
         dominantEffectText,
         dominantResolutionText: null,
         failureConsequence,
@@ -535,7 +595,7 @@ export async function applyDryhRollPlayerAction(message, action) {
                 return null;
             }
             const actorData = normalizeCharacterSystemData(actor.system);
-            const nextExhaustion = Math.min(actorData.exhaustion + 1, DRYH_EXHAUSTION_MAX);
+            const nextExhaustion = actorData.exhaustion + 1;
             if (nextExhaustion === actorData.exhaustion) {
                 return null;
             }
@@ -570,12 +630,18 @@ export async function resolveDryhRollFailureAction(message, action) {
     switch (action.type) {
         case "gain-exhaustion": {
             const actorData = normalizeCharacterSystemData(actor.system);
-            const nextExhaustion = Math.min(actorData.exhaustion + 1, DRYH_EXHAUSTION_MAX);
+            const nextExhaustion = actorData.exhaustion + 1;
             await actor.update({
                 "system.exhaustion": nextExhaustion
             });
             failureResolutionText = formatActorNameEffect("YAKOV_DRYH.ROLL.Effects.FailureResolvedGainExhaustion", "{name} gains +1 Exhaustion.", actor.name ?? localize("DOCUMENT.Actor", "Actor"));
-            break;
+            return updateFinalRollMessage(message, {
+                ...card,
+                crashCause: shouldAutoApplyCrash(nextExhaustion)
+                    ? "failure-exhaustion"
+                    : card.crashCause,
+                failureResolutionText
+            });
         }
         case "check-response": {
             if (!action.responseType) {
@@ -607,7 +673,44 @@ export async function resolveDryhRollFailureAction(message, action) {
     }
     return updateFinalRollMessage(message, {
         ...card,
+        crashCause: card.crashCause,
         failureResolutionText
+    });
+}
+export async function resolveDryhRollCrashAction(message, action) {
+    const card = getRollCardFlag(message);
+    if (!card || card.stage !== "final" || card.crashResolutionText) {
+        return null;
+    }
+    const actor = await resolveActor(card.actorUuid, card.actorId);
+    if (!actor) {
+        ui.notifications?.warn(localize("YAKOV_DRYH.UI.Warnings.ActorUnavailable", "Actor is no longer available."));
+        return null;
+    }
+    const actorData = normalizeCharacterSystemData(actor.system);
+    if (!shouldAutoApplyCrash(actorData.exhaustion)) {
+        return null;
+    }
+    let crashResolutionText;
+    switch (action.type) {
+        case "die":
+            crashResolutionText = formatActorNameEffect("YAKOV_DRYH.ROLL.Effects.CrashDie", "{name} dies.", actor.name ?? localize("DOCUMENT.Actor", "Actor"));
+            break;
+        case "sleep": {
+            const crashedData = applyCrashSleepToCharacterData(actorData);
+            await actor.update({
+                "system.discipline": crashedData.discipline,
+                "system.exhaustion": crashedData.exhaustion,
+                "system.responses.slots": crashedData.responses.slots,
+                "system.responses.max": crashedData.responses.max
+            });
+            crashResolutionText = formatActorNameEffect("YAKOV_DRYH.ROLL.Effects.CrashSleep", "{name} sleeps for 1 day. Discipline = 1. Exhaustion = 0. All Responses are un-checked. Talents are temporarily unavailable.", actor.name ?? localize("DOCUMENT.Actor", "Actor"));
+            break;
+        }
+    }
+    return updateFinalRollMessage(message, {
+        ...card,
+        crashResolutionText
     });
 }
 export async function resolveDryhRollDominantAction(message, action) {

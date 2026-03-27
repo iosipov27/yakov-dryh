@@ -8,6 +8,7 @@ import {
   finalizeDryhRoll,
   getDryhRollCardData,
   hasDryhRollCard,
+  resolveDryhRollCrashAction,
   resolveDryhRollDominantAction,
   resolveDryhRollFailureAction,
   rerenderDryhRollMessage
@@ -167,7 +168,11 @@ function activateDryhRollListeners(
     }
 
     if (card.stage === "final") {
-      if (action !== "resolve-failure" && action !== "resolve-dominant") {
+      if (
+        action !== "resolve-failure" &&
+        action !== "resolve-dominant" &&
+        action !== "resolve-crash"
+      ) {
         actionElement.setAttribute("disabled", "disabled");
         return;
       }
@@ -188,6 +193,17 @@ function activateDryhRollListeners(
               actionElement.dataset.failureAction === "check-response"
                 ? "check-response"
                 : "gain-exhaustion"
+          });
+          return;
+        }
+
+        if (action === "resolve-crash") {
+          html
+            .querySelectorAll<HTMLElement>("[data-yakov-dryh-roll-action='resolve-crash']")
+            .forEach((element) => element.setAttribute("disabled", "disabled"));
+
+          void resolveDryhRollCrashAction(message, {
+            type: actionElement.dataset.crashAction === "die" ? "die" : "sleep"
           });
           return;
         }

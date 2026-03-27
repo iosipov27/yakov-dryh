@@ -161,11 +161,11 @@ export class YakovDryhCharacterSheet extends BaseSheet {
       exhaustionPips: createEditablePips(
         "exhaustion",
         actorData.exhaustion,
-        DRYH_EXHAUSTION_MAX,
+        getEditablePoolTotal(actorData.exhaustion),
         exhaustionLabel
       ),
       exhaustionCardStyle: createStressCardStyle(actorData.exhaustion),
-      exhaustionPipTotal: DRYH_EXHAUSTION_MAX,
+      exhaustionPipTotal: getEditablePoolTotal(actorData.exhaustion),
       madnessPips: createEditablePips(
         "madnessPermanent",
         actorData.madnessPermanent,

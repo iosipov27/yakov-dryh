@@ -52,6 +52,8 @@ function createFinalCard(
     actorId: "actor-1",
     actorName: "Test Actor",
     actorUuid: "Actor.actor-1",
+    crashCause: null,
+    crashResolutionText: null,
     dominantEffectText: "GM gains +1 Despair.",
     dominantResolutionText: null,
     failureConsequence: null,
@@ -199,6 +201,20 @@ describe("DRYH roll-card action visibility", () => {
 
     expect(
       shouldHideDryhRollAction("roll-pain", {
+        isActorOwner: false,
+        isGm: true
+      })
+    ).toBe(false);
+
+    expect(
+      shouldHideDryhRollAction("resolve-crash", {
+        isActorOwner: true,
+        isGm: false
+      })
+    ).toBe(true);
+
+    expect(
+      shouldHideDryhRollAction("resolve-crash", {
         isActorOwner: false,
         isGm: true
       })

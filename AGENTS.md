@@ -193,7 +193,7 @@ Use this section as the current checklist for development progress against the a
   - talents as text
   - scars as text
 - Player roll flow currently supports:
-  - optional `+1 Exhaustion` before the roll
+  - optional `+1 Exhaustion` before the roll when current Exhaustion is below `6`
   - temporary Madness selection for the roll
   - player-side rolling for Discipline, Exhaustion, and Madness
   - optional post-roll `+1 Exhaustion` if the pre-roll option was not used
@@ -223,6 +223,14 @@ Use this section as the current checklist for development progress against the a
     - `+1 Madness`
   - button-driven GM failure resolution from the final roll card
   - automatic failure resolution updates for `+1 Exhaustion` and checking Fight / Flight responses
+  - crash resolution from the final roll card when Exhaustion exceeds `6`:
+    - GM chooses either `Sleep for 1 day` or `Die`
+    - `Sleep for 1 day` applies:
+      - `Discipline = 1`
+      - `Exhaustion = 0`
+      - all Responses are un-checked
+      - talents are marked as temporarily unavailable in the effect text
+    - `Die` currently publishes only a death effect text
 - Shared resource flow currently supports:
   - a shared world-level Hope pool
   - a shared world-level Despair pool
@@ -245,26 +253,28 @@ Use this section as the current checklist for development progress against the a
   - the current flow allows only one `+6` or `-6` intervention per conflict
 - Player post-roll options are incomplete:
   - they are still attached to the staged flow instead of a single conflict-resolution pipeline
+- Intentional house-rule divergence:
+  - the pre-roll Dice Pool dialog does not allow taking `+1 Exhaustion` when current Exhaustion is already `6`
+  - other effects may still push Exhaustion above `6`, allowing Crash to happen during resolution
 - Shared Hope lifecycle is incomplete:
   - Get A Break is not implemented
   - Restore Discipline is not implemented
   - Hope coins do not automatically vanish at session end
 - Exhaustion dominant is only partially rules-compliant:
   - `+1 Exhaustion` is applied
-  - Crash cannot happen while Exhaustion is clamped to `6`
+  - Crash now triggers only after Exhaustion goes above `6`
 - Madness dominant is only partially implemented:
   - Snap does not yet handle Nightmare transition at `0 Discipline`
 - Failure aftermath is only partially implemented:
   - GM can resolve `+1 Exhaustion` or check a Fight / Flight Response from the final roll card
-  - Crash side effects from those choices are not implemented
+  - Crash can now follow those choices once Exhaustion exceeds `6`
 - Snap flow is not implemented:
   - Nightmare transition at `0 Discipline`
-- Crash and Sleep flow is not implemented:
-  - Crash when Exhaustion exceeds `6`
-  - falling asleep or dying by scene end
-  - sleep aftermath values
-  - talent lock during recovery
-  - Discipline restoration after staying awake again
+- Crash and Sleep flow is only partially implemented:
+  - current implementation uses a GM choice in the final roll card instead of automatic by-scene-end handling
+  - sleeping characters attracting Nightmares is not implemented
+  - talent lock during recovery is only described in effect text because talent mechanics are not automated yet
+  - Discipline restoration after staying awake again is not implemented
 - Helping other characters is not implemented.
 - Talent mechanics are not implemented beyond text storage:
   - Exhaustion talent requirements and rewards are not modeled
@@ -580,6 +590,11 @@ tools/
   - keep domain modules focused on domain logic
   - move generic parsing, normalization, formatting, and reusable helpers into `utils/` or another dedicated helper module
   - if a file starts mixing actor logic, UI logic, chat logic, and generic helpers, split it before adding more code
+- Treat user edits as intentional:
+  - if the user has manually changed code, templates, or styles, do not overwrite or revert those edits just to match an earlier pattern
+  - assume a manual user change is needed unless the user explicitly asks to remove it
+  - when continuing work in a file the user has edited, build on top of that version and adapt your implementation to it
+  - if a manual user change directly conflicts with the requested feature, stop and clarify before replacing it
 - For styles:
   - keep `src/styles/yakov-dryh.scss` as the style composition root that only wires partials together
   - keep CSS variables and tokens in a dedicated partial such as `src/styles/partials/_variables.scss`

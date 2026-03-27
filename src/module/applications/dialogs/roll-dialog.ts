@@ -6,6 +6,7 @@ import {
 } from "../../data/index.js";
 import { rollDryhCheck } from "../../dice/index.js";
 import { SYSTEM_ID, SYSTEM_TITLE, TEMPLATE_PATHS } from "../../constants.js";
+import { canAddPreRollExhaustion } from "./roll-dialog-rules.js";
 
 const BaseApplication = foundry.applications.api.HandlebarsApplicationMixin(
   foundry.applications.api.ApplicationV2
@@ -97,8 +98,7 @@ export class YakovDryhRollDialog extends BaseApplication {
   ): Promise<foundry.applications.api.HandlebarsApplicationMixin.RenderContext> {
     const actor = this.actor;
     const actorData = normalizeCharacterSystemData(actor?.system);
-    const addExhaustionMax =
-      actorData.exhaustion < DRYH_EXHAUSTION_MAX ? 1 : 0;
+    const addExhaustionMax = canAddPreRollExhaustion(actorData.exhaustion) ? 1 : 0;
     const addExhaustionLabel = localize(
       "YAKOV_DRYH.ROLL.Dialog.AddExhaustion",
       "Take +1 Exhaustion"
@@ -193,13 +193,16 @@ export class YakovDryhRollDialog extends BaseApplication {
       "madnessTemp"
     ) as HTMLInputElement | null;
     const actorData = normalizeCharacterSystemData(actor.system);
-    const addExhaustion = (Number.parseInt(addExhaustionInput?.value ?? "0", 10) || 0) > 0;
+    const addExhaustionRequested =
+      (Number.parseInt(addExhaustionInput?.value ?? "0", 10) || 0) > 0;
+    const addExhaustion =
+      addExhaustionRequested && canAddPreRollExhaustion(actorData.exhaustion);
     const madnessTemp = Math.min(
       Math.max(Number.parseInt(madnessInput?.value ?? "0", 10) || 0, 0),
       DRYH_TEMP_MADNESS_MAX
     );
     const nextExhaustion = addExhaustion
-      ? Math.min(actorData.exhaustion + 1, DRYH_EXHAUSTION_MAX)
+      ? actorData.exhaustion + 1
       : actorData.exhaustion;
 
     if (addExhaustion && nextExhaustion !== actorData.exhaustion) {
