@@ -210,7 +210,7 @@ async function renderRollCard(card) {
         ? localize("YAKOV_DRYH.ROLL.Chat.MakeChoice", "Make a choice:")
         : null;
     const playerActionPrompt = playerActionButtons.length > 0
-        ? localize("YAKOV_DRYH.ROLL.Chat.PlayerActions", "Player post-roll actions:")
+        ? null
         : null;
     const displayDominantEffectText = isInitial
         ? null

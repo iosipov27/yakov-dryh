@@ -88,91 +88,101 @@
     <header class="yakov-dryh-dice-tray__panel-header">
       <div>
         <p class="yakov-dryh-eyebrow">{{localize "YAKOV_DRYH.TRAY.Eyebrow"}}</p>
-        <h3>{{trayTitle}}</h3>
+        {{#if hasActor}}
+          <h3>{{trayTitle}}</h3>
+        {{/if}}
       </div>
-      <p class="yakov-dryh-copy yakov-dryh-dice-tray__status">{{statusLabel}}</p>
+      {{#if hasActor}}
+        <p class="yakov-dryh-copy yakov-dryh-dice-tray__status">{{statusLabel}}</p>
+      {{/if}}
     </header>
 
-    <div class="yakov-dryh-dice-tray__pools">
-      {{#each poolSummaries}}
-        <section class="yakov-dryh-card-panel yakov-dryh-dice-tray__pool">
-          <div class="yakov-dryh-dice-picker">
-            <div class="yakov-dryh-dice-picker__header">
-              <strong>{{label}}</strong>
-            </div>
-            <div class="yakov-dryh-pip-track yakov-dryh-dice-tray__track{{#if trackClass}} {{trackClass}}{{/if}}">
-              {{#if empty}}
-                <span class="yakov-dryh-copy yakov-dryh-dice-tray__empty">-</span>
-              {{else}}
-                {{#each pips}}
-                  {{#if removable}}
-                    <button
-                      class="yakov-dryh-dice-picker__pip-control yakov-dryh-dice-picker__pip-control--decrease"
-                      type="button"
-                      data-yakov-dryh-tray-pool="{{../key}}"
-                      data-yakov-dryh-tray-delta="-1"
-                      {{#if tooltip}}title="{{tooltip}}" aria-label="{{tooltip}}"{{/if}}
-                    >
-                      <span class="yakov-dryh-pip yakov-dryh-pip--filled"></span>
-                      <span class="yakov-dryh-dice-picker__action-icon yakov-dryh-dice-picker__action-icon--decrease">
-                        <i class="fa-solid fa-trash-can"></i>
+    {{#if hasActor}}
+      <div class="yakov-dryh-dice-tray__pools">
+        {{#each poolSummaries}}
+          <section class="yakov-dryh-card-panel yakov-dryh-dice-tray__pool">
+            <div class="yakov-dryh-dice-picker">
+              <div class="yakov-dryh-dice-picker__header">
+                <strong>{{label}}</strong>
+              </div>
+              <div class="yakov-dryh-pip-track yakov-dryh-dice-tray__track{{#if trackClass}} {{trackClass}}{{/if}}">
+                {{#if empty}}
+                  <span class="yakov-dryh-copy yakov-dryh-dice-tray__empty">-</span>
+                {{else}}
+                  {{#each pips}}
+                    {{#if removable}}
+                      <button
+                        class="yakov-dryh-dice-picker__pip-control yakov-dryh-dice-picker__pip-control--decrease"
+                        type="button"
+                        data-yakov-dryh-tray-pool="{{../key}}"
+                        data-yakov-dryh-tray-delta="-1"
+                        {{#if tooltip}}title="{{tooltip}}" aria-label="{{tooltip}}"{{/if}}
+                      >
+                        <span class="yakov-dryh-pip yakov-dryh-pip--filled"></span>
+                        <span class="yakov-dryh-dice-picker__action-icon yakov-dryh-dice-picker__action-icon--decrease">
+                          <i class="fa-solid fa-trash-can"></i>
+                        </span>
+                      </button>
+                    {{else}}
+                      <span class="yakov-dryh-dice-picker__pip-shell">
+                        <span class="yakov-dryh-pip yakov-dryh-pip--filled"></span>
                       </span>
-                    </button>
-                  {{else}}
-                    <span class="yakov-dryh-dice-picker__pip-shell">
-                      <span class="yakov-dryh-pip yakov-dryh-pip--filled"></span>
-                    </span>
-                  {{/if}}
-                {{/each}}
-              {{/if}}
+                    {{/if}}
+                  {{/each}}
+                {{/if}}
+              </div>
             </div>
-          </div>
-        </section>
-      {{/each}}
-    </div>
-
-    <div class="yakov-dryh-dice-tray__palette">
-      <p class="yakov-dryh-copy yakov-dryh-dice-tray__palette-label">
-        {{localize "YAKOV_DRYH.TRAY.AddDie"}}
-      </p>
-
-      <div class="yakov-dryh-dice-tray__palette-buttons">
-        {{#each paletteButtons}}
-          <button
-            class="yakov-dryh-dice-tray__palette-button {{modifierClass}}"
-            type="button"
-            data-yakov-dryh-tray-pool="{{key}}"
-            data-yakov-dryh-tray-delta="1"
-            title="{{label}}"
-            aria-label="{{label}}"
-            {{#if disabled}}disabled{{/if}}
-          >
-            <span class="yakov-dryh-pip yakov-dryh-pip--filled"></span>
-          </button>
+          </section>
         {{/each}}
       </div>
-    </div>
 
-    <footer class="yakov-dryh-dice-tray__actions">
-      {{#if canLockPools}}
-        <button
-          class="yakov-dryh-button yakov-dryh-button--secondary"
-          type="button"
-          data-yakov-dryh-tray-action="lock-pools"
-        >
-          {{localize "YAKOV_DRYH.TRAY.LockPools"}}
-        </button>
-      {{/if}}
+      <div class="yakov-dryh-dice-tray__palette">
+        <p class="yakov-dryh-copy yakov-dryh-dice-tray__palette-label">
+          {{localize "YAKOV_DRYH.TRAY.AddDie"}}
+        </p>
 
-      {{#if canRoll}}
-        <button
-          class="yakov-dryh-button"
-          type="button"
-          data-yakov-dryh-tray-action="roll"
-        >
-          {{localize "YAKOV_DRYH.TRAY.Roll"}}
-        </button>
-      {{/if}}
-    </footer>
+        <div class="yakov-dryh-dice-tray__palette-buttons">
+          {{#each paletteButtons}}
+            <button
+              class="yakov-dryh-dice-tray__palette-button {{modifierClass}}"
+              type="button"
+              data-yakov-dryh-tray-pool="{{key}}"
+              data-yakov-dryh-tray-delta="1"
+              title="{{label}}"
+              aria-label="{{label}}"
+              {{#if disabled}}disabled{{/if}}
+            >
+              <span class="yakov-dryh-pip yakov-dryh-pip--filled"></span>
+            </button>
+          {{/each}}
+        </div>
+      </div>
+
+      <footer class="yakov-dryh-dice-tray__actions">
+        {{#if canLockPools}}
+          <button
+            class="yakov-dryh-button yakov-dryh-button--secondary"
+            type="button"
+            data-yakov-dryh-tray-action="lock-pools"
+          >
+            {{localize "YAKOV_DRYH.TRAY.LockPools"}}
+          </button>
+        {{/if}}
+
+        {{#if canRoll}}
+          <button
+            class="yakov-dryh-button"
+            type="button"
+            data-yakov-dryh-tray-action="roll"
+          >
+            {{localize "YAKOV_DRYH.TRAY.Roll"}}
+          </button>
+        {{/if}}
+      </footer>
+    {{else}}
+      <div class="yakov-dryh-dice-tray__empty-state">
+        <p class="yakov-dryh-copy">{{localize "YAKOV_DRYH.TRAY.EmptyState"}}</p>
+      </div>
+    {{/if}}
   </section>
 </section>

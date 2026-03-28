@@ -113,6 +113,7 @@
     },
     "TRAY": {
       "AddDie": "Add Die",
+      "EmptyState": "No active character",
       "Eyebrow": "Dice Tray",
       "LockPools": "Lock Pools",
       "NoActor": "No active character",

@@ -463,10 +463,7 @@ async function renderRollCard(card: YakovDryhRollCardData): Promise<string> {
       : null;
   const playerActionPrompt =
     playerActionButtons.length > 0
-      ? localize(
-          "YAKOV_DRYH.ROLL.Chat.PlayerActions",
-          "Player post-roll actions:"
-        )
+      ? null
       : null;
   const displayDominantEffectText = isInitial
     ? null
