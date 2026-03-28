@@ -107,6 +107,7 @@ export class YakovDryhHopeDespairTracker extends BaseApplication {
       document.body.append(root);
     }
 
+    this.initializeCenteredPosition(root);
     this.applyDragPosition(root);
     this.bindRootListeners(root);
   }
@@ -262,6 +263,19 @@ export class YakovDryhHopeDespairTracker extends BaseApplication {
     if (root instanceof HTMLElement) {
       root.classList.remove(DRAGGING_CLASS);
     }
+  }
+
+  private initializeCenteredPosition(root: HTMLElement): void {
+    if (this.dragPosition) {
+      return;
+    }
+
+    const defaultTop = Number.parseFloat(window.getComputedStyle(root).top || "0");
+
+    this.dragPosition = {
+      left: Math.max((window.innerWidth - root.offsetWidth) / 2, 0),
+      top: Number.isFinite(defaultTop) ? Math.max(defaultTop, 0) : 0
+    };
   }
 
   private applyDragPosition(root: HTMLElement): void {
