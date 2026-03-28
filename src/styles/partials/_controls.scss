@@ -70,9 +70,9 @@
   }
 
   &--secondary {
-    background: transparent;
-    border: 1px solid var(--yakov-dryh-border);
-    color: #fff;
+      border: 1px solid var(--yakov-dryh-border);
+      background: var(--yakov-dryh-secondary);
+      color: var(--yakov-dryh-ink-dark);
   }
 
   &--compact {

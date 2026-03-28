@@ -59,19 +59,6 @@
 
 .yakov-dryh-card-panel,
 .yakov-dryh-resource-card {
-  background:
-    linear-gradient(
-      145deg,
-      rgb(var(--yakov-dryh-stress-overlay) / 0.42),
-      rgb(var(--yakov-dryh-stress-overlay-edge) / 0.28)
-    ),
-    linear-gradient(
-      160deg,
-      var(--yakov-dryh-pool-card-base),
-      var(--yakov-dryh-pool-card-base-edge)
-    );
-  border: 1px solid var(--yakov-dryh-pool-card-border);
-  border-radius: 16px;
   color: var(--yakov-dryh-pool-card-ink);
   padding: 1rem;
 
