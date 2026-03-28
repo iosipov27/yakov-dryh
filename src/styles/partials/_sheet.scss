@@ -23,7 +23,6 @@
     display: grid;
     gap: 0.75rem;
     justify-items: stretch;
-    min-width: 300px;
 
     > .yakov-dryh-button,
     > .yakov-dryh-resource-card {
@@ -63,6 +62,52 @@
 }
 
 .yakov-dryh-resource-card {
+  &__header {
+    align-items: flex-start;
+    display: flex;
+    gap: 0.75rem;
+    justify-content: space-between;
+  }
+
+  &__icon-action {
+    align-items: center;
+    background: transparent;
+    border: 1px solid var(--yd-border);
+    border-radius: var(--yd-border-radius);
+    color: inherit;
+    cursor: pointer;
+    display: inline-flex;
+    flex: 0 0 auto;
+    height: 2rem;
+    justify-content: center;
+    opacity: 0;
+    padding: 0;
+    pointer-events: none;
+    transition:
+      opacity 140ms ease,
+      border-color 140ms ease,
+      color 140ms ease,
+      box-shadow 140ms ease;
+    width: 2rem;
+
+    &:hover,
+    &:focus-visible {
+      border-color: var(--yd-accent);
+      color: var(--yd-text-light);
+      outline: none;
+    }
+
+    &:focus-visible {
+      box-shadow: 0 0 0 2px rgb(253 241 237 / 25%);
+    }
+  }
+
+  &:hover &__icon-action,
+  &:focus-within &__icon-action {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
   transition:
     background 160ms ease,
     border-color 160ms ease,

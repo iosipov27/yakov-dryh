@@ -1,5 +1,19 @@
 <div class="yakov-dryh-resource-card">
-  <h4 class="m0">{{localize "YAKOV_DRYH.SHEETS.Actor.Character.Fields.Responses"}} ({{responseMax}})</h4>
+  <div class="yakov-dryh-resource-card__header">
+    <h4 class="m0">{{localize "YAKOV_DRYH.SHEETS.Actor.Character.Fields.Responses"}} ({{responseMax}})</h4>
+
+    {{#if responseIsPlayMode}}
+      <button
+        class="yakov-dryh-resource-card__icon-action"
+        type="button"
+        data-yakov-dryh-response-action="edit"
+        aria-label='{{localize "YAKOV_DRYH.SHEETS.Actor.Character.Actions.EditResponses"}}'
+        title='{{localize "YAKOV_DRYH.SHEETS.Actor.Character.Actions.EditResponses"}}'
+      >
+        <i class="fa-solid fa-pen-to-square"></i>
+      </button>
+    {{/if}}
+  </div>
 
   {{#if responseIsPlayMode}}
     <div class="yakov-dryh-responses yakov-dryh-responses--play mt09">
@@ -19,16 +33,6 @@
           </div>
         </div>
       {{/each}}
-    </div>
-
-    <div class="yakov-dryh-actions mt12">
-      <button
-        class="yakov-dryh-button yakov-dryh-button--secondary"
-        type="button"
-        data-yakov-dryh-response-action="edit"
-      >
-        {{localize "YAKOV_DRYH.SHEETS.Actor.Character.Actions.EditResponses"}}
-      </button>
     </div>
   {{else}}
     <p class="yakov-dryh-copy m0 mt09">
