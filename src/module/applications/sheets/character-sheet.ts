@@ -1,68 +1,28 @@
 import { openDryhDiceTrayForActor } from "../../chat/dice-tray-card-service.js";
 import {
   addResponseSlot as addResponseSlotData,
+  countConfiguredResponses,
   DRYH_EXHAUSTION_MAX,
   DRYH_RESPONSE_MAX,
-  YAKOV_DRYH_RESPONSE_TYPES,
-  countConfiguredResponses,
-  countResponsesByType,
   createDefaultResponsesData,
   hasCheckedResponses,
   normalizeCharacterSystemData,
-  type YakovDryhResponseSlotData,
-  type YakovDryhResponseType,
-  type YakovDryhResponsesData,
-  YAKOV_DRYH_ACTOR_TYPES
+  type YakovDryhResponseSlotData
 } from "../../data/index.js";
 import { SYSTEM_ID, SYSTEM_TITLE, TEMPLATE_PATHS } from "../../constants.js";
-import { formatLineList, parseLineList } from "../../utils/index.js";
+import { parseLineList } from "../../utils/index.js";
+import { createCharacterSheetContext } from "./character-sheet-context.js";
+import { localize } from "./character-sheet-localization.js";
+import { getEditablePoolTotal } from "./character-sheet-pool-helpers.js";
+import {
+  createResponseEditorData,
+  normalizeResponseType
+} from "./character-sheet-response-helpers.js";
+import type { EditableSheetPoolField } from "./character-sheet-types.js";
 
 const BaseSheet: any = foundry.applications.api.HandlebarsApplicationMixin(
   foundry.applications.sheets.ActorSheetV2
 );
-
-interface SheetPip {
-  filled: boolean;
-}
-
-type EditableSheetPoolField = "discipline" | "exhaustion" | "madnessPermanent";
-
-interface EditableSheetPip extends SheetPip {
-  action: "decrease" | "increase" | null;
-  field: EditableSheetPoolField;
-  iconClass: string | null;
-  tooltip: string | null;
-}
-
-interface SheetResponseAllocationIndicator {
-  label: string;
-}
-
-interface SheetResponseAllocationRow {
-  addLabel: string;
-  checkboxes: SheetResponseAllocationIndicator[];
-  label: string;
-  type: YakovDryhResponseType;
-}
-
-interface SheetResponsePlayCheckbox {
-  checked: boolean;
-  index: number;
-  label: string;
-}
-
-interface SheetResponsePlayRow {
-  checkboxes: SheetResponsePlayCheckbox[];
-  label: string;
-  type: YakovDryhResponseType;
-}
-
-const SHEET_DICE_POOL_BASE_TOTAL = 6;
-const STRESS_CARD_VISUAL_MAX = 6;
-const RESPONSE_TYPE_ORDER: YakovDryhResponseType[] = [
-  YAKOV_DRYH_RESPONSE_TYPES.fight,
-  YAKOV_DRYH_RESPONSE_TYPES.flight
-];
 
 export class YakovDryhCharacterSheet extends BaseSheet {
   private boundRoot: HTMLElement | null = null;
@@ -109,94 +69,13 @@ export class YakovDryhCharacterSheet extends BaseSheet {
     options: any
   ): Promise<any> {
     const context = await super._prepareContext(options);
-    const actor = this.actor;
-    const actorData = normalizeCharacterSystemData(actor?.system);
-    const actorType = actor?.type ?? YAKOV_DRYH_ACTOR_TYPES.character;
-    const disciplineLabel = localize(
-      "YAKOV_DRYH.SHEETS.Actor.Character.Fields.Discipline",
-      "Discipline"
+    Object.assign(
+      context,
+      createCharacterSheetContext({
+        actor: this.actor,
+        responseEditSlots: this.responseEditSlots
+      })
     );
-    const exhaustionLabel = localize(
-      "YAKOV_DRYH.SHEETS.Actor.Character.Fields.Exhaustion",
-      "Exhaustion"
-    );
-    const madnessLabel = localize(
-      "YAKOV_DRYH.SHEETS.Actor.Character.Fields.PermanentMadness",
-      "Madness"
-    );
-    const responsesLabel = localize(
-      "YAKOV_DRYH.SHEETS.Actor.Character.Fields.Responses",
-      "Responses"
-    );
-    const fightLabel = localize(
-      "YAKOV_DRYH.SHEETS.Actor.Character.Fields.Fight",
-      "Fight"
-    );
-    const flightLabel = localize(
-      "YAKOV_DRYH.SHEETS.Actor.Character.Fields.Flight",
-      "Flight"
-    );
-    const liveResponses = actorData.responses;
-    const responseEditorData = createResponseEditorData(
-      this.responseEditSlots,
-      liveResponses
-    );
-    const configuredResponseCount = countConfiguredResponses(responseEditorData);
-    const isEditingResponses = this.responseEditSlots !== null;
-    const isPlayMode = !isEditingResponses && configuredResponseCount === DRYH_RESPONSE_MAX;
-    const responseRemaining = Math.max(DRYH_RESPONSE_MAX - configuredResponseCount, 0);
-
-    Object.assign(context, {
-      actorData,
-      actorName: actor?.name ?? "",
-      actorType,
-      actorTypeLabel: localizeActorType(actorType),
-      disciplinePips: createEditablePips(
-        "discipline",
-        actorData.discipline,
-        getEditablePoolTotal(actorData.discipline),
-        disciplineLabel
-      ),
-      disciplinePipTotal: getEditablePoolTotal(actorData.discipline),
-      exhaustionPips: createEditablePips(
-        "exhaustion",
-        actorData.exhaustion,
-        getEditablePoolTotal(actorData.exhaustion),
-        exhaustionLabel
-      ),
-      exhaustionCardStyle: createStressCardStyle(actorData.exhaustion),
-      exhaustionPipTotal: getEditablePoolTotal(actorData.exhaustion),
-      madnessPips: createEditablePips(
-        "madnessPermanent",
-        actorData.madnessPermanent,
-        getEditablePoolTotal(actorData.madnessPermanent),
-        madnessLabel
-      ),
-      madnessCardStyle: createStressCardStyle(actorData.madnessPermanent),
-      madnessPipTotal: getEditablePoolTotal(actorData.madnessPermanent),
-      moduleId: SYSTEM_ID,
-      responseAllocationRows: createResponseAllocationRows(responseEditorData, {
-        fightLabel,
-        flightLabel
-      }),
-      responseCanAddMore: configuredResponseCount < DRYH_RESPONSE_MAX,
-      responseCanSave: isEditingResponses && configuredResponseCount === DRYH_RESPONSE_MAX,
-      responseIsAllocationMode: !isEditingResponses && configuredResponseCount < DRYH_RESPONSE_MAX,
-      responseIsEditMode: isEditingResponses,
-      responseIsPlayMode: isPlayMode,
-      responseMax: DRYH_RESPONSE_MAX,
-      responsePlayRows: createResponsePlayRows(liveResponses, {
-        fightLabel,
-        flightLabel,
-        responsesLabel
-      }),
-      responseRemainingLabel: formatLocalization(
-        "YAKOV_DRYH.SHEETS.Actor.Character.Fields.ResponsesRemaining",
-        { remaining: responseRemaining },
-        `Remaining: ${responseRemaining}`
-      ),
-      scarsText: formatLineList(actorData.scars)
-    });
 
     return context;
   }
@@ -485,162 +364,4 @@ export class YakovDryhCharacterSheet extends BaseSheet {
       "system.scars": parseLineList(value)
     } as Record<string, unknown>);
   }
-}
-
-function createResponseEditorData(
-  editSlots: YakovDryhResponseSlotData[] | null,
-  liveResponses: YakovDryhResponsesData
-): YakovDryhResponsesData {
-  return editSlots === null
-    ? liveResponses
-    : {
-        max: DRYH_RESPONSE_MAX,
-        slots: editSlots
-      };
-}
-
-function createResponseAllocationRows(
-  responses: YakovDryhResponsesData,
-  labels: {
-    fightLabel: string;
-    flightLabel: string;
-  }
-): SheetResponseAllocationRow[] {
-  const configuredCount = countConfiguredResponses(responses);
-
-  return RESPONSE_TYPE_ORDER
-    .map((type) => {
-      const count = countResponsesByType(responses, type);
-
-      if (configuredCount === DRYH_RESPONSE_MAX && count === 0) {
-        return null;
-      }
-
-      const label =
-        type === YAKOV_DRYH_RESPONSE_TYPES.fight ? labels.fightLabel : labels.flightLabel;
-
-      return {
-        addLabel: `${localize(
-          "YAKOV_DRYH.SHEETS.Actor.Character.Actions.AddResponse",
-          "Add Response"
-        )} (${label})`,
-        checkboxes: Array.from({ length: count }, (_entry, index) => ({
-          label: `${label} ${index + 1}`
-        })),
-        label,
-        type
-      };
-    })
-    .filter((row): row is SheetResponseAllocationRow => row !== null);
-}
-
-function createResponsePlayRows(
-  responses: YakovDryhResponsesData,
-  labels: {
-    fightLabel: string;
-    flightLabel: string;
-    responsesLabel: string;
-  }
-): SheetResponsePlayRow[] {
-  return RESPONSE_TYPE_ORDER
-    .map((type) => {
-      const label =
-        type === YAKOV_DRYH_RESPONSE_TYPES.fight ? labels.fightLabel : labels.flightLabel;
-      const checkboxes = responses.slots
-        .map((slot, index) => ({ index, slot }))
-        .filter(({ slot }) => slot.type === type)
-        .map(({ index, slot }, slotIndex) => ({
-          checked: slot.checked,
-          index,
-          label: `${labels.responsesLabel} ${label} ${slotIndex + 1}`
-        }));
-
-      return checkboxes.length > 0
-        ? {
-            checkboxes,
-            label,
-            type
-          }
-        : null;
-    })
-    .filter((row): row is SheetResponsePlayRow => row !== null);
-}
-
-function createEditablePips(
-  field: EditableSheetPoolField,
-  value: number,
-  total: number,
-  label: string
-): EditableSheetPip[] {
-  const normalizedTotal = Math.max(total, 0);
-
-  return Array.from({ length: normalizedTotal }, (_entry, index) => {
-    const filled = index < value;
-    const canDecrease = value > 0 && index === value - 1;
-    const canIncrease = index === value && value < normalizedTotal;
-
-    return {
-      action: canDecrease ? "decrease" : canIncrease ? "increase" : null,
-      field,
-      filled,
-      iconClass: canDecrease ? "fa-solid fa-trash-can" : canIncrease ? "fa-solid fa-plus" : null,
-      tooltip: canDecrease
-        ? `${localize("YAKOV_DRYH.UI.Actions.RemoveDie", "Remove 1 die")} (${label})`
-        : canIncrease
-          ? `${localize("YAKOV_DRYH.UI.Actions.AddDie", "Add 1 die")} (${label})`
-          : null
-    };
-  });
-}
-
-function getEditablePoolTotal(value: number): number {
-  return Math.max(value, SHEET_DICE_POOL_BASE_TOTAL);
-}
-
-function createStressCardStyle(value: number): string {
-  const clampedValue = Math.min(Math.max(value, 0), STRESS_CARD_VISUAL_MAX);
-  const intensity = clampedValue / STRESS_CARD_VISUAL_MAX;
-  const dangerStop = `${(intensity * 100).toFixed(2)}%`;
-  const safeStop = `${(100 - intensity * 100).toFixed(2)}%`;
-  const sheen = (0.86 - intensity * 0.16).toFixed(3);
-
-  return [
-    `--yakov-dryh-stress-intensity: ${intensity.toFixed(3)}`,
-    `--yakov-dryh-stress-sheen: ${sheen}`,
-    `--yakov-dryh-stress-safe-stop: ${safeStop}`,
-    `--yakov-dryh-stress-danger-stop: ${dangerStop}`
-  ].join("; ");
-}
-
-function localizeActorType(actorType: string): string {
-  const localizationKey = `TYPES.Actor.${actorType}`;
-  const localizedActorType = game.i18n?.localize(localizationKey) ?? localizationKey;
-
-  return localizedActorType === localizationKey ? actorType : localizedActorType;
-}
-
-function localize(key: string, fallback: string): string {
-  const localizedValue = game.i18n?.localize(key) ?? key;
-
-  return localizedValue === key ? fallback : localizedValue;
-}
-
-function formatLocalization(
-  key: string,
-  data: Record<string, string | number>,
-  fallback: string
-): string {
-  const formatData = Object.fromEntries(
-    Object.entries(data).map(([entryKey, value]) => [entryKey, String(value)])
-  );
-  const localizedValue = game.i18n?.format(key, formatData) ?? key;
-
-  return localizedValue === key ? fallback : localizedValue;
-}
-
-function normalizeResponseType(value: string): YakovDryhResponseType | "" {
-  return value === YAKOV_DRYH_RESPONSE_TYPES.fight ||
-    value === YAKOV_DRYH_RESPONSE_TYPES.flight
-    ? value
-    : "";
 }

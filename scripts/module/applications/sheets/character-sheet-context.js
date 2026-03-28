@@ -1,0 +1,56 @@
+import { DRYH_RESPONSE_MAX, normalizeCharacterSystemData, YAKOV_DRYH_ACTOR_TYPES } from "../../data/index.js";
+import { SYSTEM_ID } from "../../constants.js";
+import { formatLineList } from "../../utils/index.js";
+import { formatLocalization, localize, localizeActorType } from "./character-sheet-localization.js";
+import { createEditablePips, createStressCardStyle, getEditablePoolTotal } from "./character-sheet-pool-helpers.js";
+import { createResponseAllocationRows, createResponseEditorData, createResponsePlayRows } from "./character-sheet-response-helpers.js";
+export function createCharacterSheetContext(input) {
+    const { actor, responseEditSlots } = input;
+    const actorData = normalizeCharacterSystemData(actor?.system);
+    const actorType = actor?.type ?? YAKOV_DRYH_ACTOR_TYPES.character;
+    const disciplineLabel = localize("YAKOV_DRYH.SHEETS.Actor.Character.Fields.Discipline", "Discipline");
+    const exhaustionLabel = localize("YAKOV_DRYH.SHEETS.Actor.Character.Fields.Exhaustion", "Exhaustion");
+    const madnessLabel = localize("YAKOV_DRYH.SHEETS.Actor.Character.Fields.PermanentMadness", "Madness");
+    const responsesLabel = localize("YAKOV_DRYH.SHEETS.Actor.Character.Fields.Responses", "Responses");
+    const fightLabel = localize("YAKOV_DRYH.SHEETS.Actor.Character.Fields.Fight", "Fight");
+    const flightLabel = localize("YAKOV_DRYH.SHEETS.Actor.Character.Fields.Flight", "Flight");
+    const liveResponses = actorData.responses;
+    const responseEditorData = createResponseEditorData(responseEditSlots, liveResponses);
+    const configuredResponseCount = responseEditorData.slots.filter((slot) => slot.type !== "").length;
+    const isEditingResponses = responseEditSlots !== null;
+    const isPlayMode = !isEditingResponses && configuredResponseCount === DRYH_RESPONSE_MAX;
+    const responseRemaining = Math.max(DRYH_RESPONSE_MAX - configuredResponseCount, 0);
+    return {
+        actorData,
+        actorName: actor?.name ?? "",
+        actorType,
+        actorTypeLabel: localizeActorType(actorType),
+        disciplinePips: createEditablePips("discipline", actorData.discipline, getEditablePoolTotal(actorData.discipline), disciplineLabel),
+        disciplinePipTotal: getEditablePoolTotal(actorData.discipline),
+        exhaustionPips: createEditablePips("exhaustion", actorData.exhaustion, getEditablePoolTotal(actorData.exhaustion), exhaustionLabel),
+        exhaustionCardStyle: createStressCardStyle(actorData.exhaustion),
+        exhaustionPipTotal: getEditablePoolTotal(actorData.exhaustion),
+        madnessPips: createEditablePips("madnessPermanent", actorData.madnessPermanent, getEditablePoolTotal(actorData.madnessPermanent), madnessLabel),
+        madnessCardStyle: createStressCardStyle(actorData.madnessPermanent),
+        madnessPipTotal: getEditablePoolTotal(actorData.madnessPermanent),
+        moduleId: SYSTEM_ID,
+        responseAllocationRows: createResponseAllocationRows(responseEditorData, {
+            fightLabel,
+            flightLabel
+        }),
+        responseCanAddMore: configuredResponseCount < DRYH_RESPONSE_MAX,
+        responseCanSave: isEditingResponses && configuredResponseCount === DRYH_RESPONSE_MAX,
+        responseIsAllocationMode: !isEditingResponses && configuredResponseCount < DRYH_RESPONSE_MAX,
+        responseIsEditMode: isEditingResponses,
+        responseIsPlayMode: isPlayMode,
+        responseMax: DRYH_RESPONSE_MAX,
+        responsePlayRows: createResponsePlayRows(liveResponses, {
+            fightLabel,
+            flightLabel,
+            responsesLabel
+        }),
+        responseRemainingLabel: formatLocalization("YAKOV_DRYH.SHEETS.Actor.Character.Fields.ResponsesRemaining", { remaining: responseRemaining }, `Remaining: ${responseRemaining}`),
+        scarsText: formatLineList(actorData.scars)
+    };
+}
+//# sourceMappingURL=character-sheet-context.js.map
