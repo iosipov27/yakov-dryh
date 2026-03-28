@@ -103,7 +103,7 @@
           <section class="yakov-dryh-card-panel yakov-dryh-dice-tray__pool">
             <div class="yakov-dryh-dice-picker">
               <div class="yakov-dryh-dice-picker__header">
-                <strong>{{label}}</strong>
+                <span>{{label}}</span>
               </div>
               <div class="yakov-dryh-pip-track yakov-dryh-dice-tray__track mt065{{#if trackClass}} {{trackClass}}{{/if}}">
                 {{#if empty}}
@@ -158,7 +158,16 @@
         </div>
       </div>
 
-      <footer class="yakov-dryh-dice-tray__actions">
+      <footer class="yakov-dryh-dice-tray__actions mt15">
+        {{#if canRoll}}
+          <button
+            class="yakov-dryh-button"
+            type="button"
+            data-yakov-dryh-tray-action="roll"
+          >
+            {{localize "YAKOV_DRYH.TRAY.Roll"}}
+          </button>
+        {{/if}}
         {{#if canRoll}}
           <button
             class="yakov-dryh-button"

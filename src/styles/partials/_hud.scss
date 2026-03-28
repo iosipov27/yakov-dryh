@@ -26,8 +26,7 @@
   &__panel {
     border-radius: var(--yd-border-radius);
     display: grid;
-    gap: 0.85rem;
-    padding: 0.9rem;
+    gap: 0.1rem;
   }
 
   &__panel-header {
@@ -35,6 +34,8 @@
     display: flex;
     gap: 0.75rem;
     justify-content: space-between;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--yd-border-button);
   }
 
   &__status {
@@ -64,7 +65,7 @@
   }
 
   &__palette {
-    border-top: 1px solid rgb(183 167 156 / 44%);
+    border-top: 1px solid var(--yd-border-button);
     display: grid;
     gap: 0.65rem;
     padding-top: 0.75rem;
