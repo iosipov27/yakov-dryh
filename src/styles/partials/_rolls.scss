@@ -8,12 +8,7 @@
     background: rgb(255 255 255 / 76%);
     border-left: 4px solid var(--yd-accent);
     border-radius: var(--yd-border-radius);
-    margin: 0;
     padding: 0.85rem 1rem;
-
-    p {
-      margin: 0.35rem 0 0;
-    }
   }
 }
 
@@ -21,7 +16,6 @@
   &__arrow {
     color: var(--yd-muted);
     font-size: 0.85em;
-    margin-inline: 0.15rem;
   }
 
   &__pools {
@@ -34,11 +28,6 @@
     gap: 0.55rem;
   }
 
-  &__resolution-owner,
-  &__resolution-copy {
-    margin: 0;
-  }
-
   &__resolution-owner {
     font-weight: 700;
   }
@@ -47,7 +36,6 @@
   &__dominant {
     background: rgb(255 255 255 / 72%);
     border-radius: var(--yd-border-radius);
-    margin: 0;
     padding: 0.8rem 0.9rem;
   }
 
@@ -57,19 +45,13 @@
     border-left: 4px solid var(--yd-madness);
     border-radius: var(--yd-border-radius);
     color: var(--yd-madness);
-    margin-top: 0.75rem;
     padding: 0.8rem 0.9rem;
 
     strong {
       display: block;
       font-size: 0.98rem;
       letter-spacing: 0.02em;
-      margin: 0;
       text-transform: uppercase;
-    }
-
-    p {
-      margin: 0.35rem 0 0;
     }
   }
 
@@ -79,7 +61,6 @@
     border-left: 4px solid var(--yd-madness);
     border-radius: var(--yd-border-radius);
     color: var(--yd-madness);
-    margin-top: 0.75rem;
     padding: 0.8rem 0.9rem;
 
     strong {
@@ -87,7 +68,6 @@
       font-size: 1.5rem;
       letter-spacing: 0.04em;
       line-height: 1;
-      margin: 0;
       text-transform: uppercase;
     }
   }

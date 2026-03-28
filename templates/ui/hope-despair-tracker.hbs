@@ -3,18 +3,18 @@
     class="yakov-dryh-resource-tracker__header"
     data-yakov-dryh-drag-handle
   >
-    <p class="yakov-dryh-eyebrow">{{localize "YAKOV_DRYH.RESOURCES.Eyebrow"}}</p>
-    <h3>{{localize "YAKOV_DRYH.RESOURCES.Title"}}</h3>
+    <p class="yakov-dryh-eyebrow m0 mb035">{{localize "YAKOV_DRYH.RESOURCES.Eyebrow"}}</p>
+    <h3 class="m0">{{localize "YAKOV_DRYH.RESOURCES.Title"}}</h3>
   </header>
 
   <div class="yakov-dryh-resource-tracker__rows">
     <section class="yakov-dryh-resource-tracker__row yakov-dryh-resource-tracker__row--hope">
       <div>
         <strong>{{localize "YAKOV_DRYH.RESOURCES.Hope"}}</strong>
-        <div class="yakov-dryh-resource-tracker__values">
-          <p class="yakov-dryh-copy yakov-dryh-resource-tracker__value">{{hope}}</p>
+        <div class="yakov-dryh-resource-tracker__values mt02">
+          <p class="yakov-dryh-copy yakov-dryh-resource-tracker__value m0">{{hope}}</p>
           {{#if hasPendingHope}}
-            <p class="yakov-dryh-copy yakov-dryh-resource-tracker__value yakov-dryh-resource-tracker__value--pending">
+            <p class="yakov-dryh-copy yakov-dryh-resource-tracker__value yakov-dryh-resource-tracker__value--pending m0">
               {{pendingHope}}
             </p>
           {{/if}}
@@ -54,7 +54,7 @@
     <section class="yakov-dryh-resource-tracker__row yakov-dryh-resource-tracker__row--despair">
       <div>
         <strong>{{localize "YAKOV_DRYH.RESOURCES.Despair"}}</strong>
-        <p class="yakov-dryh-copy">{{despair}}</p>
+        <p class="yakov-dryh-copy m0 mt02">{{despair}}</p>
       </div>
 
       <div class="yakov-dryh-inline-actions">
@@ -79,6 +79,6 @@
   </div>
 
   {{#unless canEdit}}
-    <p class="yakov-dryh-copy">{{localize "YAKOV_DRYH.RESOURCES.ReadOnly"}}</p>
+    <p class="yakov-dryh-copy m0 mt035">{{localize "YAKOV_DRYH.RESOURCES.ReadOnly"}}</p>
   {{/unless}}
 </section>

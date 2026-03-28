@@ -37,15 +37,6 @@
   display: flex;
   gap: 1rem;
   justify-content: space-between;
-
-  &--sheet {
-    margin-bottom: 1rem;
-  }
-
-  h2,
-  h3 {
-    margin: 0;
-  }
 }
 
 .yakov-dryh-eyebrow {
@@ -53,7 +44,6 @@
   font-size: 0.75rem;
   font-weight: 700;
   letter-spacing: 0.16em;
-  margin: 0 0 0.35rem;
   text-transform: uppercase;
 }
 
@@ -115,12 +105,5 @@
     --yd-stress-target: var(--yd-stress-madness);
     --yd-stress-target-edge: var(--yd-stress-madness-edge);
     --yd-stress-border: var(--yd-stress-madness-border);
-  }
-}
-
-.yakov-dryh-card-panel,
-.yakov-dryh-resource-card {
-  h3 {
-    margin: 0;
   }
 }

@@ -14,6 +14,7 @@
 .yakov-dryh-dice-tray-card {
   display: grid;
   gap: 0.85rem;
+  background: var(--yd-round-shadow);
 }
 
 .yakov-dryh-dice-tray {
@@ -34,12 +35,6 @@
     display: flex;
     gap: 0.75rem;
     justify-content: space-between;
-
-    h3,
-    .yakov-dryh-eyebrow,
-    .yakov-dryh-copy {
-      margin: 0;
-    }
   }
 
   &__status {
@@ -54,12 +49,6 @@
     min-height: 13rem;
     place-items: center;
     text-align: center;
-
-    .yakov-dryh-copy {
-      font-size: 1rem;
-      font-weight: 700;
-      margin: 0;
-    }
   }
 
   &__pools {
@@ -71,12 +60,7 @@
   }
 
   &__track {
-    margin-top: 0.5rem;
     min-height: 2rem;
-  }
-
-  &__empty {
-    margin: 0;
   }
 
   &__palette {
@@ -84,10 +68,6 @@
     display: grid;
     gap: 0.65rem;
     padding-top: 0.75rem;
-  }
-
-  &__palette-label {
-    margin: 0;
   }
 
   &__palette-buttons {
@@ -99,7 +79,7 @@
   &__palette-button {
     align-items: center;
     background: transparent;
-    border: 1px solid rgb(183 167 156 / 44%);
+    border: 1px solid var(--yd-border-button);
     border-radius: var(--yd-border-radius);
     cursor: pointer;
     display: inline-flex;
@@ -108,9 +88,16 @@
     min-width: 2.6rem;
     padding: 0.25rem;
 
+    &:hover {
+      border: 1px solid var(--yd-border-active);
+    }
+
     &:disabled {
       cursor: default;
       opacity: 0.4;
+        &:hover {
+          border: 1px solid var(--yd-border-button);
+        }
     }
 
     .yakov-dryh-pip {
@@ -163,11 +150,6 @@
     cursor: grab;
     user-select: none;
 
-    h3,
-    .yakov-dryh-eyebrow {
-      margin: 0;
-    }
-
     &--static {
       cursor: default;
       user-select: auto;
@@ -192,32 +174,23 @@
       border-left: 4px solid var(--yd-pain);
     }
 
-    .yakov-dryh-copy {
-      margin-top: 0.2rem;
-    }
   }
 
   &__actions {
     align-items: center;
     display: flex;
     gap: 0.5rem;
-
-    .yakov-dryh-inline-actions {
-      margin-top: 0;
-    }
   }
 
   &__values {
     align-items: baseline;
     display: flex;
     gap: 0.85rem;
-    margin-top: 0.2rem;
   }
 
   &__value {
     font-size: 1.1rem;
     font-weight: 700;
-    margin: 0;
 
     &--pending {
       color: var(--yd-muted);

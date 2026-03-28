@@ -4,6 +4,9 @@
 // Examples:
 // - `mt1` => `margin-top: 1rem`
 // - `mb02` => `margin-bottom: 0.2rem`
+// - `mt035` => `margin-top: 0.35rem`
+// - `ml015` => `margin-left: 0.15rem`
+// - `mt075` => `margin-top: 0.75rem`
 // - `ml15` => `margin-left: 1.5rem`
 // - `mr5` => `margin-right: 5rem`
 // - `m0` => `margin: 0`
@@ -21,11 +24,25 @@ $yakov-dryh-margin-utility-properties: (
     @return "0";
   }
 
+  @if $step % 100 == 0 {
+    @return "#{math.div($step, 100)}";
+  }
+
   @if $step % 10 == 0 {
-    @return "#{math.div($step, 10)}";
+    $tenths: math.div($step, 10);
+
+    @if $step < 100 {
+      @return "0#{$tenths}";
+    }
+
+    @return "#{$tenths}";
   }
 
   @if $step < 10 {
+    @return "00#{$step}";
+  }
+
+  @if $step < 100 {
     @return "0#{$step}";
   }
 
@@ -33,9 +50,11 @@ $yakov-dryh-margin-utility-properties: (
 }
 
 @each $prefix, $property in $yakov-dryh-margin-utility-properties {
-  @for $step from 0 through 50 {
+  @for $index from 0 through 100 {
+    $step: $index * 5;
+
     .#{$prefix}#{yakov-dryh-margin-utility-suffix($step)} {
-      #{$property}: math.div($step, 10) * 1rem;
+      #{$property}: math.div($step, 100) * 1rem;
     }
   }
 }

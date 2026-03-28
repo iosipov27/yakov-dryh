@@ -3,10 +3,10 @@
     <section class="yakov-dryh-dice-tray__panel">
       <header class="yakov-dryh-dice-tray__panel-header">
         <div>
-          <p class="yakov-dryh-eyebrow">{{localize "YAKOV_DRYH.TRAY.Eyebrow"}}</p>
+          <p class="yakov-dryh-eyebrow m0 mb035">{{localize "YAKOV_DRYH.TRAY.Eyebrow"}}</p>
         </div>
         {{#if statusLabel}}
-          <p class="yakov-dryh-copy yakov-dryh-dice-tray__status">{{statusLabel}}</p>
+          <p class="yakov-dryh-copy yakov-dryh-dice-tray__status m0">{{statusLabel}}</p>
         {{/if}}
       </header>
 
@@ -17,7 +17,7 @@
               <div class="yakov-dryh-dice-picker__header">
                 <strong>{{label}}</strong>
               </div>
-              <div class="yakov-dryh-pip-track yakov-dryh-dice-tray__track{{#if trackClass}} {{trackClass}}{{/if}}">
+              <div class="yakov-dryh-pip-track yakov-dryh-dice-tray__track mt065{{#if trackClass}} {{trackClass}}{{/if}}">
                 {{#if empty}}
                   <span class="yakov-dryh-copy yakov-dryh-dice-tray__empty">-</span>
                 {{else}}
@@ -49,7 +49,7 @@
       </div>
 
       <div class="yakov-dryh-dice-tray__palette">
-        <p class="yakov-dryh-copy yakov-dryh-dice-tray__palette-label">
+        <p class="yakov-dryh-copy yakov-dryh-dice-tray__palette-label m0">
           {{localize "YAKOV_DRYH.TRAY.AddDie"}}
         </p>
 

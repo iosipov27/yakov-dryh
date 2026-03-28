@@ -4,18 +4,18 @@
       class="yakov-dryh-resource-tracker__header"
       data-yakov-dryh-drag-handle
     >
-      <p class="yakov-dryh-eyebrow">{{localize "YAKOV_DRYH.RESOURCES.Eyebrow"}}</p>
-      <h3>{{localize "YAKOV_DRYH.RESOURCES.Title"}}</h3>
+      <p class="yakov-dryh-eyebrow m0 mb035">{{localize "YAKOV_DRYH.RESOURCES.Eyebrow"}}</p>
+      <h3 class="m0">{{localize "YAKOV_DRYH.RESOURCES.Title"}}</h3>
     </header>
 
     <div class="yakov-dryh-resource-tracker__rows">
       <section class="yakov-dryh-resource-tracker__row yakov-dryh-resource-tracker__row--hope">
         <div>
           <strong>{{localize "YAKOV_DRYH.RESOURCES.Hope"}}</strong>
-          <div class="yakov-dryh-resource-tracker__values">
-            <p class="yakov-dryh-copy yakov-dryh-resource-tracker__value">{{hope}}</p>
+          <div class="yakov-dryh-resource-tracker__values mt02">
+            <p class="yakov-dryh-copy yakov-dryh-resource-tracker__value m0">{{hope}}</p>
             {{#if hasPendingHope}}
-              <p class="yakov-dryh-copy yakov-dryh-resource-tracker__value yakov-dryh-resource-tracker__value--pending">
+              <p class="yakov-dryh-copy yakov-dryh-resource-tracker__value yakov-dryh-resource-tracker__value--pending m0">
                 {{pendingHope}}
               </p>
             {{/if}}
@@ -55,7 +55,7 @@
       <section class="yakov-dryh-resource-tracker__row yakov-dryh-resource-tracker__row--despair">
         <div>
           <strong>{{localize "YAKOV_DRYH.RESOURCES.Despair"}}</strong>
-          <p class="yakov-dryh-copy">{{despair}}</p>
+          <p class="yakov-dryh-copy m0 mt02">{{despair}}</p>
         </div>
 
         <div class="yakov-dryh-inline-actions">
@@ -80,20 +80,20 @@
     </div>
 
     {{#unless canEdit}}
-      <p class="yakov-dryh-copy">{{localize "YAKOV_DRYH.RESOURCES.ReadOnly"}}</p>
+      <p class="yakov-dryh-copy m0 mt035">{{localize "YAKOV_DRYH.RESOURCES.ReadOnly"}}</p>
     {{/unless}}
   </section>
 
   <section class="yakov-dryh-dice-tray__panel">
     <header class="yakov-dryh-dice-tray__panel-header">
       <div>
-        <p class="yakov-dryh-eyebrow">{{localize "YAKOV_DRYH.TRAY.Eyebrow"}}</p>
+        <p class="yakov-dryh-eyebrow m0 mb035">{{localize "YAKOV_DRYH.TRAY.Eyebrow"}}</p>
         {{#if hasActor}}
-          <h3>{{trayTitle}}</h3>
+          <h3 class="m0">{{trayTitle}}</h3>
         {{/if}}
       </div>
       {{#if statusLabel}}
-        <p class="yakov-dryh-copy yakov-dryh-dice-tray__status">{{statusLabel}}</p>
+        <p class="yakov-dryh-copy yakov-dryh-dice-tray__status m0">{{statusLabel}}</p>
       {{/if}}
     </header>
 
@@ -105,9 +105,9 @@
               <div class="yakov-dryh-dice-picker__header">
                 <strong>{{label}}</strong>
               </div>
-              <div class="yakov-dryh-pip-track yakov-dryh-dice-tray__track{{#if trackClass}} {{trackClass}}{{/if}}">
+              <div class="yakov-dryh-pip-track yakov-dryh-dice-tray__track mt065{{#if trackClass}} {{trackClass}}{{/if}}">
                 {{#if empty}}
-                  <span class="yakov-dryh-copy yakov-dryh-dice-tray__empty">-</span>
+                  <span class="yakov-dryh-copy yakov-dryh-dice-tray__empty m0">-</span>
                 {{else}}
                   {{#each pips}}
                     {{#if removable}}
@@ -137,7 +137,7 @@
       </div>
 
       <div class="yakov-dryh-dice-tray__palette">
-        <p class="yakov-dryh-copy yakov-dryh-dice-tray__palette-label">
+        <p class="yakov-dryh-copy yakov-dryh-dice-tray__palette-label m0">
           {{localize "YAKOV_DRYH.TRAY.AddDie"}}
         </p>
 
@@ -171,7 +171,7 @@
       </footer>
     {{else}}
       <div class="yakov-dryh-dice-tray__empty-state">
-        <p class="yakov-dryh-copy">{{localize "YAKOV_DRYH.TRAY.EmptyState"}}</p>
+        <p class="yakov-dryh-copy m0">{{localize "YAKOV_DRYH.TRAY.EmptyState"}}</p>
       </div>
     {{/if}}
   </section>

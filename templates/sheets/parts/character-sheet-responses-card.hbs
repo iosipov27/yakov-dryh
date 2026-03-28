@@ -1,5 +1,5 @@
 <div class="yakov-dryh-resource-card">
-  <h4>{{localize "YAKOV_DRYH.SHEETS.Actor.Character.Fields.Responses"}} ({{responseMax}})</h4>
+  <h4 class="m0">{{localize "YAKOV_DRYH.SHEETS.Actor.Character.Fields.Responses"}} ({{responseMax}})</h4>
 
   {{#if responseIsPlayMode}}
     <div class="yakov-dryh-responses yakov-dryh-responses--play mt09">
@@ -31,7 +31,7 @@
       </button>
     </div>
   {{else}}
-    <p class="yakov-dryh-copy mt09">
+    <p class="yakov-dryh-copy m0 mt09">
       {{localize "YAKOV_DRYH.SHEETS.Actor.Character.Fields.ResponsesHint"}}
     </p>
 
@@ -65,7 +65,7 @@
       {{/each}}
     </div>
 
-    <p class="yakov-dryh-copy mt09">{{responseRemainingLabel}}</p>
+    <p class="yakov-dryh-copy m0 mt09">{{responseRemainingLabel}}</p>
 
     {{#if responseIsEditMode}}
       <div class="yakov-dryh-actions mt12">
