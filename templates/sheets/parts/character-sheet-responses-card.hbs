@@ -13,6 +13,19 @@
         <i class="fa-solid fa-pen-to-square"></i>
       </button>
     {{/if}}
+
+    {{#if responseIsEditMode}}
+      <button
+        class="yakov-dryh-resource-card__icon-action yakov-dryh-resource-card__icon-action--persistent"
+        type="button"
+        data-yakov-dryh-response-action="save"
+        aria-label='{{localize "YAKOV_DRYH.SHEETS.Actor.Character.Actions.SaveResponses"}}'
+        title='{{localize "YAKOV_DRYH.SHEETS.Actor.Character.Actions.SaveResponses"}}'
+        {{#unless responseCanSave}}disabled{{/unless}}
+      >
+        <i class="fa-solid fa-floppy-disk"></i>
+      </button>
+    {{/if}}
   </div>
 
   {{#if responseIsPlayMode}}
@@ -70,18 +83,5 @@
     </div>
 
     <p class="yakov-dryh-copy m0 mt09">{{responseRemainingLabel}}</p>
-
-    {{#if responseIsEditMode}}
-      <div class="yakov-dryh-actions mt12">
-        <button
-          class="yakov-dryh-button"
-          type="button"
-          data-yakov-dryh-response-action="save"
-          {{#unless responseCanSave}}disabled{{/unless}}
-        >
-          {{localize "YAKOV_DRYH.SHEETS.Actor.Character.Actions.SaveResponses"}}
-        </button>
-      </div>
-    {{/if}}
   {{/if}}
 </div>

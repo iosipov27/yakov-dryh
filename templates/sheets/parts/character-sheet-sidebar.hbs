@@ -12,6 +12,8 @@
       cardClasses="yakov-dryh-resource-card--stress yakov-dryh-resource-card--exhaustion"
       cardStyle=exhaustionCardStyle
       label=(localize "YAKOV_DRYH.SHEETS.Actor.Character.Fields.Exhaustion")
+      showIconAction=true
+      iconActionLabel=(localize "YAKOV_DRYH.SHEETS.Actor.Character.Actions.Edit")
       pips=exhaustionPips
       trackClass="yakov-dryh-pip-track--exhaustion"
     }}
@@ -19,6 +21,8 @@
 
   {{> "systems/yakov-dryh/templates/sheets/parts/character-sheet-resource-card.hbs"
     label=(localize "YAKOV_DRYH.SHEETS.Actor.Character.Fields.Discipline")
+    showIconAction=true
+    iconActionLabel=(localize "YAKOV_DRYH.SHEETS.Actor.Character.Actions.Edit")
     pips=disciplinePips
   }}
 
@@ -26,6 +30,8 @@
     cardClasses="yakov-dryh-resource-card--stress yakov-dryh-resource-card--madness"
     cardStyle=madnessCardStyle
     label=(localize "YAKOV_DRYH.SHEETS.Actor.Character.Fields.PermanentMadness")
+    showIconAction=true
+    iconActionLabel=(localize "YAKOV_DRYH.SHEETS.Actor.Character.Actions.Edit")
     pips=madnessPips
     trackClass="yakov-dryh-pip-track--madness"
   }}

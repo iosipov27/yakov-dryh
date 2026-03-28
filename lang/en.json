@@ -153,15 +153,16 @@
             "Talents": "Talents"
           },
           "Actions": {
-            "AddResponse": "Add Response",
-            "AddPool": "Add Pool",
-            "AddExhaustion": "+ Exhaustion",
-            "Cancel": "Cancel",
-            "CreateChatCard": "Create interactive chat card",
-            "EditResponses": "Edit Responses",
-            "Roll": "Roll",
-            "SaveResponses": "Save"
-          }
+          "AddResponse": "Add Response",
+          "AddPool": "Add Pool",
+          "AddExhaustion": "+ Exhaustion",
+          "Cancel": "Cancel",
+          "CreateChatCard": "Create interactive chat card",
+          "Edit": "Edit",
+          "EditResponses": "Edit Responses",
+          "Roll": "Roll",
+          "SaveResponses": "Save"
+        }
         }
       }
     },

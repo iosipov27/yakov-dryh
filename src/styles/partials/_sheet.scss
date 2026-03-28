@@ -100,6 +100,24 @@
     &:focus-visible {
       box-shadow: 0 0 0 2px rgb(253 241 237 / 25%);
     }
+
+    &:disabled {
+      cursor: default;
+      opacity: 0.45;
+    }
+
+    &:disabled:hover,
+    &:disabled:focus-visible {
+      border-color: var(--yd-border);
+      box-shadow: none;
+      color: inherit;
+      outline: none;
+    }
+
+    &--persistent {
+      opacity: 1;
+      pointer-events: auto;
+    }
   }
 
   &:hover &__icon-action,
