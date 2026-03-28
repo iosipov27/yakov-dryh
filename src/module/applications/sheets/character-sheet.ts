@@ -1,5 +1,4 @@
-import { loadActorIntoDiceTray } from "../ui/dice-tray-state.js";
-import { renderDiceTray } from "../ui/dice-tray.js";
+import { openDryhDiceTrayForActor } from "../../chat/dice-tray-card-service.js";
 import {
   addResponseSlot as addResponseSlotData,
   DRYH_EXHAUSTION_MAX,
@@ -222,8 +221,7 @@ export class YakovDryhCharacterSheet extends BaseSheet {
       return;
     }
 
-    await loadActorIntoDiceTray(this.actor);
-    await renderDiceTray();
+    await openDryhDiceTrayForActor(this.actor);
   }
 
   private bindRootListeners(root: HTMLElement): void {

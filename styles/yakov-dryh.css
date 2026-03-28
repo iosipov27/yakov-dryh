@@ -1615,6 +1615,11 @@
   cursor: grabbing;
 }
 
+.yakov-dryh-dice-tray-card {
+  display: grid;
+  gap: 0.85rem;
+}
+
 .yakov-dryh-dice-tray__shell {
   display: grid;
   gap: 0.85rem;
@@ -1737,6 +1742,10 @@
 .yakov-dryh-resource-tracker__header h3,
 .yakov-dryh-resource-tracker__header .yakov-dryh-eyebrow {
   margin: 0;
+}
+.yakov-dryh-resource-tracker__header--static {
+  cursor: default;
+  user-select: auto;
 }
 .yakov-dryh-resource-tracker__row {
   align-items: center;

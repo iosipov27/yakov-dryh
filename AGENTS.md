@@ -193,7 +193,7 @@ Use this section as the current checklist for development progress against the a
   - talents as text
   - scars as text
 - Player roll flow currently supports:
-  - loading the current actor pool into the always-visible Dice Tray from the character sheet
+  - loading the current actor pool into a chat-based Dice Tray from the character sheet
   - tray-based pool building for Discipline, Exhaustion, Madness, and Pain before the roll
   - optional `+1 Exhaustion` before the roll when current Exhaustion is below `6`
   - temporary Madness selection for the roll
@@ -239,7 +239,8 @@ Use this section as the current checklist for development progress against the a
   - a shared world-level Hope pool
   - a separate pending Hope pool for tokens that unlock on the next scene
   - a shared world-level Despair pool
-  - an always-visible Dice Tray window with the old Hope / Despair block preserved at the top
+  - an always-visible Hope / Despair tracker window
+  - a separate chat-based Dice Tray card for player and GM dice pools
   - manual `+ / -` adjustment for both shared pools
   - GM `+6` / `-6` intervention spending `-1 Despair`
   - shadow-casting adds converted `Hope` as pending Hope when the conflict is finalized

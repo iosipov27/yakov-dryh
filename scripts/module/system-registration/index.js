@@ -1,5 +1,5 @@
+import { renderHopeDespairTracker } from "../applications/ui/hope-despair-tracker.js";
 import { registerChatHooks } from "../chat/index.js";
-import { renderDiceTray } from "../applications/ui/dice-tray.js";
 import { registerDocumentClasses } from "./documents.js";
 import { registerSettings } from "./settings.js";
 import { registerApplicationSheets } from "./sheets.js";
@@ -15,7 +15,7 @@ export function registerSystem(api) {
         await preloadHandlebarsTemplates();
     });
     Hooks.once("ready", () => {
-        void renderDiceTray();
+        void renderHopeDespairTracker();
     });
 }
 //# sourceMappingURL=index.js.map

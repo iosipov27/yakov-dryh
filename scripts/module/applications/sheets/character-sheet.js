@@ -1,5 +1,4 @@
-import { loadActorIntoDiceTray } from "../ui/dice-tray-state.js";
-import { renderDiceTray } from "../ui/dice-tray.js";
+import { openDryhDiceTrayForActor } from "../../chat/dice-tray-card-service.js";
 import { addResponseSlot as addResponseSlotData, DRYH_EXHAUSTION_MAX, DRYH_RESPONSE_MAX, YAKOV_DRYH_RESPONSE_TYPES, countConfiguredResponses, countResponsesByType, createDefaultResponsesData, hasCheckedResponses, normalizeCharacterSystemData, YAKOV_DRYH_ACTOR_TYPES } from "../../data/index.js";
 import { SYSTEM_ID, SYSTEM_TITLE, TEMPLATE_PATHS } from "../../constants.js";
 import { formatLineList, parseLineList } from "../../utils/index.js";
@@ -109,8 +108,7 @@ export class YakovDryhCharacterSheet extends BaseSheet {
         if (!this.actor) {
             return;
         }
-        await loadActorIntoDiceTray(this.actor);
-        await renderDiceTray();
+        await openDryhDiceTrayForActor(this.actor);
     }
     bindRootListeners(root) {
         if (this.boundRoot === root) {

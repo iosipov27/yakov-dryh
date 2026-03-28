@@ -6,10 +6,11 @@ export const TEMPLATE_PATHS = {
     chatCard: `${SYSTEM_PATH}/templates/chat/interactive-card.hbs`,
     chatInteractionDialog: `${SYSTEM_PATH}/templates/dialogs/chat-interaction-dialog.hbs`,
     diceTray: `${SYSTEM_PATH}/templates/ui/dice-tray.hbs`,
+    dryhDiceTrayCard: `${SYSTEM_PATH}/templates/chat/dice-tray-card.hbs`,
     dryhPainRollDialog: `${SYSTEM_PATH}/templates/dialogs/pain-roll-dialog.hbs`,
     dryhRollCard: `${SYSTEM_PATH}/templates/chat/roll-card.hbs`,
     dryhRollDialog: `${SYSTEM_PATH}/templates/dialogs/roll-dialog.hbs`,
-    hopeDespairTracker: `${SYSTEM_PATH}/templates/ui/dice-tray.hbs`
+    hopeDespairTracker: `${SYSTEM_PATH}/templates/ui/hope-despair-tracker.hbs`
 };
 export const TEMPLATE_PARTIAL_PATHS = {
     characterSheetResponsesCard: `${SYSTEM_PATH}/templates/sheets/parts/character-sheet-responses-card.hbs`,
@@ -20,6 +21,7 @@ export const TEMPLATE_PARTIAL_PATHS = {
 export const CHAT_CARD_COMMAND = `/${SYSTEM_ID}-card`;
 export const CHAT_CARD_FLAG = "chatCard";
 export const CHAT_CARD_STATUSES = ["draft", "review", "resolved"];
+export const DRYH_DICE_TRAY_FLAG = "dryhDiceTray";
 export const DRYH_ROLL_FLAG = "dryhRoll";
 export const DRYH_SETTINGS = {
     diceTrayState: "diceTrayState",

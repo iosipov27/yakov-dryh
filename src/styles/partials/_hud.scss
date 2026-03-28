@@ -11,6 +11,11 @@
   }
 }
 
+.yakov-dryh-dice-tray-card {
+  display: grid;
+  gap: 0.85rem;
+}
+
 .yakov-dryh-dice-tray {
   &__shell {
     display: grid;
@@ -164,6 +169,11 @@
     h3,
     .yakov-dryh-eyebrow {
       margin: 0;
+    }
+
+    &--static {
+      cursor: default;
+      user-select: auto;
     }
   }
 

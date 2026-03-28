@@ -1,5 +1,6 @@
 import { YakovDryhChatInteractionDialog } from "../applications/dialogs/chat-interaction-dialog.js";
 import { CHAT_CARD_COMMAND, DRYH_SETTINGS, SYSTEM_ID } from "../constants.js";
+import { adjustDryhDiceTrayPool, hasDryhDiceTrayCard, lockDryhDiceTrayPools, rollDryhDiceTray, syncActiveDryhDiceTrayMessage } from "./dice-tray-card-service.js";
 import { applyDryhRollPlayerAction, applyDryhRollGmAction, finalizeDryhRoll, getDryhRollCardData, hasDryhRollCard, resolveDryhRollCrashAction, resolveDryhRollDominantAction, resolveDryhRollFailureAction, rerenderDryhRollMessage } from "./roll-card-service.js";
 import { advanceChatCardStatus, getChatCardData, hasInteractiveChatCard } from "./chat-card-service.js";
 import { shouldHideDryhRollAction } from "./roll-card-visibility.js";
@@ -22,6 +23,9 @@ export function registerChatHooks(api) {
         return false;
     });
     Hooks.on("renderChatMessageHTML", (message, html) => {
+        if (hasDryhDiceTrayCard(message)) {
+            activateDryhDiceTrayListeners(html);
+        }
         if (hasDryhRollCard(message)) {
             activateDryhRollListeners(message, html);
         }
@@ -31,6 +35,9 @@ export function registerChatHooks(api) {
         activateChatCardListeners(message, html, api);
     });
     Hooks.on("updateSetting", (setting) => {
+        if (setting.key === `${SYSTEM_ID}.${DRYH_SETTINGS.diceTrayState}`) {
+            void syncActiveDryhDiceTrayMessage();
+        }
         if (setting.key !== `${SYSTEM_ID}.${DRYH_SETTINGS.gmDespair}` &&
             setting.key !== `${SYSTEM_ID}.${DRYH_SETTINGS.sharedHope}` &&
             setting.key !== `${SYSTEM_ID}.${DRYH_SETTINGS.pendingHope}`) {
@@ -45,6 +52,34 @@ export function registerChatHooks(api) {
             return;
         }
         void rerenderDryhRollMessage(latestMessage);
+    });
+}
+function activateDryhDiceTrayListeners(html) {
+    const actionElements = html.querySelectorAll([
+        "[data-yakov-dryh-tray-card-action]",
+        "[data-yakov-dryh-tray-card-pool]"
+    ].join(", "));
+    actionElements.forEach((actionElement) => {
+        actionElement.addEventListener("click", (event) => {
+            event.preventDefault();
+            const trayAction = actionElement.dataset.yakovDryhTrayCardAction;
+            if (trayAction === "lock-pools") {
+                actionElement.setAttribute("disabled", "disabled");
+                void lockDryhDiceTrayPools();
+                return;
+            }
+            if (trayAction === "roll") {
+                actionElement.setAttribute("disabled", "disabled");
+                void rollDryhDiceTray();
+                return;
+            }
+            const trayPool = actionElement.dataset.yakovDryhTrayCardPool;
+            const trayDelta = Number.parseInt(actionElement.dataset.yakovDryhTrayCardDelta ?? "0", 10);
+            if (trayPool && Number.isFinite(trayDelta)) {
+                actionElement.setAttribute("disabled", "disabled");
+                void adjustDryhDiceTrayPool(trayPool, trayDelta);
+            }
+        });
     });
 }
 function activateChatCardListeners(message, html, api) {

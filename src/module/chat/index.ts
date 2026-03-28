@@ -2,6 +2,13 @@ import { YakovDryhChatInteractionDialog } from "../applications/dialogs/chat-int
 import type { YakovDryhSystemApi } from "../api.js";
 import { CHAT_CARD_COMMAND, DRYH_SETTINGS, SYSTEM_ID } from "../constants.js";
 import {
+  adjustDryhDiceTrayPool,
+  hasDryhDiceTrayCard,
+  lockDryhDiceTrayPools,
+  rollDryhDiceTray,
+  syncActiveDryhDiceTrayMessage
+} from "./dice-tray-card-service.js";
+import {
   applyDryhRollPlayerAction,
   applyDryhRollGmAction,
   finalizeDryhRoll,
@@ -51,6 +58,10 @@ export function registerChatHooks(api: YakovDryhSystemApi): void {
   });
 
   Hooks.on("renderChatMessageHTML", (message, html) => {
+    if (hasDryhDiceTrayCard(message)) {
+      activateDryhDiceTrayListeners(html);
+    }
+
     if (hasDryhRollCard(message)) {
       activateDryhRollListeners(message, html);
     }
@@ -63,6 +74,10 @@ export function registerChatHooks(api: YakovDryhSystemApi): void {
   });
 
   Hooks.on("updateSetting", (setting: { key?: string }) => {
+    if (setting.key === `${SYSTEM_ID}.${DRYH_SETTINGS.diceTrayState}`) {
+      void syncActiveDryhDiceTrayMessage();
+    }
+
     if (
       setting.key !== `${SYSTEM_ID}.${DRYH_SETTINGS.gmDespair}` &&
       setting.key !== `${SYSTEM_ID}.${DRYH_SETTINGS.sharedHope}` &&
@@ -86,6 +101,51 @@ export function registerChatHooks(api: YakovDryhSystemApi): void {
     }
 
     void rerenderDryhRollMessage(latestMessage);
+  });
+}
+
+function activateDryhDiceTrayListeners(html: HTMLElement): void {
+  const actionElements = html.querySelectorAll<HTMLElement>(
+    [
+      "[data-yakov-dryh-tray-card-action]",
+      "[data-yakov-dryh-tray-card-pool]"
+    ].join(", ")
+  );
+
+  actionElements.forEach((actionElement) => {
+    actionElement.addEventListener("click", (event: MouseEvent) => {
+      event.preventDefault();
+
+      const trayAction = actionElement.dataset.yakovDryhTrayCardAction;
+
+      if (trayAction === "lock-pools") {
+        actionElement.setAttribute("disabled", "disabled");
+        void lockDryhDiceTrayPools();
+        return;
+      }
+
+      if (trayAction === "roll") {
+        actionElement.setAttribute("disabled", "disabled");
+        void rollDryhDiceTray();
+        return;
+      }
+
+      const trayPool = actionElement.dataset.yakovDryhTrayCardPool as
+        | "discipline"
+        | "exhaustion"
+        | "madness"
+        | "pain"
+        | undefined;
+      const trayDelta = Number.parseInt(
+        actionElement.dataset.yakovDryhTrayCardDelta ?? "0",
+        10
+      );
+
+      if (trayPool && Number.isFinite(trayDelta)) {
+        actionElement.setAttribute("disabled", "disabled");
+        void adjustDryhDiceTrayPool(trayPool, trayDelta);
+      }
+    });
   });
 }
 
