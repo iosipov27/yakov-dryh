@@ -23,8 +23,7 @@
   }
 
   &__panel {
-    border-radius: 18px;
-    box-shadow: var(--yakov-dryh-shadow);
+    border-radius: var(--yd-border-radius);
     display: grid;
     gap: 0.85rem;
     padding: 0.9rem;
@@ -44,7 +43,7 @@
   }
 
   &__status {
-    color: var(--yakov-dryh-muted);
+    color: var(--yd-muted);
     max-width: 10rem;
     text-align: right;
   }
@@ -65,11 +64,10 @@
 
   &__pools {
     display: grid;
-    gap: 0.75rem;
   }
 
   &__pool {
-    padding: 0.85rem 0.9rem;
+    padding: 0.5rem;
   }
 
   &__track {
@@ -86,7 +84,6 @@
     display: grid;
     gap: 0.65rem;
     padding-top: 0.75rem;
-    background-color: var(--yakov-dryh-panel);
   }
 
   &__palette-label {
@@ -103,7 +100,7 @@
     align-items: center;
     background: transparent;
     border: 1px solid rgb(183 167 156 / 44%);
-    border-radius: 12px;
+    border-radius: var(--yd-border-radius);
     cursor: pointer;
     display: inline-flex;
     justify-content: center;
@@ -117,27 +114,27 @@
     }
 
     .yakov-dryh-pip {
-      background-color: var(--yakov-dryh-pip-discipline);
+      background-color: var(--yd-pip-discipline);
     }
 
     &--exhaustion {
       .yakov-dryh-pip {
-        background-color: var(--yakov-dryh-exhaustion);
+        background-color: var(--yd-exhaustion);
         filter:
           drop-shadow(0 0 1px rgb(255 255 255 / 34%))
-          drop-shadow(0 0 1px var(--yakov-dryh-pip-shadow));
+          drop-shadow(0 0 1px var(--yd-pip-shadow));
       }
     }
 
     &--madness {
       .yakov-dryh-pip {
-        background-color: var(--yakov-dryh-madness);
+        background-color: var(--yd-madness);
       }
     }
 
     &--pain {
       .yakov-dryh-pip {
-        background-color: var(--yakov-dryh-pain);
+        background-color: var(--yd-pain);
       }
     }
   }
@@ -151,8 +148,8 @@
 
 .yakov-dryh-resource-tracker {
   border: 1px solid rgb(183 167 156 / 72%);
-  border-radius: 18px;
-  box-shadow: var(--yakov-dryh-shadow);
+  border-radius: var(--yd-border-radius);
+  box-shadow: var(--yd-shadow);
   display: grid;
   gap: 0.75rem;
   padding: 0.9rem;
@@ -181,18 +178,18 @@
     align-items: center;
     background: rgb(255 255 255 / 72%);
     border: 1px solid rgb(183 167 156 / 44%);
-    border-radius: 14px;
+    border-radius: var(--yd-border-radius);
     display: flex;
     gap: 0.75rem;
     justify-content: space-between;
     padding: 0.7rem 0.75rem;
 
     &--hope {
-      border-left: 4px solid var(--yakov-dryh-accent);
+      border-left: 4px solid var(--yd-accent);
     }
 
     &--despair {
-      border-left: 4px solid var(--yakov-dryh-pain);
+      border-left: 4px solid var(--yd-pain);
     }
 
     .yakov-dryh-copy {
@@ -223,7 +220,7 @@
     margin: 0;
 
     &--pending {
-      color: var(--yakov-dryh-muted);
+      color: var(--yd-muted);
       font-size: 1rem;
       font-weight: 600;
     }

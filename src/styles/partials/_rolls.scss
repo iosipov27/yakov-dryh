@@ -6,8 +6,8 @@
 
   &__detail {
     background: rgb(255 255 255 / 76%);
-    border-left: 4px solid var(--yakov-dryh-accent);
-    border-radius: 12px;
+    border-left: 4px solid var(--yd-accent);
+    border-radius: var(--yd-border-radius);
     margin: 0;
     padding: 0.85rem 1rem;
 
@@ -19,7 +19,7 @@
 
 .yakov-dryh-roll-card {
   &__arrow {
-    color: var(--yakov-dryh-muted);
+    color: var(--yd-muted);
     font-size: 0.85em;
     margin-inline: 0.15rem;
   }
@@ -46,7 +46,7 @@
   &__summary,
   &__dominant {
     background: rgb(255 255 255 / 72%);
-    border-radius: 14px;
+    border-radius: var(--yd-border-radius);
     margin: 0;
     padding: 0.8rem 0.9rem;
   }
@@ -54,9 +54,9 @@
   &__snap-effect {
     background: rgb(176 28 46 / 10%);
     border: 1px solid rgb(176 28 46 / 26%);
-    border-left: 4px solid var(--yakov-dryh-madness);
-    border-radius: 12px;
-    color: var(--yakov-dryh-madness);
+    border-left: 4px solid var(--yd-madness);
+    border-radius: var(--yd-border-radius);
+    color: var(--yd-madness);
     margin-top: 0.75rem;
     padding: 0.8rem 0.9rem;
 
@@ -76,9 +76,9 @@
   &__crash-alert {
     background: rgb(176 28 46 / 10%);
     border: 1px solid rgb(176 28 46 / 26%);
-    border-left: 4px solid var(--yakov-dryh-madness);
-    border-radius: 12px;
-    color: var(--yakov-dryh-madness);
+    border-left: 4px solid var(--yd-madness);
+    border-radius: var(--yd-border-radius);
+    color: var(--yd-madness);
     margin-top: 0.75rem;
     padding: 0.8rem 0.9rem;
 
@@ -97,7 +97,7 @@
   align-items: center;
   background: rgb(255 255 255 / 72%);
   border: 1px solid rgb(183 167 156 / 56%);
-  border-radius: 14px;
+  border-radius: var(--yd-border-radius);
   display: flex;
   gap: 0.75rem;
   justify-content: space-between;
@@ -124,7 +124,7 @@
   }
 
   &__die-shell {
-    border-radius: 0.35rem;
+    border-radius: var(--yd-border-radius);
     display: block;
     flex: 0 0 auto;
     height: 1.75rem;
@@ -140,7 +140,7 @@
 
   &__successes {
     align-items: center;
-    color: var(--yakov-dryh-muted);
+    color: var(--yd-muted);
     display: inline-flex;
     font-size: 0.95rem;
     font-weight: 700;
@@ -150,7 +150,7 @@
   }
 
   &__successes-count {
-    color: var(--yakov-dryh-success-player);
+    color: var(--yd-success-player);
     font-size: large;
   }
 
@@ -159,10 +159,10 @@
   }
 
   &--exhaustion {
-    border-left: 4px solid var(--yakov-dryh-exhaustion);
+    border-left: 4px solid var(--yd-exhaustion);
 
     .yakov-dryh-roll-pool__die-shell {
-      background: var(--yakov-dryh-exhaustion);
+      background: var(--yd-exhaustion);
     }
 
     .yakov-dryh-roll-pool__die-icon {
@@ -171,10 +171,10 @@
   }
 
   &--madness {
-    border-left: 4px solid var(--yakov-dryh-madness);
+    border-left: 4px solid var(--yd-madness);
 
     .yakov-dryh-roll-pool__die-shell {
-      background: var(--yakov-dryh-madness);
+      background: var(--yd-madness);
     }
 
     .yakov-dryh-roll-pool__die-icon {
@@ -183,10 +183,10 @@
   }
 
   &--pain {
-    border-left: 4px solid var(--yakov-dryh-pain);
+    border-left: 4px solid var(--yd-pain);
 
     .yakov-dryh-roll-pool__die-shell {
-      background: var(--yakov-dryh-pain);
+      background: var(--yd-pain);
     }
 
     .yakov-dryh-roll-pool__die-icon {
@@ -194,11 +194,11 @@
     }
 
     .yakov-dryh-roll-pool__successes-count {
-      color: var(--yakov-dryh-success-pain);
+      color: var(--yd-success-pain);
     }
   }
 
   &--discipline {
-    border-left: 4px solid var(--yakov-dryh-accent);
+    border-left: 4px solid var(--yd-accent);
   }
 }

@@ -49,7 +49,7 @@
 }
 
 .yakov-dryh-eyebrow {
-  color: var(--yakov-dryh-muted);
+  color: var(--yd-muted);
   font-size: 0.75rem;
   font-weight: 700;
   letter-spacing: 0.16em;
@@ -59,7 +59,7 @@
 
 .yakov-dryh-card-panel,
 .yakov-dryh-resource-card {
-  color: var(--yakov-dryh-pool-card-ink);
+  color: var(--yd-pool-card-ink);
   padding: 1rem;
 
   .yakov-dryh-copy,
@@ -82,39 +82,39 @@
     background:
       linear-gradient(
         145deg,
-        rgb(var(--yakov-dryh-stress-overlay) / var(--yakov-dryh-stress-sheen, 0.86)),
-        rgb(var(--yakov-dryh-stress-overlay-edge) / 0.62)
+        rgb(var(--yd-stress-overlay) / var(--yd-stress-sheen, 0.86)),
+        rgb(var(--yd-stress-overlay-edge) / 0.62)
       ),
       linear-gradient(
         160deg,
         color-mix(
           in srgb,
-          var(--yakov-dryh-stress-neutral) var(--yakov-dryh-stress-safe-stop, 100%),
-          var(--yakov-dryh-stress-target) var(--yakov-dryh-stress-danger-stop, 0%)
+          var(--yd-stress-neutral) var(--yd-stress-safe-stop, 100%),
+          var(--yd-stress-target) var(--yd-stress-danger-stop, 0%)
         ),
         color-mix(
           in srgb,
-          var(--yakov-dryh-stress-neutral-edge) var(--yakov-dryh-stress-safe-stop, 100%),
-          var(--yakov-dryh-stress-target-edge) var(--yakov-dryh-stress-danger-stop, 0%)
+          var(--yd-stress-neutral-edge) var(--yd-stress-safe-stop, 100%),
+          var(--yd-stress-target-edge) var(--yd-stress-danger-stop, 0%)
         )
       );
     border-color: color-mix(
       in srgb,
-      var(--yakov-dryh-border) var(--yakov-dryh-stress-safe-stop, 100%),
-      var(--yakov-dryh-stress-border) var(--yakov-dryh-stress-danger-stop, 0%)
+      var(--yd-border) var(--yd-stress-safe-stop, 100%),
+      var(--yd-stress-border) var(--yd-stress-danger-stop, 0%)
     );
   }
 
   &--exhaustion {
-    --yakov-dryh-stress-target: var(--yakov-dryh-stress-exhaustion);
-    --yakov-dryh-stress-target-edge: var(--yakov-dryh-stress-exhaustion-edge);
-    --yakov-dryh-stress-border: var(--yakov-dryh-stress-exhaustion-border);
+    --yd-stress-target: var(--yd-stress-exhaustion);
+    --yd-stress-target-edge: var(--yd-stress-exhaustion-edge);
+    --yd-stress-border: var(--yd-stress-exhaustion-border);
   }
 
   &--madness {
-    --yakov-dryh-stress-target: var(--yakov-dryh-stress-madness);
-    --yakov-dryh-stress-target-edge: var(--yakov-dryh-stress-madness-edge);
-    --yakov-dryh-stress-border: var(--yakov-dryh-stress-madness-border);
+    --yd-stress-target: var(--yd-stress-madness);
+    --yd-stress-target-edge: var(--yd-stress-madness-edge);
+    --yd-stress-border: var(--yd-stress-madness-border);
   }
 }
 

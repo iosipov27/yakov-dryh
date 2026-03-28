@@ -3,11 +3,10 @@
 .yakov-dryh-sheet-shell {
   background:
     radial-gradient(circle at top right, rgb(155 61 36 / 12%), transparent 34%),
-    linear-gradient(180deg, #fffdf8 0%, var(--yakov-dryh-surface) 100%);
-  border: 1px solid var(--yakov-dryh-border);
-  border-radius: 20px;
-  box-shadow: var(--yakov-dryh-shadow);
-  color: var(--yakov-dryh-ink);
+    linear-gradient(180deg, #fffdf8 0%, var(--yd-surface) 100%);
+  border: 1px solid var(--yd-border);
+  border-radius: var(--yd-border-radius);
+  color: var(--yd-ink);
   font-family:
     "Trebuchet MS",
     "Gill Sans",
@@ -17,13 +16,13 @@
 
 .yakov-dryh-subtitle,
 .yakov-dryh-copy {
-  color: var(--yakov-dryh-muted);
+  color: var(--yd-muted);
   margin: 0.35rem 0 0;
 }
 
 .yakov-dryh-status {
   align-self: flex-start;
-  border-radius: 999px;
+  border-radius: var(--yd-border-radius);
   font-size: 0.75rem;
   font-weight: 700;
   padding: 0.45rem 0.75rem;

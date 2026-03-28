@@ -46,9 +46,9 @@ export function createStressCardStyle(value: number): string {
   const sheen = (0.86 - intensity * 0.16).toFixed(3);
 
   return [
-    `--yakov-dryh-stress-intensity: ${intensity.toFixed(3)}`,
-    `--yakov-dryh-stress-sheen: ${sheen}`,
-    `--yakov-dryh-stress-safe-stop: ${safeStop}`,
-    `--yakov-dryh-stress-danger-stop: ${dangerStop}`
+    `--yd-stress-intensity: ${intensity.toFixed(3)}`,
+    `--yd-stress-sheen: ${sheen}`,
+    `--yd-stress-safe-stop: ${safeStop}`,
+    `--yd-stress-danger-stop: ${dangerStop}`
   ].join("; ");
 }

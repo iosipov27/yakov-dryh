@@ -18,9 +18,9 @@
   textarea,
   select {
     background: rgb(255 255 255 / 88%);
-    border: 1px solid var(--yakov-dryh-border);
-    border-radius: 12px;
-    color: var(--yakov-dryh-ink);
+    border: 1px solid var(--yd-border);
+    border-radius: var(--yd-border-radius);
+    color: var(--yd-ink);
     min-height: 2.5rem;
     padding: 0.65rem 0.8rem;
   }
@@ -40,8 +40,8 @@
 
   input {
     background: rgb(255 255 255 / 88%);
-    border: 1px solid var(--yakov-dryh-border);
-    border-radius: 12px;
+    border: 1px solid var(--yd-border);
+    border-radius: var(--yd-border-radius);
     min-height: 2.5rem;
     padding: 0.65rem 0.8rem;
     width: 5rem;
@@ -55,9 +55,9 @@
 }
 
 .yakov-dryh-button {
-  background: var(--yakov-dryh-accent);
+  background: var(--yd-accent);
   border: 0;
-  border-radius: 999px;
+  border-radius: var(--yd-border-radius);
   color: #fff;
   cursor: pointer;
   font-weight: 700;
@@ -70,9 +70,9 @@
   }
 
   &--secondary {
-      border: 1px solid var(--yakov-dryh-border);
-      background: var(--yakov-dryh-secondary);
-      color: var(--yakov-dryh-ink-dark);
+      border: 1px solid var(--yd-border);
+      background: var(--yd-secondary);
+      color: var(--yd-ink-dark);
   }
 
   &--compact {
@@ -90,38 +90,38 @@
 
   &--exhaustion {
     .yakov-dryh-pip--filled {
-      background-color: var(--yakov-dryh-exhaustion);
+      background-color: var(--yd-exhaustion);
       filter:
         drop-shadow(0 0 1px rgb(255 255 255 / 34%))
-        drop-shadow(0 0 1px var(--yakov-dryh-pip-shadow));
+        drop-shadow(0 0 1px var(--yd-pip-shadow));
     }
   }
 
   &--madness,
   &--response {
     .yakov-dryh-pip--filled {
-      background-color: var(--yakov-dryh-madness);
+      background-color: var(--yd-madness);
     }
   }
 
   &--pain {
     .yakov-dryh-pip--filled {
-      background-color: var(--yakov-dryh-pain);
+      background-color: var(--yd-pain);
     }
   }
 }
 
 .yakov-dryh-pip {
-  background-color: var(--yakov-dryh-pip-inactive);
+  background-color: var(--yd-pip-inactive);
   display: inline-block;
-  filter: drop-shadow(0 0 1px var(--yakov-dryh-pip-shadow));
+  filter: drop-shadow(0 0 1px var(--yd-pip-shadow));
   height: 2rem;
   mask: url("../assets/six-sided-dice.svg") center / contain no-repeat;
   -webkit-mask: url("../assets/six-sided-dice.svg") center / contain no-repeat;
   width: 2rem;
 
   &--filled {
-    background-color: var(--yakov-dryh-pip-discipline);
+    background-color: var(--yd-pip-discipline);
   }
 }
 
@@ -137,7 +137,7 @@
   }
 
   &__value {
-    color: var(--yakov-dryh-muted);
+    color: var(--yd-muted);
     font-size: 0.8rem;
     font-weight: 700;
     letter-spacing: 0.06em;
@@ -167,7 +167,7 @@
     }
 
     &:focus-visible {
-      outline: 2px solid var(--yakov-dryh-accent);
+      outline: 2px solid var(--yd-accent);
       outline-offset: 3px;
     }
 
@@ -184,7 +184,7 @@
     align-items: center;
     background: #1f1f1f;
     border: 1px solid rgb(255 255 255 / 72%);
-    border-radius: 999px;
+    border-radius: var(--yd-border-radius);
     box-shadow: 0 8px 16px rgb(25 16 10 / 22%);
     color: #fff;
     display: inline-flex;
@@ -257,7 +257,7 @@
   }
 
   &__checkbox {
-    accent-color: var(--yakov-dryh-accent);
+    accent-color: var(--yd-accent);
     cursor: pointer;
     height: 1rem;
     margin: 0;
