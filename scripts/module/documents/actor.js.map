@@ -1,1 +1,0 @@
-{"version":3,"file":"actor.js","sourceRoot":"","sources":["../../../src/module/documents/actor.ts"],"names":[],"mappings":"AAAA,MAAM,OAAO,cAAe,SAAQ,KAAK;CAAG","sourcesContent":["export class YakovDryhActor extends Actor {}\n\ndeclare module \"fvtt-types/configuration\" {\n  interface DocumentClassConfig {\n    Actor: typeof YakovDryhActor;\n  }\n}\n"]}

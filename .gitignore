@@ -11,6 +11,11 @@ pnpm-debug.log*
 # Test and coverage output
 coverage/
 
+# Build output
+scripts/
+styles/
+*.map
+
 # Editors and IDEs
 .idea/
 .vscode/
