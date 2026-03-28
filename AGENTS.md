@@ -193,14 +193,17 @@ Use this section as the current checklist for development progress against the a
   - talents as text
   - scars as text
 - Player roll flow currently supports:
+  - loading the current actor pool into the always-visible Dice Tray from the character sheet
+  - tray-based pool building for Discipline, Exhaustion, Madness, and Pain before the roll
   - optional `+1 Exhaustion` before the roll when current Exhaustion is below `6`
   - temporary Madness selection for the roll
-  - player-side rolling for Discipline, Exhaustion, and Madness
+  - a single tray-based roll for Discipline, Exhaustion, Madness, and Pain
   - optional post-roll `+1 Exhaustion` if the pre-roll option was not used
   - optional post-roll `-1 Hope` to add a `1` to the Discipline pool
 - GM flow currently supports:
-  - a separate Pain roll dialog after the player roll
-  - one `+6` or `-6` intervention after Pain is rolled
+  - GM-only Pain editing inside the Dice Tray before the roll
+  - one `+6` or `-6` intervention after the roll
+  - GM locking the tray before the player can roll
   - final result publication in chat
 - Dice engine currently supports:
   - rolling pools
@@ -221,7 +224,7 @@ Use this section as the current checklist for development progress against the a
     - all Responses are un-checked
     - `-1 Discipline`
     - `+1 Madness`
-    - if Discipline drops to `0`, the character becomes a Nightmare and the sheet hides Discipline
+    - if Discipline drops to `0`, the character becomes a Nightmare and the effect text says so
   - button-driven GM failure resolution from the final roll card
   - automatic failure resolution updates for `+1 Exhaustion`, checking Fight / Flight responses, and `Snap` when the response branch has no unchecked Responses left
   - crash resolution from the final roll card when Exhaustion exceeds `6`:
@@ -236,7 +239,7 @@ Use this section as the current checklist for development progress against the a
   - a shared world-level Hope pool
   - a separate pending Hope pool for tokens that unlock on the next scene
   - a shared world-level Despair pool
-  - an always-visible Hope / Despair tracker window
+  - an always-visible Dice Tray window with the old Hope / Despair block preserved at the top
   - manual `+ / -` adjustment for both shared pools
   - GM `+6` / `-6` intervention spending `-1 Despair`
   - shadow-casting adds converted `Hope` as pending Hope when the conflict is finalized
@@ -244,21 +247,13 @@ Use this section as the current checklist for development progress against the a
 
 #### Open Rules Compliance Gaps
 
-- Conflict resolution is staged as:
-  - player roll first
-  - GM Pain roll later
-  - optional GM intervention after that
-  - finalization in a separate step
-- `RULES.pdf` describes a single conflict roll against Pain, so this staged flow remains a rules divergence until intentionally kept or replaced.
 - GM shadow-casting is only partially modeled:
   - Hope gained from converting `-1 Despair` to `+1 Hope` is stored as pending Hope on conflict finalization
   - the final effect text warns that this Hope is only usable starting next scene
   - because the system cannot detect scenes automatically, scene progression is a manual GM action through the tracker
   - the current flow allows only one `+6` or `-6` intervention per conflict
-- Player post-roll options are incomplete:
-  - they are still attached to the staged flow instead of a single conflict-resolution pipeline
 - Intentional house-rule divergence:
-  - the pre-roll Dice Pool dialog does not allow taking `+1 Exhaustion` when current Exhaustion is already `6`
+  - the Dice Tray does not allow taking `+1 Exhaustion` before the roll when current Exhaustion is already `6`
   - other effects may still push Exhaustion above `6`, allowing Crash to happen during resolution
 - Shared Hope lifecycle is incomplete:
   - Get A Break is not implemented

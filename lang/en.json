@@ -111,6 +111,18 @@
       "EndScene": "End Scene",
       "ReadOnly": "Only the GM can change shared pools."
     },
+    "TRAY": {
+      "AddDie": "Add Die",
+      "Eyebrow": "Dice Tray",
+      "LockPools": "Lock Pools",
+      "NoActor": "No active character",
+      "Roll": "Roll",
+      "Status": {
+        "Empty": "Load a character pool from the sheet.",
+        "Ready": "Ready to roll.",
+        "WaitingForGm": "Waiting for GM to lock pools."
+      }
+    },
     "SHEETS": {
       "Actor": {
         "Character": {
@@ -142,6 +154,7 @@
           },
           "Actions": {
             "AddResponse": "Add Response",
+            "AddPool": "Add Pool",
             "AddExhaustion": "+ Exhaustion",
             "Cancel": "Cancel",
             "CreateChatCard": "Create interactive chat card",
@@ -163,7 +176,8 @@
         "DespairRequired": "At least 1 Despair is required to adjust a six.",
         "HopeRequired": "At least 1 Hope is required to improve Discipline.",
         "ResponseUnavailable": "Response is no longer available.",
-        "SharedPoolsGmOnly": "Only the GM can change Hope / Despair."
+        "SharedPoolsGmOnly": "Only the GM can change Hope / Despair.",
+        "TrayActorOwnerOnly": "Only the actor owner can change these dice."
       }
     }
   }

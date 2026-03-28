@@ -1280,6 +1280,9 @@
 .yakov-dryh-pip-track--madness .yakov-dryh-pip--filled, .yakov-dryh-pip-track--response .yakov-dryh-pip--filled {
   background-color: var(--yakov-dryh-madness);
 }
+.yakov-dryh-pip-track--pain .yakov-dryh-pip--filled {
+  background-color: var(--yakov-dryh-pain);
+}
 
 .yakov-dryh-pip {
   background-color: var(--yakov-dryh-pip-inactive);
@@ -1597,15 +1600,109 @@
   border-left: 4px solid var(--yakov-dryh-accent);
 }
 
+.yakov-dryh-dice-tray,
 .yakov-dryh-hope-despair-tracker {
   position: fixed;
   right: 1rem;
   top: 1rem;
-  width: min(18rem, 100vw - 2rem);
+  width: min(23rem, 100vw - 2rem);
   z-index: 35;
 }
+.yakov-dryh-dice-tray--dragging .yakov-dryh-resource-tracker__header,
 .yakov-dryh-hope-despair-tracker--dragging .yakov-dryh-resource-tracker__header {
   cursor: grabbing;
+}
+
+.yakov-dryh-dice-tray__shell {
+  display: grid;
+  gap: 0.85rem;
+}
+.yakov-dryh-dice-tray__panel {
+  background: rgba(244, 239, 231, 0.94);
+  border: 1px solid rgba(183, 167, 156, 0.72);
+  border-radius: 18px;
+  box-shadow: var(--yakov-dryh-shadow);
+  display: grid;
+  gap: 0.85rem;
+  padding: 0.9rem;
+}
+.yakov-dryh-dice-tray__panel-header {
+  align-items: flex-start;
+  display: flex;
+  gap: 0.75rem;
+  justify-content: space-between;
+}
+.yakov-dryh-dice-tray__panel-header h3,
+.yakov-dryh-dice-tray__panel-header .yakov-dryh-eyebrow,
+.yakov-dryh-dice-tray__panel-header .yakov-dryh-copy {
+  margin: 0;
+}
+.yakov-dryh-dice-tray__status {
+  color: var(--yakov-dryh-muted);
+  max-width: 10rem;
+  text-align: right;
+}
+.yakov-dryh-dice-tray__pools {
+  display: grid;
+  gap: 0.75rem;
+}
+.yakov-dryh-dice-tray__pool {
+  padding: 0.85rem 0.9rem;
+}
+.yakov-dryh-dice-tray__track {
+  margin-top: 0.5rem;
+  min-height: 2rem;
+}
+.yakov-dryh-dice-tray__empty {
+  margin: 0;
+}
+.yakov-dryh-dice-tray__palette {
+  border-top: 1px solid rgba(183, 167, 156, 0.44);
+  display: grid;
+  gap: 0.65rem;
+  padding-top: 0.75rem;
+}
+.yakov-dryh-dice-tray__palette-label {
+  margin: 0;
+}
+.yakov-dryh-dice-tray__palette-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+}
+.yakov-dryh-dice-tray__palette-button {
+  align-items: center;
+  background: transparent;
+  border: 1px solid rgba(183, 167, 156, 0.44);
+  border-radius: 12px;
+  cursor: pointer;
+  display: inline-flex;
+  justify-content: center;
+  min-height: 2.6rem;
+  min-width: 2.6rem;
+  padding: 0.25rem;
+}
+.yakov-dryh-dice-tray__palette-button:disabled {
+  cursor: default;
+  opacity: 0.4;
+}
+.yakov-dryh-dice-tray__palette-button .yakov-dryh-pip {
+  background-color: var(--yakov-dryh-pip-discipline);
+}
+.yakov-dryh-dice-tray__palette-button--exhaustion .yakov-dryh-pip {
+  background-color: var(--yakov-dryh-exhaustion);
+  filter: drop-shadow(0 0 1px rgba(255, 255, 255, 0.34)) drop-shadow(0 0 1px var(--yakov-dryh-pip-shadow));
+}
+.yakov-dryh-dice-tray__palette-button--madness .yakov-dryh-pip {
+  background-color: var(--yakov-dryh-madness);
+}
+.yakov-dryh-dice-tray__palette-button--pain .yakov-dryh-pip {
+  background-color: var(--yakov-dryh-pain);
+}
+.yakov-dryh-dice-tray__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
 }
 
 .yakov-dryh-resource-tracker {
@@ -1694,6 +1791,17 @@
   }
   .yakov-dryh-button {
     width: 100%;
+  }
+  .yakov-dryh-dice-tray,
+  .yakov-dryh-hope-despair-tracker {
+    width: min(100vw - 1rem, 23rem);
+  }
+  .yakov-dryh-dice-tray__panel-header {
+    flex-direction: column;
+  }
+  .yakov-dryh-dice-tray__status {
+    max-width: none;
+    text-align: left;
   }
 }
 

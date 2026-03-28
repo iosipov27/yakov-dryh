@@ -106,6 +106,7 @@ export type YakovDryhRollCardData =
 
 interface CreateInitialRollMessageInput {
   actor: Actor.Implementation;
+  painRolled?: boolean;
   preRollExhaustionTaken: boolean;
   rollResult: YakovDryhRollResult;
 }
@@ -774,7 +775,7 @@ function createInitialRollCardData(
     finalMessageId: null,
     finalized: false,
     gmActionUsed: false,
-    painRolled: false,
+    painRolled: input.painRolled === true,
     playerAdjustments: {
       ...createDefaultPlayerAdjustmentsData(),
       preRollExhaustionTaken: input.preRollExhaustionTaken

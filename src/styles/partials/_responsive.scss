@@ -27,4 +27,20 @@
   .yakov-dryh-button {
     width: 100%;
   }
+
+  .yakov-dryh-dice-tray,
+  .yakov-dryh-hope-despair-tracker {
+    width: min(100vw - 1rem, 23rem);
+  }
+
+  .yakov-dryh-dice-tray {
+    &__panel-header {
+      flex-direction: column;
+    }
+
+    &__status {
+      max-width: none;
+      text-align: left;
+    }
+  }
 }

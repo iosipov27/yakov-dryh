@@ -1,6 +1,7 @@
 import {
   YakovDryhChatInteractionDialog,
   YakovDryhCharacterSheet,
+  YakovDryhDiceTray,
   YakovDryhHopeDespairTracker
 } from "./applications/index.js";
 import {
@@ -21,6 +22,7 @@ export interface YakovDryhSystemApi {
       ChatInteraction: typeof YakovDryhChatInteractionDialog;
     };
     ui: {
+      DiceTray: typeof YakovDryhDiceTray;
       HopeDespairTracker: typeof YakovDryhHopeDespairTracker;
     };
     sheets: {
@@ -47,6 +49,7 @@ export function createSystemApi(): YakovDryhSystemApi {
         ChatInteraction: YakovDryhChatInteractionDialog
       },
       ui: {
+        DiceTray: YakovDryhDiceTray,
         HopeDespairTracker: YakovDryhHopeDespairTracker
       },
       sheets: {

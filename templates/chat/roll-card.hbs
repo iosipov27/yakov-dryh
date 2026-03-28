@@ -118,27 +118,6 @@
     {{/if}}
   </div>
 
-  {{#if canRollPain}}
-    <footer class="yakov-dryh-actions mt12">
-      <button
-        class="yakov-dryh-button"
-        type="button"
-        data-yakov-dryh-roll-action="roll-pain"
-      >
-        {{localize "YAKOV_DRYH.ROLL.Chat.RollPain"}}
-      </button>
-      {{#if showPainRollWaiting}}
-        <p
-          class="yakov-dryh-copy"
-          data-yakov-dryh-roll-waiting
-          hidden
-        >
-          {{waitingForPainLabel}}
-        </p>
-      {{/if}}
-    </footer>
-  {{/if}}
-
   {{#if hasPlayerActionButtons}}
     <footer class="yakov-dryh-roll-card__resolution">
       {{#if playerActionPrompt}}

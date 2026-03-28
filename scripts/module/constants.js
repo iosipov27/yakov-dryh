@@ -5,10 +5,11 @@ export const TEMPLATE_PATHS = {
     characterSheet: `${SYSTEM_PATH}/templates/sheets/character-sheet.hbs`,
     chatCard: `${SYSTEM_PATH}/templates/chat/interactive-card.hbs`,
     chatInteractionDialog: `${SYSTEM_PATH}/templates/dialogs/chat-interaction-dialog.hbs`,
+    diceTray: `${SYSTEM_PATH}/templates/ui/dice-tray.hbs`,
     dryhPainRollDialog: `${SYSTEM_PATH}/templates/dialogs/pain-roll-dialog.hbs`,
     dryhRollCard: `${SYSTEM_PATH}/templates/chat/roll-card.hbs`,
     dryhRollDialog: `${SYSTEM_PATH}/templates/dialogs/roll-dialog.hbs`,
-    hopeDespairTracker: `${SYSTEM_PATH}/templates/ui/hope-despair-tracker.hbs`
+    hopeDespairTracker: `${SYSTEM_PATH}/templates/ui/dice-tray.hbs`
 };
 export const TEMPLATE_PARTIAL_PATHS = {
     characterSheetResponsesCard: `${SYSTEM_PATH}/templates/sheets/parts/character-sheet-responses-card.hbs`,
@@ -21,6 +22,7 @@ export const CHAT_CARD_FLAG = "chatCard";
 export const CHAT_CARD_STATUSES = ["draft", "review", "resolved"];
 export const DRYH_ROLL_FLAG = "dryhRoll";
 export const DRYH_SETTINGS = {
+    diceTrayState: "diceTrayState",
     gmDespair: "gmDespair",
     pendingHope: "pendingHope",
     sharedHope: "sharedHope"

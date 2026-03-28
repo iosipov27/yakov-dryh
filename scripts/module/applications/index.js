@@ -1,5 +1,5 @@
 import { YakovDryhChatInteractionDialog } from "./dialogs/chat-interaction-dialog.js";
-import { YakovDryhHopeDespairTracker } from "./ui/hope-despair-tracker.js";
+import { YakovDryhDiceTray, YakovDryhHopeDespairTracker } from "./ui/dice-tray.js";
 import { YakovDryhCharacterSheet } from "./sheets/character-sheet.js";
-export { YakovDryhChatInteractionDialog, YakovDryhCharacterSheet, YakovDryhHopeDespairTracker };
+export { YakovDryhChatInteractionDialog, YakovDryhCharacterSheet, YakovDryhDiceTray, YakovDryhHopeDespairTracker };
 //# sourceMappingURL=index.js.map

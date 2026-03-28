@@ -1,4 +1,5 @@
-import { YakovDryhRollDialog } from "../dialogs/roll-dialog.js";
+import { loadActorIntoDiceTray } from "../ui/dice-tray-state.js";
+import { renderDiceTray } from "../ui/dice-tray.js";
 import {
   addResponseSlot as addResponseSlotData,
   DRYH_EXHAUSTION_MAX,
@@ -216,12 +217,13 @@ export class YakovDryhCharacterSheet extends BaseSheet {
     this.bindRootListeners(root);
   }
 
-  private async openRollDialog(): Promise<void> {
+  private async addActorPoolToTray(): Promise<void> {
     if (!this.actor) {
       return;
     }
 
-    await YakovDryhRollDialog.openForActor(this.actor);
+    await loadActorIntoDiceTray(this.actor);
+    await renderDiceTray();
   }
 
   private bindRootListeners(root: HTMLElement): void {
@@ -253,8 +255,8 @@ export class YakovDryhCharacterSheet extends BaseSheet {
 
     event.preventDefault();
 
-    if (actionElement.dataset.yakovDryhAction === "open-roll-dialog") {
-      void this.openRollDialog();
+    if (actionElement.dataset.yakovDryhAction === "add-pool-to-tray") {
+      void this.addActorPoolToTray();
       return;
     }
 

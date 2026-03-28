@@ -399,7 +399,7 @@ function createInitialRollCardData(input) {
         finalMessageId: null,
         finalized: false,
         gmActionUsed: false,
-        painRolled: false,
+        painRolled: input.painRolled === true,
         playerAdjustments: {
             ...createDefaultPlayerAdjustmentsData(),
             preRollExhaustionTaken: input.preRollExhaustionTaken

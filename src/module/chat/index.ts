@@ -1,5 +1,4 @@
 import { YakovDryhChatInteractionDialog } from "../applications/dialogs/chat-interaction-dialog.js";
-import { YakovDryhPainRollDialog } from "../applications/dialogs/pain-roll-dialog.js";
 import type { YakovDryhSystemApi } from "../api.js";
 import { CHAT_CARD_COMMAND, DRYH_SETTINGS, SYSTEM_ID } from "../constants.js";
 import {
@@ -19,8 +18,7 @@ import {
   hasInteractiveChatCard
 } from "./chat-card-service.js";
 import {
-  shouldHideDryhRollAction,
-  shouldShowPainRollWaitingMessage
+  shouldHideDryhRollAction
 } from "./roll-card-visibility.js";
 
 export async function openChatInteraction(
@@ -152,19 +150,6 @@ function activateDryhRollListeners(
       })
     ) {
       actionElement.hidden = true;
-
-      if (
-        shouldShowPainRollWaitingMessage(action, {
-          isActorOwner: canUseActorOwnerActions,
-          isGm: game.user?.isGM ?? false
-        })
-      ) {
-        actionElement
-          .closest<HTMLElement>(".yakov-dryh-actions")
-          ?.querySelector<HTMLElement>("[data-yakov-dryh-roll-waiting]")
-          ?.removeAttribute("hidden");
-      }
-
       return;
     }
 
@@ -245,11 +230,6 @@ function activateDryhRollListeners(
         void applyDryhRollPlayerAction(message, {
           type: action
         });
-        return;
-      }
-
-      if (action === "roll-pain") {
-        void YakovDryhPainRollDialog.openForMessage(message);
         return;
       }
 

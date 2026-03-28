@@ -1,9 +1,8 @@
 import { YakovDryhChatInteractionDialog } from "../applications/dialogs/chat-interaction-dialog.js";
-import { YakovDryhPainRollDialog } from "../applications/dialogs/pain-roll-dialog.js";
 import { CHAT_CARD_COMMAND, DRYH_SETTINGS, SYSTEM_ID } from "../constants.js";
 import { applyDryhRollPlayerAction, applyDryhRollGmAction, finalizeDryhRoll, getDryhRollCardData, hasDryhRollCard, resolveDryhRollCrashAction, resolveDryhRollDominantAction, resolveDryhRollFailureAction, rerenderDryhRollMessage } from "./roll-card-service.js";
 import { advanceChatCardStatus, getChatCardData, hasInteractiveChatCard } from "./chat-card-service.js";
-import { shouldHideDryhRollAction, shouldShowPainRollWaitingMessage } from "./roll-card-visibility.js";
+import { shouldHideDryhRollAction } from "./roll-card-visibility.js";
 export async function openChatInteraction(message) {
     const liveMessage = (message.id ? game.messages?.get(message.id) : null) ?? message;
     const dialog = new YakovDryhChatInteractionDialog(liveMessage);
@@ -82,15 +81,6 @@ function activateDryhRollListeners(message, html) {
             isGm: game.user?.isGM ?? false
         })) {
             actionElement.hidden = true;
-            if (shouldShowPainRollWaitingMessage(action, {
-                isActorOwner: canUseActorOwnerActions,
-                isGm: game.user?.isGM ?? false
-            })) {
-                actionElement
-                    .closest(".yakov-dryh-actions")
-                    ?.querySelector("[data-yakov-dryh-roll-waiting]")
-                    ?.removeAttribute("hidden");
-            }
             return;
         }
         if (card.stage === "final") {
@@ -153,10 +143,6 @@ function activateDryhRollListeners(message, html) {
                 void applyDryhRollPlayerAction(message, {
                     type: action
                 });
-                return;
-            }
-            if (action === "roll-pain") {
-                void YakovDryhPainRollDialog.openForMessage(message);
                 return;
             }
             if (action === "finalize") {

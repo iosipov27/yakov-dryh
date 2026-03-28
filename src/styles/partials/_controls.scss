@@ -103,6 +103,12 @@
       background-color: var(--yakov-dryh-madness);
     }
   }
+
+  &--pain {
+    .yakov-dryh-pip--filled {
+      background-color: var(--yakov-dryh-pain);
+    }
+  }
 }
 
 .yakov-dryh-pip {
