@@ -203,7 +203,7 @@ Use this section as the current checklist for development progress against the a
 - GM flow currently supports:
   - GM-only Pain editing inside the Dice Tray before the roll
   - one `+6` or `-6` intervention after the roll
-  - GM locking the tray before the player can roll
+  - the tray becomes roll-ready once the GM adds at least one Pain die
   - final result publication in chat
 - Dice engine currently supports:
   - rolling pools

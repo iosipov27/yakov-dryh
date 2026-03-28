@@ -1,6 +1,6 @@
 import { YakovDryhChatInteractionDialog } from "../applications/dialogs/chat-interaction-dialog.js";
 import { CHAT_CARD_COMMAND, DRYH_SETTINGS, SYSTEM_ID } from "../constants.js";
-import { adjustDryhDiceTrayPool, hasDryhDiceTrayCard, lockDryhDiceTrayPools, rollDryhDiceTray, syncActiveDryhDiceTrayMessage } from "./dice-tray-card-service.js";
+import { adjustDryhDiceTrayPool, hasDryhDiceTrayCard, rollDryhDiceTray, syncActiveDryhDiceTrayMessage } from "./dice-tray-card-service.js";
 import { applyDryhRollPlayerAction, applyDryhRollGmAction, finalizeDryhRoll, getDryhRollCardData, hasDryhRollCard, resolveDryhRollCrashAction, resolveDryhRollDominantAction, resolveDryhRollFailureAction, rerenderDryhRollMessage } from "./roll-card-service.js";
 import { advanceChatCardStatus, getChatCardData, hasInteractiveChatCard } from "./chat-card-service.js";
 import { shouldHideDryhRollAction } from "./roll-card-visibility.js";
@@ -63,11 +63,6 @@ function activateDryhDiceTrayListeners(html) {
         actionElement.addEventListener("click", (event) => {
             event.preventDefault();
             const trayAction = actionElement.dataset.yakovDryhTrayCardAction;
-            if (trayAction === "lock-pools") {
-                actionElement.setAttribute("disabled", "disabled");
-                void lockDryhDiceTrayPools();
-                return;
-            }
             if (trayAction === "roll") {
                 actionElement.setAttribute("disabled", "disabled");
                 void rollDryhDiceTray();

@@ -115,13 +115,12 @@
       "AddDie": "Add Die",
       "EmptyState": "No active character",
       "Eyebrow": "Dice Tray",
-      "LockPools": "Lock Pools",
       "NoActor": "No active character",
       "Roll": "Roll",
       "Status": {
         "Empty": "Load a character pool from the sheet.",
         "Ready": "Ready to roll.",
-        "WaitingForGm": "Waiting for GM to lock pools."
+        "WaitingForGm": "Waiting for GM to add Pain."
       }
     },
     "SHEETS": {

@@ -14,7 +14,6 @@ import {
   getDiceTrayState,
   hasLoadedDiceTrayActor,
   resetDiceTrayState,
-  setDiceTrayConfirmed,
   type YakovDryhDiceTrayPool,
   type YakovDryhDiceTrayState
 } from "./dice-tray-state.js";
@@ -50,7 +49,6 @@ interface DiceTrayPaletteButton {
 interface DiceTrayContext extends Record<string, unknown> {
   actorName: string;
   canEdit: boolean;
-  canLockPools: boolean;
   canRoll: boolean;
   despair: number;
   hasActor: boolean;
@@ -134,12 +132,12 @@ export class YakovDryhDiceTray extends BaseApplication {
     const isGm = game.user?.isGM ?? false;
     const isActorOwner = actor?.isOwner ?? false;
     const hasActor = hasLoadedDiceTrayActor(trayState);
+    const canRoll = hasActor && trayState.pools.pain > 0 && (isActorOwner || isGm);
 
     Object.assign(context, {
       actorName: trayState.actorName,
       canEdit: isGm,
-      canLockPools: isGm && hasActor && !trayState.confirmed,
-      canRoll: hasActor && trayState.confirmed && (isActorOwner || isGm),
+      canRoll,
       despair: sharedPools.despair,
       hasActor,
       hasPendingHope: sharedPools.pendingHope > 0,
@@ -231,11 +229,6 @@ export class YakovDryhDiceTray extends BaseApplication {
     event.preventDefault();
 
     const trayAction = actionElement.dataset.yakovDryhTrayAction;
-
-    if (trayAction === "lock-pools") {
-      void this.lockPools();
-      return;
-    }
 
     if (trayAction === "roll") {
       void this.rollFromTray();
@@ -422,19 +415,10 @@ export class YakovDryhDiceTray extends BaseApplication {
     await adjustDiceTrayPool(pool, delta);
   }
 
-  private async lockPools(): Promise<void> {
-    if (!game.user?.isGM) {
-      this.showGmOnlyWarning();
-      return;
-    }
-
-    await setDiceTrayConfirmed(true);
-  }
-
   private async rollFromTray(): Promise<void> {
     const state = getDiceTrayState();
 
-    if (!state.confirmed || !state.actorId) {
+    if (state.pools.pain < 1 || !state.actorId) {
       return;
     }
 
@@ -628,12 +612,9 @@ function getStatusLabel(state: YakovDryhDiceTrayState): string {
     );
   }
 
-  return state.confirmed
+  return state.pools.pain > 0
     ? localize("YAKOV_DRYH.TRAY.Status.Ready", "Ready to roll.")
-    : localize(
-        "YAKOV_DRYH.TRAY.Status.WaitingForGm",
-        "Waiting for GM to lock pools."
-      );
+    : "";
 }
 
 function formatPool(pool: YakovDryhDiceTrayPool): string {

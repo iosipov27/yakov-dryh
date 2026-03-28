@@ -42,7 +42,7 @@ export class YakovDryhCharacterSheet extends BaseSheet {
     },
     position: {
       height: "auto" as const,
-      width: 860
+      width: 700
     },
     tag: "form",
     window: {
@@ -60,14 +60,13 @@ export class YakovDryhCharacterSheet extends BaseSheet {
   };
 
   get title(): string {
-    const actorName = this.actor?.name ?? game.i18n?.localize("DOCUMENT.Actor") ?? "Actor";
+    const actorName =
+      this.actor?.name ?? game.i18n?.localize("DOCUMENT.Actor") ?? "Actor";
 
     return `${SYSTEM_TITLE}: ${actorName}`;
   }
 
-  protected async _prepareContext(
-    options: any
-  ): Promise<any> {
+  protected async _prepareContext(options: any): Promise<any> {
     const context = await super._prepareContext(options);
     Object.assign(
       context,
@@ -80,10 +79,7 @@ export class YakovDryhCharacterSheet extends BaseSheet {
     return context;
   }
 
-  protected async _onRender(
-    context: any,
-    options: any
-  ): Promise<void> {
+  protected async _onRender(context: any, options: any): Promise<void> {
     await super._onRender(context, options);
 
     const root = this.element as HTMLElement | null;
@@ -152,7 +148,9 @@ export class YakovDryhCharacterSheet extends BaseSheet {
         return;
     }
 
-    const field = actionElement.dataset.yakovDryhPoolField as EditableSheetPoolField | undefined;
+    const field = actionElement.dataset.yakovDryhPoolField as
+      | EditableSheetPoolField
+      | undefined;
     const action = actionElement.dataset.yakovDryhPoolAction as
       | "decrease"
       | "increase"
@@ -168,7 +166,10 @@ export class YakovDryhCharacterSheet extends BaseSheet {
   private handleRootChange(event: Event): void {
     const target = event.target;
 
-    if (target instanceof HTMLInputElement && target.dataset.yakovDryhResponseToggle) {
+    if (
+      target instanceof HTMLInputElement &&
+      target.dataset.yakovDryhResponseToggle
+    ) {
       void this.updateResponseChecked(
         Number.parseInt(target.dataset.yakovDryhResponseToggle, 10),
         target.checked
@@ -227,18 +228,23 @@ export class YakovDryhCharacterSheet extends BaseSheet {
     const currentData = normalizeCharacterSystemData(actor.system);
     const currentSlot = currentData.responses.slots[slotIndex];
 
-    if (!currentSlot || currentSlot.type === "" || currentSlot.checked === checked) {
+    if (
+      !currentSlot ||
+      currentSlot.type === "" ||
+      currentSlot.checked === checked
+    ) {
       return;
     }
 
     await actor.update({
-      "system.responses.slots": currentData.responses.slots.map((slot, index) =>
-        index === slotIndex
-          ? {
-              ...slot,
-              checked
-            }
-          : slot
+      "system.responses.slots": currentData.responses.slots.map(
+        (slot, index) =>
+          index === slotIndex
+            ? {
+                ...slot,
+                checked
+              }
+            : slot
       ),
       "system.responses.max": DRYH_RESPONSE_MAX
     } as Record<string, unknown>);
@@ -281,7 +287,9 @@ export class YakovDryhCharacterSheet extends BaseSheet {
       return;
     }
 
-    const currentResponses = normalizeCharacterSystemData(actor.system).responses;
+    const currentResponses = normalizeCharacterSystemData(
+      actor.system
+    ).responses;
 
     if (hasCheckedResponses(currentResponses)) {
       const confirmed = await this.confirmResponseEditReset();
@@ -330,7 +338,10 @@ export class YakovDryhCharacterSheet extends BaseSheet {
       buttons: [
         {
           action: "cancel",
-          label: localize("YAKOV_DRYH.SHEETS.Actor.Character.Actions.Cancel", "Cancel")
+          label: localize(
+            "YAKOV_DRYH.SHEETS.Actor.Character.Actions.Cancel",
+            "Cancel"
+          )
         },
         {
           action: "edit",
@@ -348,7 +359,10 @@ export class YakovDryhCharacterSheet extends BaseSheet {
       modal: true,
       rejectClose: false,
       window: {
-        title: localize("YAKOV_DRYH.SHEETS.Actor.Character.Actions.EditResponses", "Edit Responses")
+        title: localize(
+          "YAKOV_DRYH.SHEETS.Actor.Character.Actions.EditResponses",
+          "Edit Responses"
+        )
       }
     });
 

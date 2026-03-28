@@ -24,7 +24,7 @@ export class YakovDryhCharacterSheet extends BaseSheet {
         },
         position: {
             height: "auto",
-            width: 860
+            width: 700
         },
         tag: "form",
         window: {
@@ -110,7 +110,8 @@ export class YakovDryhCharacterSheet extends BaseSheet {
     }
     handleRootChange(event) {
         const target = event.target;
-        if (target instanceof HTMLInputElement && target.dataset.yakovDryhResponseToggle) {
+        if (target instanceof HTMLInputElement &&
+            target.dataset.yakovDryhResponseToggle) {
             void this.updateResponseChecked(Number.parseInt(target.dataset.yakovDryhResponseToggle, 10), target.checked);
             return;
         }
@@ -146,7 +147,9 @@ export class YakovDryhCharacterSheet extends BaseSheet {
         }
         const currentData = normalizeCharacterSystemData(actor.system);
         const currentSlot = currentData.responses.slots[slotIndex];
-        if (!currentSlot || currentSlot.type === "" || currentSlot.checked === checked) {
+        if (!currentSlot ||
+            currentSlot.type === "" ||
+            currentSlot.checked === checked) {
             return;
         }
         await actor.update({

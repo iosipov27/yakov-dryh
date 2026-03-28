@@ -92,7 +92,7 @@
           <h3>{{trayTitle}}</h3>
         {{/if}}
       </div>
-      {{#if hasActor}}
+      {{#if statusLabel}}
         <p class="yakov-dryh-copy yakov-dryh-dice-tray__status">{{statusLabel}}</p>
       {{/if}}
     </header>
@@ -159,16 +159,6 @@
       </div>
 
       <footer class="yakov-dryh-dice-tray__actions">
-        {{#if canLockPools}}
-          <button
-            class="yakov-dryh-button yakov-dryh-button--secondary"
-            type="button"
-            data-yakov-dryh-tray-action="lock-pools"
-          >
-            {{localize "YAKOV_DRYH.TRAY.LockPools"}}
-          </button>
-        {{/if}}
-
         {{#if canRoll}}
           <button
             class="yakov-dryh-button"

@@ -4,7 +4,6 @@ import { CHAT_CARD_COMMAND, DRYH_SETTINGS, SYSTEM_ID } from "../constants.js";
 import {
   adjustDryhDiceTrayPool,
   hasDryhDiceTrayCard,
-  lockDryhDiceTrayPools,
   rollDryhDiceTray,
   syncActiveDryhDiceTrayMessage
 } from "./dice-tray-card-service.js";
@@ -117,12 +116,6 @@ function activateDryhDiceTrayListeners(html: HTMLElement): void {
       event.preventDefault();
 
       const trayAction = actionElement.dataset.yakovDryhTrayCardAction;
-
-      if (trayAction === "lock-pools") {
-        actionElement.setAttribute("disabled", "disabled");
-        void lockDryhDiceTrayPools();
-        return;
-      }
 
       if (trayAction === "roll") {
         actionElement.setAttribute("disabled", "disabled");

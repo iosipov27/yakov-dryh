@@ -2,12 +2,12 @@ import { canDecreaseDiceTrayPool, canIncreaseDiceTrayPool, hasLoadedDiceTrayActo
 export function createDiceTrayCardContext(input) {
     const { isActorOwner, isGm, state } = input;
     const hasActor = hasLoadedDiceTrayActor(state);
+    const canRoll = hasActor && state.pools.pain > 0 && (isActorOwner || isGm);
     return {
         actorName: state.actorName,
-        canLockPools: isGm && hasActor && !state.confirmed,
         paletteButtons: createPaletteButtons(state, { isActorOwner, isGm }),
         poolSummaries: createPoolSummaries(state, { isActorOwner, isGm }),
-        rollDisabled: !hasActor || !state.confirmed,
+        rollDisabled: !canRoll,
         statusLabel: getStatusLabel(state),
         trayTitle: state.actorName
             || localize("YAKOV_DRYH.TRAY.NoActor", "No active character")
@@ -62,9 +62,9 @@ function getPoolTrackClass(pool) {
     }
 }
 function getStatusLabel(state) {
-    return state.confirmed
+    return state.pools.pain > 0
         ? localize("YAKOV_DRYH.TRAY.Status.Ready", "Ready to roll.")
-        : localize("YAKOV_DRYH.TRAY.Status.WaitingForGm", "Waiting for GM to lock pools.");
+        : "";
 }
 function formatPool(pool) {
     return localize(`YAKOV_DRYH.ROLL.Pools.${pool}`, pool.charAt(0).toUpperCase() + pool.slice(1));

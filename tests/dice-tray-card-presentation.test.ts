@@ -12,8 +12,8 @@ describe("dice tray card presentation", () => {
     } as typeof game;
   });
 
-  it("keeps the roll button visible but disabled until the GM locks the pools", () => {
-    const unlockedState = normalizeDiceTrayState({
+  it("enables roll once the GM adds at least one pain die", () => {
+    const noPainState = normalizeDiceTrayState({
       actorId: "actor-1",
       actorName: "Samewere",
       actorUuid: "Actor.actor-1",
@@ -28,28 +28,38 @@ describe("dice tray card presentation", () => {
         discipline: 2,
         exhaustion: 3,
         madness: 5,
+        pain: 0
+      }
+    });
+    const painReadyState = normalizeDiceTrayState({
+      ...noPainState,
+      pools: {
+        ...noPainState.pools,
         pain: 1
       }
     });
-    const lockedState = normalizeDiceTrayState({
-      ...unlockedState,
-      confirmed: true
+
+    const waitingContext = createDiceTrayCardContext({
+      isActorOwner: true,
+      isGm: false,
+      state: noPainState
+    });
+    const readyOwnerContext = createDiceTrayCardContext({
+      isActorOwner: true,
+      isGm: false,
+      state: painReadyState
+    });
+    const readyGmContext = createDiceTrayCardContext({
+      isActorOwner: false,
+      isGm: true,
+      state: painReadyState
     });
 
-    expect(
-      createDiceTrayCardContext({
-        isActorOwner: true,
-        isGm: false,
-        state: unlockedState
-      }).rollDisabled
-    ).toBe(true);
-    expect(
-      createDiceTrayCardContext({
-        isActorOwner: true,
-        isGm: false,
-        state: lockedState
-      }).rollDisabled
-    ).toBe(false);
+    expect(waitingContext.rollDisabled).toBe(true);
+    expect(waitingContext.statusLabel).toBe("");
+    expect(readyOwnerContext.rollDisabled).toBe(false);
+    expect(readyOwnerContext.statusLabel).toBe("Ready to roll.");
+    expect(readyGmContext.rollDisabled).toBe(false);
   });
 
   it("limits pain editing to the GM and player pools to the actor owner", () => {

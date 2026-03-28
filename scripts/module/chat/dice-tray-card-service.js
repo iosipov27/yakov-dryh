@@ -1,4 +1,4 @@
-import { adjustDiceTrayPool, getDiceTrayState, hasLoadedDiceTrayActor, loadActorIntoDiceTray, resetDiceTrayState, setDiceTrayConfirmed } from "../applications/ui/dice-tray-state.js";
+import { adjustDiceTrayPool, getDiceTrayState, hasLoadedDiceTrayActor, loadActorIntoDiceTray, resetDiceTrayState } from "../applications/ui/dice-tray-state.js";
 import { DRYH_DICE_TRAY_FLAG, SYSTEM_ID, TEMPLATE_PATHS } from "../constants.js";
 import { rollDryhCheck } from "../dice/index.js";
 import { createDryhInitialRollMessage } from "./roll-card-service.js";
@@ -147,16 +147,9 @@ export async function adjustDryhDiceTrayPool(pool, delta) {
     }
     await adjustDiceTrayPool(pool, delta);
 }
-export async function lockDryhDiceTrayPools() {
-    if (!game.user?.isGM) {
-        ui.notifications?.warn(localize("YAKOV_DRYH.UI.Warnings.SharedPoolsGmOnly", "Only the GM can change Hope / Despair."));
-        return;
-    }
-    await setDiceTrayConfirmed(true);
-}
 export async function rollDryhDiceTray() {
     const state = getDiceTrayState();
-    if (!state.confirmed || !state.actorId) {
+    if (state.pools.pain < 1 || !state.actorId) {
         return null;
     }
     const actor = await resolveTrayActor();

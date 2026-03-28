@@ -2,7 +2,7 @@ import { createDryhInitialRollMessage } from "../../chat/roll-card-service.js";
 import { SYSTEM_ID, TEMPLATE_PATHS } from "../../constants.js";
 import { rollDryhCheck } from "../../dice/index.js";
 import { adjustSharedPool, endHopeScene, getSharedPools } from "../../resources/index.js";
-import { adjustDiceTrayPool, canDecreaseDiceTrayPool, canIncreaseDiceTrayPool, getDiceTrayState, hasLoadedDiceTrayActor, resetDiceTrayState, setDiceTrayConfirmed } from "./dice-tray-state.js";
+import { adjustDiceTrayPool, canDecreaseDiceTrayPool, canIncreaseDiceTrayPool, getDiceTrayState, hasLoadedDiceTrayActor, resetDiceTrayState } from "./dice-tray-state.js";
 const BaseApplication = foundry.applications.api.HandlebarsApplicationMixin(foundry.applications.api.ApplicationV2);
 let trayApplication = null;
 const DRAGGING_CLASS = "yakov-dryh-dice-tray--dragging";
@@ -54,11 +54,11 @@ export class YakovDryhDiceTray extends BaseApplication {
         const isGm = game.user?.isGM ?? false;
         const isActorOwner = actor?.isOwner ?? false;
         const hasActor = hasLoadedDiceTrayActor(trayState);
+        const canRoll = hasActor && trayState.pools.pain > 0 && (isActorOwner || isGm);
         Object.assign(context, {
             actorName: trayState.actorName,
             canEdit: isGm,
-            canLockPools: isGm && hasActor && !trayState.confirmed,
-            canRoll: hasActor && trayState.confirmed && (isActorOwner || isGm),
+            canRoll,
             despair: sharedPools.despair,
             hasActor,
             hasPendingHope: sharedPools.pendingHope > 0,
@@ -124,10 +124,6 @@ export class YakovDryhDiceTray extends BaseApplication {
         }
         event.preventDefault();
         const trayAction = actionElement.dataset.yakovDryhTrayAction;
-        if (trayAction === "lock-pools") {
-            void this.lockPools();
-            return;
-        }
         if (trayAction === "roll") {
             void this.rollFromTray();
             return;
@@ -257,16 +253,9 @@ export class YakovDryhDiceTray extends BaseApplication {
         }
         await adjustDiceTrayPool(pool, delta);
     }
-    async lockPools() {
-        if (!game.user?.isGM) {
-            this.showGmOnlyWarning();
-            return;
-        }
-        await setDiceTrayConfirmed(true);
-    }
     async rollFromTray() {
         const state = getDiceTrayState();
-        if (!state.confirmed || !state.actorId) {
+        if (state.pools.pain < 1 || !state.actorId) {
             return;
         }
         const actor = game.actors?.get(state.actorId) ??
@@ -387,9 +376,9 @@ function getStatusLabel(state) {
     if (!state.actorId) {
         return localize("YAKOV_DRYH.TRAY.Status.Empty", "Load a character pool from the sheet.");
     }
-    return state.confirmed
+    return state.pools.pain > 0
         ? localize("YAKOV_DRYH.TRAY.Status.Ready", "Ready to roll.")
-        : localize("YAKOV_DRYH.TRAY.Status.WaitingForGm", "Waiting for GM to lock pools.");
+        : "";
 }
 function formatPool(pool) {
     return localize(`YAKOV_DRYH.ROLL.Pools.${pool}`, pool.charAt(0).toUpperCase() + pool.slice(1));

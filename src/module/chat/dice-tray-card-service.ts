@@ -4,7 +4,6 @@ import {
   hasLoadedDiceTrayActor,
   loadActorIntoDiceTray,
   resetDiceTrayState,
-  setDiceTrayConfirmed,
   type YakovDryhDiceTrayPool
 } from "../applications/ui/dice-tray-state.js";
 import {
@@ -240,24 +239,10 @@ export async function adjustDryhDiceTrayPool(
   await adjustDiceTrayPool(pool, delta);
 }
 
-export async function lockDryhDiceTrayPools(): Promise<void> {
-  if (!game.user?.isGM) {
-    ui.notifications?.warn(
-      localize(
-        "YAKOV_DRYH.UI.Warnings.SharedPoolsGmOnly",
-        "Only the GM can change Hope / Despair."
-      )
-    );
-    return;
-  }
-
-  await setDiceTrayConfirmed(true);
-}
-
 export async function rollDryhDiceTray(): Promise<ChatMessage.Implementation | null> {
   const state = getDiceTrayState();
 
-  if (!state.confirmed || !state.actorId) {
+  if (state.pools.pain < 1 || !state.actorId) {
     return null;
   }
 

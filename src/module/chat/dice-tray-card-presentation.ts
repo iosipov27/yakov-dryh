@@ -28,7 +28,6 @@ export interface DiceTrayCardPaletteButton {
 
 export interface YakovDryhDiceTrayCardContext {
   actorName: string;
-  canLockPools: boolean;
   paletteButtons: DiceTrayCardPaletteButton[];
   poolSummaries: DiceTrayCardPoolSummary[];
   rollDisabled: boolean;
@@ -47,13 +46,13 @@ export function createDiceTrayCardContext(
 ): YakovDryhDiceTrayCardContext {
   const { isActorOwner, isGm, state } = input;
   const hasActor = hasLoadedDiceTrayActor(state);
+  const canRoll = hasActor && state.pools.pain > 0 && (isActorOwner || isGm);
 
   return {
     actorName: state.actorName,
-    canLockPools: isGm && hasActor && !state.confirmed,
     paletteButtons: createPaletteButtons(state, { isActorOwner, isGm }),
     poolSummaries: createPoolSummaries(state, { isActorOwner, isGm }),
-    rollDisabled: !hasActor || !state.confirmed,
+    rollDisabled: !canRoll,
     statusLabel: getStatusLabel(state),
     trayTitle: state.actorName
       || localize("YAKOV_DRYH.TRAY.NoActor", "No active character")
@@ -140,12 +139,9 @@ function getPoolTrackClass(pool: YakovDryhDiceTrayPool): string | null {
 }
 
 function getStatusLabel(state: YakovDryhDiceTrayState): string {
-  return state.confirmed
+  return state.pools.pain > 0
     ? localize("YAKOV_DRYH.TRAY.Status.Ready", "Ready to roll.")
-    : localize(
-        "YAKOV_DRYH.TRAY.Status.WaitingForGm",
-        "Waiting for GM to lock pools."
-      );
+    : "";
 }
 
 function formatPool(pool: YakovDryhDiceTrayPool): string {
