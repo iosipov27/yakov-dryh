@@ -22,6 +22,44 @@ Foundry will download the packaged system from the latest GitHub Release asset d
 - `src/module/system-registration` for Foundry init-time registration work
 - `templates/`, `styles/`, and `lang/` for static package resources
 
+## Chat Flow Overview
+
+```mermaid
+flowchart TD
+    Sheet["Character Sheet\nAdd Pool"] --> TrayOpen["openDryhDiceTrayForActor()"]
+    TrayOpen --> TrayState["Dice Tray State Store\nlocal in-memory state"]
+    TrayState --> TrayCard["Chat Dice Tray Card"]
+    TrayState --> TrayUI["Floating Dice Tray UI"]
+
+    TrayCard -->|"Roll"| TrayRoll["rollDryhDiceTray()"]
+    TrayUI -->|"Roll"| TrayRoll
+
+    TrayRoll --> InitialRoll["createDryhInitialRollMessage()"]
+    InitialRoll --> InitialCard["Initial Roll Card"]
+
+    InitialCard -->|"Player action"| PlayerAction["applyDryhRollPlayerAction()"]
+    InitialCard -->|"GM action"| GmAction["applyDryhRollGmAction()"]
+    InitialCard -->|"Finalize"| Finalize["finalizeDryhRoll()"]
+
+    PlayerAction --> InitialCard
+    GmAction --> InitialCard
+    Finalize --> FinalCard["Final Roll Card"]
+
+    FinalCard -->|"Dominant resolution"| Dominant["resolveDryhRollDominantAction()"]
+    FinalCard -->|"Failure resolution"| Failure["resolveDryhRollFailureAction()"]
+    FinalCard -->|"Crash resolution"| Crash["resolveDryhRollCrashAction()"]
+
+    Dominant --> Actor["Actor document updates"]
+    Failure --> Actor
+    Crash --> Actor
+    Finalize --> SharedPools["Shared Hope / Despair updates"]
+```
+
+Notes:
+
+- The dice tray state is client-local and no longer persisted through `game.settings` on every `+/-`.
+- The chat dice tray card sync is debounced, while roll resolution still persists through Foundry documents and chat messages.
+
 ## Development
 
 Install dependencies:
@@ -36,7 +74,7 @@ Build the runtime bundle and stylesheet:
 npm run build
 ```
 
-The compiled runtime in `scripts/` and `styles/` is committed on purpose so GitHub branch and tag archives stay directly installable in Foundry.
+The release workflow builds fresh `scripts/` and `styles/` assets before packaging the Foundry install zip. Local `scripts/` output is kept for development, but it is not required to stay tracked in Git.
 
 ## Release Flow
 

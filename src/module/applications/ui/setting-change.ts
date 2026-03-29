@@ -11,10 +11,3 @@ export function isSharedPoolSettingChange(setting: SettingDocumentLike): boolean
     setting.key === `${SYSTEM_ID}.${DRYH_SETTINGS.gmDespair}`
   );
 }
-
-export function isDiceTraySettingChange(setting: SettingDocumentLike): boolean {
-  return (
-    isSharedPoolSettingChange(setting) ||
-    setting.key === `${SYSTEM_ID}.${DRYH_SETTINGS.diceTrayState}`
-  );
-}

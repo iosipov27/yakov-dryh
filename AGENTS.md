@@ -50,6 +50,7 @@ Use this repository's GitHub Actions release flow as the default release process
 - Keep `system.json` `download` pointed at:
   - `https://github.com/iosipov27/yakov-dryh/releases/latest/download/yakov-dryh.zip`
 - Do not switch release installs back to branch archives or tag source archives unless the user explicitly asks for that behavior.
+- Treat GitHub Release assets as the installable artifact source; local build output in `scripts/` can be ignored by Git as long as the release workflow rebuilds it before packaging.
 
 ### Release Preparation Checklist
 

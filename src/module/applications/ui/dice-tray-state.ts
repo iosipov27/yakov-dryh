@@ -1,4 +1,3 @@
-import { DRYH_SETTINGS, SYSTEM_ID } from "../../constants.js";
 import {
   DRYH_TEMP_MADNESS_MAX,
   normalizeCharacterSystemData
@@ -27,12 +26,26 @@ export interface YakovDryhDiceTrayState {
   pools: YakovDryhDiceTrayPools;
 }
 
+export type YakovDryhDiceTraySyncMode = "debounced" | "immediate" | "none";
+
+interface YakovDryhDiceTrayStateChange {
+  state: YakovDryhDiceTrayState;
+  syncMode: YakovDryhDiceTraySyncMode;
+}
+
+type YakovDryhDiceTrayStateListener = (
+  change: YakovDryhDiceTrayStateChange
+) => void;
+
 const EMPTY_POOLS: YakovDryhDiceTrayPools = {
   discipline: 0,
   exhaustion: 0,
   madness: 0,
   pain: 0
 };
+
+let currentDiceTrayState: YakovDryhDiceTrayState | null = null;
+const diceTrayStateListeners = new Set<YakovDryhDiceTrayStateListener>();
 
 export function createDefaultDiceTrayState(): YakovDryhDiceTrayState {
   return {
@@ -119,37 +132,39 @@ export function normalizeDiceTrayState(state: unknown): YakovDryhDiceTrayState {
 }
 
 export function getDiceTrayState(): YakovDryhDiceTrayState {
-  const state = game.settings?.get(SYSTEM_ID, DRYH_SETTINGS.diceTrayState);
+  currentDiceTrayState ??= createDefaultDiceTrayState();
 
-  return normalizeDiceTrayState(state);
+  return normalizeDiceTrayState(currentDiceTrayState);
 }
 
 export async function setDiceTrayState(
-  state: YakovDryhDiceTrayState
+  state: YakovDryhDiceTrayState,
+  options: { syncMode?: YakovDryhDiceTraySyncMode } = {}
 ): Promise<YakovDryhDiceTrayState> {
   const normalizedState = normalizeDiceTrayState(state);
-
-  await game.settings?.set(
-    SYSTEM_ID,
-    DRYH_SETTINGS.diceTrayState,
-    JSON.stringify(normalizedState)
-  );
+  currentDiceTrayState = normalizedState;
+  emitDiceTrayStateChange(normalizedState, options.syncMode ?? "debounced");
 
   return normalizedState;
 }
 
 export async function resetDiceTrayState(): Promise<YakovDryhDiceTrayState> {
-  return setDiceTrayState(createDefaultDiceTrayState());
+  return setDiceTrayState(createDefaultDiceTrayState(), {
+    syncMode: "none"
+  });
 }
 
 export async function loadActorIntoDiceTray(
   actor: Actor.Implementation
 ): Promise<YakovDryhDiceTrayState> {
-  return setDiceTrayState(createDiceTrayStateForActor(actor));
+  return setDiceTrayState(createDiceTrayStateForActor(actor), {
+    syncMode: "none"
+  });
 }
 
 export async function setDiceTrayConfirmed(
-  confirmed: boolean
+  confirmed: boolean,
+  options: { syncMode?: YakovDryhDiceTraySyncMode } = {}
 ): Promise<YakovDryhDiceTrayState | null> {
   const state = getDiceTrayState();
 
@@ -160,7 +175,7 @@ export async function setDiceTrayConfirmed(
   return setDiceTrayState({
     ...state,
     confirmed
-  });
+  }, options);
 }
 
 export async function adjustDiceTrayPool(
@@ -180,6 +195,16 @@ export async function adjustDiceTrayPool(
       [pool]: state.pools[pool] + Math.trunc(delta)
     }
   });
+}
+
+export function subscribeToDiceTrayStateChanges(
+  listener: YakovDryhDiceTrayStateListener
+): () => void {
+  diceTrayStateListeners.add(listener);
+
+  return () => {
+    diceTrayStateListeners.delete(listener);
+  };
 }
 
 export function canAdjustDiceTrayPool(
@@ -256,6 +281,18 @@ export function getDiceTrayMaxPools(
     madness: state.basePools.madness + DRYH_TEMP_MADNESS_MAX,
     pain: Number.MAX_SAFE_INTEGER
   };
+}
+
+function emitDiceTrayStateChange(
+  state: YakovDryhDiceTrayState,
+  syncMode: YakovDryhDiceTraySyncMode
+): void {
+  for (const listener of diceTrayStateListeners) {
+    listener({
+      state,
+      syncMode
+    });
+  }
 }
 
 export function hasLoadedDiceTrayActor(state: YakovDryhDiceTrayState): boolean {

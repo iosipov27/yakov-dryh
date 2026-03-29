@@ -14,10 +14,11 @@ import {
   getDiceTrayState,
   hasLoadedDiceTrayActor,
   resetDiceTrayState,
+  subscribeToDiceTrayStateChanges,
   type YakovDryhDiceTrayPool,
   type YakovDryhDiceTrayState
 } from "./dice-tray-state.js";
-import { isDiceTraySettingChange } from "./setting-change.js";
+import { isSharedPoolSettingChange } from "./setting-change.js";
 
 const BaseApplication = foundry.applications.api.HandlebarsApplicationMixin(
   foundry.applications.api.ApplicationV2
@@ -101,11 +102,13 @@ export class YakovDryhDiceTray extends BaseApplication {
   private readonly handlePointerUpBound: (event: PointerEvent) => void;
   private readonly handleRootClickBound: (event: MouseEvent) => void;
   private readonly handleRootPointerDownBound: (event: PointerEvent) => void;
+  private readonly handleDiceTrayStateChangeBound: () => void;
   private readonly handleSettingUpdateBound: (setting: SettingDocumentLike) => void;
   private boundRoot: HTMLElement | null;
   private dragPosition: TrackerDragPosition | null;
   private dragState: TrackerDragState | null;
-  private settingRenderTimeout: number | null;
+  private renderTimeout: number | null;
+  private unsubscribeFromDiceTrayState: (() => void) | null;
 
   constructor(options: object = {}) {
     super(options);
@@ -113,11 +116,15 @@ export class YakovDryhDiceTray extends BaseApplication {
     this.handlePointerUpBound = this.handlePointerUp.bind(this);
     this.handleRootClickBound = this.handleRootClick.bind(this);
     this.handleRootPointerDownBound = this.handleRootPointerDown.bind(this);
+    this.handleDiceTrayStateChangeBound = this.handleDiceTrayStateChange.bind(this);
     this.handleSettingUpdateBound = this.handleSettingUpdate.bind(this);
     this.boundRoot = null;
     this.dragPosition = null;
     this.dragState = null;
-    this.settingRenderTimeout = null;
+    this.renderTimeout = null;
+    this.unsubscribeFromDiceTrayState = subscribeToDiceTrayStateChanges(
+      this.handleDiceTrayStateChangeBound
+    );
     Hooks.on("createSetting", this.handleSettingUpdateBound);
     Hooks.on("updateSetting", this.handleSettingUpdateBound);
   }
@@ -189,6 +196,8 @@ export class YakovDryhDiceTray extends BaseApplication {
     this.boundRoot?.removeEventListener("click", this.handleRootClickBound);
     this.boundRoot?.removeEventListener("pointerdown", this.handleRootPointerDownBound);
     this.boundRoot = null;
+    this.unsubscribeFromDiceTrayState?.();
+    this.unsubscribeFromDiceTrayState = null;
     Hooks.off("createSetting", this.handleSettingUpdateBound);
     Hooks.off("updateSetting", this.handleSettingUpdateBound);
 
@@ -490,27 +499,35 @@ export class YakovDryhDiceTray extends BaseApplication {
       return;
     }
 
-    if (!isDiceTraySettingChange(setting)) {
+    if (!isSharedPoolSettingChange(setting)) {
       return;
     }
 
-    if (this.settingRenderTimeout !== null) {
+    this.scheduleRender();
+  }
+
+  private handleDiceTrayStateChange(): void {
+    this.scheduleRender();
+  }
+
+  private scheduleRender(): void {
+    if (this.renderTimeout !== null) {
       return;
     }
 
-    this.settingRenderTimeout = window.setTimeout(() => {
-      this.settingRenderTimeout = null;
+    this.renderTimeout = window.setTimeout(() => {
+      this.renderTimeout = null;
       void this.render();
     }, 0);
   }
 
   private clearScheduledRender(): void {
-    if (this.settingRenderTimeout === null) {
+    if (this.renderTimeout === null) {
       return;
     }
 
-    window.clearTimeout(this.settingRenderTimeout);
-    this.settingRenderTimeout = null;
+    window.clearTimeout(this.renderTimeout);
+    this.renderTimeout = null;
   }
 }
 

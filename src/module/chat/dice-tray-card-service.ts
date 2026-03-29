@@ -19,6 +19,9 @@ interface DryhDiceTrayCardFlag {
   type: "dice-tray";
 }
 
+const DICE_TRAY_MESSAGE_SYNC_DELAY_MS = 50;
+let scheduledDiceTrayMessageSync: ReturnType<typeof setTimeout> | null = null;
+
 function createDryhDiceTrayCardFlag(): DryhDiceTrayCardFlag {
   return {
     type: "dice-tray"
@@ -106,7 +109,9 @@ async function renderDryhDiceTrayCard(): Promise<string | null> {
     return null;
   }
 
-  const actor = state.actorId ? game.actors?.get(state.actorId) ?? null : null;
+  const actor = state.actorId
+    ? (game.actors?.get(state.actorId) ?? null)
+    : null;
   const context = createDiceTrayCardContext({
     isActorOwner: actor?.isOwner ?? false,
     isGm: game.user?.isGM ?? false,
@@ -123,6 +128,7 @@ async function renderDryhDiceTrayCard(): Promise<string | null> {
 }
 
 export async function deleteActiveDryhDiceTrayMessage(): Promise<void> {
+  cancelScheduledDryhDiceTrayMessageSync();
   const message = getActiveDryhDiceTrayMessage();
 
   if (!message) {
@@ -157,6 +163,7 @@ export async function rerenderDryhDiceTrayMessage(
 }
 
 export async function syncActiveDryhDiceTrayMessage(): Promise<ChatMessage.Implementation | null> {
+  cancelScheduledDryhDiceTrayMessageSync();
   const message = getActiveDryhDiceTrayMessage();
 
   if (!message) {
@@ -167,6 +174,7 @@ export async function syncActiveDryhDiceTrayMessage(): Promise<ChatMessage.Imple
 }
 
 export async function upsertDryhDiceTrayMessage(): Promise<ChatMessage.Implementation | null> {
+  cancelScheduledDryhDiceTrayMessageSync();
   const content = await renderDryhDiceTrayCard();
 
   if (!content) {
@@ -179,7 +187,8 @@ export async function upsertDryhDiceTrayMessage(): Promise<ChatMessage.Implement
 
   if (existingMessage) {
     await existingMessage.update({
-      [`flags.${SYSTEM_ID}.${DRYH_DICE_TRAY_FLAG}`]: createDryhDiceTrayCardFlag(),
+      [`flags.${SYSTEM_ID}.${DRYH_DICE_TRAY_FLAG}`]:
+        createDryhDiceTrayCardFlag(),
       content,
       speaker: getSpeaker(actor)
     } as Record<string, unknown>);
@@ -206,12 +215,38 @@ export async function openDryhDiceTrayForActor(
   return upsertDryhDiceTrayMessage();
 }
 
+export function requestActiveDryhDiceTrayMessageSync(
+  syncMode: "debounced" | "immediate" | "none"
+): void {
+  if (syncMode === "none") {
+    cancelScheduledDryhDiceTrayMessageSync();
+    return;
+  }
+
+  if (syncMode === "immediate") {
+    cancelScheduledDryhDiceTrayMessageSync();
+    void syncActiveDryhDiceTrayMessage();
+    return;
+  }
+
+  if (scheduledDiceTrayMessageSync !== null) {
+    return;
+  }
+
+  scheduledDiceTrayMessageSync = setTimeout(() => {
+    scheduledDiceTrayMessageSync = null;
+    void syncActiveDryhDiceTrayMessage();
+  }, DICE_TRAY_MESSAGE_SYNC_DELAY_MS);
+}
+
 export async function adjustDryhDiceTrayPool(
   pool: YakovDryhDiceTrayPool,
   delta: number
 ): Promise<void> {
   const state = getDiceTrayState();
-  const actor = state.actorId ? game.actors?.get(state.actorId) ?? null : null;
+  const actor = state.actorId
+    ? (game.actors?.get(state.actorId) ?? null)
+    : null;
   const isActorOwner = actor?.isOwner ?? false;
   const isGm = game.user?.isGM ?? false;
   const canEditPlayerPools = isActorOwner || isGm;
@@ -296,4 +331,13 @@ export async function rollDryhDiceTray(): Promise<ChatMessage.Implementation | n
   await resetDiceTrayState();
 
   return resultMessage;
+}
+
+function cancelScheduledDryhDiceTrayMessageSync(): void {
+  if (scheduledDiceTrayMessageSync === null) {
+    return;
+  }
+
+  clearTimeout(scheduledDiceTrayMessageSync);
+  scheduledDiceTrayMessageSync = null;
 }

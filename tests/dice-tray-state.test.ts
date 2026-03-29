@@ -1,13 +1,18 @@
-import { describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 
 import {
+  adjustDiceTrayPool,
   canDecreaseDiceTrayPool,
   canIncreaseDiceTrayPool,
   createDefaultDiceTrayState,
   createDiceTrayStateForActor,
   getDiceTrayMaxPools,
   getDiceTrayMinPools,
-  normalizeDiceTrayState
+  getDiceTrayState,
+  normalizeDiceTrayState,
+  resetDiceTrayState,
+  setDiceTrayState,
+  subscribeToDiceTrayStateChanges
 } from "../src/module/applications/ui/dice-tray-state.ts";
 
 function createActorStub(system: Record<string, unknown>): Actor.Implementation {
@@ -18,6 +23,11 @@ function createActorStub(system: Record<string, unknown>): Actor.Implementation 
     uuid: "Actor.actor-1"
   } as Actor.Implementation;
 }
+
+afterEach(async () => {
+  await resetDiceTrayState();
+  vi.restoreAllMocks();
+});
 
 describe("dice tray state", () => {
   it("creates an empty default tray state", () => {
@@ -190,5 +200,78 @@ describe("dice tray state", () => {
     expect(canDecreaseDiceTrayPool(state, "pain")).toBe(false);
     expect(canIncreaseDiceTrayPool(state, "madness")).toBe(false);
     expect(canDecreaseDiceTrayPool(state, "madness")).toBe(false);
+  });
+
+  it("stores tray state in local memory without writing to world settings", async () => {
+    const settingsSet = vi.fn();
+
+    globalThis.game = {
+      i18n: {
+        localize: () => "Actor"
+      },
+      settings: {
+        set: settingsSet
+      }
+    } as typeof game;
+
+    const state = normalizeDiceTrayState({
+      actorId: "actor-1",
+      actorName: "Samewere",
+      actorUuid: "Actor.actor-1",
+      basePools: {
+        discipline: 2,
+        exhaustion: 2,
+        madness: 3,
+        pain: 0
+      },
+      confirmed: false,
+      pools: {
+        discipline: 2,
+        exhaustion: 2,
+        madness: 3,
+        pain: 1
+      }
+    });
+
+    await setDiceTrayState(state);
+
+    expect(getDiceTrayState()).toEqual(state);
+    expect(settingsSet).not.toHaveBeenCalled();
+  });
+
+  it("emits debounced sync updates when tray pools change locally", async () => {
+    const syncModes: string[] = [];
+    const unsubscribe = subscribeToDiceTrayStateChanges((change) => {
+      syncModes.push(change.syncMode);
+    });
+
+    await setDiceTrayState(
+      normalizeDiceTrayState({
+        actorId: "actor-1",
+        actorName: "Samewere",
+        actorUuid: "Actor.actor-1",
+        basePools: {
+          discipline: 2,
+          exhaustion: 2,
+          madness: 3,
+          pain: 0
+        },
+        confirmed: false,
+        pools: {
+          discipline: 2,
+          exhaustion: 2,
+          madness: 3,
+          pain: 0
+        }
+      }),
+      { syncMode: "none" }
+    );
+
+    await adjustDiceTrayPool("pain", 1);
+
+    unsubscribe();
+
+    expect(syncModes).toEqual(["none", "debounced"]);
+    expect(getDiceTrayState().pools.pain).toBe(1);
   });
 });

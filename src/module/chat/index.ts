@@ -1,11 +1,12 @@
+import { subscribeToDiceTrayStateChanges } from "../applications/ui/dice-tray-state.js";
 import { YakovDryhChatInteractionDialog } from "../applications/dialogs/chat-interaction-dialog.js";
 import type { YakovDryhSystemApi } from "../api.js";
 import { CHAT_CARD_COMMAND, DRYH_SETTINGS, SYSTEM_ID } from "../constants.js";
 import {
   adjustDryhDiceTrayPool,
   hasDryhDiceTrayCard,
+  requestActiveDryhDiceTrayMessageSync,
   rollDryhDiceTray,
-  syncActiveDryhDiceTrayMessage
 } from "./dice-tray-card-service.js";
 import {
   applyDryhRollPlayerAction,
@@ -28,6 +29,8 @@ import {
   shouldHideDryhRollAction
 } from "./roll-card-visibility.js";
 
+let hasRegisteredDiceTrayStateSync = false;
+
 export async function openChatInteraction(
   message: ChatMessage.Implementation
 ): Promise<YakovDryhChatInteractionDialog> {
@@ -41,6 +44,13 @@ export async function openChatInteraction(
 }
 
 export function registerChatHooks(api: YakovDryhSystemApi): void {
+  if (!hasRegisteredDiceTrayStateSync) {
+    subscribeToDiceTrayStateChanges((change) => {
+      requestActiveDryhDiceTrayMessageSync(change.syncMode);
+    });
+    hasRegisteredDiceTrayStateSync = true;
+  }
+
   Hooks.on("chatMessage", (_chatLog, message) => {
     const trimmedMessage = message.trim();
 
@@ -74,10 +84,6 @@ export function registerChatHooks(api: YakovDryhSystemApi): void {
   });
 
   Hooks.on("updateSetting", (setting: { key?: string }) => {
-    if (setting.key === `${SYSTEM_ID}.${DRYH_SETTINGS.diceTrayState}`) {
-      void syncActiveDryhDiceTrayMessage();
-    }
-
     if (
       setting.key !== `${SYSTEM_ID}.${DRYH_SETTINGS.gmDespair}` &&
       setting.key !== `${SYSTEM_ID}.${DRYH_SETTINGS.sharedHope}` &&

@@ -27,7 +27,6 @@ export const CHAT_CARD_STATUSES = ["draft", "review", "resolved"] as const;
 export const DRYH_DICE_TRAY_FLAG = "dryhDiceTray";
 export const DRYH_ROLL_FLAG = "dryhRoll";
 export const DRYH_SETTINGS = {
-  diceTrayState: "diceTrayState",
   gmDespair: "gmDespair",
   pendingHope: "pendingHope",
   sharedHope: "sharedHope"
