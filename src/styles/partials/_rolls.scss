@@ -107,15 +107,13 @@
     border-radius: var(--yd-border-radius);
     display: block;
     flex: 0 0 auto;
-    height: 1.75rem;
     overflow: hidden;
-    width: 1.75rem;
   }
 
   &__die-icon {
     display: block;
-    height: 1.75rem;
-    width: 1.75rem;
+    height: 1.5rem;
+    width: 1.5rem;
   }
 
   &__successes {

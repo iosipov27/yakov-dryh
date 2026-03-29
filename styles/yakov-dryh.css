@@ -39,6 +39,44 @@
   --yd-pip-shadow: rgb(33 22 30 / 30%);
 }
 
+h1,
+h2,
+h3 {
+  font-weight: 500;
+  line-height: 1.15;
+}
+
+h4,
+h5,
+h6 {
+  font-weight: 500;
+  line-height: 1.2;
+}
+
+h1 {
+  font-size: 2rem;
+}
+
+h2 {
+  font-size: 1.6rem;
+}
+
+h3 {
+  font-size: 1.3rem;
+}
+
+h4 {
+  font-size: 1.1rem;
+}
+
+h5 {
+  font-size: 1rem;
+}
+
+h6 {
+  font-size: 0.9rem;
+}
+
 .m0 {
   margin: 0rem;
 }
@@ -2070,6 +2108,15 @@
   padding: 1rem;
 }
 
+.yakov-dryh-sheet .window-header h1 {
+  font-size: 1rem;
+  font-weight: 400;
+}
+.yakov-dryh-sheet .window-content {
+  background: transparent;
+  padding: 0;
+}
+
 .yakov-dryh-status {
   align-self: flex-start;
   border-radius: var(--yd-border-radius);
@@ -2126,6 +2173,9 @@
   display: flex;
   gap: 1rem;
   justify-content: space-between;
+}
+.yakov-dryh-header h3 {
+  font-weight: 500;
 }
 
 .yakov-dryh-eyebrow {
@@ -2555,14 +2605,12 @@
   border-radius: var(--yd-border-radius);
   display: block;
   flex: 0 0 auto;
-  height: 1.75rem;
   overflow: hidden;
-  width: 1.75rem;
 }
 .yakov-dryh-roll-pool__die-icon {
   display: block;
-  height: 1.75rem;
-  width: 1.75rem;
+  height: 1.5rem;
+  width: 1.5rem;
 }
 .yakov-dryh-roll-pool__successes {
   align-items: center;

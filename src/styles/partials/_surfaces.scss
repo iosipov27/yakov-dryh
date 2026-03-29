@@ -14,6 +14,19 @@
   padding: 1rem;
 }
 
+.yakov-dryh-sheet {
+  .window-header {
+    h1 {
+      font-size: 1rem;
+      font-weight: 400;
+    }
+  }
+
+  .window-content {
+    background: transparent;
+    padding: 0;
+  }
+}
 
 .yakov-dryh-status {
   align-self: flex-start;
