@@ -4,6 +4,7 @@
       class="yakov-dryh-button yakov-dryh-button--secondary"
       type="button"
       data-yakov-dryh-action="add-pool-to-tray"
+      {{#unless canAddPoolToTray}}disabled{{/unless}}
     >
       {{localize "YAKOV_DRYH.SHEETS.Actor.Character.Actions.AddPool"}}
     </button>

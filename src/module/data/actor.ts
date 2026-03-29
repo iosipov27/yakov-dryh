@@ -162,6 +162,12 @@ export function countConfiguredResponses(
   return responses.slots.filter((slot) => slot.type !== "").length;
 }
 
+export function hasCompleteResponseConfiguration(
+  responses: YakovDryhResponsesData
+): boolean {
+  return countConfiguredResponses(responses) === DRYH_RESPONSE_MAX;
+}
+
 export function countResponsesByType(
   responses: YakovDryhResponsesData,
   responseType: YakovDryhResponseType

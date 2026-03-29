@@ -52,6 +52,7 @@ describe("character sheet pool edit context", () => {
     expect(context.disciplineIsEditMode).toBe(false);
     expect(context.exhaustionIsEditMode).toBe(false);
     expect(context.madnessIsEditMode).toBe(false);
+    expect(context.canAddPoolToTray).toBe(true);
     expect(context.disciplineControls).toEqual({
       canDecrease: false,
       canIncrease: false,
@@ -137,5 +138,33 @@ describe("character sheet pool edit context", () => {
     expect(
       (context.madnessPips as Array<{ filled: boolean }>).map((pip) => pip.filled)
     ).toEqual([true, true, false, false, false, false]);
+  });
+
+  it("blocks Add Pool until all three responses are configured", () => {
+    const context = createCharacterSheetContext({
+      actor: {
+        name: "Ada",
+        system: {
+          discipline: 3,
+          exhaustion: 1,
+          madnessPermanent: 0,
+          responses: {
+            max: 3,
+            slots: [
+              { checked: false, type: "fight" },
+              { checked: false, type: "" },
+              { checked: false, type: "" }
+            ]
+          }
+        },
+        type: "character"
+      } as Actor.Implementation,
+      poolEditValues: {},
+      responseEditSlots: null
+    });
+
+    expect(context.canAddPoolToTray).toBe(false);
+    expect(context.responseIsAllocationMode).toBe(true);
+    expect(context.responseIsPlayMode).toBe(false);
   });
 });

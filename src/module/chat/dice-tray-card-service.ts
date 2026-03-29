@@ -11,6 +11,10 @@ import {
   SYSTEM_ID,
   TEMPLATE_PATHS
 } from "../constants.js";
+import {
+  hasCompleteResponseConfiguration,
+  normalizeCharacterSystemData
+} from "../data/index.js";
 import { rollDryhCheck } from "../dice/index.js";
 import { createDryhInitialRollMessage } from "./roll-card-service.js";
 import { createDiceTrayCardContext } from "./dice-tray-card-presentation.js";
@@ -210,6 +214,18 @@ export async function upsertDryhDiceTrayMessage(): Promise<ChatMessage.Implement
 export async function openDryhDiceTrayForActor(
   actor: Actor.Implementation
 ): Promise<ChatMessage.Implementation | null> {
+  const actorData = normalizeCharacterSystemData(actor.system);
+
+  if (!hasCompleteResponseConfiguration(actorData.responses)) {
+    ui.notifications?.warn(
+      localize(
+        "YAKOV_DRYH.UI.Warnings.ResponsesNotConfigured",
+        "Configure all 3 Responses before rolling."
+      )
+    );
+    return null;
+  }
+
   await loadActorIntoDiceTray(actor);
 
   return upsertDryhDiceTrayMessage();
@@ -288,6 +304,20 @@ export async function rollDryhDiceTray(): Promise<ChatMessage.Implementation | n
       localize(
         "YAKOV_DRYH.UI.Warnings.ActorUnavailable",
         "Actor is no longer available."
+      )
+    );
+    return null;
+  }
+
+  if (
+    !hasCompleteResponseConfiguration(
+      normalizeCharacterSystemData(actor.system).responses
+    )
+  ) {
+    ui.notifications?.warn(
+      localize(
+        "YAKOV_DRYH.UI.Warnings.ResponsesNotConfigured",
+        "Configure all 3 Responses before rolling."
       )
     );
     return null;

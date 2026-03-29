@@ -6,6 +6,7 @@ import {
   countConfiguredResponses,
   countResponsesByType,
   createDefaultResponsesData,
+  hasCompleteResponseConfiguration,
   hasCheckedResponses,
   uncheckFirstCheckedResponse
 } from "../src/module/data/index.ts";
@@ -72,8 +73,22 @@ describe("response slot helpers", () => {
     };
 
     expect(countConfiguredResponses(responses)).toBe(2);
+    expect(hasCompleteResponseConfiguration(responses)).toBe(false);
     expect(countResponsesByType(responses, "fight")).toBe(2);
     expect(countResponsesByType(responses, "flight")).toBe(0);
+  });
+
+  it("detects when all three responses have been configured", () => {
+    expect(
+      hasCompleteResponseConfiguration({
+        max: 3,
+        slots: [
+          { checked: false, type: "fight" },
+          { checked: false, type: "flight" },
+          { checked: true, type: "fight" }
+        ]
+      })
+    ).toBe(true);
   });
 
   it("detects whether any responses are currently checked", () => {

@@ -1,5 +1,6 @@
 import {
   DRYH_RESPONSE_MAX,
+  hasCompleteResponseConfiguration,
   normalizeCharacterSystemData,
   YAKOV_DRYH_ACTOR_TYPES,
   type YakovDryhResponseSlotData
@@ -59,6 +60,7 @@ export function createCharacterSheetContext(input: {
   const liveResponses = actorData.responses;
   const responseEditorData = createResponseEditorData(responseEditSlots, liveResponses);
   const configuredResponseCount = responseEditorData.slots.filter((slot) => slot.type !== "").length;
+  const hasCompleteResponses = hasCompleteResponseConfiguration(liveResponses);
   const isEditingResponses = responseEditSlots !== null;
   const isPlayMode = !isEditingResponses && configuredResponseCount === DRYH_RESPONSE_MAX;
   const responseRemaining = Math.max(DRYH_RESPONSE_MAX - configuredResponseCount, 0);
@@ -74,6 +76,7 @@ export function createCharacterSheetContext(input: {
     actorName: actor?.name ?? "",
     actorType,
     actorTypeLabel: localizeActorType(actorType),
+    canAddPoolToTray: hasCompleteResponses,
     disciplineControls: createEditablePoolControls(
       disciplineValue,
       disciplineLabel,

@@ -5,6 +5,7 @@ import {
   DRYH_EXHAUSTION_MAX,
   DRYH_RESPONSE_MAX,
   createDefaultResponsesData,
+  hasCompleteResponseConfiguration,
   hasCheckedResponses,
   normalizeCharacterSystemData,
   type YakovDryhResponseSlotData
@@ -98,6 +99,18 @@ export class YakovDryhCharacterSheet extends BaseSheet {
 
   private async addActorPoolToTray(): Promise<void> {
     if (!this.actor) {
+      return;
+    }
+
+    const actorData = normalizeCharacterSystemData(this.actor.system);
+
+    if (!hasCompleteResponseConfiguration(actorData.responses)) {
+      ui.notifications?.warn(
+        localize(
+          "YAKOV_DRYH.UI.Warnings.ResponsesNotConfigured",
+          "Configure all 3 Responses before rolling."
+        )
+      );
       return;
     }
 

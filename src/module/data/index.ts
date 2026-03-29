@@ -10,6 +10,7 @@ export {
   createDefaultResponsesData,
   getCheckedResponseTypes,
   getUncheckedResponseTypes,
+  hasCompleteResponseConfiguration,
   hasCheckedResponses,
   isNightmareDiscipline,
   uncheckFirstCheckedResponse,
