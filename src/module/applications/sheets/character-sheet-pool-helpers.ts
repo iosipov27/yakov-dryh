@@ -1,38 +1,34 @@
 import { localize } from "./character-sheet-localization.js";
 import type {
-  EditableSheetPip,
-  EditableSheetPoolField
+  EditableSheetPoolControls,
+  SheetPip
 } from "./character-sheet-types.js";
 
 const SHEET_DICE_POOL_BASE_TOTAL = 6;
 const STRESS_CARD_VISUAL_MAX = 6;
 
-export function createEditablePips(
-  field: EditableSheetPoolField,
+export function createDisplayPips(
   value: number,
-  total: number,
+  total: number
+): SheetPip[] {
+  return Array.from({ length: Math.max(total, 0) }, (_entry, index) => ({
+    filled: index < value
+  }));
+}
+
+export function createEditablePoolControls(
+  value: number,
   label: string,
   isEditMode: boolean
-): EditableSheetPip[] {
-  const normalizedTotal = Math.max(total, 0);
+): EditableSheetPoolControls {
+  const maxValue = getEditablePoolTotal(value);
 
-  return Array.from({ length: normalizedTotal }, (_entry, index) => {
-    const filled = index < value;
-    const canDecrease = isEditMode && value > 0 && index === value - 1;
-    const canIncrease = isEditMode && index === value && value < normalizedTotal;
-
-    return {
-      action: canDecrease ? "decrease" : canIncrease ? "increase" : null,
-      field,
-      filled,
-      iconClass: canDecrease ? "fa-solid fa-trash-can" : canIncrease ? "fa-solid fa-plus" : null,
-      tooltip: canDecrease
-        ? `${localize("YAKOV_DRYH.UI.Actions.RemoveDie", "Remove 1 die")} (${label})`
-        : canIncrease
-          ? `${localize("YAKOV_DRYH.UI.Actions.AddDie", "Add 1 die")} (${label})`
-          : null
-    };
-  });
+  return {
+    canDecrease: isEditMode && value > 0,
+    canIncrease: isEditMode && value < maxValue,
+    decreaseLabel: `${localize("YAKOV_DRYH.UI.Actions.RemoveDie", "Remove 1 die")} (${label})`,
+    increaseLabel: `${localize("YAKOV_DRYH.UI.Actions.AddDie", "Add 1 die")} (${label})`
+  };
 }
 
 export function getEditablePoolTotal(value: number): number {

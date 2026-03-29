@@ -12,7 +12,8 @@ import {
   localizeActorType
 } from "./character-sheet-localization.js";
 import {
-  createEditablePips,
+  createDisplayPips,
+  createEditablePoolControls,
   createStressCardStyle,
   getEditablePoolTotal
 } from "./character-sheet-pool-helpers.js";
@@ -73,31 +74,37 @@ export function createCharacterSheetContext(input: {
     actorName: actor?.name ?? "",
     actorType,
     actorTypeLabel: localizeActorType(actorType),
-    disciplinePips: createEditablePips(
-      "discipline",
+    disciplineControls: createEditablePoolControls(
       disciplineValue,
-      getEditablePoolTotal(disciplineValue),
       disciplineLabel,
       disciplineIsEditMode
     ),
+    disciplinePips: createDisplayPips(
+      disciplineValue,
+      getEditablePoolTotal(disciplineValue)
+    ),
     disciplineIsEditMode,
     disciplinePipTotal: getEditablePoolTotal(disciplineValue),
-    exhaustionPips: createEditablePips(
-      "exhaustion",
+    exhaustionControls: createEditablePoolControls(
       exhaustionValue,
-      getEditablePoolTotal(exhaustionValue),
       exhaustionLabel,
       exhaustionIsEditMode
+    ),
+    exhaustionPips: createDisplayPips(
+      exhaustionValue,
+      getEditablePoolTotal(exhaustionValue)
     ),
     exhaustionCardStyle: createStressCardStyle(exhaustionValue),
     exhaustionIsEditMode,
     exhaustionPipTotal: getEditablePoolTotal(exhaustionValue),
-    madnessPips: createEditablePips(
-      "madnessPermanent",
+    madnessControls: createEditablePoolControls(
       madnessValue,
-      getEditablePoolTotal(madnessValue),
       madnessLabel,
       madnessIsEditMode
+    ),
+    madnessPips: createDisplayPips(
+      madnessValue,
+      getEditablePoolTotal(madnessValue)
     ),
     madnessCardStyle: createStressCardStyle(madnessValue),
     madnessIsEditMode,

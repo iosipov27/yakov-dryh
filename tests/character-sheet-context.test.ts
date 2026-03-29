@@ -52,21 +52,33 @@ describe("character sheet pool edit context", () => {
     expect(context.disciplineIsEditMode).toBe(false);
     expect(context.exhaustionIsEditMode).toBe(false);
     expect(context.madnessIsEditMode).toBe(false);
+    expect(context.disciplineControls).toEqual({
+      canDecrease: false,
+      canIncrease: false,
+      decreaseLabel: "Remove 1 die (Discipline)",
+      increaseLabel: "Add 1 die (Discipline)"
+    });
+    expect(context.exhaustionControls).toEqual({
+      canDecrease: false,
+      canIncrease: false,
+      decreaseLabel: "Remove 1 die (Exhaustion)",
+      increaseLabel: "Add 1 die (Exhaustion)"
+    });
+    expect(context.madnessControls).toEqual({
+      canDecrease: false,
+      canIncrease: false,
+      decreaseLabel: "Remove 1 die (Madness)",
+      increaseLabel: "Add 1 die (Madness)"
+    });
     expect(
-      (context.disciplinePips as Array<{ action: string | null }>).every(
-        (pip) => pip.action === null
-      )
-    ).toBe(true);
+      (context.disciplinePips as Array<{ filled: boolean }>).map((pip) => pip.filled)
+    ).toEqual([true, true, true, false, false, false]);
     expect(
-      (context.exhaustionPips as Array<{ action: string | null }>).every(
-        (pip) => pip.action === null
-      )
-    ).toBe(true);
+      (context.exhaustionPips as Array<{ filled: boolean }>).map((pip) => pip.filled)
+    ).toEqual([true, true, false, false, false, false]);
     expect(
-      (context.madnessPips as Array<{ action: string | null }>).every(
-        (pip) => pip.action === null
-      )
-    ).toBe(true);
+      (context.madnessPips as Array<{ filled: boolean }>).map((pip) => pip.filled)
+    ).toEqual([true, false, false, false, false, false]);
   });
 
   it("keeps actions visible only for pools that are currently being edited", () => {
@@ -98,20 +110,32 @@ describe("character sheet pool edit context", () => {
     expect(context.disciplineIsEditMode).toBe(true);
     expect(context.exhaustionIsEditMode).toBe(true);
     expect(context.madnessIsEditMode).toBe(false);
+    expect(context.disciplineControls).toEqual({
+      canDecrease: true,
+      canIncrease: true,
+      decreaseLabel: "Remove 1 die (Discipline)",
+      increaseLabel: "Add 1 die (Discipline)"
+    });
+    expect(context.exhaustionControls).toEqual({
+      canDecrease: true,
+      canIncrease: false,
+      decreaseLabel: "Remove 1 die (Exhaustion)",
+      increaseLabel: "Add 1 die (Exhaustion)"
+    });
+    expect(context.madnessControls).toEqual({
+      canDecrease: false,
+      canIncrease: false,
+      decreaseLabel: "Remove 1 die (Madness)",
+      increaseLabel: "Add 1 die (Madness)"
+    });
     expect(
-      (context.disciplinePips as Array<{ action: string | null }>).map(
-        (pip) => pip.action
-      )
-    ).toEqual([null, null, null, "decrease", "increase", null]);
+      (context.disciplinePips as Array<{ filled: boolean }>).map((pip) => pip.filled)
+    ).toEqual([true, true, true, true, false, false]);
     expect(
-      (context.exhaustionPips as Array<{ action: string | null }>).map(
-        (pip) => pip.action
-      )
-    ).toEqual([null, null, null, null, null, "decrease"]);
+      (context.exhaustionPips as Array<{ filled: boolean }>).map((pip) => pip.filled)
+    ).toEqual([true, true, true, true, true, true]);
     expect(
-      (context.madnessPips as Array<{ action: string | null }>).every(
-        (pip) => pip.action === null
-      )
-    ).toBe(true);
+      (context.madnessPips as Array<{ filled: boolean }>).map((pip) => pip.filled)
+    ).toEqual([true, true, false, false, false, false]);
   });
 });

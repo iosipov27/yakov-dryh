@@ -7,11 +7,11 @@ export interface SheetPip {
 export type EditableSheetPoolField = "discipline" | "exhaustion" | "madnessPermanent";
 export type EditableSheetPoolDrafts = Partial<Record<EditableSheetPoolField, number>>;
 
-export interface EditableSheetPip extends SheetPip {
-  action: "decrease" | "increase" | null;
-  field: EditableSheetPoolField;
-  iconClass: string | null;
-  tooltip: string | null;
+export interface EditableSheetPoolControls {
+  canDecrease: boolean;
+  canIncrease: boolean;
+  decreaseLabel: string;
+  increaseLabel: string;
 }
 
 export interface SheetResponseAllocationIndicator {

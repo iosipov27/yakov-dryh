@@ -2,43 +2,57 @@
   class="yakov-dryh-resource-card{{#if cardClasses}} {{cardClasses}}{{/if}}"
   {{#if cardStyle}}style="{{cardStyle}}"{{/if}}
 >
-  <div class="yakov-dryh-dice-picker{{#if isEditMode}} yakov-dryh-dice-picker--editing{{/if}}">
+  <div class="yakov-dryh-dice-picker">
     <div class="yakov-dryh-dice-picker__header">
       <h4 class="m0">{{label}}</h4>
 
-      {{#if showIconAction}}
-        <button
-          class="yakov-dryh-resource-card__icon-action{{#if isEditMode}} yakov-dryh-resource-card__icon-action--persistent{{/if}}"
-          type="button"
-          data-yakov-dryh-pool-edit-field="{{field}}"
-          data-yakov-dryh-pool-edit-action="{{#if isEditMode}}save{{else}}edit{{/if}}"
-          aria-label='{{#if isEditMode}}{{localize "YAKOV_DRYH.SHEETS.Actor.Character.Actions.Save"}}{{else}}{{localize "YAKOV_DRYH.SHEETS.Actor.Character.Actions.Edit"}}{{/if}}'
-          title='{{#if isEditMode}}{{localize "YAKOV_DRYH.SHEETS.Actor.Character.Actions.Save"}}{{else}}{{localize "YAKOV_DRYH.SHEETS.Actor.Character.Actions.Edit"}}{{/if}}'
-        >
-          <i class="{{#if isEditMode}}fa-solid fa-floppy-disk{{else}}fa-solid fa-pen-to-square{{/if}}"></i>
-        </button>
-      {{/if}}
+      <div class="yakov-dryh-resource-card__header-actions">
+        {{#if isEditMode}}
+          <div class="yakov-dryh-inline-actions">
+            <button
+              class="yakov-dryh-button yakov-dryh-button--secondary yakov-dryh-button--compact"
+              type="button"
+              data-yakov-dryh-pool-field="{{field}}"
+              data-yakov-dryh-pool-action="decrease"
+              title="{{controls.decreaseLabel}}"
+              aria-label="{{controls.decreaseLabel}}"
+              {{#unless controls.canDecrease}}disabled{{/unless}}
+            >
+              -
+            </button>
+            <button
+              class="yakov-dryh-button yakov-dryh-button--compact"
+              type="button"
+              data-yakov-dryh-pool-field="{{field}}"
+              data-yakov-dryh-pool-action="increase"
+              title="{{controls.increaseLabel}}"
+              aria-label="{{controls.increaseLabel}}"
+              {{#unless controls.canIncrease}}disabled{{/unless}}
+            >
+              +
+            </button>
+          </div>
+        {{/if}}
+
+        {{#if showIconAction}}
+          <button
+            class="yakov-dryh-resource-card__icon-action{{#if isEditMode}} yakov-dryh-resource-card__icon-action--persistent{{/if}}"
+            type="button"
+            data-yakov-dryh-pool-edit-field="{{field}}"
+            data-yakov-dryh-pool-edit-action="{{#if isEditMode}}save{{else}}edit{{/if}}"
+            aria-label='{{#if isEditMode}}{{localize "YAKOV_DRYH.SHEETS.Actor.Character.Actions.Save"}}{{else}}{{localize "YAKOV_DRYH.SHEETS.Actor.Character.Actions.Edit"}}{{/if}}'
+            title='{{#if isEditMode}}{{localize "YAKOV_DRYH.SHEETS.Actor.Character.Actions.Save"}}{{else}}{{localize "YAKOV_DRYH.SHEETS.Actor.Character.Actions.Edit"}}{{/if}}'
+          >
+            <i class="{{#if isEditMode}}fa-solid fa-floppy-disk{{else}}fa-solid fa-pen-to-square{{/if}}"></i>
+          </button>
+        {{/if}}
+      </div>
     </div>
     <div class="yakov-dryh-pip-track yakov-dryh-dice-picker__track mt065{{#if trackClass}} {{trackClass}}{{/if}}">
       {{#each pips}}
-        {{#if action}}
-          <button
-            class="yakov-dryh-dice-picker__pip-control yakov-dryh-dice-picker__pip-control--{{action}}"
-            type="button"
-            data-yakov-dryh-pool-field="{{field}}"
-            data-yakov-dryh-pool-action="{{action}}"
-            {{#if tooltip}}title="{{tooltip}}" aria-label="{{tooltip}}"{{/if}}
-          >
-            <span class="yakov-dryh-pip {{#if filled}}yakov-dryh-pip--filled{{/if}}"></span>
-            <span class="yakov-dryh-dice-picker__action-icon yakov-dryh-dice-picker__action-icon--{{action}}">
-              <i class="{{iconClass}}"></i>
-            </span>
-          </button>
-        {{else}}
-          <span class="yakov-dryh-dice-picker__pip-shell">
-            <span class="yakov-dryh-pip {{#if filled}}yakov-dryh-pip--filled{{/if}}"></span>
-          </span>
-        {{/if}}
+        <span class="yakov-dryh-dice-picker__pip-shell">
+          <span class="yakov-dryh-pip {{#if filled}}yakov-dryh-pip--filled{{/if}}"></span>
+        </span>
       {{/each}}
     </div>
   </div>

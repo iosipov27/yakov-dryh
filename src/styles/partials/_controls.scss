@@ -131,20 +131,6 @@
   display: grid;
   gap: 0.2rem;
 
-  &--editing {
-    .yakov-dryh-dice-picker__action-icon {
-      opacity: 1;
-    }
-
-    .yakov-dryh-dice-picker__action-icon--increase {
-      transform: translate(0, -50%);
-    }
-
-    .yakov-dryh-dice-picker__action-icon--decrease {
-      transform: translate(0, 0);
-    }
-  }
-
   &__header {
     align-items: center;
     display: flex;
