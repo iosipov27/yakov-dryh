@@ -835,9 +835,10 @@ async function applyDominantEffect(
 
     case "madness":
       return appendEffectText(
-        localize(
+        formatActorNameEffect(
           "YAKOV_DRYH.ROLL.Effects.madness",
-          "Mark a Response."
+          "{name} chooses a Response to check.",
+          actor.name ?? localize("DOCUMENT.Actor", "Actor")
         ),
         hopeEffectText
       );

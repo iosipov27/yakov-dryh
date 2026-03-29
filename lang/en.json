@@ -75,7 +75,7 @@
         "SnapNightmare": "{name} becomes a Nightmare. All Responses are un-checked. Convert -1 Discipline to +1 Madness.",
         "discipline": "Un-check a Response or remove 1 Exhaustion.",
         "exhaustion": "{name} gains +1 Exhaustion.",
-        "madness": "Choose a Response to check.",
+        "madness": "{name} chooses a Response to check.",
         "pain": "GM gains +1 Despair."
       },
       "Outcomes": {

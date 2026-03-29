@@ -193,7 +193,7 @@ describe("DRYH roll-card presentation state", () => {
 
   it("hides the madness response-check text when snap already resolved it", () => {
     const card = createFinalCard({
-      dominantEffectText: "Choose a Response to check.",
+      dominantEffectText: "Hence chooses a Response to check.",
       modifiedResult: createRollResult({
         discipline: [2],
         exhaustion: [3],
