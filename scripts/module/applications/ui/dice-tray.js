@@ -3,6 +3,7 @@ import { SYSTEM_ID, TEMPLATE_PATHS } from "../../constants.js";
 import { rollDryhCheck } from "../../dice/index.js";
 import { adjustSharedPool, endHopeScene, getSharedPools } from "../../resources/index.js";
 import { adjustDiceTrayPool, canDecreaseDiceTrayPool, canIncreaseDiceTrayPool, getDiceTrayState, hasLoadedDiceTrayActor, resetDiceTrayState } from "./dice-tray-state.js";
+import { isDiceTraySettingChange } from "./setting-change.js";
 const BaseApplication = foundry.applications.api.HandlebarsApplicationMixin(foundry.applications.api.ApplicationV2);
 let trayApplication = null;
 const DRAGGING_CLASS = "yakov-dryh-dice-tray--dragging";
@@ -44,6 +45,7 @@ export class YakovDryhDiceTray extends BaseApplication {
         this.dragPosition = null;
         this.dragState = null;
         this.settingRenderTimeout = null;
+        Hooks.on("createSetting", this.handleSettingUpdateBound);
         Hooks.on("updateSetting", this.handleSettingUpdateBound);
     }
     async _prepareContext(options) {
@@ -95,6 +97,7 @@ export class YakovDryhDiceTray extends BaseApplication {
         this.boundRoot?.removeEventListener("click", this.handleRootClickBound);
         this.boundRoot?.removeEventListener("pointerdown", this.handleRootPointerDownBound);
         this.boundRoot = null;
+        Hooks.off("createSetting", this.handleSettingUpdateBound);
         Hooks.off("updateSetting", this.handleSettingUpdateBound);
         return super.close(options);
     }
@@ -296,10 +299,7 @@ export class YakovDryhDiceTray extends BaseApplication {
         if (!setting || typeof setting !== "object") {
             return;
         }
-        if (setting.key !== `${SYSTEM_ID}.sharedHope` &&
-            setting.key !== `${SYSTEM_ID}.pendingHope` &&
-            setting.key !== `${SYSTEM_ID}.gmDespair` &&
-            setting.key !== `${SYSTEM_ID}.diceTrayState`) {
+        if (!isDiceTraySettingChange(setting)) {
             return;
         }
         if (this.settingRenderTimeout !== null) {

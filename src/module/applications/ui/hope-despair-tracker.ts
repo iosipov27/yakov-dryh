@@ -6,6 +6,7 @@ import {
   type YakovDryhSharedPool
 } from "../../resources/index.js";
 import { createHopeDespairTrackerContext } from "./hope-despair-tracker-presentation.js";
+import { isSharedPoolSettingChange } from "./setting-change.js";
 
 const BaseApplication = foundry.applications.api.HandlebarsApplicationMixin(
   foundry.applications.api.ApplicationV2
@@ -70,6 +71,7 @@ export class YakovDryhHopeDespairTracker extends BaseApplication {
     this.dragPosition = null;
     this.dragState = null;
     this.settingRenderTimeout = null;
+    Hooks.on("createSetting", this.handleSettingUpdateBound);
     Hooks.on("updateSetting", this.handleSettingUpdateBound);
   }
 
@@ -124,6 +126,7 @@ export class YakovDryhHopeDespairTracker extends BaseApplication {
     this.boundRoot?.removeEventListener("click", this.handleRootClickBound);
     this.boundRoot?.removeEventListener("pointerdown", this.handleRootPointerDownBound);
     this.boundRoot = null;
+    Hooks.off("createSetting", this.handleSettingUpdateBound);
     Hooks.off("updateSetting", this.handleSettingUpdateBound);
 
     return super.close(
@@ -325,11 +328,7 @@ export class YakovDryhHopeDespairTracker extends BaseApplication {
   }
 
   private handleSettingUpdate(setting: SettingDocumentLike): void {
-    if (
-      setting.key !== `${SYSTEM_ID}.sharedHope` &&
-      setting.key !== `${SYSTEM_ID}.pendingHope` &&
-      setting.key !== `${SYSTEM_ID}.gmDespair`
-    ) {
+    if (!isSharedPoolSettingChange(setting)) {
       return;
     }
 
