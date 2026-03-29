@@ -5,6 +5,7 @@ export interface SheetPip {
 }
 
 export type EditableSheetPoolField = "discipline" | "exhaustion" | "madnessPermanent";
+export type EditableSheetPoolDrafts = Partial<Record<EditableSheetPoolField, number>>;
 
 export interface EditableSheetPip extends SheetPip {
   action: "decrease" | "increase" | null;

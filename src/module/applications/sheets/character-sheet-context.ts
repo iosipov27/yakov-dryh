@@ -16,6 +16,7 @@ import {
   createStressCardStyle,
   getEditablePoolTotal
 } from "./character-sheet-pool-helpers.js";
+import type { EditableSheetPoolDrafts } from "./character-sheet-types.js";
 import {
   createResponseAllocationRows,
   createResponseEditorData,
@@ -24,9 +25,10 @@ import {
 
 export function createCharacterSheetContext(input: {
   actor: Actor.Implementation | null | undefined;
+  poolEditValues: EditableSheetPoolDrafts;
   responseEditSlots: YakovDryhResponseSlotData[] | null;
 }): Record<string, unknown> {
-  const { actor, responseEditSlots } = input;
+  const { actor, poolEditValues, responseEditSlots } = input;
   const actorData = normalizeCharacterSystemData(actor?.system);
   const actorType = actor?.type ?? YAKOV_DRYH_ACTOR_TYPES.character;
   const disciplineLabel = localize(
@@ -59,6 +61,12 @@ export function createCharacterSheetContext(input: {
   const isEditingResponses = responseEditSlots !== null;
   const isPlayMode = !isEditingResponses && configuredResponseCount === DRYH_RESPONSE_MAX;
   const responseRemaining = Math.max(DRYH_RESPONSE_MAX - configuredResponseCount, 0);
+  const disciplineIsEditMode = poolEditValues.discipline !== undefined;
+  const disciplineValue = poolEditValues.discipline ?? actorData.discipline;
+  const exhaustionIsEditMode = poolEditValues.exhaustion !== undefined;
+  const exhaustionValue = poolEditValues.exhaustion ?? actorData.exhaustion;
+  const madnessIsEditMode = poolEditValues.madnessPermanent !== undefined;
+  const madnessValue = poolEditValues.madnessPermanent ?? actorData.madnessPermanent;
 
   return {
     actorData,
@@ -67,27 +75,33 @@ export function createCharacterSheetContext(input: {
     actorTypeLabel: localizeActorType(actorType),
     disciplinePips: createEditablePips(
       "discipline",
-      actorData.discipline,
-      getEditablePoolTotal(actorData.discipline),
-      disciplineLabel
+      disciplineValue,
+      getEditablePoolTotal(disciplineValue),
+      disciplineLabel,
+      disciplineIsEditMode
     ),
-    disciplinePipTotal: getEditablePoolTotal(actorData.discipline),
+    disciplineIsEditMode,
+    disciplinePipTotal: getEditablePoolTotal(disciplineValue),
     exhaustionPips: createEditablePips(
       "exhaustion",
-      actorData.exhaustion,
-      getEditablePoolTotal(actorData.exhaustion),
-      exhaustionLabel
+      exhaustionValue,
+      getEditablePoolTotal(exhaustionValue),
+      exhaustionLabel,
+      exhaustionIsEditMode
     ),
-    exhaustionCardStyle: createStressCardStyle(actorData.exhaustion),
-    exhaustionPipTotal: getEditablePoolTotal(actorData.exhaustion),
+    exhaustionCardStyle: createStressCardStyle(exhaustionValue),
+    exhaustionIsEditMode,
+    exhaustionPipTotal: getEditablePoolTotal(exhaustionValue),
     madnessPips: createEditablePips(
       "madnessPermanent",
-      actorData.madnessPermanent,
-      getEditablePoolTotal(actorData.madnessPermanent),
-      madnessLabel
+      madnessValue,
+      getEditablePoolTotal(madnessValue),
+      madnessLabel,
+      madnessIsEditMode
     ),
-    madnessCardStyle: createStressCardStyle(actorData.madnessPermanent),
-    madnessPipTotal: getEditablePoolTotal(actorData.madnessPermanent),
+    madnessCardStyle: createStressCardStyle(madnessValue),
+    madnessIsEditMode,
+    madnessPipTotal: getEditablePoolTotal(madnessValue),
     moduleId: SYSTEM_ID,
     responseAllocationRows: createResponseAllocationRows(responseEditorData, {
       fightLabel,

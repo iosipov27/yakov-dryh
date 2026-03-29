@@ -2,18 +2,20 @@
   class="yakov-dryh-resource-card{{#if cardClasses}} {{cardClasses}}{{/if}}"
   {{#if cardStyle}}style="{{cardStyle}}"{{/if}}
 >
-  <div class="yakov-dryh-dice-picker">
+  <div class="yakov-dryh-dice-picker{{#if isEditMode}} yakov-dryh-dice-picker--editing{{/if}}">
     <div class="yakov-dryh-dice-picker__header">
       <h4 class="m0">{{label}}</h4>
 
       {{#if showIconAction}}
         <button
-          class="yakov-dryh-resource-card__icon-action"
+          class="yakov-dryh-resource-card__icon-action{{#if isEditMode}} yakov-dryh-resource-card__icon-action--persistent{{/if}}"
           type="button"
-          aria-label="{{iconActionLabel}}"
-          title="{{iconActionLabel}}"
+          data-yakov-dryh-pool-edit-field="{{field}}"
+          data-yakov-dryh-pool-edit-action="{{#if isEditMode}}save{{else}}edit{{/if}}"
+          aria-label='{{#if isEditMode}}{{localize "YAKOV_DRYH.SHEETS.Actor.Character.Actions.Save"}}{{else}}{{localize "YAKOV_DRYH.SHEETS.Actor.Character.Actions.Edit"}}{{/if}}'
+          title='{{#if isEditMode}}{{localize "YAKOV_DRYH.SHEETS.Actor.Character.Actions.Save"}}{{else}}{{localize "YAKOV_DRYH.SHEETS.Actor.Character.Actions.Edit"}}{{/if}}'
         >
-          <i class="fa-solid fa-pen-to-square"></i>
+          <i class="{{#if isEditMode}}fa-solid fa-floppy-disk{{else}}fa-solid fa-pen-to-square{{/if}}"></i>
         </button>
       {{/if}}
     </div>

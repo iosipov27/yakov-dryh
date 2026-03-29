@@ -11,27 +11,30 @@
     {{> "systems/yakov-dryh/templates/sheets/parts/character-sheet-resource-card.hbs"
       cardClasses="yakov-dryh-resource-card--stress yakov-dryh-resource-card--exhaustion"
       cardStyle=exhaustionCardStyle
+      field="exhaustion"
+      isEditMode=exhaustionIsEditMode
       label=(localize "YAKOV_DRYH.SHEETS.Actor.Character.Fields.Exhaustion")
       showIconAction=true
-      iconActionLabel=(localize "YAKOV_DRYH.SHEETS.Actor.Character.Actions.Edit")
       pips=exhaustionPips
       trackClass="yakov-dryh-pip-track--exhaustion"
     }}
   </div>
 
   {{> "systems/yakov-dryh/templates/sheets/parts/character-sheet-resource-card.hbs"
+    field="discipline"
+    isEditMode=disciplineIsEditMode
     label=(localize "YAKOV_DRYH.SHEETS.Actor.Character.Fields.Discipline")
     showIconAction=true
-    iconActionLabel=(localize "YAKOV_DRYH.SHEETS.Actor.Character.Actions.Edit")
     pips=disciplinePips
   }}
 
   {{> "systems/yakov-dryh/templates/sheets/parts/character-sheet-resource-card.hbs"
     cardClasses="yakov-dryh-resource-card--stress yakov-dryh-resource-card--madness"
     cardStyle=madnessCardStyle
+    field="madnessPermanent"
+    isEditMode=madnessIsEditMode
     label=(localize "YAKOV_DRYH.SHEETS.Actor.Character.Fields.PermanentMadness")
     showIconAction=true
-    iconActionLabel=(localize "YAKOV_DRYH.SHEETS.Actor.Character.Actions.Edit")
     pips=madnessPips
     trackClass="yakov-dryh-pip-track--madness"
   }}

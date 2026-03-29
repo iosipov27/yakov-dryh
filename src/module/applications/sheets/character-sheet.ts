@@ -18,7 +18,10 @@ import {
   createResponseEditorData,
   normalizeResponseType
 } from "./character-sheet-response-helpers.js";
-import type { EditableSheetPoolField } from "./character-sheet-types.js";
+import type {
+  EditableSheetPoolDrafts,
+  EditableSheetPoolField
+} from "./character-sheet-types.js";
 
 const BaseSheet: any = foundry.applications.api.HandlebarsApplicationMixin(
   foundry.applications.sheets.ActorSheetV2
@@ -32,6 +35,7 @@ export class YakovDryhCharacterSheet extends BaseSheet {
   private readonly handleRootClickBound = (event: MouseEvent): void => {
     this.handleRootClick(event);
   };
+  private poolEditValues: EditableSheetPoolDrafts = {};
   private responseEditSlots: YakovDryhResponseSlotData[] | null = null;
 
   static DEFAULT_OPTIONS = {
@@ -72,6 +76,7 @@ export class YakovDryhCharacterSheet extends BaseSheet {
       context,
       createCharacterSheetContext({
         actor: this.actor,
+        poolEditValues: this.poolEditValues,
         responseEditSlots: this.responseEditSlots
       })
     );
@@ -119,7 +124,7 @@ export class YakovDryhCharacterSheet extends BaseSheet {
     }
 
     const actionElement = target.closest<HTMLElement>(
-      "[data-yakov-dryh-action], [data-yakov-dryh-response-action], [data-yakov-dryh-response-add], [data-yakov-dryh-pool-action]"
+      "[data-yakov-dryh-action], [data-yakov-dryh-response-action], [data-yakov-dryh-response-add], [data-yakov-dryh-pool-edit-action], [data-yakov-dryh-pool-action]"
     );
 
     if (!actionElement) {
@@ -146,6 +151,26 @@ export class YakovDryhCharacterSheet extends BaseSheet {
       case "save":
         void this.saveResponseEdit();
         return;
+    }
+
+    const editField = actionElement.dataset.yakovDryhPoolEditField as
+      | EditableSheetPoolField
+      | undefined;
+    const editAction = actionElement.dataset.yakovDryhPoolEditAction as
+      | "edit"
+      | "save"
+      | undefined;
+
+    if (editField && editAction) {
+      switch (editAction) {
+        case "edit":
+          void this.startPoolEdit(editField);
+          return;
+
+        case "save":
+          void this.savePoolEdit(editField);
+          return;
+      }
     }
 
     const field = actionElement.dataset.yakovDryhPoolField as
@@ -190,13 +215,12 @@ export class YakovDryhCharacterSheet extends BaseSheet {
     action: "decrease" | "increase"
   ): Promise<void> {
     const actor = this.actor;
+    const currentValue = this.poolEditValues[field];
 
-    if (!actor) {
+    if (!actor || currentValue === undefined) {
       return;
     }
 
-    const actorData = normalizeCharacterSystemData(actor.system);
-    const currentValue = actorData[field];
     const maxValue =
       field === "exhaustion"
         ? DRYH_EXHAUSTION_MAX
@@ -210,9 +234,63 @@ export class YakovDryhCharacterSheet extends BaseSheet {
       return;
     }
 
-    await actor.update({
-      [`system.${field}`]: nextValue
-    } as Record<string, unknown>);
+    this.poolEditValues = {
+      ...this.poolEditValues,
+      [field]: nextValue
+    };
+
+    await this.render({ force: true });
+  }
+
+  private async startPoolEdit(field: EditableSheetPoolField): Promise<void> {
+    const actor = this.actor;
+
+    if (!actor || this.poolEditValues[field] !== undefined) {
+      return;
+    }
+
+    const actorData = normalizeCharacterSystemData(actor.system);
+    this.poolEditValues = {
+      ...this.poolEditValues,
+      [field]: actorData[field]
+    };
+
+    await this.render({ force: true });
+  }
+
+  private async savePoolEdit(field: EditableSheetPoolField): Promise<void> {
+    const actor = this.actor;
+    const nextValue = this.poolEditValues[field];
+
+    if (!actor || nextValue === undefined) {
+      return;
+    }
+
+    const actorData = normalizeCharacterSystemData(actor.system);
+    const currentValue = actorData[field];
+    const restoredEditValues = {
+      ...this.poolEditValues
+    };
+    const poolEditValues = {
+      ...this.poolEditValues
+    };
+
+    delete poolEditValues[field];
+    this.poolEditValues = poolEditValues;
+
+    if (nextValue === currentValue) {
+      await this.render({ force: true });
+      return;
+    }
+
+    try {
+      await actor.update({
+        [`system.${field}`]: nextValue
+      } as Record<string, unknown>);
+    } catch (error) {
+      this.poolEditValues = restoredEditValues;
+      throw error;
+    }
   }
 
   private async updateResponseChecked(

@@ -11,14 +11,15 @@ export function createEditablePips(
   field: EditableSheetPoolField,
   value: number,
   total: number,
-  label: string
+  label: string,
+  isEditMode: boolean
 ): EditableSheetPip[] {
   const normalizedTotal = Math.max(total, 0);
 
   return Array.from({ length: normalizedTotal }, (_entry, index) => {
     const filled = index < value;
-    const canDecrease = value > 0 && index === value - 1;
-    const canIncrease = index === value && value < normalizedTotal;
+    const canDecrease = isEditMode && value > 0 && index === value - 1;
+    const canIncrease = isEditMode && index === value && value < normalizedTotal;
 
     return {
       action: canDecrease ? "decrease" : canIncrease ? "increase" : null,
