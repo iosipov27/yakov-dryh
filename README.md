@@ -7,10 +7,10 @@ Minimal Foundry VTT system scaffold for `Data/systems/yakov-dryh`, built around 
 Install in Foundry VTT with this manifest URL:
 
 ```text
-https://raw.githubusercontent.com/iosipov27/yakov-dryh/main/system.json
+https://github.com/iosipov27/yakov-dryh/releases/latest/download/system.json
 ```
 
-Foundry will download the packaged system from the GitHub repository archive declared in `system.json`.
+Foundry will download the packaged system from the latest GitHub Release asset declared in `system.json`.
 
 ## Current Scope
 
@@ -37,6 +37,20 @@ npm run build
 ```
 
 The compiled runtime in `scripts/` and `styles/` is committed on purpose so GitHub branch and tag archives stay directly installable in Foundry.
+
+## Release Flow
+
+Push a version tag such as `v0.1.0` to trigger the GitHub Actions release workflow.
+
+The workflow:
+
+- installs dependencies
+- rebuilds `scripts/` and `styles/`
+- verifies that the tag version matches `system.json`
+- packages a Foundry-ready `yakov-dryh.zip`
+- publishes both `yakov-dryh.zip` and `system.json` to the GitHub Release
+
+You can also re-run the workflow manually for an existing tag from the Actions tab by providing the tag name.
 
 Run linting:
 

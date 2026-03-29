@@ -3,8 +3,8 @@
   "title": "Yakov Dryh",
   "description": "Don't Rest Your Head system for Foundry VTT.",
   "url": "https://github.com/iosipov27/yakov-dryh",
-  "manifest": "https://raw.githubusercontent.com/iosipov27/yakov-dryh/main/system.json",
-  "download": "https://github.com/iosipov27/yakov-dryh/archive/refs/tags/v0.1.0.zip",
+  "manifest": "https://github.com/iosipov27/yakov-dryh/releases/latest/download/system.json",
+  "download": "https://github.com/iosipov27/yakov-dryh/releases/latest/download/yakov-dryh.zip",
 
   "version": "0.1.0",
   "authors": [
