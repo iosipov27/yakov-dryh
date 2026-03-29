@@ -1,0 +1,2 @@
+export { applyHopeBoostToRollResult, DRYH_POOL_PRIORITY, applyPainRollToRollResult, applyPostRollExhaustionToRollResult, applyGmActionToRollResult, countSuccesses, createRollResult, getDominantPool, getSortedDice, rollD6Pool, rollDryhCheck } from "./roll.js";
+//# sourceMappingURL=index.js.map

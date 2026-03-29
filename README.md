@@ -2,6 +2,16 @@
 
 Minimal Foundry VTT system scaffold for `Data/systems/yakov-dryh`, built around Foundry V13 APIs and an ApplicationV2-first architecture.
 
+## Installation
+
+Install in Foundry VTT with this manifest URL:
+
+```text
+https://raw.githubusercontent.com/iosipov27/yakov-dryh/main/system.json
+```
+
+Foundry will download the packaged system from the GitHub repository archive declared in `system.json`.
+
 ## Current Scope
 
 - `system.json` manifest with a runtime bundle, stylesheet, localization, and a seeded `character` Actor subtype
@@ -25,6 +35,8 @@ Build the runtime bundle and stylesheet:
 ```bash
 npm run build
 ```
+
+The compiled runtime in `scripts/` and `styles/` is committed on purpose so GitHub branch and tag archives stay directly installable in Foundry.
 
 Run linting:
 

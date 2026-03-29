@@ -12,9 +12,9 @@ pnpm-debug.log*
 coverage/
 
 # Build output
-/scripts/
-/styles/
 *.map
+!scripts/**/*.map
+!styles/*.map
 
 # Editors and IDEs
 .idea/
