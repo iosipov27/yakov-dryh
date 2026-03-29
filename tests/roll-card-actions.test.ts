@@ -14,6 +14,7 @@ import {
 } from "../src/module/chat/roll-card-service.ts";
 import { createDefaultShadowCastingData } from "../src/module/chat/shadow-casting.ts";
 import {
+  isLatestChatMessage,
   shouldHideDryhRollAction,
   shouldShowPainRollWaitingMessage
 } from "../src/module/chat/roll-card-visibility.ts";
@@ -229,6 +230,24 @@ describe("DRYH roll-card presentation state", () => {
 });
 
 describe("DRYH roll-card action visibility", () => {
+  it("treats only the most recent chat message as interactive", () => {
+    expect(
+      isLatestChatMessage(
+        { id: "message-2" },
+        [{ id: "message-1" }, { id: "message-2" }]
+      )
+    ).toBe(true);
+
+    expect(
+      isLatestChatMessage(
+        { id: "message-1" },
+        [{ id: "message-1" }, { id: "message-2" }]
+      )
+    ).toBe(false);
+
+    expect(isLatestChatMessage({ id: null }, [{ id: "message-1" }])).toBe(false);
+  });
+
   it("shows GM actions only to the GM", () => {
     expect(
       shouldHideDryhRollAction("roll-pain", {

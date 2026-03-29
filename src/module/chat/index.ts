@@ -24,6 +24,7 @@ import {
   hasInteractiveChatCard
 } from "./chat-card-service.js";
 import {
+  isLatestChatMessage,
   shouldHideDryhRollAction
 } from "./roll-card-visibility.js";
 
@@ -174,14 +175,20 @@ function activateDryhRollListeners(
   message: ChatMessage.Implementation,
   html: HTMLElement
 ): void {
+  const actionElements = html.querySelectorAll<HTMLElement>(
+    "[data-yakov-dryh-roll-action]"
+  );
+
+  if (!isLatestChatMessage(message)) {
+    disableDryhRollActions(actionElements);
+    return;
+  }
+
   const card = getDryhRollCardData(message);
   const actor = card.actorId
     ? game.actors?.get(card.actorId) ?? null
     : null;
   const canUseActorOwnerActions = actor?.isOwner ?? false;
-  const actionElements = html.querySelectorAll<HTMLElement>(
-    "[data-yakov-dryh-roll-action]"
-  );
 
   actionElements.forEach((actionElement) => {
     const action = actionElement.dataset.yakovDryhRollAction;
@@ -218,6 +225,11 @@ function activateDryhRollListeners(
 
       actionElement.addEventListener("click", (event: MouseEvent) => {
         event.preventDefault();
+
+        if (!isLatestChatMessage(message)) {
+          disableDryhRollActions(actionElements);
+          return;
+        }
 
         if (action === "resolve-failure") {
           html
@@ -278,6 +290,11 @@ function activateDryhRollListeners(
     actionElement.addEventListener("click", (event: MouseEvent) => {
       event.preventDefault();
 
+      if (!isLatestChatMessage(message)) {
+        disableDryhRollActions(actionElements);
+        return;
+      }
+
       if (action === "spend-hope" || action === "take-post-roll-exhaustion") {
         actionElement.setAttribute("disabled", "disabled");
         void applyDryhRollPlayerAction(message, {
@@ -304,6 +321,12 @@ function activateDryhRollListeners(
       });
     });
   });
+}
+
+function disableDryhRollActions(actionElements: ArrayLike<HTMLElement>): void {
+  for (let index = 0; index < actionElements.length; index += 1) {
+    actionElements[index]?.setAttribute("disabled", "disabled");
+  }
 }
 
 export { advanceChatCardStatus, getChatCardData };
