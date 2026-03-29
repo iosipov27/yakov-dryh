@@ -1,7 +1,5 @@
 import { subscribeToDiceTrayStateChanges } from "../applications/ui/dice-tray-state.js";
-import { YakovDryhChatInteractionDialog } from "../applications/dialogs/chat-interaction-dialog.js";
-import type { YakovDryhSystemApi } from "../api.js";
-import { CHAT_CARD_COMMAND, DRYH_SETTINGS, SYSTEM_ID } from "../constants.js";
+import { DRYH_SETTINGS, SYSTEM_ID } from "../constants.js";
 import {
   adjustDryhDiceTrayPool,
   hasDryhDiceTrayCard,
@@ -20,52 +18,19 @@ import {
   rerenderDryhRollMessage
 } from "./roll-card-service.js";
 import {
-  advanceChatCardStatus,
-  getChatCardData,
-  hasInteractiveChatCard
-} from "./chat-card-service.js";
-import {
   isLatestChatMessage,
   shouldHideDryhRollAction
 } from "./roll-card-visibility.js";
 
 let hasRegisteredDiceTrayStateSync = false;
 
-export async function openChatInteraction(
-  message: ChatMessage.Implementation
-): Promise<YakovDryhChatInteractionDialog> {
-  const liveMessage =
-    (message.id ? game.messages?.get(message.id) : null) ?? message;
-  const dialog = new YakovDryhChatInteractionDialog(liveMessage);
-
-  await dialog.render({ force: true });
-
-  return dialog;
-}
-
-export function registerChatHooks(api: YakovDryhSystemApi): void {
+export function registerChatHooks(): void {
   if (!hasRegisteredDiceTrayStateSync) {
     subscribeToDiceTrayStateChanges((change) => {
       requestActiveDryhDiceTrayMessageSync(change.syncMode);
     });
     hasRegisteredDiceTrayStateSync = true;
   }
-
-  Hooks.on("chatMessage", (_chatLog, message) => {
-    const trimmedMessage = message.trim();
-
-    if (!trimmedMessage.startsWith(CHAT_CARD_COMMAND)) {
-      return;
-    }
-
-    const summary = trimmedMessage.slice(CHAT_CARD_COMMAND.length).trim();
-
-    void api.chat.createInteractiveMessage({
-      summary: summary || undefined
-    });
-
-    return false;
-  });
 
   Hooks.on("renderChatMessageHTML", (message, html) => {
     if (hasDryhDiceTrayCard(message)) {
@@ -75,12 +40,6 @@ export function registerChatHooks(api: YakovDryhSystemApi): void {
     if (hasDryhRollCard(message)) {
       activateDryhRollListeners(message, html);
     }
-
-    if (!hasInteractiveChatCard(message)) {
-      return;
-    }
-
-    activateChatCardListeners(message, html, api);
   });
 
   Hooks.on("updateSetting", (setting: { key?: string }) => {
@@ -146,34 +105,6 @@ function activateDryhDiceTrayListeners(html: HTMLElement): void {
         void adjustDryhDiceTrayPool(trayPool, trayDelta);
       }
     });
-  });
-}
-
-function activateChatCardListeners(
-  message: ChatMessage.Implementation,
-  html: HTMLElement,
-  api: YakovDryhSystemApi
-): void {
-  const actions = html.querySelectorAll<HTMLElement>(
-    "[data-yakov-dryh-action]"
-  );
-
-  actions.forEach((actionElement) => {
-    const action = actionElement.getAttribute("data-yakov-dryh-action");
-
-    if (action === "open-dialog") {
-      actionElement.addEventListener("click", (event: MouseEvent) => {
-        event.preventDefault();
-        void api.chat.openInteraction(message);
-      });
-    }
-
-    if (action === "advance-status") {
-      actionElement.addEventListener("click", (event: MouseEvent) => {
-        event.preventDefault();
-        void api.chat.advanceStatus(message);
-      });
-    }
   });
 }
 
@@ -334,5 +265,3 @@ function disableDryhRollActions(actionElements: ArrayLike<HTMLElement>): void {
     actionElements[index]?.setAttribute("disabled", "disabled");
   }
 }
-
-export { advanceChatCardStatus, getChatCardData };

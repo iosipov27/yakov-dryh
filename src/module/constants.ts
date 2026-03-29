@@ -4,8 +4,6 @@ export const SYSTEM_PATH = `systems/${SYSTEM_ID}`;
 
 export const TEMPLATE_PATHS = {
   characterSheet: `${SYSTEM_PATH}/templates/sheets/character-sheet.hbs`,
-  chatCard: `${SYSTEM_PATH}/templates/chat/interactive-card.hbs`,
-  chatInteractionDialog: `${SYSTEM_PATH}/templates/dialogs/chat-interaction-dialog.hbs`,
   diceTray: `${SYSTEM_PATH}/templates/ui/dice-tray.hbs`,
   dryhDiceTrayCard: `${SYSTEM_PATH}/templates/chat/dice-tray-card.hbs`,
   dryhPainRollDialog: `${SYSTEM_PATH}/templates/dialogs/pain-roll-dialog.hbs`,
@@ -21,9 +19,6 @@ export const TEMPLATE_PARTIAL_PATHS = {
   characterSheetStoryColumn: `${SYSTEM_PATH}/templates/sheets/parts/character-sheet-story-column.hbs`
 } as const;
 
-export const CHAT_CARD_COMMAND = `/${SYSTEM_ID}-card`;
-export const CHAT_CARD_FLAG = "chatCard";
-export const CHAT_CARD_STATUSES = ["draft", "review", "resolved"] as const;
 export const DRYH_DICE_TRAY_FLAG = "dryhDiceTray";
 export const DRYH_ROLL_FLAG = "dryhRoll";
 export const DRYH_SETTINGS = {
@@ -32,5 +27,3 @@ export const DRYH_SETTINGS = {
   sharedHope: "sharedHope"
 } as const;
 export const LOCALIZATION_PREFIX = "YAKOV_DRYH";
-
-export type YakovDryhChatCardStatus = (typeof CHAT_CARD_STATUSES)[number];
