@@ -78,14 +78,14 @@
     </div>
 
     {{#if showDominant}}
-      <p class="yakov-dryh-roll-card__dominant m0">
+      <p class="yakov-dryh-roll-card__dominant mt0 mb1">
         <strong>{{localize "YAKOV_DRYH.ROLL.Chat.Dominant"}}</strong>
         {{dominantLabel}}
       </p>
     {{/if}}
 
     {{#if hasEffectText}}
-      <div class="yakov-dryh-chat-card__detail">
+      <div class="yakov-dryh-chat-card__detail mb1">
         <strong>{{localize "YAKOV_DRYH.ROLL.Chat.Effect"}}</strong>
         {{#if hasPendingCrash}}
           <div class="yakov-dryh-roll-card__crash-alert mt075">
@@ -118,7 +118,7 @@
   </div>
 
   {{#if hasPlayerActionButtons}}
-    <footer class="yakov-dryh-roll-card__resolution">
+    <footer class="yakov-dryh-roll-card__resolution mt1">
       <p class="yakov-dryh-copy yakov-dryh-roll-card__resolution-owner m0">
         {{actorName}}:
       </p>
@@ -127,7 +127,7 @@
           {{playerActionPrompt}}
         </p>
       {{/if}}
-      <div class="yakov-dryh-actions mt12">
+      <div class="yakov-dryh-actions">
         {{#each playerActionButtons}}
           <button
             class="yakov-dryh-button yakov-dryh-button--secondary"
@@ -142,11 +142,11 @@
   {{/if}}
 
   {{#if canFinalize}}
-    <footer class="yakov-dryh-roll-card__resolution">
+    <footer class="yakov-dryh-roll-card__resolution mt1">
       <p class="yakov-dryh-copy yakov-dryh-roll-card__resolution-owner m0">
         GM:
       </p>
-      <div class="yakov-dryh-actions mt12">
+      <div class="yakov-dryh-actions">
       <button
         class="yakov-dryh-button"
         type="button"
@@ -159,7 +159,7 @@
   {{/if}}
 
   {{#if hasDominantResolutionButtons}}
-    <footer class="yakov-dryh-roll-card__resolution">
+    <footer class="yakov-dryh-roll-card__resolution mt1">
       <p class="yakov-dryh-copy yakov-dryh-roll-card__resolution-owner m0">
         {{actorName}}:
       </p>
@@ -168,7 +168,7 @@
           {{dominantResolutionPrompt}}
         </p>
       {{/if}}
-      <div class="yakov-dryh-actions mt12">
+      <div class="yakov-dryh-actions">
         {{#each dominantResolutionButtons}}
           <button
             class="yakov-dryh-button yakov-dryh-button--secondary"
@@ -185,7 +185,7 @@
   {{/if}}
 
   {{#if hasFailureResolutionButtons}}
-    <footer class="yakov-dryh-roll-card__resolution">
+    <footer class="yakov-dryh-roll-card__resolution mt1">
       <p class="yakov-dryh-copy yakov-dryh-roll-card__resolution-owner m0">
         GM:
       </p>
@@ -194,7 +194,7 @@
           {{failureResolutionPrompt}}
         </p>
       {{/if}}
-      <div class="yakov-dryh-actions mt12">
+      <div class="yakov-dryh-actions">
         {{#each failureResolutionButtons}}
           <button
             class="yakov-dryh-button yakov-dryh-button--secondary"
@@ -211,7 +211,7 @@
   {{/if}}
 
   {{#if hasCrashResolutionButtons}}
-    <footer class="yakov-dryh-roll-card__resolution">
+    <footer class="yakov-dryh-roll-card__resolution mt1">
       <p class="yakov-dryh-copy yakov-dryh-roll-card__resolution-owner m0">
         GM:
       </p>
@@ -220,7 +220,7 @@
           {{crashResolutionPrompt}}
         </p>
       {{/if}}
-      <div class="yakov-dryh-actions mt12">
+      <div class="yakov-dryh-actions">
         {{#each crashResolutionButtons}}
           <button
             class="yakov-dryh-button yakov-dryh-button--secondary"
