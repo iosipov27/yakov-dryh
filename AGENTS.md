@@ -29,6 +29,9 @@ When working on UI or applications, use ApplicationV2 and its ecosystem as the p
 - Project type: Foundry VTT system targeting a `Data/systems/` workspace
 - Current status: repository initialized, package scaffold not created yet
 - Reference application: `example/app-example-main`
+- Architecture reference: `docs/architecture.md`
+
+Before changing chat, dice tray, character sheet, or shared-pool flows, read `docs/architecture.md` for the current subsystem map and data flow.
 
 ---
 
