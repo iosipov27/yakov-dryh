@@ -34,6 +34,7 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: flex-end;
+  width: 2rem;
   gap: 0.5rem;
 
   input {
@@ -80,8 +81,10 @@
   }
 
   &--compact {
-    min-width: 2rem;
-    padding: 0 0.2rem;
+    padding: 0;
+    height: 1.5rem;
+    min-width: 1.5rem;
+    min-height: 1.5rem;
   }
 }
 

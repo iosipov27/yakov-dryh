@@ -39,6 +39,22 @@
     padding: 0.8rem 0.9rem;
   }
 
+  &__summary {
+    strong {
+      color: inherit;
+    }
+
+    &--success {
+      background: rgb(219 233 221 / 72%);
+      color: var(--yd-success-player);
+    }
+
+    &--failure {
+      background: rgb(241 216 211 / 72%);
+      color: var(--yd-success-pain);
+    }
+  }
+
   &__snap-effect {
     background: rgb(176 28 46 / 10%);
     border: 1px solid rgb(176 28 46 / 26%);
@@ -89,11 +105,29 @@
     min-width: 0;
   }
 
+  &__header {
+    align-items: baseline;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+  }
+
   &__result {
     align-items: center;
     display: flex;
     flex-wrap: wrap;
     gap: 0.45rem;
+  }
+
+  &__adjustments {
+    align-self: stretch;
+    display: grid;
+    gap: 0.35rem;
+    justify-items: end;
+
+    .yakov-dryh-button {
+      width: 1.5rem;
+    }
   }
 
   &__dice {
@@ -170,23 +204,14 @@
   }
 
   &__successes {
-    align-items: center;
-    color: var(--yd-muted);
     display: inline-flex;
-    font-size: 0.95rem;
     font-weight: 700;
-    gap: 0.35rem;
-    letter-spacing: 0.02em;
     white-space: nowrap;
   }
 
   &__successes-count {
     color: var(--yd-success-player);
-    font-size: large;
-  }
-
-  &__arrow {
-    font-size: 0.8em;
+    font-size: 1.05rem;
   }
 
   &--exhaustion {

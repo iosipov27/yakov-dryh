@@ -33,7 +33,7 @@
   --yd-stress-madness-edge: #9f6c7d;
   --yd-stress-madness-border: #825264;
   --yd-shadow: 0 14px 30px rgb(33 22 30 / 12%);
-  --yd-round-shadow: radial-gradient(60% 60% at 40% 40%, #898073 0%, #473b2e 100%);
+  --yd-round-shadow: radial-gradient(60% 60% at 40% 40%, #474361 0%, #0a0912 100%);
   --yd-pip-discipline: #fffdf8;
   --yd-pip-inactive: #a89d95;
   --yd-pip-shadow: rgb(33 22 30 / 30%);
@@ -2312,6 +2312,7 @@ h6 {
   display: flex;
   flex-wrap: wrap;
   justify-content: flex-end;
+  width: 2rem;
   gap: 0.5rem;
 }
 .yakov-dryh-inline-actions input {
@@ -2354,8 +2355,10 @@ h6 {
   color: var(--yd-text-light);
 }
 .yakov-dryh-button--compact {
-  min-width: 2rem;
-  padding: 0 0.2rem;
+  padding: 0;
+  height: 1.5rem;
+  min-width: 1.5rem;
+  min-height: 1.5rem;
 }
 
 .yakov-dryh-pip-track {
@@ -2548,6 +2551,17 @@ h6 {
   border-radius: var(--yd-border-radius);
   padding: 0.8rem 0.9rem;
 }
+.yakov-dryh-roll-card__summary strong {
+  color: inherit;
+}
+.yakov-dryh-roll-card__summary--success {
+  background: rgba(219, 233, 221, 0.72);
+  color: var(--yd-success-player);
+}
+.yakov-dryh-roll-card__summary--failure {
+  background: rgba(241, 216, 211, 0.72);
+  color: var(--yd-success-pain);
+}
 .yakov-dryh-roll-card__snap-effect {
   background: rgba(176, 28, 46, 0.1);
   border: 1px solid rgba(176, 28, 46, 0.26);
@@ -2593,11 +2607,26 @@ h6 {
   gap: 0.5rem;
   min-width: 0;
 }
+.yakov-dryh-roll-pool__header {
+  align-items: baseline;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
 .yakov-dryh-roll-pool__result {
   align-items: center;
   display: flex;
   flex-wrap: wrap;
   gap: 0.45rem;
+}
+.yakov-dryh-roll-pool__adjustments {
+  align-self: stretch;
+  display: grid;
+  gap: 0.35rem;
+  justify-items: end;
+}
+.yakov-dryh-roll-pool__adjustments .yakov-dryh-button {
+  width: 1.5rem;
 }
 .yakov-dryh-roll-pool__dice {
   align-items: center;
@@ -2660,21 +2689,13 @@ h6 {
   grid-row: 3;
 }
 .yakov-dryh-roll-pool__successes {
-  align-items: center;
-  color: var(--yd-muted);
   display: inline-flex;
-  font-size: 0.95rem;
   font-weight: 700;
-  gap: 0.35rem;
-  letter-spacing: 0.02em;
   white-space: nowrap;
 }
 .yakov-dryh-roll-pool__successes-count {
   color: var(--yd-success-player);
-  font-size: large;
-}
-.yakov-dryh-roll-pool__arrow {
-  font-size: 0.8em;
+  font-size: 1.05rem;
 }
 .yakov-dryh-roll-pool--exhaustion {
   border-left: 4px solid var(--yd-exhaustion);

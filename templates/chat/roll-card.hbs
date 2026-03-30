@@ -1,15 +1,11 @@
 <article class="yakov-dryh-chat-card yakov-dryh-roll-card {{#if isFinal}}yakov-dryh-roll-card--final{{/if}}">
   <header class="yakov-dryh-header">
     <h3 class="m0">{{stageLabel}}</h3>
-
-    {{#if showOutcome}}
-      <span class="yakov-dryh-status yakov-dryh-status--{{rollResult.outcome}}">{{outcomeLabel}}</span>
-    {{/if}}
   </header>
 
   <div class="yakov-dryh-chat-card__body">
     {{#if showOutcome}}
-      <p class="yakov-dryh-roll-card__summary m0">
+      <p class="yakov-dryh-roll-card__summary yakov-dryh-roll-card__summary--{{rollResult.outcome}} m0">
         {{localize "YAKOV_DRYH.ROLL.Chat.Successes"}}
         {{rollResult.successes.player}}
         vs
@@ -23,7 +19,12 @@
       {{#each poolSummaries}}
         <section class="yakov-dryh-roll-pool {{cssClass}}">
           <div class="yakov-dryh-roll-pool__content">
-            <strong>{{label}}</strong>
+            <div class="yakov-dryh-roll-pool__header">
+              <strong>{{label}}:</strong>
+              <span class="yakov-dryh-roll-pool__successes">
+                <span class="yakov-dryh-roll-pool__successes-count">{{successes}}</span>
+              </span>
+            </div>
             <div class="yakov-dryh-roll-pool__result">
               {{#if hasDice}}
                 <div class="yakov-dryh-roll-pool__dice" aria-label="{{label}}">
@@ -40,15 +41,11 @@
               {{else}}
                 <span class="yakov-dryh-copy">-</span>
               {{/if}}
-              <span class="yakov-dryh-roll-pool__successes">
-                <i class="fa-solid fa-arrow-right yakov-dryh-roll-pool__arrow" aria-hidden="true"></i>
-                <span class="yakov-dryh-roll-pool__successes-count">{{successes}}</span>
-              </span>
             </div>
           </div>
 
           {{#if ../showAdjustments}}
-            <div class="yakov-dryh-inline-actions mt075">
+            <div class="yakov-dryh-inline-actions yakov-dryh-roll-pool__adjustments mt075">
               <button
                 class="yakov-dryh-button yakov-dryh-button--secondary yakov-dryh-button--compact"
                 type="button"
