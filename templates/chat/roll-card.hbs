@@ -28,14 +28,12 @@
               {{#if hasDice}}
                 <div class="yakov-dryh-roll-pool__dice" aria-label="{{label}}">
                   {{#each dice}}
-                    <span class="yakov-dryh-roll-pool__die-shell">
-                      <img
-                        class="yakov-dryh-roll-pool__die-icon"
-                        src="{{src}}"
-                        alt="{{alt}}"
-                        width="28"
-                        height="28"
-                      >
+                    <span class="yakov-dryh-roll-pool__die-shell" role="img" aria-label="{{alt}}">
+                      <span class="yakov-dryh-roll-pool__die-face">
+                        {{#each pipIndexes}}
+                          <span class="yakov-dryh-roll-pool__pip yakov-dryh-roll-pool__pip--{{this}}"></span>
+                        {{/each}}
+                      </span>
                     </span>
                   {{/each}}
                 </div>

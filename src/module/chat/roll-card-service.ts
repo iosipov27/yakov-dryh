@@ -8,7 +8,6 @@ import {
 } from "../data/index.js";
 import {
   DRYH_ROLL_FLAG,
-  SYSTEM_PATH,
   SYSTEM_ID,
   TEMPLATE_PATHS
 } from "../constants.js";
@@ -113,7 +112,7 @@ interface CreateInitialRollMessageInput {
 
 interface RollDieSummary {
   alt: string;
-  src: string;
+  pipIndexes: number[];
   value: number;
 }
 
@@ -253,21 +252,35 @@ function formatDominantPool(pool: YakovDryhDominantPool): string {
   );
 }
 
-function getRollDieIconStyle(pool: YakovDryhDominantPool): "outline" | "solid" {
-  return pool === "discipline" ? "outline" : "solid";
-}
-
-function getRollDieIconSrc(
-  pool: YakovDryhDominantPool,
-  value: number
-): string {
-  const dieValue = Math.min(Math.max(Math.trunc(value), 1), 6);
-
-  return `${SYSTEM_PATH}/assets/d6-${getRollDieIconStyle(pool)}-${dieValue}.svg`;
-}
-
 export function sortRollDiceForDisplay(dice: number[]): number[] {
   return [...dice].sort((left, right) => right - left);
+}
+
+export function getRollDiePipIndexes(value: number): number[] {
+  const dieValue = Math.min(Math.max(Math.trunc(value), 1), 6);
+
+  switch (dieValue) {
+    case 1:
+      return [5];
+
+    case 2:
+      return [1, 9];
+
+    case 3:
+      return [1, 5, 9];
+
+    case 4:
+      return [1, 3, 7, 9];
+
+    case 5:
+      return [1, 3, 5, 7, 9];
+
+    case 6:
+      return [1, 3, 4, 6, 7, 9];
+
+    default:
+      return [5];
+  }
 }
 
 function getRollDiceSummary(
@@ -278,7 +291,7 @@ function getRollDiceSummary(
 
   return sortRollDiceForDisplay(dice).map((value) => ({
     alt: `${label} ${value}`,
-    src: getRollDieIconSrc(pool, value),
+    pipIndexes: getRollDiePipIndexes(value),
     value
   }));
 }

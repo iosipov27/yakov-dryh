@@ -6,6 +6,7 @@ import {
   canSpendHopeForDiscipline,
   getAvailablePlayerRollActionTypes,
   getDisplayedFinalEffectTexts,
+  getRollDiePipIndexes,
   getVisibleRollPools,
   getRollCardPresentationState,
   sortRollDiceForDisplay,
@@ -140,6 +141,15 @@ describe("DRYH player post-roll action availability", () => {
 describe("DRYH roll-card presentation state", () => {
   it("sorts displayed dice from highest to lowest", () => {
     expect(sortRollDiceForDisplay([2, 6, 1, 4, 2, 6])).toEqual([6, 6, 4, 2, 2, 1]);
+  });
+
+  it("maps die values to stable CSS pip layouts", () => {
+    expect(getRollDiePipIndexes(1)).toEqual([5]);
+    expect(getRollDiePipIndexes(2)).toEqual([1, 9]);
+    expect(getRollDiePipIndexes(3)).toEqual([1, 5, 9]);
+    expect(getRollDiePipIndexes(4)).toEqual([1, 3, 7, 9]);
+    expect(getRollDiePipIndexes(5)).toEqual([1, 3, 5, 7, 9]);
+    expect(getRollDiePipIndexes(6)).toEqual([1, 3, 4, 6, 7, 9]);
   });
 
   it("hides the Pain pool before Pain is rolled", () => {

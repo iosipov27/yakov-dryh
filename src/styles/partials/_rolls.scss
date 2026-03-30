@@ -100,20 +100,73 @@
     align-items: center;
     display: flex;
     flex-wrap: wrap;
-    gap: 0.3rem;
+    gap: 4px;
   }
 
   &__die-shell {
-    border-radius: var(--yd-border-radius);
     display: block;
     flex: 0 0 auto;
-    overflow: hidden;
+    height: 26px;
+    width: 26px;
   }
 
-  &__die-icon {
-    display: block;
-    height: 1.5rem;
-    width: 1.5rem;
+  &__die-face {
+    box-sizing: border-box;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    height: 26px;
+    border-radius: 0.22rem;
+    background: #fff;
+    box-shadow:
+      inset 0 0 0 1.5px rgb(20 20 20 / 82%),
+      0 1px 1px rgb(0 0 0 / 8%);
+    padding: 2px;
+    width: 26px;
+  }
+
+  &__pip {
+    align-self: center;
+    background: #121212;
+    border-radius: 999px;
+    height: 5px;
+    justify-self: center;
+    width: 5px;
+
+    &--1 {
+      grid-column: 1;
+      grid-row: 1;
+    }
+
+    &--3 {
+      grid-column: 3;
+      grid-row: 1;
+    }
+
+    &--4 {
+      grid-column: 1;
+      grid-row: 2;
+    }
+
+    &--5 {
+      grid-column: 2;
+      grid-row: 2;
+    }
+
+    &--6 {
+      grid-column: 3;
+      grid-row: 2;
+    }
+
+    &--7 {
+      grid-column: 1;
+      grid-row: 3;
+    }
+
+    &--9 {
+      grid-column: 3;
+      grid-row: 3;
+    }
   }
 
   &__successes {
@@ -139,36 +192,45 @@
   &--exhaustion {
     border-left: 4px solid var(--yd-exhaustion);
 
-    .yakov-dryh-roll-pool__die-shell {
+    .yakov-dryh-roll-pool__die-face {
       background: var(--yd-exhaustion);
+      box-shadow:
+        inset 0 0 0 1px rgb(255 255 255 / 8%),
+        0 1px 1px rgb(0 0 0 / 8%);
     }
 
-    .yakov-dryh-roll-pool__die-icon {
-      mix-blend-mode: screen;
+    .yakov-dryh-roll-pool__pip {
+      background: rgb(255 250 244 / 98%);
     }
   }
 
   &--madness {
     border-left: 4px solid var(--yd-madness);
 
-    .yakov-dryh-roll-pool__die-shell {
+    .yakov-dryh-roll-pool__die-face {
       background: var(--yd-madness);
+      box-shadow:
+        inset 0 0 0 1px rgb(255 255 255 / 10%),
+        0 1px 1px rgb(0 0 0 / 8%);
     }
 
-    .yakov-dryh-roll-pool__die-icon {
-      mix-blend-mode: screen;
+    .yakov-dryh-roll-pool__pip {
+      background: rgb(255 250 244 / 98%);
     }
   }
 
   &--pain {
     border-left: 4px solid var(--yd-pain);
 
-    .yakov-dryh-roll-pool__die-shell {
+    .yakov-dryh-roll-pool__die-face {
       background: var(--yd-pain);
+      box-shadow:
+        inset 0 0 0 1px rgb(255 255 255 / 8%),
+        0 1px 1px rgb(0 0 0 / 8%);
     }
 
-    .yakov-dryh-roll-pool__die-icon {
-      mix-blend-mode: screen;
+    .yakov-dryh-roll-pool__pip {
+      background: rgb(248 242 233 / 96%);
     }
 
     .yakov-dryh-roll-pool__successes-count {

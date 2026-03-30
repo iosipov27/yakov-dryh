@@ -2599,18 +2599,61 @@ h6 {
   align-items: center;
   display: flex;
   flex-wrap: wrap;
-  gap: 0.3rem;
+  gap: 4px;
 }
 .yakov-dryh-roll-pool__die-shell {
-  border-radius: var(--yd-border-radius);
   display: block;
   flex: 0 0 auto;
-  overflow: hidden;
+  height: 26px;
+  width: 26px;
 }
-.yakov-dryh-roll-pool__die-icon {
-  display: block;
-  height: 1.5rem;
-  width: 1.5rem;
+.yakov-dryh-roll-pool__die-face {
+  box-sizing: border-box;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  height: 26px;
+  border-radius: 0.22rem;
+  background: #fff;
+  box-shadow: inset 0 0 0 1.5px rgba(20, 20, 20, 0.82), 0 1px 1px rgba(0, 0, 0, 0.08);
+  padding: 2px;
+  width: 26px;
+}
+.yakov-dryh-roll-pool__pip {
+  align-self: center;
+  background: #121212;
+  border-radius: 999px;
+  height: 5px;
+  justify-self: center;
+  width: 5px;
+}
+.yakov-dryh-roll-pool__pip--1 {
+  grid-column: 1;
+  grid-row: 1;
+}
+.yakov-dryh-roll-pool__pip--3 {
+  grid-column: 3;
+  grid-row: 1;
+}
+.yakov-dryh-roll-pool__pip--4 {
+  grid-column: 1;
+  grid-row: 2;
+}
+.yakov-dryh-roll-pool__pip--5 {
+  grid-column: 2;
+  grid-row: 2;
+}
+.yakov-dryh-roll-pool__pip--6 {
+  grid-column: 3;
+  grid-row: 2;
+}
+.yakov-dryh-roll-pool__pip--7 {
+  grid-column: 1;
+  grid-row: 3;
+}
+.yakov-dryh-roll-pool__pip--9 {
+  grid-column: 3;
+  grid-row: 3;
 }
 .yakov-dryh-roll-pool__successes {
   align-items: center;
@@ -2632,29 +2675,32 @@ h6 {
 .yakov-dryh-roll-pool--exhaustion {
   border-left: 4px solid var(--yd-exhaustion);
 }
-.yakov-dryh-roll-pool--exhaustion .yakov-dryh-roll-pool__die-shell {
+.yakov-dryh-roll-pool--exhaustion .yakov-dryh-roll-pool__die-face {
   background: var(--yd-exhaustion);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08), 0 1px 1px rgba(0, 0, 0, 0.08);
 }
-.yakov-dryh-roll-pool--exhaustion .yakov-dryh-roll-pool__die-icon {
-  mix-blend-mode: screen;
+.yakov-dryh-roll-pool--exhaustion .yakov-dryh-roll-pool__pip {
+  background: rgba(255, 250, 244, 0.98);
 }
 .yakov-dryh-roll-pool--madness {
   border-left: 4px solid var(--yd-madness);
 }
-.yakov-dryh-roll-pool--madness .yakov-dryh-roll-pool__die-shell {
+.yakov-dryh-roll-pool--madness .yakov-dryh-roll-pool__die-face {
   background: var(--yd-madness);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1), 0 1px 1px rgba(0, 0, 0, 0.08);
 }
-.yakov-dryh-roll-pool--madness .yakov-dryh-roll-pool__die-icon {
-  mix-blend-mode: screen;
+.yakov-dryh-roll-pool--madness .yakov-dryh-roll-pool__pip {
+  background: rgba(255, 250, 244, 0.98);
 }
 .yakov-dryh-roll-pool--pain {
   border-left: 4px solid var(--yd-pain);
 }
-.yakov-dryh-roll-pool--pain .yakov-dryh-roll-pool__die-shell {
+.yakov-dryh-roll-pool--pain .yakov-dryh-roll-pool__die-face {
   background: var(--yd-pain);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08), 0 1px 1px rgba(0, 0, 0, 0.08);
 }
-.yakov-dryh-roll-pool--pain .yakov-dryh-roll-pool__die-icon {
-  mix-blend-mode: screen;
+.yakov-dryh-roll-pool--pain .yakov-dryh-roll-pool__pip {
+  background: rgba(248, 242, 233, 0.96);
 }
 .yakov-dryh-roll-pool--pain .yakov-dryh-roll-pool__successes-count {
   color: var(--yd-success-pain);
