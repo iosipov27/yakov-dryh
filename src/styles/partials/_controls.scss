@@ -155,6 +155,10 @@
     position: relative;
   }
 
+  &__pip-slot--hidden {
+    display: none;
+  }
+
   &__pip-control {
     align-items: center;
     background: transparent;

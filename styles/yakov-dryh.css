@@ -2409,6 +2409,9 @@ h6 {
   display: inline-flex;
   position: relative;
 }
+.yakov-dryh-dice-picker__pip-slot--hidden {
+  display: none;
+}
 .yakov-dryh-dice-picker__pip-control {
   align-items: center;
   background: transparent;

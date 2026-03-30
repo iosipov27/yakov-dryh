@@ -18,6 +18,10 @@ import {
   type YakovDryhDiceTrayPool,
   type YakovDryhDiceTrayState
 } from "./dice-tray-state.js";
+import {
+  createDiceTrayPoolPips,
+  type DiceTrayPoolPipPresentation
+} from "./dice-tray-pool-presentation.js";
 import { isSharedPoolSettingChange } from "./setting-change.js";
 
 const BaseApplication = foundry.applications.api.HandlebarsApplicationMixin(
@@ -28,16 +32,11 @@ interface SettingDocumentLike {
   key?: string;
 }
 
-interface DiceTrayPoolPip {
-  removable: boolean;
-  tooltip: string | null;
-}
-
 interface DiceTrayPoolSummary {
   empty: boolean;
   key: YakovDryhDiceTrayPool;
   label: string;
-  pips: DiceTrayPoolPip[];
+  pips: DiceTrayPoolPipPresentation[];
   trackClass: string | null;
 }
 
@@ -559,19 +558,15 @@ function createPoolSummaries(
           ? permissions.isGm && canDecreaseDiceTrayPool(state, key)
           : canEditPlayerPools && canDecreaseDiceTrayPool(state, key);
       const pipCount = state.pools[key];
-      const pips: DiceTrayPoolPip[] = Array.from({ length: pipCount }, (_entry, index) => {
-        const isLastRemovable = removable && index === pipCount - 1;
-
-        return {
-          removable: isLastRemovable,
-          tooltip: isLastRemovable
-            ? `${localize("YAKOV_DRYH.UI.Actions.RemoveDie", "Remove 1 die")} (${formatPool(key)})`
-            : null
-        };
+      const pips = createDiceTrayPoolPips({
+        pipCount,
+        poolLabel: formatPool(key),
+        removeActionLabel: localize("YAKOV_DRYH.UI.Actions.RemoveDie", "Remove 1 die"),
+        removable
       });
 
       return {
-        empty: pips.length === 0,
+        empty: pipCount === 0,
         key,
         label: formatPool(key),
         pips,

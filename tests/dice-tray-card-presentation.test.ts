@@ -102,4 +102,38 @@ describe("dice tray card presentation", () => {
       gmContext.paletteButtons.find((button) => button.key === "pain")?.disabled
     ).toBe(false);
   });
+
+  it("renders fixed tray slots and hides the unused ones", () => {
+    const state = normalizeDiceTrayState({
+      actorId: "actor-1",
+      actorName: "Samewere",
+      actorUuid: "Actor.actor-1",
+      basePools: {
+        discipline: 3,
+        exhaustion: 2,
+        madness: 1,
+        pain: 0
+      },
+      confirmed: false,
+      pools: {
+        discipline: 3,
+        exhaustion: 3,
+        madness: 1,
+        pain: 0
+      }
+    });
+
+    const context = createDiceTrayCardContext({
+      isActorOwner: true,
+      isGm: false,
+      state
+    });
+    const exhaustion = context.poolSummaries.find((summary) => summary.key === "exhaustion");
+
+    expect(exhaustion).toBeDefined();
+    expect(exhaustion?.pips).toHaveLength(20);
+    expect(exhaustion?.pips.slice(0, 3).every((pip) => pip.hidden === false)).toBe(true);
+    expect(exhaustion?.pips[2]?.removable).toBe(true);
+    expect(exhaustion?.pips.slice(3).every((pip) => pip.hidden === true)).toBe(true);
+  });
 });

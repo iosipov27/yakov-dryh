@@ -5,17 +5,16 @@ import {
   type YakovDryhDiceTrayPool,
   type YakovDryhDiceTrayState
 } from "../applications/ui/dice-tray-state.js";
-
-export interface DiceTrayCardPoolPip {
-  removable: boolean;
-  tooltip: string | null;
-}
+import {
+  createDiceTrayPoolPips,
+  type DiceTrayPoolPipPresentation
+} from "../applications/ui/dice-tray-pool-presentation.js";
 
 export interface DiceTrayCardPoolSummary {
   empty: boolean;
   key: YakovDryhDiceTrayPool;
   label: string;
-  pips: DiceTrayCardPoolPip[];
+  pips: DiceTrayPoolPipPresentation[];
   trackClass: string | null;
 }
 
@@ -75,22 +74,15 @@ function createPoolSummaries(
           ? permissions.isGm && canDecreaseDiceTrayPool(state, key)
           : canEditPlayerPools && canDecreaseDiceTrayPool(state, key);
       const pipCount = state.pools[key];
-      const pips: DiceTrayCardPoolPip[] = Array.from(
-        { length: pipCount },
-        (_entry, index) => {
-          const isLastRemovable = removable && index === pipCount - 1;
-
-          return {
-            removable: isLastRemovable,
-            tooltip: isLastRemovable
-              ? `${localize("YAKOV_DRYH.UI.Actions.RemoveDie", "Remove 1 die")} (${formatPool(key)})`
-              : null
-          };
-        }
-      );
+      const pips = createDiceTrayPoolPips({
+        pipCount,
+        poolLabel: formatPool(key),
+        removeActionLabel: localize("YAKOV_DRYH.UI.Actions.RemoveDie", "Remove 1 die"),
+        removable
+      });
 
       return {
-        empty: pips.length === 0,
+        empty: pipCount === 0,
         key,
         label: formatPool(key),
         pips,
