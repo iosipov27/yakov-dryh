@@ -37,13 +37,13 @@
   --yd-pip-discipline: #fffdf8;
   --yd-pip-inactive: #a89d95;
   --yd-pip-shadow: rgb(33 22 30 / 30%);
-  --yd-sheet-bg: #08060c;
-  --yd-sheet-bg-soft: #110d17;
-  --yd-sheet-border: rgb(243 231 214 / 14%);
-  --yd-sheet-divider: rgb(243 231 214 / 12%);
-  --yd-sheet-ink: #f0e5d2;
-  --yd-sheet-muted: #cdbda6;
-  --yd-sheet-muted-strong: #eee1ca;
+  --yd-sheet-bg: #0e0908;
+  --yd-sheet-bg-soft: #2b2321;
+  --yd-sheet-border: rgb(222 183 145 / 16%);
+  --yd-sheet-divider: rgb(222 183 145 / 12%);
+  --yd-sheet-ink: #f1dfca;
+  --yd-sheet-muted: #ceb094;
+  --yd-sheet-muted-strong: #f0dfca;
   --yd-sheet-input-bg: #c9c3bb;
   --yd-sheet-input-bg-strong: #d8d2ca;
   --yd-sheet-input-border: #95897d;
@@ -2227,7 +2227,7 @@ h6 {
 }
 
 .yakov-dryh-sheet-shell {
-  background: radial-gradient(circle at top left, rgba(255, 255, 255, 0.04), transparent 28%), radial-gradient(circle at 82% 32%, rgba(188, 45, 45, 0.07), transparent 26%), radial-gradient(circle at 52% 100%, rgba(219, 200, 170, 0.04), transparent 28%), linear-gradient(180deg, rgba(15, 11, 22, 0.98) 0%, rgba(8, 6, 12, 0.99) 100%);
+  background: radial-gradient(circle at top left, rgba(255, 241, 221, 0.05), transparent 28%), radial-gradient(circle at 84% 26%, rgba(178, 104, 66, 0.1), transparent 28%), radial-gradient(circle at 50% 100%, rgba(228, 188, 144, 0.05), transparent 30%), linear-gradient(180deg, rgba(45, 28, 23, 0.98) 0%, rgba(20, 12, 10, 0.99) 100%);
   border: 1px solid var(--yd-sheet-border);
   border-radius: 0.35rem;
   box-shadow: var(--yd-sheet-shadow);
@@ -2246,7 +2246,7 @@ h6 {
 }
 
 .yakov-dryh-sheet .window-header {
-  background: linear-gradient(180deg, rgba(13, 10, 19, 0.99) 0%, rgba(7, 5, 11, 0.99) 100%);
+  background: linear-gradient(180deg, rgba(49, 40, 37, 0.99) 0%, rgba(28, 24, 23, 0.99) 100%);
   border-bottom: 1px solid var(--yd-sheet-divider);
   color: var(--yd-sheet-muted-strong);
   font-family: var(--yd-sheet-body-font);
@@ -2273,8 +2273,12 @@ h6 {
   outline: none;
 }
 .yakov-dryh-sheet .window-content {
-  background: radial-gradient(circle at top center, rgba(255, 255, 255, 0.03), transparent 24%), linear-gradient(180deg, var(--yd-sheet-bg-soft) 0%, var(--yd-sheet-bg) 100%);
+  background: radial-gradient(circle at top center, rgba(255, 238, 216, 0.04), transparent 24%), radial-gradient(circle at 85% 18%, rgba(186, 116, 74, 0.08), transparent 22%), linear-gradient(180deg, var(--yd-sheet-bg-soft) 0%, var(--yd-sheet-bg) 100%);
   padding: 0;
+}
+
+.yakov-dryh-dialog .window-header h1 {
+  font-size: 1rem;
 }
 
 .yakov-dryh-status {
@@ -2395,13 +2399,13 @@ h6 {
 }
 .yakov-dryh-sheet .yakov-dryh-resource-card__icon-action {
   background: rgba(255, 255, 255, 0.03);
-  border-color: rgba(255, 255, 255, 0.1);
-  color: var(--yd-sheet-muted);
+  border-color: rgba(255, 248, 236, 0.24);
+  color: rgba(255, 248, 236, 0.55);
   height: 1.85rem;
   width: 1.85rem;
 }
 .yakov-dryh-sheet .yakov-dryh-resource-card__icon-action:hover, .yakov-dryh-sheet .yakov-dryh-resource-card__icon-action:focus-visible {
-  border-color: rgba(255, 255, 255, 0.18);
+  border-color: rgba(255, 248, 236, 0.38);
   color: #fff7ea;
 }
 .yakov-dryh-sheet .yakov-dryh-resource-card__icon-action:focus-visible {

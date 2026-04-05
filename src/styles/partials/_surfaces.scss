@@ -37,10 +37,10 @@
 
 .yakov-dryh-sheet-shell {
   background:
-    radial-gradient(circle at top left, rgb(255 255 255 / 4%), transparent 28%),
-    radial-gradient(circle at 82% 32%, rgb(188 45 45 / 7%), transparent 26%),
-    radial-gradient(circle at 52% 100%, rgb(219 200 170 / 4%), transparent 28%),
-    linear-gradient(180deg, rgb(15 11 22 / 98%) 0%, rgb(8 6 12 / 99%) 100%);
+    radial-gradient(circle at top left, rgb(255 241 221 / 5%), transparent 28%),
+    radial-gradient(circle at 84% 26%, rgb(178 104 66 / 10%), transparent 28%),
+    radial-gradient(circle at 50% 100%, rgb(228 188 144 / 5%), transparent 30%),
+    linear-gradient(180deg, rgb(45 28 23 / 98%) 0%, rgb(20 12 10 / 99%) 100%);
   border: 1px solid var(--yd-sheet-border);
   border-radius: 0.35rem;
   box-shadow: var(--yd-sheet-shadow);
@@ -61,8 +61,7 @@
 
 .yakov-dryh-sheet {
   .window-header {
-    background:
-      linear-gradient(180deg, rgb(13 10 19 / 99%) 0%, rgb(7 5 11 / 99%) 100%);
+    background: linear-gradient(180deg, rgb(49 40 37 / 99%) 0%, rgb(28 24 23 / 99%) 100%);
     border-bottom: 1px solid var(--yd-sheet-divider);
     color: var(--yd-sheet-muted-strong);
     font-family: var(--yd-sheet-body-font);
@@ -100,9 +99,18 @@
 
   .window-content {
     background:
-      radial-gradient(circle at top center, rgb(255 255 255 / 3%), transparent 24%),
+      radial-gradient(circle at top center, rgb(255 238 216 / 4%), transparent 24%),
+      radial-gradient(circle at 85% 18%, rgb(186 116 74 / 8%), transparent 22%),
       linear-gradient(180deg, var(--yd-sheet-bg-soft) 0%, var(--yd-sheet-bg) 100%);
     padding: 0;
+  }
+}
+
+.yakov-dryh-dialog {
+  .window-header {
+    h1 {
+      font-size: 1rem;
+    }
   }
 }
 

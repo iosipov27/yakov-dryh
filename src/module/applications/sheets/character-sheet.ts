@@ -447,6 +447,7 @@ export class YakovDryhCharacterSheet extends BaseSheet {
         `<p>${localize("YAKOV_DRYH.SHEETS.Actor.Character.Prompts.EditResponses", "Edit Responses?")}</p>`,
         `<p>${localize("YAKOV_DRYH.SHEETS.Actor.Character.Prompts.EditResponsesWarning", "This will clear all marks.")}</p>`
       ].join(""),
+      classes: [SYSTEM_ID, "yakov-dryh-dialog"],
       modal: true,
       rejectClose: false,
       window: {

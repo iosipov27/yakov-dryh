@@ -103,14 +103,14 @@
 
     &__icon-action {
       background: rgb(255 255 255 / 3%);
-      border-color: rgb(255 255 255 / 10%);
-      color: var(--yd-sheet-muted);
+      border-color: rgb(255 248 236 / 24%);
+      color: rgb(255 248 236 / 55%);
       height: 1.85rem;
       width: 1.85rem;
 
       &:hover,
       &:focus-visible {
-        border-color: rgb(255 255 255 / 18%);
+        border-color: rgb(255 248 236 / 38%);
         color: #fff7ea;
       }
 
