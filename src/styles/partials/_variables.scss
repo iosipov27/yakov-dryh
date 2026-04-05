@@ -79,6 +79,23 @@
     drop-shadow(0.22rem 0.32rem 0.2rem rgb(0 0 0 / 34%))
     drop-shadow(0.08rem 0.1rem 0.06rem rgb(0 0 0 / 28%))
     drop-shadow(0 0 0.02rem rgb(255 255 255 / 16%));
+  --yd-chat-paper: #ece5d7;
+  --yd-chat-paper-strong: #f4eee3;
+  --yd-chat-paper-edge: #ded4c3;
+  --yd-chat-paper-line: #cfc2ab;
+  --yd-chat-panel: #f3ede3;
+  --yd-chat-panel-strong: #ebe3d6;
+  --yd-chat-ink: #2f2622;
+  --yd-chat-muted: #6f6357;
+  --yd-chat-success-bg: #e1ebe0;
+  --yd-chat-success-ink: #525e54;
+  --yd-chat-failure-bg: #eadbd5;
+  --yd-chat-failure-ink: #8a3840;
+  --yd-chat-accent: #8a3f2e;
+  --yd-chat-shadow: 0 10px 28px rgb(36 28 21 / 12%);
+  --yd-chat-die-shadow:
+    0 1px 0 rgb(255 255 255 / 32%),
+    0 1px 3px rgb(0 0 0 / 12%);
   --yd-sheet-display-font:
     "Baskerville Old Face",
     "Palatino Linotype",

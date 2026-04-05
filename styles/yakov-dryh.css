@@ -73,6 +73,23 @@
     drop-shadow(0.22rem 0.32rem 0.2rem rgb(0 0 0 / 34%))
     drop-shadow(0.08rem 0.1rem 0.06rem rgb(0 0 0 / 28%))
     drop-shadow(0 0 0.02rem rgb(255 255 255 / 16%));
+  --yd-chat-paper: #ece5d7;
+  --yd-chat-paper-strong: #f4eee3;
+  --yd-chat-paper-edge: #ded4c3;
+  --yd-chat-paper-line: #cfc2ab;
+  --yd-chat-panel: #f3ede3;
+  --yd-chat-panel-strong: #ebe3d6;
+  --yd-chat-ink: #2f2622;
+  --yd-chat-muted: #6f6357;
+  --yd-chat-success-bg: #e1ebe0;
+  --yd-chat-success-ink: #525e54;
+  --yd-chat-failure-bg: #eadbd5;
+  --yd-chat-failure-ink: #8a3840;
+  --yd-chat-accent: #8a3f2e;
+  --yd-chat-shadow: 0 10px 28px rgb(36 28 21 / 12%);
+  --yd-chat-die-shadow:
+    0 1px 0 rgb(255 255 255 / 32%),
+    0 1px 3px rgb(0 0 0 / 12%);
   --yd-sheet-display-font:
     "Baskerville Old Face",
     "Palatino Linotype",
@@ -2143,7 +2160,6 @@ h6 {
   margin-right: 5rem;
 }
 
-.yakov-dryh-chat-card,
 .yakov-dryh-dialog-shell {
   background: radial-gradient(circle at top right, rgba(155, 61, 36, 0.12), transparent 34%), linear-gradient(180deg, #fffdf8 0%, var(--yd-surface) 100%);
   border: 1px solid var(--yd-border);
@@ -2151,6 +2167,24 @@ h6 {
   color: var(--yd-ink);
   font-family: "Trebuchet MS", "Gill Sans", sans-serif;
   padding: 1rem;
+}
+
+.yakov-dryh-chat-card {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.22) 0%, rgba(255, 255, 255, 0) 14%), radial-gradient(circle at 20% 12%, rgba(255, 255, 255, 0.18), transparent 26%), radial-gradient(circle at 82% 24%, rgba(206, 169, 132, 0.12), transparent 24%), linear-gradient(180deg, var(--yd-chat-paper-strong) 0%, var(--yd-chat-paper) 100%);
+  border: 1px solid var(--yd-chat-paper-line);
+  border-radius: 0.16rem;
+  box-shadow: var(--yd-chat-shadow);
+  color: var(--yd-chat-ink);
+  font-family: var(--yd-sheet-body-font);
+  padding: 1rem 1rem 1.1rem;
+  position: relative;
+}
+.yakov-dryh-chat-card::after {
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  content: "";
+  inset: 0.35rem;
+  pointer-events: none;
+  position: absolute;
 }
 
 .yakov-dryh-sheet-shell {
@@ -2510,7 +2544,7 @@ h6 {
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.26), 0 0 0 1px rgba(0, 0, 0, 0.08);
   color: var(--yd-sheet-input-ink);
   font-family: var(--yd-sheet-body-font);
-  min-height: 2.45rem;
+  min-height: 2rem;
   padding: 0.65rem 0.85rem;
 }
 .yakov-dryh-sheet .yakov-dryh-field input:focus,
@@ -2614,8 +2648,8 @@ h6 {
   color: var(--yd-sheet-muted-strong);
 }
 .yakov-dryh-sheet .yakov-dryh-button--compact {
-  min-height: 1.75rem;
-  min-width: 1.75rem;
+  min-height: 1.3rem;
+  min-width: 1.3rem;
   padding: 0;
 }
 
@@ -2848,45 +2882,71 @@ h6 {
 
 .yakov-dryh-chat-card__body {
   display: grid;
-  gap: 0.85rem;
+  gap: 0.5rem;
 }
 .yakov-dryh-chat-card__detail {
-  background: rgba(255, 255, 255, 0.76);
-  border-left: 4px solid var(--yd-accent);
-  border-radius: var(--yd-border-radius);
-  padding: 0.85rem 1rem;
+  background: rgba(255, 255, 255, 0.26);
+  border: 1px solid var(--yd-chat-paper-line);
+  border-left: 3px solid color-mix(in srgb, var(--yd-chat-accent) 78%, #2f2622);
+  border-radius: 0.14rem;
+  padding: 0.9rem 1rem;
 }
 
+.yakov-dryh-roll-card .yakov-dryh-header {
+  border-bottom: 1px solid var(--yd-chat-paper-line);
+  margin-bottom: 0.2rem;
+  padding-bottom: 0.65rem;
+}
+.yakov-dryh-roll-card .yakov-dryh-header h3 {
+  color: var(--yd-chat-ink);
+  font-family: var(--yd-sheet-display-font);
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1;
+}
 .yakov-dryh-roll-card__arrow {
-  color: var(--yd-muted);
+  color: var(--yd-chat-muted);
   font-size: 0.3rem;
 }
 .yakov-dryh-roll-card__pools {
   display: grid;
-  gap: 0.5rem;
+  gap: 0;
+  overflow: hidden;
 }
 .yakov-dryh-roll-card__resolution {
+  border-top: 1px solid var(--yd-chat-paper-line);
   display: grid;
   gap: 0.55rem;
+  padding-top: 0.9rem;
 }
 .yakov-dryh-roll-card__resolution-owner {
+  color: var(--yd-chat-ink);
+  font-family: var(--yd-sheet-display-font);
   font-weight: 700;
 }
 .yakov-dryh-roll-card__summary, .yakov-dryh-roll-card__dominant {
-  background: rgba(255, 255, 255, 0.72);
-  border-radius: var(--yd-border-radius);
-  padding: 0.8rem 0.9rem;
+  padding: 0.2rem 0.5rem;
+}
+.yakov-dryh-roll-card__summary {
+  font-size: 1.02rem;
 }
 .yakov-dryh-roll-card__summary strong {
   color: inherit;
 }
 .yakov-dryh-roll-card__summary--success {
-  background: rgba(219, 233, 221, 0.72);
-  color: var(--yd-success-player);
+  background: var(--yd-chat-success-bg);
+  color: var(--yd-chat-success-ink);
 }
 .yakov-dryh-roll-card__summary--failure {
-  background: rgba(241, 216, 211, 0.72);
-  color: var(--yd-success-pain);
+  background: var(--yd-chat-failure-bg);
+  color: var(--yd-chat-failure-ink);
+}
+.yakov-dryh-roll-card__dominant {
+  font-size: 1.02rem;
+}
+.yakov-dryh-roll-card__dominant strong {
+  color: var(--yd-chat-ink);
+  margin-right: 0.2rem;
 }
 .yakov-dryh-roll-card__snap-effect {
   background: rgba(176, 28, 46, 0.1);
@@ -2917,16 +2977,41 @@ h6 {
   line-height: 1;
   text-transform: uppercase;
 }
+.yakov-dryh-roll-card .yakov-dryh-button {
+  border-radius: 0.14rem;
+  font-size: 0.96rem;
+}
+.yakov-dryh-roll-card .yakov-dryh-button:not(.yakov-dryh-button--compact) {
+  min-height: 2rem;
+  padding: 0.5rem 0.8rem;
+}
+.yakov-dryh-roll-card .yakov-dryh-button--secondary {
+  background: linear-gradient(180deg, #f6eee1 0%, #ecdfc9 100%);
+  border: 1px solid rgba(162, 136, 107, 0.52);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.34), 0 1px 0 rgba(255, 255, 255, 0.35);
+  color: var(--yd-chat-ink);
+}
 
 .yakov-dryh-roll-pool {
   align-items: center;
-  background: rgba(255, 255, 255, 0.72);
-  border: 1px solid rgba(183, 167, 156, 0.56);
-  border-radius: var(--yd-border-radius);
   display: flex;
   gap: 0.75rem;
   justify-content: space-between;
-  padding: 0.8rem 0.9rem;
+  padding: 1rem 0.95rem 0.95rem 1.1rem;
+  position: relative;
+}
+.yakov-dryh-roll-pool::before {
+  background: var(--yd-chat-accent);
+  border-radius: 999px;
+  content: "";
+  left: 0;
+  position: absolute;
+  top: 0.95rem;
+  bottom: 0.95rem;
+  width: 4px;
+}
+.yakov-dryh-roll-pool:not(:last-child) {
+  border-bottom: 1px solid rgba(207, 194, 171, 0.78);
 }
 .yakov-dryh-roll-pool__content {
   display: grid;
@@ -2939,6 +3024,10 @@ h6 {
   flex-wrap: wrap;
   gap: 0.35rem;
 }
+.yakov-dryh-roll-pool__header strong {
+  color: var(--yd-chat-ink);
+  font-size: 1rem;
+}
 .yakov-dryh-roll-pool__result {
   align-items: center;
   display: flex;
@@ -2950,9 +3039,11 @@ h6 {
   display: grid;
   gap: 0.35rem;
   justify-items: end;
+  width: auto;
 }
 .yakov-dryh-roll-pool__adjustments .yakov-dryh-button {
-  width: 1.5rem;
+  min-height: 1.5rem;
+  font-size: 0.75rem;
 }
 .yakov-dryh-roll-pool__dice {
   align-items: center;
@@ -2972,9 +3063,9 @@ h6 {
   grid-template-columns: repeat(3, 1fr);
   grid-template-rows: repeat(3, 1fr);
   height: 26px;
-  border-radius: 0.22rem;
-  background: #fff;
-  box-shadow: inset 0 0 0 1.5px rgba(20, 20, 20, 0.82), 0 1px 1px rgba(0, 0, 0, 0.08);
+  border-radius: 0.14rem;
+  background: #fffdf9;
+  box-shadow: inset 0 0 0 1.5px rgba(31, 26, 23, 0.82), var(--yd-chat-die-shadow);
   padding: 2px;
   width: 26px;
 }
@@ -3023,8 +3114,8 @@ h6 {
   color: var(--yd-success-player);
   font-size: 1.05rem;
 }
-.yakov-dryh-roll-pool--exhaustion {
-  border-left: 4px solid var(--yd-exhaustion);
+.yakov-dryh-roll-pool--exhaustion::before {
+  background: var(--yd-exhaustion);
 }
 .yakov-dryh-roll-pool--exhaustion .yakov-dryh-roll-pool__die-face {
   background: var(--yd-exhaustion);
@@ -3033,8 +3124,8 @@ h6 {
 .yakov-dryh-roll-pool--exhaustion .yakov-dryh-roll-pool__pip {
   background: rgba(255, 250, 244, 0.98);
 }
-.yakov-dryh-roll-pool--madness {
-  border-left: 4px solid var(--yd-madness);
+.yakov-dryh-roll-pool--madness::before {
+  background: var(--yd-madness);
 }
 .yakov-dryh-roll-pool--madness .yakov-dryh-roll-pool__die-face {
   background: var(--yd-madness);
@@ -3043,8 +3134,8 @@ h6 {
 .yakov-dryh-roll-pool--madness .yakov-dryh-roll-pool__pip {
   background: rgba(255, 250, 244, 0.98);
 }
-.yakov-dryh-roll-pool--pain {
-  border-left: 4px solid var(--yd-pain);
+.yakov-dryh-roll-pool--pain::before {
+  background: var(--yd-pain);
 }
 .yakov-dryh-roll-pool--pain .yakov-dryh-roll-pool__die-face {
   background: var(--yd-pain);
@@ -3056,8 +3147,8 @@ h6 {
 .yakov-dryh-roll-pool--pain .yakov-dryh-roll-pool__successes-count {
   color: var(--yd-success-pain);
 }
-.yakov-dryh-roll-pool--discipline {
-  border-left: 4px solid var(--yd-accent);
+.yakov-dryh-roll-pool--discipline::before {
+  background: var(--yd-chat-accent);
 }
 
 .yakov-dryh-dice-tray,
