@@ -36,8 +36,7 @@
     > span {
       color: var(--yd-sheet-muted-strong);
       font-family: var(--yd-sheet-body-font);
-      font-size: 0.92rem;
-      font-weight: 700;
+      font-size: 0.9rem;
     }
 
     input,
@@ -52,8 +51,8 @@
         0 0 0 1px rgb(0 0 0 / 8%);
       color: var(--yd-sheet-input-ink);
       font-family: var(--yd-sheet-body-font);
-      min-height: 2rem;
-      padding: 0.65rem 0.85rem;
+      min-height: 1rem;
+      padding: 0.4rem 0.4rem;
 
       &:focus {
         border-color: color-mix(in srgb, var(--yd-sheet-input-border) 45%, #fff);
@@ -75,8 +74,8 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: flex-end;
-  width: 2rem;
-  gap: 0.5rem;
+  width: 3rem;
+  gap: 0.2rem;
 
   input {
     background: rgb(255 255 255 / 88%);

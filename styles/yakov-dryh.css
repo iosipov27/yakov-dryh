@@ -2412,6 +2412,7 @@ h6 {
 .yakov-dryh-sheet .yakov-dryh-sheet-shell__header-side > .yakov-dryh-resource-card {
   padding-top: 0.35rem;
   padding-left: 1rem;
+  border-top: 1px solid var(--yd-sheet-divider);
 }
 .yakov-dryh-sheet .yakov-dryh-sheet-shell__column--sidebar > .yakov-dryh-resource-card:last-child {
   border-top: 1px solid var(--yd-sheet-divider);
@@ -2553,8 +2554,7 @@ h6 {
 .yakov-dryh-sheet .yakov-dryh-field > span {
   color: var(--yd-sheet-muted-strong);
   font-family: var(--yd-sheet-body-font);
-  font-size: 0.92rem;
-  font-weight: 700;
+  font-size: 0.9rem;
 }
 .yakov-dryh-sheet .yakov-dryh-field input,
 .yakov-dryh-sheet .yakov-dryh-field textarea,
@@ -2565,8 +2565,8 @@ h6 {
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.26), 0 0 0 1px rgba(0, 0, 0, 0.08);
   color: var(--yd-sheet-input-ink);
   font-family: var(--yd-sheet-body-font);
-  min-height: 2rem;
-  padding: 0.65rem 0.85rem;
+  min-height: 1rem;
+  padding: 0.4rem 0.4rem;
 }
 .yakov-dryh-sheet .yakov-dryh-field input:focus,
 .yakov-dryh-sheet .yakov-dryh-field textarea:focus,
@@ -2584,8 +2584,8 @@ h6 {
   display: flex;
   flex-wrap: wrap;
   justify-content: flex-end;
-  width: 2rem;
-  gap: 0.5rem;
+  width: 3rem;
+  gap: 0.2rem;
 }
 .yakov-dryh-inline-actions input {
   background: rgba(255, 255, 255, 0.88);

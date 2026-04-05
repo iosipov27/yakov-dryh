@@ -11,30 +11,27 @@
     <input type="text" name="system.concept" value="{{actorData.concept}}" />
   </label>
 
-  <div class="yakov-dryh-card-panel">
+  <label class="yakov-dryh-field">
+    <span>{{localize
+        "YAKOV_DRYH.SHEETS.Actor.Character.Fields.ExhaustionTalent"
+      }}</span>
+    <input
+      type="text"
+      name="system.talents.exhaustion"
+      value="{{actorData.talents.exhaustion}}"
+    />
+  </label>
 
-    <label class="yakov-dryh-field">
-      <span>{{localize
-          "YAKOV_DRYH.SHEETS.Actor.Character.Fields.ExhaustionTalent"
-        }}</span>
-      <input
-        type="text"
-        name="system.talents.exhaustion"
-        value="{{actorData.talents.exhaustion}}"
-      />
-    </label>
-
-    <label class="yakov-dryh-field">
-      <span>{{localize
-          "YAKOV_DRYH.SHEETS.Actor.Character.Fields.MadnessTalent"
-        }}</span>
-      <input
-        type="text"
-        name="system.talents.madness"
-        value="{{actorData.talents.madness}}"
-      />
-    </label>
-  </div>
+  <label class="yakov-dryh-field">
+    <span>{{localize
+        "YAKOV_DRYH.SHEETS.Actor.Character.Fields.MadnessTalent"
+      }}</span>
+    <input
+      type="text"
+      name="system.talents.madness"
+      value="{{actorData.talents.madness}}"
+    />
+  </label>
 
   <label class="yakov-dryh-field">
     <span>{{localize "YAKOV_DRYH.SHEETS.Actor.Character.Fields.Scars"}}</span>

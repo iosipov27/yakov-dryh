@@ -154,6 +154,7 @@
   .yakov-dryh-sheet-shell__header-side > .yakov-dryh-resource-card {
     padding-top: 0.35rem;
     padding-left: 1rem;
+    border-top: 1px solid var(--yd-sheet-divider);
   }
 
   .yakov-dryh-sheet-shell__column--sidebar > .yakov-dryh-resource-card:last-child {
