@@ -1,33 +1,38 @@
-<div class="yakov-dryh-sheet-shell__column yakov-dryh-sheet-shell__column--story">
+<div
+  class="yakov-dryh-sheet-shell__column yakov-dryh-sheet-shell__column--story"
+>
   <label class="yakov-dryh-field">
     <span>{{localize "YAKOV_DRYH.SHEETS.Actor.Character.Fields.Name"}}</span>
-    <input type="text" name="name" value="{{actorName}}">
+    <input type="text" name="name" value="{{actorName}}" />
   </label>
 
   <label class="yakov-dryh-field">
     <span>{{localize "YAKOV_DRYH.SHEETS.Actor.Character.Fields.Concept"}}</span>
-    <input type="text" name="system.concept" value="{{actorData.concept}}">
+    <input type="text" name="system.concept" value="{{actorData.concept}}" />
   </label>
 
   <div class="yakov-dryh-card-panel">
-    <h3 class="m0">{{localize "YAKOV_DRYH.SHEETS.Actor.Character.Sections.Talents"}}</h3>
 
     <label class="yakov-dryh-field">
-      <span>{{localize "YAKOV_DRYH.SHEETS.Actor.Character.Fields.ExhaustionTalent"}}</span>
+      <span>{{localize
+          "YAKOV_DRYH.SHEETS.Actor.Character.Fields.ExhaustionTalent"
+        }}</span>
       <input
         type="text"
         name="system.talents.exhaustion"
         value="{{actorData.talents.exhaustion}}"
-      >
+      />
     </label>
 
     <label class="yakov-dryh-field">
-      <span>{{localize "YAKOV_DRYH.SHEETS.Actor.Character.Fields.MadnessTalent"}}</span>
+      <span>{{localize
+          "YAKOV_DRYH.SHEETS.Actor.Character.Fields.MadnessTalent"
+        }}</span>
       <input
         type="text"
         name="system.talents.madness"
         value="{{actorData.talents.madness}}"
-      >
+      />
     </label>
   </div>
 

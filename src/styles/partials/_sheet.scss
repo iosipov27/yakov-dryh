@@ -19,12 +19,12 @@
     }
 
     &--story {
-      padding-right: 0.2rem;
+      padding: 1rem;
     }
 
     &--sidebar {
       border-left: 1px solid var(--yd-sheet-divider);
-      padding-left: 1.5rem;
+      padding: 1rem;
     }
   }
 
@@ -153,6 +153,7 @@
 
   .yakov-dryh-sheet-shell__header-side > .yakov-dryh-resource-card {
     padding-top: 0.35rem;
+    padding-left: 1rem;
   }
 
   .yakov-dryh-sheet-shell__column--sidebar > .yakov-dryh-resource-card:last-child {
