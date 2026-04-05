@@ -196,9 +196,6 @@
   &--exhaustion {
     .yakov-dryh-pip--filled {
       background-color: var(--yd-exhaustion);
-      filter:
-        drop-shadow(0 0 1px rgb(255 255 255 / 34%))
-        drop-shadow(0 0 1px var(--yd-pip-shadow));
     }
   }
 
@@ -218,7 +215,7 @@
 
 .yakov-dryh-pip {
   display: inline-block;
-  filter: drop-shadow(0 0 1px var(--yd-pip-shadow));
+  filter: var(--yd-pip-filter, drop-shadow(0 0 1px var(--yd-pip-shadow)));
   height: 2rem;
   mask: url("../assets/six-sided-dice3.svg") center / contain no-repeat;
   -webkit-mask: url("../assets/six-sided-dice3.svg") center / contain no-repeat;
@@ -318,6 +315,12 @@
       top: -0.2rem;
       transform: translate(-0.15rem, 0.15rem);
     }
+  }
+}
+
+.yakov-dryh-sheet {
+  .yakov-dryh-pip {
+    --yd-pip-filter: var(--yd-sheet-pip-shadow-filter);
   }
 }
 

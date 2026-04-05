@@ -58,13 +58,27 @@
   --yd-sheet-button-bg-hover: #f8eddc;
   --yd-sheet-button-ink: #2e2429;
   --yd-sheet-card: #b4a59b;
+  --yd-sheet-card-mid: #b6a89d;
   --yd-sheet-card-edge: #9f9187;
   --yd-sheet-card-highlight: rgb(255 246 233 / 24%);
+  --yd-sheet-card-glow: rgb(246 229 205 / 28%);
   --yd-sheet-card-exhaustion: #b8a79b;
+  --yd-sheet-card-exhaustion-mid: #bbaa9d;
   --yd-sheet-card-exhaustion-edge: #9b8b7f;
+  --yd-sheet-card-exhaustion-glow: rgb(241 222 194 / 26%);
   --yd-sheet-card-madness: #b9aba2;
+  --yd-sheet-card-madness-mid: #bcaea5;
   --yd-sheet-card-madness-edge: #9d8f86;
+  --yd-sheet-card-madness-glow: rgb(245 225 205 / 30%);
   --yd-sheet-shadow: 0 20px 48px rgb(0 0 0 / 38%);
+  --yd-sheet-resource-card-shadow:
+    inset 0 1px 0 var(--yd-sheet-card-highlight),
+    inset 0 -18px 32px rgb(0 0 0 / 10%),
+    0 1px 0 rgb(255 255 255 / 4%);
+  --yd-sheet-pip-shadow-filter:
+    drop-shadow(0.22rem 0.32rem 0.2rem rgb(0 0 0 / 34%))
+    drop-shadow(0.08rem 0.1rem 0.06rem rgb(0 0 0 / 28%))
+    drop-shadow(0 0 0.02rem rgb(255 255 255 / 16%));
   --yd-sheet-display-font:
     "Baskerville Old Face",
     "Palatino Linotype",
