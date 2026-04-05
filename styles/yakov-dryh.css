@@ -10,9 +10,9 @@
   --yd-text-light: #f8f0e2;
   --yd-text-secondary: #bdbdbd;
   --yd-success-player: #3f7d4b;
-  --yd-success-pain: #b01c2e;
+  --yd-success-pain: #8b1c29;
   --yd-exhaustion: #111111;
-  --yd-madness: #b01c2e;
+  --yd-madness: #912f26;
   --yd-pain: #444;
   --yd-border: #b7a79c;
   --yd-border-button: rgb(183 167 156 / 44%);
@@ -33,6 +33,9 @@
   --yd-stress-madness-edge: #9f6c7d;
   --yd-stress-madness-border: #825264;
   --yd-shadow: 0 14px 30px rgb(33 22 30 / 12%);
+  --yd-button-hover-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.4),
+    0 2px 4px rgba(90, 57, 31, 0.12);
   --yd-round-shadow: radial-gradient(60% 60% at 40% 40%, #474361 0%, #0a0912 100%);
   --yd-pip-discipline: #fffdf8;
   --yd-pip-inactive: #a89d95;
@@ -2670,7 +2673,7 @@ h6 {
 }
 .yakov-dryh-sheet .yakov-dryh-button:hover, .yakov-dryh-sheet .yakov-dryh-button:focus-visible {
   background: linear-gradient(180deg, var(--yd-sheet-button-bg-hover) 0%, #ead9c2 100%);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.42), 0 10px 22px rgba(0, 0, 0, 0.14);
+  box-shadow: var(--yd-button-hover-shadow);
   outline: none;
   transform: translateY(-1px);
 }
@@ -3022,16 +3025,63 @@ h6 {
 .yakov-dryh-roll-card .yakov-dryh-button {
   border-radius: 0.14rem;
   font-size: 0.96rem;
+  transition: transform 140ms ease, box-shadow 140ms ease, background 140ms ease, border-color 140ms ease, color 140ms ease;
 }
 .yakov-dryh-roll-card .yakov-dryh-button:not(.yakov-dryh-button--compact) {
   min-height: 2rem;
   padding: 0.5rem 0.8rem;
+}
+.yakov-dryh-roll-card .yakov-dryh-button:hover, .yakov-dryh-roll-card .yakov-dryh-button:focus-visible {
+  outline: none;
+  transform: translateY(-1px);
+}
+.yakov-dryh-roll-card .yakov-dryh-button:disabled:hover, .yakov-dryh-roll-card .yakov-dryh-button:disabled:focus-visible {
+  transform: none;
 }
 .yakov-dryh-roll-card .yakov-dryh-button--secondary {
   background: linear-gradient(180deg, #f6eee1 0%, #ecdfc9 100%);
   border: 1px solid rgba(162, 136, 107, 0.52);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.34), 0 1px 0 rgba(255, 255, 255, 0.35);
   color: var(--yd-chat-ink);
+}
+.yakov-dryh-roll-card .yakov-dryh-button--secondary:hover, .yakov-dryh-roll-card .yakov-dryh-button--secondary:focus-visible {
+  background: linear-gradient(180deg, #fbf4e8 0%, #efe1cb 100%);
+  border-color: rgba(176, 146, 114, 0.66);
+  box-shadow: var(--yd-button-hover-shadow);
+  color: var(--yd-chat-ink);
+}
+.yakov-dryh-roll-card .yakov-dryh-button--secondary:disabled:hover, .yakov-dryh-roll-card .yakov-dryh-button--secondary:disabled:focus-visible {
+  background: linear-gradient(180deg, #f6eee1 0%, #ecdfc9 100%);
+  border-color: rgba(162, 136, 107, 0.52);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.34), 0 1px 0 rgba(255, 255, 255, 0.35);
+}
+.yakov-dryh-roll-card__finalize-button {
+  background: radial-gradient(circle at 50% 24%, rgba(255, 224, 199, 0.12), transparent 38%), linear-gradient(180deg, #b24a2c 0%, #9b3f27 46%, #7a2e1c 100%);
+  border: 1px solid rgba(126, 63, 46, 0.88);
+  box-shadow: inset 0 1px 0 rgba(255, 223, 197, 0.22), inset 0 -8px 14px rgba(65, 17, 11, 0.24), 0 1px 0 rgba(255, 239, 225, 0.22);
+  color: #fff1e4;
+  font-family: var(--yd-sheet-display-font);
+  font-size: 1.04rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  padding-inline: 0.95rem;
+  text-shadow: 0 1px 0 rgba(54, 15, 12, 0.36);
+  transition: transform 140ms ease, box-shadow 140ms ease, background 140ms ease, border-color 140ms ease, color 140ms ease;
+}
+.yakov-dryh-roll-card__finalize-button:hover, .yakov-dryh-roll-card__finalize-button:focus-visible {
+  background: radial-gradient(circle at 50% 22%, rgba(255, 232, 210, 0.16), transparent 40%), linear-gradient(180deg, #c35631 0%, #ab472a 46%, #873320 100%);
+  border-color: rgba(148, 79, 56, 0.96);
+  box-shadow: var(--yd-button-hover-shadow);
+  color: #fff7ef;
+  outline: none;
+  transform: translateY(-1px);
+}
+.yakov-dryh-roll-card__finalize-button:disabled:hover, .yakov-dryh-roll-card__finalize-button:disabled:focus-visible {
+  background: radial-gradient(circle at 50% 24%, rgba(255, 224, 199, 0.12), transparent 38%), linear-gradient(180deg, #b24a2c 0%, #9b3f27 46%, #7a2e1c 100%);
+  border-color: rgba(126, 63, 46, 0.88);
+  box-shadow: inset 0 1px 0 rgba(255, 223, 197, 0.22), inset 0 -8px 14px rgba(65, 17, 11, 0.24), 0 1px 0 rgba(255, 239, 225, 0.22);
+  color: #fff1e4;
+  transform: none;
 }
 
 .yakov-dryh-roll-pool {
@@ -3357,7 +3407,7 @@ h6 {
 .yakov-dryh-dice-tray__palette-button:hover, .yakov-dryh-dice-tray__palette-button:focus-visible {
   background: var(--yd-tray-tile-hover);
   border-color: rgba(255, 255, 255, 0.18);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05), 0 10px 22px rgba(0, 0, 0, 0.2);
+  box-shadow: var(--yd-button-hover-shadow);
   outline: none;
   transform: translateY(-1px);
 }
@@ -3430,6 +3480,7 @@ h6 {
 }
 .yakov-dryh-dice-tray__actions .yakov-dryh-button:hover, .yakov-dryh-dice-tray__actions .yakov-dryh-button:focus-visible {
   background: var(--yd-tray-roll-hover);
+  box-shadow: var(--yd-button-hover-shadow);
   outline: none;
 }
 .yakov-dryh-dice-tray__actions .yakov-dryh-button:disabled:hover, .yakov-dryh-dice-tray__actions .yakov-dryh-button:disabled:focus-visible {
@@ -3454,6 +3505,7 @@ h6 {
 .yakov-dryh-dice-tray-card .yakov-dryh-button:focus-visible {
   background: var(--yd-tray-tile-hover);
   border-color: rgba(255, 255, 255, 0.16);
+  box-shadow: var(--yd-button-hover-shadow);
   outline: none;
   transform: translateY(-1px);
 }
@@ -3593,6 +3645,7 @@ h6 {
 .yakov-dryh-resource-tracker__adjuster:hover, .yakov-dryh-resource-tracker__adjuster:focus-visible {
   background: linear-gradient(180deg, rgba(255, 220, 182, 0.09) 0%, rgba(0, 0, 0, 0.14) 100%), linear-gradient(180deg, var(--yd-resource-button-hover) 0%, #2a1b1d 100%);
   border-color: color-mix(in srgb, var(--yd-resource-button-edge) 70%, #b8916d);
+  box-shadow: var(--yd-button-hover-shadow);
   outline: none;
   transform: translateY(-1px);
 }
@@ -3695,6 +3748,7 @@ h6 {
 }
 .yakov-dryh-resource-tracker__scene-button:hover, .yakov-dryh-resource-tracker__scene-button:focus-visible {
   background: linear-gradient(180deg, rgba(255, 223, 188, 0.14) 0%, rgba(0, 0, 0, 0.16) 100%), linear-gradient(180deg, var(--yd-resource-scene-hover) 0%, #4f302b 100%);
+  box-shadow: var(--yd-button-hover-shadow);
   outline: none;
 }
 .yakov-dryh-resource-tracker__scene-button:disabled:hover, .yakov-dryh-resource-tracker__scene-button:disabled:focus-visible {

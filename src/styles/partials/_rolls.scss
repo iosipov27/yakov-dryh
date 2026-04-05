@@ -119,10 +119,27 @@
   .yakov-dryh-button {
     border-radius: 0.14rem;
     font-size: 0.96rem;
+    transition:
+      transform 140ms ease,
+      box-shadow 140ms ease,
+      background 140ms ease,
+      border-color 140ms ease,
+      color 140ms ease;
 
     &:not(.yakov-dryh-button--compact) {
       min-height: 2rem;
       padding: 0.5rem 0.8rem;
+    }
+
+    &:hover,
+    &:focus-visible {
+      outline: none;
+      transform: translateY(-1px);
+    }
+
+    &:disabled:hover,
+    &:disabled:focus-visible {
+      transform: none;
     }
 
     &--secondary {
@@ -132,6 +149,73 @@
         inset 0 1px 0 rgb(255 255 255 / 34%),
         0 1px 0 rgb(255 255 255 / 35%);
       color: var(--yd-chat-ink);
+
+      &:hover,
+      &:focus-visible {
+        background: linear-gradient(180deg, #fbf4e8 0%, #efe1cb 100%);
+        border-color: rgb(176 146 114 / 66%);
+        box-shadow: var(--yd-button-hover-shadow);
+        color: var(--yd-chat-ink);
+      }
+
+      &:disabled:hover,
+      &:disabled:focus-visible {
+        background: linear-gradient(180deg, #f6eee1 0%, #ecdfc9 100%);
+        border-color: rgb(162 136 107 / 52%);
+        box-shadow:
+          inset 0 1px 0 rgb(255 255 255 / 34%),
+          0 1px 0 rgb(255 255 255 / 35%);
+      }
+    }
+  }
+
+  &__finalize-button {
+    background:
+      radial-gradient(circle at 50% 24%, rgb(255 224 199 / 12%), transparent 38%),
+      linear-gradient(180deg, #b24a2c 0%, #9b3f27 46%, #7a2e1c 100%);
+    border: 1px solid rgb(126 63 46 / 88%);
+    box-shadow:
+      inset 0 1px 0 rgb(255 223 197 / 22%),
+      inset 0 -8px 14px rgb(65 17 11 / 24%),
+      0 1px 0 rgb(255 239 225 / 22%);
+    color: #fff1e4;
+    font-family: var(--yd-sheet-display-font);
+    font-size: 1.04rem;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+    padding-inline: 0.95rem;
+    text-shadow: 0 1px 0 rgb(54 15 12 / 36%);
+    transition:
+      transform 140ms ease,
+      box-shadow 140ms ease,
+      background 140ms ease,
+      border-color 140ms ease,
+      color 140ms ease;
+
+    &:hover,
+    &:focus-visible {
+      background:
+        radial-gradient(circle at 50% 22%, rgb(255 232 210 / 16%), transparent 40%),
+        linear-gradient(180deg, #c35631 0%, #ab472a 46%, #873320 100%);
+      border-color: rgb(148 79 56 / 96%);
+      box-shadow: var(--yd-button-hover-shadow);
+      color: #fff7ef;
+      outline: none;
+      transform: translateY(-1px);
+    }
+
+    &:disabled:hover,
+    &:disabled:focus-visible {
+      background:
+        radial-gradient(circle at 50% 24%, rgb(255 224 199 / 12%), transparent 38%),
+        linear-gradient(180deg, #b24a2c 0%, #9b3f27 46%, #7a2e1c 100%);
+      border-color: rgb(126 63 46 / 88%);
+      box-shadow:
+        inset 0 1px 0 rgb(255 223 197 / 22%),
+        inset 0 -8px 14px rgb(65 17 11 / 24%),
+        0 1px 0 rgb(255 239 225 / 22%);
+      color: #fff1e4;
+      transform: none;
     }
   }
 }
