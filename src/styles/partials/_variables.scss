@@ -96,6 +96,27 @@
   --yd-chat-die-shadow:
     0 1px 0 rgb(255 255 255 / 32%),
     0 1px 3px rgb(0 0 0 / 12%);
+  --yd-tray-bg: #0a0b12;
+  --yd-tray-bg-soft: #151728;
+  --yd-tray-panel: rgb(20 22 35 / 85%);
+  --yd-tray-panel-strong: rgb(27 30 46 / 88%);
+  --yd-tray-surface: rgb(255 255 255 / 3%);
+  --yd-tray-surface-shadow: rgb(0 0 0 / 20%);
+  --yd-tray-border: rgb(255 255 255 / 5%);
+  --yd-tray-line: rgb(255 255 255 / 9%);
+  --yd-tray-text: #efe7dd;
+  --yd-tray-muted: rgb(239 231 221 / 60%);
+  --yd-tray-muted-strong: rgb(239 231 221 / 78%);
+  --yd-tray-tile: rgb(255 255 255 / 4%);
+  --yd-tray-tile-hover: rgb(255 255 255 / 8%);
+  --yd-tray-tile-border: rgb(255 255 255 / 10%);
+  --yd-tray-tile-active: #b33a3a;
+  --yd-tray-roll: #b33a3a;
+  --yd-tray-roll-hover: #d14a4a;
+  --yd-tray-roll-shadow: 0 10px 24px rgb(91 18 18 / 34%);
+  --yd-tray-madness-glow:
+    drop-shadow(0 0 6px rgb(179 58 58 / 40%))
+    drop-shadow(0 0 10px rgb(179 58 58 / 18%));
   --yd-sheet-display-font:
     "Baskerville Old Face",
     "Palatino Linotype",
