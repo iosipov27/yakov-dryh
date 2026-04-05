@@ -96,21 +96,21 @@
   --yd-chat-die-shadow:
     0 1px 0 rgb(255 255 255 / 32%),
     0 1px 3px rgb(0 0 0 / 12%);
-  --yd-tray-bg: #0a0b12;
-  --yd-tray-bg-soft: #151728;
-  --yd-tray-panel: rgb(20 22 35 / 85%);
-  --yd-tray-panel-strong: rgb(27 30 46 / 88%);
-  --yd-tray-surface: rgb(255 255 255 / 3%);
-  --yd-tray-surface-shadow: rgb(0 0 0 / 20%);
-  --yd-tray-border: rgb(255 255 255 / 5%);
-  --yd-tray-line: rgb(255 255 255 / 9%);
-  --yd-tray-text: #efe7dd;
-  --yd-tray-muted: rgb(239 231 221 / 60%);
-  --yd-tray-muted-strong: rgb(239 231 221 / 78%);
-  --yd-tray-tile: rgb(255 255 255 / 4%);
-  --yd-tray-tile-hover: rgb(255 255 255 / 8%);
-  --yd-tray-tile-border: rgb(255 255 255 / 10%);
-  --yd-tray-tile-active: #b33a3a;
+  --yd-tray-bg: #110b0c;
+  --yd-tray-bg-soft: #231514;
+  --yd-tray-panel: rgb(42 27 24 / 88%);
+  --yd-tray-panel-strong: rgb(57 37 31 / 90%);
+  --yd-tray-surface: rgb(255 226 196 / 4%);
+  --yd-tray-surface-shadow: rgb(15 7 7 / 28%);
+  --yd-tray-border: rgb(166 116 92 / 18%);
+  --yd-tray-line: rgb(197 151 118 / 16%);
+  --yd-tray-text: #efe0d0;
+  --yd-tray-muted: rgb(239 224 208 / 58%);
+  --yd-tray-muted-strong: rgb(239 224 208 / 76%);
+  --yd-tray-tile: linear-gradient(180deg, rgb(144 43 43 / 24%) 0%, rgb(89 24 27 / 28%) 100%);
+  --yd-tray-tile-hover: linear-gradient(180deg, rgb(170 52 52 / 30%) 0%, rgb(109 29 33 / 36%) 100%);
+  --yd-tray-tile-border: rgb(179 73 73 / 24%);
+  --yd-tray-tile-active: #c43e43;
   --yd-tray-roll: #b33a3a;
   --yd-tray-roll-hover: #d14a4a;
   --yd-tray-roll-shadow: 0 10px 24px rgb(91 18 18 / 34%);

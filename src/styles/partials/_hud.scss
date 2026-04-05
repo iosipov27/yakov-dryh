@@ -133,12 +133,6 @@
     .yakov-dryh-pip-track--madness .yakov-dryh-pip--filled {
       filter: var(--yd-tray-madness-glow);
     }
-
-    &:has(.yakov-dryh-pip-track--exhaustion) {
-      background:
-        linear-gradient(180deg, rgb(255 255 255 / 6%) 0%, rgb(0 0 0 / 12%) 100%),
-        linear-gradient(180deg, rgb(38 40 56 / 92%) 0%, rgb(24 26 39 / 96%) 100%);
-    }
   }
 
   &__track {
