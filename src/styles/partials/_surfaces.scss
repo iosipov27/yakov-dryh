@@ -1,6 +1,5 @@
 .yakov-dryh-chat-card,
-.yakov-dryh-dialog-shell,
-.yakov-dryh-sheet-shell {
+.yakov-dryh-dialog-shell {
   background:
     radial-gradient(circle at top right, rgb(155 61 36 / 12%), transparent 34%),
     linear-gradient(180deg, #fffdf8 0%, var(--yd-surface) 100%);
@@ -14,16 +13,73 @@
   padding: 1rem;
 }
 
+.yakov-dryh-sheet-shell {
+  background:
+    radial-gradient(circle at top left, rgb(255 255 255 / 4%), transparent 28%),
+    radial-gradient(circle at 82% 32%, rgb(188 45 45 / 7%), transparent 26%),
+    radial-gradient(circle at 52% 100%, rgb(219 200 170 / 4%), transparent 28%),
+    linear-gradient(180deg, rgb(15 11 22 / 98%) 0%, rgb(8 6 12 / 99%) 100%);
+  border: 1px solid var(--yd-sheet-border);
+  border-radius: 0.35rem;
+  box-shadow: var(--yd-sheet-shadow);
+  color: var(--yd-sheet-ink);
+  font-family: var(--yd-sheet-body-font);
+  padding: 1.3rem 1.35rem 1.4rem;
+  position: relative;
+
+  &::after {
+    border: 1px solid rgb(255 255 255 / 3%);
+    border-radius: inherit;
+    content: "";
+    inset: 0.35rem;
+    pointer-events: none;
+    position: absolute;
+  }
+}
+
 .yakov-dryh-sheet {
   .window-header {
+    background:
+      linear-gradient(180deg, rgb(13 10 19 / 99%) 0%, rgb(7 5 11 / 99%) 100%);
+    border-bottom: 1px solid var(--yd-sheet-divider);
+    color: var(--yd-sheet-muted-strong);
+    font-family: var(--yd-sheet-body-font);
+    padding: 0.55rem 0.75rem;
+
     h1 {
+      color: var(--yd-sheet-muted-strong);
+      font-family: var(--yd-sheet-display-font);
       font-size: 1rem;
-      font-weight: 400;
+      font-weight: 700;
+      letter-spacing: 0.01em;
+      margin: 0;
+    }
+
+    button {
+      color: var(--yd-sheet-muted-strong);
+    }
+  }
+
+  .window-header {
+    .header-control {
+      border-radius: 0.2rem;
+      transition:
+        background 140ms ease,
+        color 140ms ease;
+
+      &:hover,
+      &:focus-visible {
+        background: rgb(255 255 255 / 7%);
+        color: #fff8ec;
+        outline: none;
+      }
     }
   }
 
   .window-content {
-    background: transparent;
+    background:
+      radial-gradient(circle at top center, rgb(255 255 255 / 3%), transparent 24%),
+      linear-gradient(180deg, var(--yd-sheet-bg-soft) 0%, var(--yd-sheet-bg) 100%);
     padding: 0;
   }
 }

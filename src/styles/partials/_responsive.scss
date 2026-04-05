@@ -8,6 +8,17 @@
       grid-template-columns: 1fr;
     }
 
+    &__column--story {
+      padding-right: 0;
+    }
+
+    &__column--sidebar {
+      border-left: 0;
+      border-top: 1px solid var(--yd-sheet-divider);
+      padding-left: 0;
+      padding-top: 1.15rem;
+    }
+
     &__header-side {
       justify-items: stretch;
       min-width: 0;

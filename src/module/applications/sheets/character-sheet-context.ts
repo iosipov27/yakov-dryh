@@ -15,7 +15,6 @@ import {
 import {
   createDisplayPips,
   createEditablePoolControls,
-  createStressCardStyle,
   getEditablePoolTotal
 } from "./character-sheet-pool-helpers.js";
 import type { EditableSheetPoolDrafts } from "./character-sheet-types.js";
@@ -97,7 +96,6 @@ export function createCharacterSheetContext(input: {
       exhaustionValue,
       getEditablePoolTotal(exhaustionValue)
     ),
-    exhaustionCardStyle: createStressCardStyle(exhaustionValue),
     exhaustionIsEditMode,
     exhaustionPipTotal: getEditablePoolTotal(exhaustionValue),
     madnessControls: createEditablePoolControls(
@@ -109,7 +107,6 @@ export function createCharacterSheetContext(input: {
       madnessValue,
       getEditablePoolTotal(madnessValue)
     ),
-    madnessCardStyle: createStressCardStyle(madnessValue),
     madnessIsEditMode,
     madnessPipTotal: getEditablePoolTotal(madnessValue),
     moduleId: SYSTEM_ID,
