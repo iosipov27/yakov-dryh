@@ -44,6 +44,10 @@
     width: min(100vw - 1rem, 23rem);
   }
 
+  .yakov-dryh-hope-despair-tracker {
+    width: min(100vw - 1rem, 31rem);
+  }
+
   .yakov-dryh-dice-tray {
     &__panel-header {
       flex-direction: column;
@@ -52,6 +56,37 @@
     &__status {
       max-width: none;
       text-align: left;
+    }
+  }
+
+  .yakov-dryh-resource-tracker {
+    padding-inline: 0.8rem;
+
+    &__body {
+      gap: 1rem;
+      grid-template-columns: 1fr;
+    }
+
+    &__header h3 {
+      font-size: 1.55rem;
+    }
+
+    &__controls {
+      min-height: 5.15rem;
+    }
+
+    &__coin {
+      height: 4.35rem;
+      width: 4.35rem;
+    }
+
+    &__value {
+      font-size: 2.2rem;
+    }
+
+    &__scene-button {
+      min-width: 0;
+      width: 100%;
     }
   }
 }

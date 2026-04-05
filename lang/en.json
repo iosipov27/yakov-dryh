@@ -109,6 +109,7 @@
       "Hope": "Hope",
       "Despair": "Despair",
       "EndScene": "End Scene",
+      "NextScene": "next scene",
       "ReadOnly": "Only the GM can change shared pools."
     },
     "TRAY": {

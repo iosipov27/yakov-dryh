@@ -3,71 +3,81 @@
     class="yakov-dryh-resource-tracker__header"
     data-yakov-dryh-drag-handle
   >
-    <p class="yakov-dryh-eyebrow m0 mb035">{{localize "YAKOV_DRYH.RESOURCES.Eyebrow"}}</p>
+    <p class="yakov-dryh-eyebrow yakov-dryh-resource-tracker__eyebrow m0">
+      {{localize "YAKOV_DRYH.RESOURCES.Eyebrow"}}
+    </p>
     <h3 class="m0">{{localize "YAKOV_DRYH.RESOURCES.Title"}}</h3>
   </header>
 
-  <div class="yakov-dryh-resource-tracker__rows">
-    <section class="yakov-dryh-resource-tracker__row yakov-dryh-resource-tracker__row--hope">
-      <div>
-        <strong>{{localize "YAKOV_DRYH.RESOURCES.Hope"}}</strong>
-        <div class="yakov-dryh-resource-tracker__values mt02">
-          <p class="yakov-dryh-copy yakov-dryh-resource-tracker__value m0">{{hope}}</p>
-          {{#if hasPendingHope}}
-            <p class="yakov-dryh-copy yakov-dryh-resource-tracker__value yakov-dryh-resource-tracker__value--pending m0">
-              {{pendingHope}}
-            </p>
-          {{/if}}
-        </div>
-      </div>
-
-      <div class="yakov-dryh-resource-tracker__actions">
-        <div class="yakov-dryh-inline-actions">
-          <button
-            class="yakov-dryh-button yakov-dryh-button--secondary yakov-dryh-button--compact"
-            type="button"
-            data-yakov-dryh-resource-pool="hope"
-            data-yakov-dryh-resource-delta="-1"
-          >
-            -
-          </button>
-          <button
-            class="yakov-dryh-button yakov-dryh-button--compact"
-            type="button"
-            data-yakov-dryh-resource-pool="hope"
-            data-yakov-dryh-resource-delta="1"
-          >
-            +
-          </button>
-        </div>
+  <div class="yakov-dryh-resource-tracker__body">
+    <section
+      class="yakov-dryh-resource-tracker__pool yakov-dryh-resource-tracker__pool--hope"
+      aria-label="{{localize "YAKOV_DRYH.RESOURCES.Hope"}}"
+    >
+      <div class="yakov-dryh-resource-tracker__controls">
         <button
-          class="yakov-dryh-button yakov-dryh-button--secondary yakov-dryh-button--compact"
+          class="yakov-dryh-button yakov-dryh-button--secondary yakov-dryh-resource-tracker__adjuster"
           type="button"
-          data-yakov-dryh-resource-action="end-scene"
-          {{#unless hasPendingHope}}disabled{{/unless}}
+          data-yakov-dryh-resource-pool="hope"
+          data-yakov-dryh-resource-delta="-1"
         >
-          {{localize "YAKOV_DRYH.RESOURCES.EndScene"}}
+          -
+        </button>
+
+        <div class="yakov-dryh-resource-tracker__coin-wrap">
+          <div class="yakov-dryh-resource-tracker__coin">
+            <span class="yakov-dryh-resource-tracker__value">{{hope}}</span>
+          </div>
+          <div class="yakov-dryh-resource-tracker__meta">
+            <p class="yakov-dryh-resource-tracker__caption m0">
+              {{localize "YAKOV_DRYH.RESOURCES.Hope"}}
+            </p>
+            {{#if hasPendingHope}}
+              <p class="yakov-dryh-copy yakov-dryh-resource-tracker__note m0">
+                +{{pendingHope}} {{localize "YAKOV_DRYH.RESOURCES.NextScene"}}
+              </p>
+            {{/if}}
+          </div>
+        </div>
+
+        <button
+          class="yakov-dryh-button yakov-dryh-resource-tracker__adjuster"
+          type="button"
+          data-yakov-dryh-resource-pool="hope"
+          data-yakov-dryh-resource-delta="1"
+        >
+          +
         </button>
       </div>
     </section>
 
-    <section class="yakov-dryh-resource-tracker__row yakov-dryh-resource-tracker__row--despair">
-      <div>
-        <strong>{{localize "YAKOV_DRYH.RESOURCES.Despair"}}</strong>
-        <p class="yakov-dryh-copy m0 mt02">{{despair}}</p>
-      </div>
-
-      <div class="yakov-dryh-inline-actions">
+    <section
+      class="yakov-dryh-resource-tracker__pool yakov-dryh-resource-tracker__pool--despair"
+      aria-label="{{localize "YAKOV_DRYH.RESOURCES.Despair"}}"
+    >
+      <div class="yakov-dryh-resource-tracker__controls">
         <button
-          class="yakov-dryh-button yakov-dryh-button--secondary yakov-dryh-button--compact"
+          class="yakov-dryh-button yakov-dryh-button--secondary yakov-dryh-resource-tracker__adjuster"
           type="button"
           data-yakov-dryh-resource-pool="despair"
           data-yakov-dryh-resource-delta="-1"
         >
           -
         </button>
+
+        <div class="yakov-dryh-resource-tracker__coin-wrap">
+          <div class="yakov-dryh-resource-tracker__coin">
+            <span class="yakov-dryh-resource-tracker__value">{{despair}}</span>
+          </div>
+          <div class="yakov-dryh-resource-tracker__meta">
+            <p class="yakov-dryh-resource-tracker__caption m0">
+              {{localize "YAKOV_DRYH.RESOURCES.Despair"}}
+            </p>
+          </div>
+        </div>
+
         <button
-          class="yakov-dryh-button yakov-dryh-button--compact"
+          class="yakov-dryh-button yakov-dryh-resource-tracker__adjuster"
           type="button"
           data-yakov-dryh-resource-pool="despair"
           data-yakov-dryh-resource-delta="1"
@@ -78,7 +88,20 @@
     </section>
   </div>
 
+  <footer class="yakov-dryh-resource-tracker__footer">
+    <button
+      class="yakov-dryh-button yakov-dryh-button--secondary yakov-dryh-resource-tracker__scene-button"
+      type="button"
+      data-yakov-dryh-resource-action="end-scene"
+      {{#unless hasPendingHope}}disabled{{/unless}}
+    >
+      {{localize "YAKOV_DRYH.RESOURCES.EndScene"}}
+    </button>
+  </footer>
+
   {{#unless canEdit}}
-    <p class="yakov-dryh-copy m0 mt035">{{localize "YAKOV_DRYH.RESOURCES.ReadOnly"}}</p>
+    <p class="yakov-dryh-copy yakov-dryh-resource-tracker__read-only m0">
+      {{localize "YAKOV_DRYH.RESOURCES.ReadOnly"}}
+    </p>
   {{/unless}}
 </section>
