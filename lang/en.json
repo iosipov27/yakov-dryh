@@ -154,7 +154,7 @@
           },
           "Actions": {
           "AddResponse": "Add Response",
-          "AddPool": "Add Pool",
+          "AddPool": "Create the Pool",
           "AddExhaustion": "+ Exhaustion",
           "Cancel": "Cancel",
           "CreateChatCard": "Create interactive chat card",
