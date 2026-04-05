@@ -20,6 +20,7 @@
           type="button"
           data-yakov-dryh-resource-pool="hope"
           data-yakov-dryh-resource-delta="-1"
+          {{#unless canEdit}}disabled{{/unless}}
         >
           -
         </button>
@@ -45,6 +46,7 @@
           type="button"
           data-yakov-dryh-resource-pool="hope"
           data-yakov-dryh-resource-delta="1"
+          {{#unless canEdit}}disabled{{/unless}}
         >
           +
         </button>
@@ -61,6 +63,7 @@
           type="button"
           data-yakov-dryh-resource-pool="despair"
           data-yakov-dryh-resource-delta="-1"
+          {{#unless canEdit}}disabled{{/unless}}
         >
           -
         </button>
@@ -81,6 +84,7 @@
           type="button"
           data-yakov-dryh-resource-pool="despair"
           data-yakov-dryh-resource-delta="1"
+          {{#unless canEdit}}disabled{{/unless}}
         >
           +
         </button>
