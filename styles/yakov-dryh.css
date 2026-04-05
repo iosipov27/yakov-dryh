@@ -93,24 +93,32 @@
   --yd-chat-die-shadow:
     0 1px 0 rgb(255 255 255 / 32%),
     0 1px 3px rgb(0 0 0 / 12%);
-  --yd-tray-bg: #110b0c;
-  --yd-tray-bg-soft: #231514;
-  --yd-tray-panel: rgb(42 27 24 / 88%);
-  --yd-tray-panel-strong: rgb(57 37 31 / 90%);
-  --yd-tray-surface: rgb(255 226 196 / 4%);
-  --yd-tray-surface-shadow: rgb(15 7 7 / 28%);
-  --yd-tray-border: rgb(166 116 92 / 18%);
-  --yd-tray-line: rgb(197 151 118 / 16%);
-  --yd-tray-text: #efe0d0;
-  --yd-tray-muted: rgb(239 224 208 / 58%);
-  --yd-tray-muted-strong: rgb(239 224 208 / 76%);
-  --yd-tray-tile: linear-gradient(180deg, rgb(144 43 43 / 24%) 0%, rgb(89 24 27 / 28%) 100%);
-  --yd-tray-tile-hover: linear-gradient(180deg, rgb(170 52 52 / 30%) 0%, rgb(109 29 33 / 36%) 100%);
-  --yd-tray-tile-border: rgb(179 73 73 / 24%);
-  --yd-tray-tile-active: #c43e43;
-  --yd-tray-roll: #b33a3a;
-  --yd-tray-roll-hover: #d14a4a;
-  --yd-tray-roll-shadow: 0 10px 24px rgb(91 18 18 / 34%);
+  --yd-tray-bg: #e3d9ca;
+  --yd-tray-bg-soft: #f4ede1;
+  --yd-tray-panel: #e9dfd1;
+  --yd-tray-panel-strong: #f6efe4;
+  --yd-tray-surface: rgb(255 255 255 / 16%);
+  --yd-tray-surface-shadow: rgb(220 206 188 / 42%);
+  --yd-tray-border: rgb(176 152 124 / 34%);
+  --yd-tray-line: rgb(207 194 171 / 72%);
+  --yd-tray-text: #2f2622;
+  --yd-tray-muted: rgb(111 99 87 / 62%);
+  --yd-tray-muted-strong: rgb(111 99 87 / 84%);
+  --yd-tray-tile: linear-gradient(180deg, #fbf5ea 0%, #e9dcc8 100%);
+  --yd-tray-tile-hover: linear-gradient(180deg, #fffaf0 0%, #efe1cb 100%);
+  --yd-tray-tile-border: rgb(162 136 107 / 52%);
+  --yd-tray-tile-active: #b56d55;
+  --yd-tray-roll-accent: #9b3f27;
+  --yd-tray-roll:
+    radial-gradient(circle at 50% 24%, rgb(255 224 199 / 12%), transparent 38%),
+    linear-gradient(180deg, #b24a2c 0%, #9b3f27 46%, #7a2e1c 100%);
+  --yd-tray-roll-hover:
+    radial-gradient(circle at 50% 22%, rgb(255 232 210 / 16%), transparent 40%),
+    linear-gradient(180deg, #c35631 0%, #ab472a 46%, #873320 100%);
+  --yd-tray-roll-shadow:
+    inset 0 1px 0 rgb(255 223 197 / 22%),
+    inset 0 -8px 14px rgb(65 17 11 / 24%),
+    0 1px 0 rgb(255 239 225 / 22%);
   --yd-tray-madness-glow:
     drop-shadow(0 0 6px rgb(179 58 58 / 40%))
     drop-shadow(0 0 10px rgb(179 58 58 / 18%));
@@ -2994,26 +3002,16 @@ h6 {
   margin-right: 0.2rem;
 }
 .yakov-dryh-roll-card__snap-effect {
-  background: rgba(176, 28, 46, 0.1);
-  border: 1px solid rgba(176, 28, 46, 0.26);
-  border-left: 4px solid var(--yd-madness);
-  border-radius: var(--yd-border-radius);
   color: var(--yd-madness);
-  padding: 0.8rem 0.9rem;
 }
 .yakov-dryh-roll-card__snap-effect strong {
   display: block;
-  font-size: 0.98rem;
+  font-size: 1rem;
   letter-spacing: 0.02em;
   text-transform: uppercase;
 }
 .yakov-dryh-roll-card__crash-alert {
-  background: rgba(176, 28, 46, 0.1);
-  border: 1px solid rgba(176, 28, 46, 0.26);
-  border-left: 4px solid var(--yd-madness);
-  border-radius: var(--yd-border-radius);
   color: var(--yd-madness);
-  padding: 0.8rem 0.9rem;
 }
 .yakov-dryh-roll-card__crash-alert strong {
   display: block;
@@ -3266,11 +3264,8 @@ h6 {
 .yakov-dryh-dice-tray-card {
   display: grid;
   gap: 0.85rem;
-  background: radial-gradient(circle at center, var(--yd-tray-bg-soft) 0%, var(--yd-tray-bg) 100%);
-  border: 1px solid var(--yd-tray-border);
-  border-radius: 0.3rem;
-  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.52);
-  color: var(--yd-tray-text);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.22) 0%, rgba(255, 255, 255, 0) 14%), radial-gradient(circle at 20% 12%, rgba(255, 255, 255, 0.18), transparent 26%), radial-gradient(circle at 82% 24%, rgba(206, 169, 132, 0.12), transparent 24%), linear-gradient(180deg, var(--yd-chat-paper-strong) 0%, var(--yd-chat-paper) 100%);
+  color: var(--yd-chat-ink);
   position: relative;
 }
 .yakov-dryh-dice-tray-card > * {
@@ -3282,10 +3277,10 @@ h6 {
 }
 
 .yakov-dryh-dice-tray {
-  background: radial-gradient(circle at center, var(--yd-tray-bg-soft) 0%, var(--yd-tray-bg) 100%);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.24) 0%, rgba(255, 255, 255, 0) 18%), linear-gradient(180deg, var(--yd-tray-bg-soft) 0%, var(--yd-tray-bg) 100%);
   border: 1px solid var(--yd-tray-border);
   border-radius: 0.3rem;
-  box-shadow: 0 18px 42px rgba(0, 0, 0, 0.56);
+  box-shadow: 0 16px 34px rgba(48, 35, 25, 0.16);
   color: var(--yd-tray-text);
   padding: 0.8rem;
   position: relative;
@@ -3297,13 +3292,8 @@ h6 {
   z-index: 1;
 }
 .yakov-dryh-dice-tray__panel {
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(0, 0, 0, 0.14)), linear-gradient(180deg, var(--yd-tray-panel-strong) 0%, var(--yd-tray-panel) 100%);
-  border: 1px solid var(--yd-tray-border);
-  border-radius: 0.35rem;
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6);
   display: grid;
   gap: 0.7rem;
-  padding: 0.9rem;
   position: relative;
   z-index: 2;
 }
@@ -3316,9 +3306,10 @@ h6 {
   border-bottom: 1px solid var(--yd-tray-line);
 }
 .yakov-dryh-dice-tray__panel-header .yakov-dryh-eyebrow {
-  color: color-mix(in srgb, var(--yd-tray-roll) 70%, var(--yd-tray-text));
+  color: color-mix(in srgb, var(--yd-tray-roll-accent) 88%, var(--yd-tray-text));
   letter-spacing: 0.06em;
-  opacity: 0.72;
+  font-weight: 700;
+  font-size: 1rem;
 }
 .yakov-dryh-dice-tray__panel-header h3 {
   color: var(--yd-tray-text);
@@ -3331,7 +3322,7 @@ h6 {
   color: var(--yd-tray-muted);
   letter-spacing: 0.05em;
   max-width: 10rem;
-  opacity: 0.8;
+  opacity: 0.92;
   text-align: right;
 }
 .yakov-dryh-dice-tray__empty-state {
@@ -3345,9 +3336,8 @@ h6 {
   display: grid;
 }
 .yakov-dryh-dice-tray__pool {
-  background: linear-gradient(180deg, var(--yd-tray-surface) 0%, var(--yd-tray-surface-shadow) 100%);
   border-bottom: 1px solid var(--yd-tray-line);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.02), 0 10px 22px rgba(0, 0, 0, 0.18);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.34), 0 1px 0 rgba(255, 255, 255, 0.26);
   padding: 0.6rem;
 }
 .yakov-dryh-dice-tray__pool:last-child {
@@ -3362,6 +3352,10 @@ h6 {
 .yakov-dryh-dice-tray__pool .yakov-dryh-pip-track--madness .yakov-dryh-pip--filled {
   filter: var(--yd-tray-madness-glow);
 }
+.yakov-dryh-dice-tray__pool--discipline, .yakov-dryh-dice-tray__pool--madness {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.18) 0%, rgba(255, 255, 255, 0) 38%), #d9cec3;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.24), 0 1px 0 rgba(255, 255, 255, 0.2);
+}
 .yakov-dryh-dice-tray__track {
   min-height: 2rem;
 }
@@ -3372,12 +3366,12 @@ h6 {
   padding-top: 0.75rem;
 }
 .yakov-dryh-dice-tray__palette-label {
-  color: color-mix(in srgb, var(--yd-tray-roll) 74%, var(--yd-tray-text));
+  color: color-mix(in srgb, var(--yd-tray-roll-accent) 90%, var(--yd-tray-text));
   font-family: var(--yd-sheet-display-font);
   font-size: 1rem;
   font-weight: 700;
   letter-spacing: 0.04em;
-  opacity: 0.9;
+  opacity: 1;
   text-transform: uppercase;
 }
 .yakov-dryh-dice-tray__palette-buttons {
@@ -3390,9 +3384,9 @@ h6 {
 .yakov-dryh-dice-tray__palette-button {
   align-items: center;
   background: var(--yd-tray-tile);
-  border: 1px solid var(--yd-tray-tile-border);
+  border: 1px solid rgba(142, 112, 84, 0.72);
   border-radius: 0.25rem;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03), 0 8px 18px rgba(0, 0, 0, 0.16);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.48), 0 6px 14px rgba(83, 57, 31, 0.14);
   cursor: pointer;
   display: inline-flex;
   justify-content: center;
@@ -3406,7 +3400,7 @@ h6 {
 }
 .yakov-dryh-dice-tray__palette-button:hover, .yakov-dryh-dice-tray__palette-button:focus-visible {
   background: var(--yd-tray-tile-hover);
-  border-color: rgba(255, 255, 255, 0.18);
+  border-color: rgba(155, 122, 91, 0.86);
   box-shadow: var(--yd-button-hover-shadow);
   outline: none;
   transform: translateY(-1px);
@@ -3422,32 +3416,21 @@ h6 {
 }
 .yakov-dryh-dice-tray__palette-button:disabled:hover, .yakov-dryh-dice-tray__palette-button:disabled:focus-visible, .yakov-dryh-dice-tray__palette-button:disabled:active {
   background: var(--yd-tray-tile);
-  border-color: var(--yd-tray-tile-border);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03), 0 8px 18px rgba(0, 0, 0, 0.16);
+  border-color: rgba(142, 112, 84, 0.72);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.48), 0 6px 14px rgba(83, 57, 31, 0.14);
   transform: none;
 }
 .yakov-dryh-dice-tray__palette-button .yakov-dryh-pip {
   background-color: var(--yd-pip-discipline);
-}
-.yakov-dryh-dice-tray__palette-button--discipline {
-  border-color: rgba(255, 248, 236, 0.16);
-}
-.yakov-dryh-dice-tray__palette-button--exhaustion {
-  border-color: rgba(255, 255, 255, 0.12);
+  filter: drop-shadow(0 1px 1px rgba(47, 38, 34, 0.18)) drop-shadow(0 0 1px rgba(47, 38, 34, 0.22));
 }
 .yakov-dryh-dice-tray__palette-button--exhaustion .yakov-dryh-pip {
   background-color: var(--yd-exhaustion);
   filter: drop-shadow(0 0 1px rgba(255, 255, 255, 0.34)) drop-shadow(0 0 1px var(--yd-pip-shadow));
 }
-.yakov-dryh-dice-tray__palette-button--madness {
-  border-color: rgba(179, 58, 58, 0.34);
-}
 .yakov-dryh-dice-tray__palette-button--madness .yakov-dryh-pip {
   background-color: var(--yd-madness);
   filter: var(--yd-tray-madness-glow);
-}
-.yakov-dryh-dice-tray__palette-button--pain {
-  border-color: rgba(255, 255, 255, 0.12);
 }
 .yakov-dryh-dice-tray__palette-button--pain .yakov-dryh-pip {
   background-color: var(--yd-pain);
@@ -3461,50 +3444,54 @@ h6 {
 }
 .yakov-dryh-dice-tray__actions .yakov-dryh-button {
   background: var(--yd-tray-roll);
-  border: 0;
+  border: 1px solid rgba(126, 63, 46, 0.88);
   border-radius: 0.24rem;
   box-shadow: var(--yd-tray-roll-shadow);
-  color: #f2eee8;
+  color: #fff1e4;
   font-family: var(--yd-sheet-display-font);
   font-size: 1rem;
-  font-weight: 500;
+  font-weight: 700;
   justify-content: center;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.03em;
   min-height: 2.2rem;
   min-width: 100%;
   padding: 0.6rem 1.2rem;
   text-transform: uppercase;
   pointer-events: auto;
   position: relative;
+  text-shadow: 0 1px 0 rgba(54, 15, 12, 0.36);
   z-index: 4;
 }
 .yakov-dryh-dice-tray__actions .yakov-dryh-button:hover, .yakov-dryh-dice-tray__actions .yakov-dryh-button:focus-visible {
   background: var(--yd-tray-roll-hover);
+  border-color: rgba(148, 79, 56, 0.96);
   box-shadow: var(--yd-button-hover-shadow);
+  color: #fff7ef;
   outline: none;
 }
 .yakov-dryh-dice-tray__actions .yakov-dryh-button:disabled:hover, .yakov-dryh-dice-tray__actions .yakov-dryh-button:disabled:focus-visible {
   background: var(--yd-tray-roll);
+  border-color: rgba(126, 63, 46, 0.88);
 }
 
 .yakov-dryh-dice-tray .yakov-dryh-copy,
 .yakov-dryh-dice-tray-card .yakov-dryh-copy {
-  color: var(--yd-tray-muted-strong);
+  color: var(--yd-sheet-button-ink);
 }
 .yakov-dryh-dice-tray .yakov-dryh-button,
 .yakov-dryh-dice-tray-card .yakov-dryh-button {
-  background: var(--yd-tray-tile);
-  border: 1px solid var(--yd-tray-tile-border);
+  background: linear-gradient(180deg, #f6eee1 0%, #ecdfc9 100%);
+  border: 1px solid rgba(162, 136, 107, 0.52);
   border-radius: 0.24rem;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03), 0 8px 18px rgba(0, 0, 0, 0.16);
-  color: var(--yd-tray-text);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.34), 0 1px 0 rgba(255, 255, 255, 0.35);
+  color: var(--yd-chat-ink);
   transition: background 140ms ease, border-color 140ms ease, box-shadow 140ms ease, transform 140ms ease;
 }
 .yakov-dryh-dice-tray .yakov-dryh-button:hover, .yakov-dryh-dice-tray .yakov-dryh-button:focus-visible,
 .yakov-dryh-dice-tray-card .yakov-dryh-button:hover,
 .yakov-dryh-dice-tray-card .yakov-dryh-button:focus-visible {
-  background: var(--yd-tray-tile-hover);
-  border-color: rgba(255, 255, 255, 0.16);
+  background: linear-gradient(180deg, #fbf4e8 0%, #efe1cb 100%);
+  border-color: rgba(176, 146, 114, 0.66);
   box-shadow: var(--yd-button-hover-shadow);
   outline: none;
   transform: translateY(-1px);
@@ -3512,15 +3499,47 @@ h6 {
 .yakov-dryh-dice-tray .yakov-dryh-button:disabled:hover, .yakov-dryh-dice-tray .yakov-dryh-button:disabled:focus-visible,
 .yakov-dryh-dice-tray-card .yakov-dryh-button:disabled:hover,
 .yakov-dryh-dice-tray-card .yakov-dryh-button:disabled:focus-visible {
-  background: var(--yd-tray-tile);
-  border-color: var(--yd-tray-tile-border);
+  background: linear-gradient(180deg, #f6eee1 0%, #ecdfc9 100%);
+  border-color: rgba(162, 136, 107, 0.52);
   transform: none;
 }
 .yakov-dryh-dice-tray .yakov-dryh-button--secondary,
 .yakov-dryh-dice-tray-card .yakov-dryh-button--secondary {
-  background: var(--yd-tray-tile);
-  border-color: var(--yd-tray-tile-border);
-  color: var(--yd-tray-text);
+  background: linear-gradient(180deg, #f6eee1 0%, #ecdfc9 100%);
+  border-color: rgba(162, 136, 107, 0.52);
+  color: var(--yd-chat-ink);
+}
+.yakov-dryh-dice-tray .yakov-dryh-dice-tray__actions .yakov-dryh-button,
+.yakov-dryh-dice-tray-card .yakov-dryh-dice-tray__actions .yakov-dryh-button {
+  background: var(--yd-tray-roll);
+  border-color: rgba(126, 63, 46, 0.88);
+  box-shadow: var(--yd-tray-roll-shadow);
+  color: #fff1e4;
+  font-family: var(--yd-sheet-display-font);
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-shadow: 0 1px 0 rgba(54, 15, 12, 0.36);
+}
+.yakov-dryh-dice-tray .yakov-dryh-dice-tray__actions .yakov-dryh-button:hover, .yakov-dryh-dice-tray .yakov-dryh-dice-tray__actions .yakov-dryh-button:focus-visible,
+.yakov-dryh-dice-tray-card .yakov-dryh-dice-tray__actions .yakov-dryh-button:hover,
+.yakov-dryh-dice-tray-card .yakov-dryh-dice-tray__actions .yakov-dryh-button:focus-visible {
+  background: var(--yd-tray-roll-hover);
+  border-color: rgba(148, 79, 56, 0.96);
+  box-shadow: var(--yd-button-hover-shadow);
+  color: #fff7ef;
+}
+.yakov-dryh-dice-tray .yakov-dryh-dice-tray__actions .yakov-dryh-button:disabled,
+.yakov-dryh-dice-tray-card .yakov-dryh-dice-tray__actions .yakov-dryh-button:disabled {
+  background: var(--yd-tray-roll);
+  border-color: rgba(126, 63, 46, 0.88);
+  color: #fff1e4;
+}
+.yakov-dryh-dice-tray .yakov-dryh-dice-tray__actions .yakov-dryh-button:disabled:hover, .yakov-dryh-dice-tray .yakov-dryh-dice-tray__actions .yakov-dryh-button:disabled:focus-visible,
+.yakov-dryh-dice-tray-card .yakov-dryh-dice-tray__actions .yakov-dryh-button:disabled:hover,
+.yakov-dryh-dice-tray-card .yakov-dryh-dice-tray__actions .yakov-dryh-button:disabled:focus-visible {
+  background: var(--yd-tray-roll);
+  border-color: rgba(126, 63, 46, 0.88);
+  color: #fff1e4;
 }
 
 .yakov-dryh-resource-tracker {

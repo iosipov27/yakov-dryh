@@ -84,28 +84,18 @@
   }
 
   &__snap-effect {
-    background: rgb(176 28 46 / 10%);
-    border: 1px solid rgb(176 28 46 / 26%);
-    border-left: 4px solid var(--yd-madness);
-    border-radius: var(--yd-border-radius);
     color: var(--yd-madness);
-    padding: 0.8rem 0.9rem;
 
     strong {
       display: block;
-      font-size: 0.98rem;
+      font-size: 1rem;
       letter-spacing: 0.02em;
       text-transform: uppercase;
     }
   }
 
   &__crash-alert {
-    background: rgb(176 28 46 / 10%);
-    border: 1px solid rgb(176 28 46 / 26%);
-    border-left: 4px solid var(--yd-madness);
-    border-radius: var(--yd-border-radius);
     color: var(--yd-madness);
-    padding: 0.8rem 0.9rem;
 
     strong {
       display: block;

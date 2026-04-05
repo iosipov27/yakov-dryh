@@ -58,7 +58,7 @@ describe("dice tray card presentation", () => {
     expect(waitingContext.rollDisabled).toBe(true);
     expect(waitingContext.statusLabel).toBe("");
     expect(readyOwnerContext.rollDisabled).toBe(false);
-    expect(readyOwnerContext.statusLabel).toBe("Ready to roll.");
+    expect(readyOwnerContext.statusLabel).toBe("");
     expect(readyGmContext.rollDisabled).toBe(false);
   });
 
@@ -101,6 +101,11 @@ describe("dice tray card presentation", () => {
     expect(
       gmContext.paletteButtons.find((button) => button.key === "pain")?.disabled
     ).toBe(false);
+    expect(observerContext.paletteButtons.map((button) => button.key)).toEqual([
+      "exhaustion",
+      "madness",
+      "pain"
+    ]);
   });
 
   it("renders fixed tray slots and hides the unused ones", () => {

@@ -120,7 +120,6 @@
       "Roll": "Roll",
       "Status": {
         "Empty": "Load a character pool from the sheet.",
-        "Ready": "Ready to roll.",
         "WaitingForGm": "Waiting for GM to add Pain."
       }
     },

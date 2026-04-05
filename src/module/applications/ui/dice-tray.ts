@@ -18,6 +18,7 @@ import {
   type YakovDryhDiceTrayPool,
   type YakovDryhDiceTrayState
 } from "./dice-tray-state.js";
+import { ADDABLE_DICE_TRAY_POOLS } from "./dice-tray-rules.js";
 import {
   createDiceTrayPoolPips,
   type DiceTrayPoolPipPresentation
@@ -585,7 +586,7 @@ function createPaletteButtons(
 ): DiceTrayPaletteButton[] {
   const canEditPlayerPools = permissions.isActorOwner || permissions.isGm;
 
-  return (["discipline", "exhaustion", "madness", "pain"] as YakovDryhDiceTrayPool[]).map(
+  return ADDABLE_DICE_TRAY_POOLS.map(
     (key) => ({
       disabled:
         key === "pain"
@@ -622,9 +623,7 @@ function getStatusLabel(state: YakovDryhDiceTrayState): string {
     );
   }
 
-  return state.pools.pain > 0
-    ? localize("YAKOV_DRYH.TRAY.Status.Ready", "Ready to roll.")
-    : "";
+  return "";
 }
 
 function formatPool(pool: YakovDryhDiceTrayPool): string {
