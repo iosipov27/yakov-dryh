@@ -1,85 +1,104 @@
 :root {
-  --yd-ink: #21161e;
-  --yd-ink-dark: #0a0912;
-  --yd-surface: #f4efe7;
-  --yd-panel: #fffaf4;
-  --yd-panel-strong: #f8f0e2;
-  --yd-accent: #9b3d24;
-  --yd-secondary: #f9eedc;
+  --yd-ink: #1a1d20;
+  --yd-ink-dark: #070809;
+  --yd-surface: #edf0f2;
+  --yd-panel: #fbfcfc;
+  --yd-panel-strong: #f2f4f6;
+  --yd-accent: #5b636b;
+  --yd-secondary: #eceff1;
 
-  --yd-muted: #928d87;
-  --yd-text-light: #f8f0e2;
-  --yd-text-secondary: #bdbdbd;
+  --yd-muted: #868d94;
+  --yd-text-light: #f4f6f7;
+  --yd-text-secondary: #b9c0c5;
 
-  --yd-success-player: #3f7d4b;
-  --yd-success-pain: #8b1c29;
+  --yd-success-player: #7b848b;
+  --yd-success-pain: #555c63;
   --yd-exhaustion: #111111;
-  --yd-madness: #912f26;
-  --yd-pain: #444;
-  --yd-border: #b7a79c;
-  --yd-border-button: rgb(183 167 156 / 44%);
+  --yd-madness: #656c73;
+  --yd-pain: #363b40;
+  --yd-border: #a4acb3;
+  --yd-border-button: rgb(164 172 179 / 44%);
 
-  --yd-border-active: #fdf1ed;
+  --yd-border-active: #f3f5f7;
   --yd-border-radius: 0.2rem;
-  --yd-pool-card-base: #8b837c;
-  --yd-pool-card-base-edge: #6f6861;
-  --yd-pool-card-border: #5f5953;
-  --yd-pool-card-ink: #f4ede5;
-  --yd-stress-neutral: #8b837c;
-  --yd-stress-neutral-edge: #6f6861;
-  --yd-stress-overlay: 166 158 149;
-  --yd-stress-overlay-edge: 128 120 112;
-  --yd-stress-exhaustion: #c79b87;
-  --yd-stress-exhaustion-edge: #a97e6b;
-  --yd-stress-exhaustion-border: #8f6655;
-  --yd-stress-madness: #c28e9f;
-  --yd-stress-madness-edge: #9f6c7d;
-  --yd-stress-madness-border: #825264;
+  --yd-pool-card-base: #878e94;
+  --yd-pool-card-base-edge: #656c72;
+  --yd-pool-card-border: #4f555b;
+  --yd-pool-card-ink: #f1f3f4;
+  --yd-stress-neutral: #878e94;
+  --yd-stress-neutral-edge: #656c72;
+  --yd-stress-overlay: 152 160 168;
+  --yd-stress-overlay-edge: 107 114 121;
+  --yd-stress-exhaustion: #a4abb1;
+  --yd-stress-exhaustion-edge: #7e858c;
+  --yd-stress-exhaustion-border: #676d73;
+  --yd-stress-madness: #969da4;
+  --yd-stress-madness-edge: #727980;
+  --yd-stress-madness-border: #5d646b;
 
-  --yd-shadow: 0 14px 30px rgb(33 22 30 / 12%);
+  --yd-shadow: 0 14px 30px rgb(24 27 30 / 12%);
   --yd-button-hover-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.4),
-    0 2px 4px rgba(90, 57, 31, 0.12);
-  --yd-round-shadow: radial-gradient(60% 60% at 40% 40%, #474361 0%, #0a0912 100%);
-  --yd-pip-discipline: #fffdf8;
-  --yd-pip-inactive: #a89d95;
+    0 2px 4px rgba(44, 50, 56, 0.14);
+  --yd-round-shadow: radial-gradient(60% 60% at 40% 40%, #4b4f58 0%, #070809 100%);
+  --yd-pip-discipline: #f7f9fa;
+  --yd-pip-inactive: #9ea4aa;
 
-  --yd-pip-shadow: rgb(33 22 30 / 30%);
+  --yd-pip-shadow: rgb(24 27 30 / 30%);
 
-  --yd-sheet-bg: #0e0908;
-  --yd-sheet-bg-soft: #2b2321;
-  --yd-sheet-border: rgb(222 183 145 / 16%);
-  --yd-sheet-divider: rgb(222 183 145 / 12%);
-  --yd-sheet-ink: #f1dfca;
-  --yd-sheet-muted: #ceb094;
-  --yd-sheet-muted-strong: #f0dfca;
-  --yd-sheet-input-bg: #c9c3bb;
-  --yd-sheet-input-bg-strong: #d8d2ca;
-  --yd-sheet-input-border: #95897d;
-  --yd-sheet-input-ink: #332a2c;
-  --yd-sheet-input-paper: #e6e1db;
-  --yd-sheet-input-paper-soft: #cdc8c2;
-  --yd-sheet-input-paper-line: rgb(96 92 86 / 34%);
+  --yd-sheet-bg: #08090a;
+  --yd-sheet-bg-soft: #181a1d;
+  --yd-sheet-border: rgb(206 212 218 / 16%);
+  --yd-sheet-divider: rgb(206 212 218 / 12%);
+  --yd-sheet-ink: #edf1f3;
+  --yd-sheet-muted: #aab2b9;
+  --yd-sheet-muted-strong: #eef2f4;
+  --yd-sheet-input-bg: #c6ccd0;
+  --yd-sheet-input-bg-strong: #d7dde1;
+  --yd-sheet-input-border: #8a9299;
+  --yd-sheet-input-ink: #272c31;
+  --yd-sheet-input-paper: #dfe4e7;
+  --yd-sheet-input-paper-soft: #c6ccd1;
+  --yd-sheet-input-paper-line: rgb(96 103 109 / 34%);
+  --yd-sheet-input-surface:
+    linear-gradient(180deg, rgb(255 255 255 / 15%) 0%, rgb(255 255 255 / 0%) 22%),
+    radial-gradient(circle at 16% 18%, rgb(255 255 255 / 14%), transparent 30%),
+    linear-gradient(180deg, rgb(217 214 210 / 82%) 0%, rgb(198 194 189 / 76%) 100%),
+    linear-gradient(180deg, var(--yd-sheet-input-paper) 0%, var(--yd-sheet-input-paper-soft) 100%),
+    url("../assets/paper.jpg") center / 560px auto repeat;
   --yd-sheet-input-shadow:
     inset 0 1px 0 rgb(255 255 255 / 42%),
-    inset 0 -12px 18px rgb(78 58 43 / 7%),
+    inset 0 -12px 18px rgb(46 52 57 / 8%),
     0 0 0 1px rgb(0 0 0 / 8%);
-  --yd-sheet-button-bg: #f2e4cf;
-  --yd-sheet-button-bg-hover: #f8eddc;
-  --yd-sheet-button-ink: #2e2429;
-  --yd-sheet-card: #b4a59b;
-  --yd-sheet-card-mid: #b6a89d;
-  --yd-sheet-card-edge: #9f9187;
-  --yd-sheet-card-highlight: rgb(255 246 233 / 24%);
-  --yd-sheet-card-glow: rgb(246 229 205 / 28%);
-  --yd-sheet-card-exhaustion: #b8a79b;
-  --yd-sheet-card-exhaustion-mid: #bbaa9d;
-  --yd-sheet-card-exhaustion-edge: #9b8b7f;
-  --yd-sheet-card-exhaustion-glow: rgb(241 222 194 / 26%);
-  --yd-sheet-card-madness: #b9aba2;
-  --yd-sheet-card-madness-mid: #bcaea5;
-  --yd-sheet-card-madness-edge: #9d8f86;
-  --yd-sheet-card-madness-glow: rgb(245 225 205 / 30%);
+  --yd-sheet-input-focus-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 42%),
+    inset 0 -12px 18px rgb(44 49 54 / 8%),
+    0 0 0 1px rgb(0 0 0 / 8%),
+    0 0 0 2px rgb(236 240 242 / 14%);
+  --yd-sheet-input-placeholder: color-mix(in srgb, var(--yd-sheet-input-ink) 62%, #7f868d);
+  --yd-sheet-button-bg: #e1e6e9;
+  --yd-sheet-button-bg-hover: #edf1f3;
+  --yd-sheet-button-ink: #262c31;
+  --yd-sheet-button-surface: linear-gradient(180deg, var(--yd-sheet-button-bg) 0%, #cdd3d8 100%);
+  --yd-sheet-button-surface-hover:
+    linear-gradient(180deg, var(--yd-sheet-button-bg-hover) 0%, #d9dfe3 100%);
+  --yd-sheet-button-border: rgb(62 68 74 / 20%);
+  --yd-sheet-button-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 35%),
+    0 6px 18px rgb(0 0 0 / 10%);
+  --yd-sheet-card: #adb4ba;
+  --yd-sheet-card-mid: #444a50;
+  --yd-sheet-card-edge: #383d42;
+  --yd-sheet-card-glow: rgb(255 255 255 / 26%);
+  --yd-sheet-card-highlight: rgb(245 247 248 / 24%);
+  --yd-sheet-card-exhaustion: #9ea6ad;
+  --yd-sheet-card-exhaustion-mid: #a7afb6;
+  --yd-sheet-card-exhaustion-edge: #7f878f;
+  --yd-sheet-card-exhaustion-glow: rgb(234 238 241 / 24%);
+  --yd-sheet-card-madness: #9aa2a8;
+  --yd-sheet-card-madness-mid: #a3abb1;
+  --yd-sheet-card-madness-edge: #7a838a;
+  --yd-sheet-card-madness-glow: rgb(232 236 239 / 26%);
   --yd-sheet-shadow: 0 20px 48px rgb(0 0 0 / 38%);
   --yd-sheet-resource-card-shadow:
     inset 0 1px 0 var(--yd-sheet-card-highlight),
@@ -89,82 +108,210 @@
     drop-shadow(0.22rem 0.32rem 0.2rem rgb(0 0 0 / 34%))
     drop-shadow(0.08rem 0.1rem 0.06rem rgb(0 0 0 / 28%))
     drop-shadow(0 0 0.02rem rgb(255 255 255 / 16%));
-  --yd-chat-paper: #ece5d7;
-  --yd-chat-paper-strong: #f4eee3;
-  --yd-chat-paper-edge: #ded4c3;
-  --yd-chat-paper-line: #cfc2ab;
-  --yd-chat-panel: #f3ede3;
-  --yd-chat-panel-strong: #ebe3d6;
-  --yd-chat-ink: #2f2622;
-  --yd-chat-muted: #6f6357;
-  --yd-chat-success-bg: #abc3a8;
-  --yd-chat-success-ink: #525e54;
-  --yd-chat-failure-bg: #eadbd5;
-  --yd-chat-failure-ink: #8a3840;
-  --yd-chat-accent: #8a3f2e;
-  --yd-chat-shadow: 0 10px 28px rgb(36 28 21 / 12%);
+  --yd-chat-paper: #e5e8ea;
+  --yd-chat-paper-strong: #f0f2f4;
+  --yd-chat-paper-edge: #d3d8dc;
+  --yd-chat-paper-line: #bcc3c8;
+  --yd-chat-card-surface:
+    linear-gradient(180deg, rgb(255 255 255 / 22%) 0%, rgb(255 255 255 / 0%) 14%),
+    radial-gradient(circle at 20% 12%, rgb(255 255 255 / 18%), transparent 26%),
+    radial-gradient(circle at 82% 24%, rgb(171 178 184 / 12%), transparent 24%),
+    linear-gradient(180deg, var(--yd-chat-paper-strong) 0%, var(--yd-chat-paper) 100%);
+  --yd-chat-card-paper-overlay:
+    radial-gradient(circle at 18% 16%, rgb(255 255 255 / 26%), transparent 28%),
+    linear-gradient(180deg, rgb(247 249 250 / 68%) 0%, rgb(195 201 206 / 40%) 100%),
+    url(../assets/paper.jpg) center / 560px auto repeat;
+  --yd-chat-card-frame: rgb(255 255 255 / 22%);
+  --yd-chat-panel: #eceff1;
+  --yd-chat-panel-strong: #e2e6e9;
+  --yd-chat-ink: #252b30;
+  --yd-chat-muted: #666e75;
+  --yd-chat-success-bg: #d1d6da;
+  --yd-chat-success-ink: #4e565d;
+  --yd-chat-failure-bg: #d9dde0;
+  --yd-chat-failure-ink: #4b5259;
+  --yd-chat-accent: #69737c;
+  --yd-chat-shadow: 0 10px 28px rgb(24 27 30 / 12%);
   --yd-chat-die-shadow:
     0 1px 0 rgb(255 255 255 / 32%),
     0 1px 3px rgb(0 0 0 / 12%);
-  --yd-tray-bg: #e3d9ca;
-  --yd-tray-bg-soft: #f4ede1;
-  --yd-tray-frame: #7b5d4a;
-  --yd-tray-frame-soft: rgb(189 155 124 / 16%);
-  --yd-tray-panel: #e9dfd1;
-  --yd-tray-panel-strong: #f6efe4;
-  --yd-tray-panel-edge: rgb(125 92 66 / 36%);
-  --yd-tray-panel-highlight: rgb(255 250 242 / 46%);
+  --yd-tray-bg: #d8dde0;
+  --yd-tray-bg-soft: #edf1f3;
+  --yd-tray-shell-surface:
+    linear-gradient(180deg, rgb(96 103 109 / 8%) 0%, rgb(96 103 109 / 0%) 16%),
+    linear-gradient(180deg, rgb(255 255 255 / 24%) 0%, rgb(255 255 255 / 0%) 18%),
+    linear-gradient(180deg, var(--yd-tray-bg-soft) 0%, var(--yd-tray-bg) 100%);
+  --yd-tray-paper-overlay:
+    linear-gradient(180deg, rgb(18 20 22 / 58%) 0%, rgb(10 12 14 / 36%) 100%),
+    radial-gradient(circle at 18% 16%, rgb(255 255 255 / 26%), transparent 28%),
+    linear-gradient(180deg, rgb(247 249 250 / 68%) 0%, rgb(196 201 206 / 42%) 100%),
+    url(../assets/paper.jpg) center / 560px auto repeat;
+  --yd-tray-shell-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 34%),
+    inset 0 0 0 1px var(--yd-tray-frame-soft),
+    0 18px 40px rgb(18 20 22 / 18%);
+  --yd-tray-frame-line: rgb(94 101 108 / 22%);
+  --yd-tray-frame: #5c636a;
+  --yd-tray-frame-soft: rgb(138 145 152 / 16%);
+  --yd-tray-panel: #e1e5e8;
+  --yd-tray-panel-strong: #f3f5f6;
+  --yd-tray-panel-edge: rgb(98 105 113 / 36%);
+  --yd-tray-panel-highlight: rgb(250 251 252 / 46%);
+  --yd-tray-panel-header-surface:
+    linear-gradient(180deg, rgb(255 255 255 / 16%) 0%, rgb(255 255 255 / 0%) 100%);
+  --yd-tray-panel-header-shadow:
+    inset 0 -1px 0 rgb(255 255 255 / 26%),
+    0 1px 0 rgb(96 103 109 / 12%);
+  --yd-tray-pool-surface:
+    linear-gradient(180deg, rgb(255 255 255 / 18%) 0%, rgb(255 255 255 / 0%) 44%),
+    radial-gradient(circle at 88% 22%, rgb(255 255 255 / 18%), transparent 28%),
+    linear-gradient(135deg, color-mix(in srgb, var(--yd-tray-pool-panel) 94%, #fff 6%) 0%, var(--yd-tray-pool-panel) 100%);
+  --yd-tray-pool-shadow:
+    inset 0 1px 0 var(--yd-tray-panel-highlight),
+    inset 0 -12px 20px rgb(0 0 0 / 4%),
+    0 1px 0 rgb(255 255 255 / 22%);
   --yd-tray-surface: rgb(255 255 255 / 16%);
-  --yd-tray-surface-shadow: rgb(220 206 188 / 42%);
-  --yd-tray-border: rgb(176 152 124 / 34%);
-  --yd-tray-line: rgb(207 194 171 / 72%);
-  --yd-tray-text: #2f2622;
-  --yd-tray-muted: rgb(111 99 87 / 62%);
-  --yd-tray-muted-strong: rgb(111 99 87 / 84%);
-  --yd-tray-tile: linear-gradient(180deg, #fbf5ea 0%, #e9dcc8 100%);
-  --yd-tray-tile-hover: linear-gradient(180deg, #fffaf0 0%, #efe1cb 100%);
-  --yd-tray-tile-border: rgb(162 136 107 / 52%);
-  --yd-tray-tile-active: #b56d55;
-  --yd-tray-roll-accent: #9b3f27;
+  --yd-tray-surface-shadow: rgb(201 207 212 / 42%);
+  --yd-tray-border: rgb(154 162 169 / 34%);
+  --yd-tray-line: rgb(188 195 200 / 72%);
+  --yd-tray-text: #252b30;
+  --yd-tray-muted: rgb(102 110 117 / 62%);
+  --yd-tray-muted-strong: rgb(102 110 117 / 84%);
+  --yd-tray-tile: linear-gradient(180deg, #f3f5f6 0%, #dde2e6 100%);
+  --yd-tray-tile-hover: linear-gradient(180deg, #fafbfc 0%, #e6eaed 100%);
+  --yd-tray-tile-border: rgb(142 150 157 / 52%);
+  --yd-tray-tile-active: #737d86;
+  --yd-tray-roll-accent: #727b84;
   --yd-tray-roll:
-    radial-gradient(circle at 50% 24%, rgb(255 224 199 / 12%), transparent 38%),
-    linear-gradient(180deg, #b24a2c 0%, #9b3f27 46%, #7a2e1c 100%);
+    radial-gradient(circle at 50% 24%, rgb(255 255 255 / 14%), transparent 38%),
+    linear-gradient(180deg, #7c858d 0%, #636b73 46%, #444b52 100%);
   --yd-tray-roll-hover:
-    radial-gradient(circle at 50% 22%, rgb(255 232 210 / 16%), transparent 40%),
-    linear-gradient(180deg, #c35631 0%, #ab472a 46%, #873320 100%);
+    radial-gradient(circle at 50% 22%, rgb(255 255 255 / 18%), transparent 40%),
+    linear-gradient(180deg, #8a949c 0%, #707982 46%, #50575e 100%);
   --yd-tray-roll-shadow:
-    inset 0 1px 0 rgb(255 223 197 / 22%),
-    inset 0 -8px 14px rgb(65 17 11 / 24%),
-    0 1px 0 rgb(255 239 225 / 22%);
-  --yd-tray-discipline-accent: #8e6b49;
-  --yd-tray-discipline-panel: #e7ddd2;
-  --yd-tray-exhaustion-accent: #4f4239;
-  --yd-tray-exhaustion-panel: #d9d0c6;
-  --yd-tray-madness-accent: #9a5547;
-  --yd-tray-madness-panel: #ddd1ca;
-  --yd-tray-pain-accent: #6d5948;
-  --yd-tray-pain-panel: #d8cdbf;
+    inset 0 1px 0 rgb(255 255 255 / 22%),
+    inset 0 -8px 14px rgb(20 24 28 / 24%),
+    0 1px 0 rgb(244 246 247 / 22%);
+  --yd-tray-primary-button-border: rgb(72 79 86 / 88%);
+  --yd-tray-primary-button-border-hover: rgb(98 106 113 / 96%);
+  --yd-tray-primary-button-ink: #f6f8f9;
+  --yd-tray-primary-button-ink-hover: #fbfcfc;
+  --yd-tray-primary-button-text-shadow: 0 1px 0 rgb(18 20 22 / 36%);
+  --yd-tray-secondary-button-surface:
+    linear-gradient(180deg, #eff2f4 0%, #dce1e5 100%);
+  --yd-tray-secondary-button-surface-hover:
+    linear-gradient(180deg, #fafbfc 0%, #e4e8eb 100%);
+  --yd-tray-secondary-button-border: rgb(141 148 155 / 52%);
+  --yd-tray-secondary-button-border-hover: rgb(158 166 173 / 66%);
+  --yd-tray-secondary-button-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 34%),
+    0 1px 0 rgb(255 255 255 / 35%);
+  --yd-tray-discipline-accent: #8e969d;
+  --yd-tray-discipline-panel: #e2e6e9;
+  --yd-tray-exhaustion-accent: #575e66;
+  --yd-tray-exhaustion-panel: #d3d8dc;
+  --yd-tray-madness-accent: #727981;
+  --yd-tray-madness-panel: #d7dce0;
+  --yd-tray-pain-accent: #656c74;
+  --yd-tray-pain-panel: #d0d5d9;
   --yd-tray-madness-glow:
-    drop-shadow(0 0 6px rgb(179 58 58 / 40%))
-    drop-shadow(0 0 10px rgb(179 58 58 / 18%));
-  --yd-resource-frame: #140d0f;
-  --yd-resource-frame-edge: #6f4c3f;
-  --yd-resource-surface: #2a1918;
-  --yd-resource-surface-soft: #3a2624;
-  --yd-resource-line: rgb(179 140 103 / 24%);
-  --yd-resource-ink: #ead8bc;
-  --yd-resource-muted: #b79f88;
-  --yd-resource-button: #2f201f;
-  --yd-resource-button-hover: #4a312d;
-  --yd-resource-button-edge: #755241;
-  --yd-resource-scene: #5d392f;
-  --yd-resource-scene-hover: #77473a;
-  --yd-resource-hope: #b78127;
-  --yd-resource-hope-bright: #f3d489;
-  --yd-resource-hope-edge: #5f3a15;
-  --yd-resource-despair: #8e2f28;
-  --yd-resource-despair-bright: #f2b2a2;
-  --yd-resource-despair-edge: #461717;
+    drop-shadow(0 0 6px rgb(255 255 255 / 18%))
+    drop-shadow(0 0 10px rgb(112 120 128 / 18%));
+  --yd-resource-frame: #0a0b0d;
+  --yd-resource-frame-edge: #4d545c;
+  --yd-resource-surface: #171a1d;
+  --yd-resource-surface-soft: #25292d;
+  --yd-resource-tracker-surface:
+    radial-gradient(circle at top, rgb(255 255 255 / 8%) 0%, transparent 42%),
+    radial-gradient(circle at bottom, rgb(0 0 0 / 22%) 0%, transparent 46%),
+    linear-gradient(180deg, var(--yd-resource-surface-soft) 0%, var(--yd-resource-surface) 100%);
+  --yd-resource-tracker-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 9%),
+    inset 0 0 0 1px rgb(255 255 255 / 4%),
+    0 18px 42px rgb(0 0 0 / 42%);
+  --yd-resource-tracker-outer-frame:
+    inset 0 0 0 1px rgb(0 0 0 / 24%),
+    inset 0 12px 20px rgb(255 255 255 / 3%),
+    inset 0 -12px 18px rgb(0 0 0 / 18%);
+  --yd-resource-tracker-inner-frame:
+    0 0 0 1px rgb(255 255 255 / 4%),
+    inset 0 0 0 1px rgb(83 90 97 / 68%);
+  --yd-resource-line: rgb(168 175 181 / 24%);
+  --yd-resource-ink: #e8ecef;
+  --yd-resource-muted: #a2abb2;
+  --yd-resource-button: #23272c;
+  --yd-resource-button-hover: #31363c;
+  --yd-resource-button-edge: #59616a;
+  --yd-resource-rail-surface:
+    linear-gradient(180deg, rgb(255 255 255 / 7%) 0%, rgb(0 0 0 / 32%) 100%),
+    linear-gradient(180deg, #24282d 0%, #14171a 100%);
+  --yd-resource-rail-border: rgb(90 98 106 / 74%);
+  --yd-resource-adjuster-surface:
+    linear-gradient(180deg, rgb(255 255 255 / 6%) 0%, rgb(0 0 0 / 18%) 100%),
+    linear-gradient(180deg, var(--yd-resource-button) 0%, #1c2024 100%);
+  --yd-resource-adjuster-surface-hover:
+    linear-gradient(180deg, rgb(255 255 255 / 9%) 0%, rgb(0 0 0 / 14%) 100%),
+    linear-gradient(180deg, var(--yd-resource-button-hover) 0%, #252a2f 100%);
+  --yd-resource-adjuster-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 10%),
+    inset 0 -6px 10px rgb(0 0 0 / 18%),
+    0 6px 14px rgb(0 0 0 / 24%);
+  --yd-resource-adjuster-text-shadow: 0 1px 0 rgb(0 0 0 / 32%);
+  --yd-resource-adjuster-border-hover:
+    color-mix(in srgb, var(--yd-resource-button-edge) 70%, #c1c8cd);
+  --yd-resource-coin-surface:
+    radial-gradient(circle at 32% 26%, rgb(255 255 255 / 18%) 0%, transparent 28%),
+    linear-gradient(180deg, rgb(255 255 255 / 7%) 0%, rgb(0 0 0 / 14%) 100%),
+    var(--yd-resource-pool-image) center / contain no-repeat;
+  --yd-resource-coin-shadow:
+    0 10px 20px rgb(0 0 0 / 28%),
+    0 0 0 1px rgb(255 255 255 / 5%);
+  --yd-resource-value-ink: #f4f6f7;
+  --yd-resource-value-shadow:
+    0 1px 0 rgb(12 14 16 / 80%),
+    0 4px 14px rgb(0 0 0 / 30%);
+  --yd-resource-scene: #40464d;
+  --yd-resource-scene-hover: #515960;
+  --yd-resource-scene-surface:
+    linear-gradient(180deg, rgb(255 255 255 / 10%) 0%, rgb(0 0 0 / 20%) 100%),
+    linear-gradient(180deg, var(--yd-resource-scene) 0%, #343a40 100%);
+  --yd-resource-scene-surface-hover:
+    linear-gradient(180deg, rgb(255 255 255 / 14%) 0%, rgb(0 0 0 / 16%) 100%),
+    linear-gradient(180deg, var(--yd-resource-scene-hover) 0%, #454c53 100%);
+  --yd-resource-scene-border:
+    color-mix(in srgb, var(--yd-resource-button-edge) 80%, #aeb5bb);
+  --yd-resource-hope: #959ca3;
+  --yd-resource-hope-bright: #dce1e4;
+  --yd-resource-hope-edge: #2d3237;
+  --yd-resource-despair: #6b7279;
+  --yd-resource-despair-bright: #c9cfd4;
+  --yd-resource-despair-edge: #1d2024;
+  --yd-dialog-shell-surface:
+    radial-gradient(circle at top right, rgb(111 119 126 / 12%), transparent 34%),
+    linear-gradient(180deg, #fbfcfc 0%, var(--yd-surface) 100%);
+  --yd-sheet-window-header-surface:
+    linear-gradient(180deg, rgb(20 22 24 / 99%) 0%, rgb(10 11 12 / 99%) 100%);
+  --yd-sheet-window-header-control-hover-bg: rgb(255 255 255 / 7%);
+  --yd-sheet-window-header-control-hover-ink: #f8fafb;
+  --yd-sheet-window-surface:
+    radial-gradient(circle at 50% 46%, rgb(150 157 164 / 5%), transparent 32%),
+    radial-gradient(circle at 50% 52%, transparent 42%, rgb(7 8 9 / 24%) 100%),
+    radial-gradient(circle at top left, rgb(255 255 255 / 6%), transparent 28%),
+    radial-gradient(circle at 84% 26%, rgb(116 123 130 / 9%), transparent 28%),
+    radial-gradient(circle at 50% 100%, rgb(181 187 193 / 5%), transparent 30%),
+    linear-gradient(180deg, rgb(28 31 34 / 98%) 0%, rgb(8 9 10 / 99%) 100%);
+  --yd-sheet-window-backdrop:
+    linear-gradient(180deg, rgb(202 208 213 / 44%) 0%, rgb(66 72 78 / 54%) 100%),
+    url(../assets/bg2.jpg) center / cover no-repeat;
+  --yd-sheet-window-frame: rgb(255 255 255 / 3%);
+  --yd-status-success-bg: #d8dde0;
+  --yd-status-failure-bg: #dbdfe2;
+  --yd-status-draft-bg: #e4e7e9;
+  --yd-status-review-bg: #e7eaed;
+  --yd-status-resolved-bg: #d2d8dc;
+  --yd-roll-detail-surface: rgb(255 255 255 / 26%);
+  --yd-roll-detail-accent: color-mix(in srgb, var(--yd-chat-accent) 78%, #2f2622);
+  --yd-roll-pool-divider: rgb(188 195 200 / 78%);
   --yd-sheet-display-font:
     "Baskerville Old Face",
     "Palatino Linotype",

@@ -5,9 +5,9 @@
   }
 
   &__detail {
-    background: rgb(255 255 255 / 26%);
+    background: var(--yd-roll-detail-surface);
     border: 1px solid var(--yd-chat-paper-line);
-    border-left: 3px solid color-mix(in srgb, var(--yd-chat-accent) 78%, #2f2622);
+    border-left: 3px solid var(--yd-roll-detail-accent);
     border-radius: 0.14rem;
     padding: 0.9rem 1rem;
   }
@@ -133,48 +133,39 @@
     }
 
     &--secondary {
-      background: linear-gradient(180deg, #f6eee1 0%, #ecdfc9 100%);
-      border: 1px solid rgb(162 136 107 / 52%);
-      box-shadow:
-        inset 0 1px 0 rgb(255 255 255 / 34%),
-        0 1px 0 rgb(255 255 255 / 35%);
+      background: var(--yd-tray-secondary-button-surface);
+      border: 1px solid var(--yd-tray-secondary-button-border);
+      box-shadow: var(--yd-tray-secondary-button-shadow);
       color: var(--yd-chat-ink);
 
       &:hover,
       &:focus-visible {
-        background: linear-gradient(180deg, #fbf4e8 0%, #efe1cb 100%);
-        border-color: rgb(176 146 114 / 66%);
+        background: var(--yd-tray-secondary-button-surface-hover);
+        border-color: var(--yd-tray-secondary-button-border-hover);
         box-shadow: var(--yd-button-hover-shadow);
         color: var(--yd-chat-ink);
       }
 
       &:disabled:hover,
       &:disabled:focus-visible {
-        background: linear-gradient(180deg, #f6eee1 0%, #ecdfc9 100%);
-        border-color: rgb(162 136 107 / 52%);
-        box-shadow:
-          inset 0 1px 0 rgb(255 255 255 / 34%),
-          0 1px 0 rgb(255 255 255 / 35%);
+        background: var(--yd-tray-secondary-button-surface);
+        border-color: var(--yd-tray-secondary-button-border);
+        box-shadow: var(--yd-tray-secondary-button-shadow);
       }
     }
   }
 
   &__finalize-button {
-    background:
-      radial-gradient(circle at 50% 24%, rgb(255 224 199 / 12%), transparent 38%),
-      linear-gradient(180deg, #b24a2c 0%, #9b3f27 46%, #7a2e1c 100%);
-    border: 1px solid rgb(126 63 46 / 88%);
-    box-shadow:
-      inset 0 1px 0 rgb(255 223 197 / 22%),
-      inset 0 -8px 14px rgb(65 17 11 / 24%),
-      0 1px 0 rgb(255 239 225 / 22%);
-    color: #fff1e4;
+    background: var(--yd-tray-roll);
+    border: 1px solid var(--yd-tray-primary-button-border);
+    box-shadow: var(--yd-tray-roll-shadow);
+    color: var(--yd-tray-primary-button-ink);
     font-family: var(--yd-sheet-display-font);
     font-size: 1.04rem;
     font-weight: 700;
     letter-spacing: 0.01em;
     padding-inline: 0.95rem;
-    text-shadow: 0 1px 0 rgb(54 15 12 / 36%);
+    text-shadow: var(--yd-tray-primary-button-text-shadow);
     transition:
       transform 140ms ease,
       box-shadow 140ms ease,
@@ -184,27 +175,20 @@
 
     &:hover,
     &:focus-visible {
-      background:
-        radial-gradient(circle at 50% 22%, rgb(255 232 210 / 16%), transparent 40%),
-        linear-gradient(180deg, #c35631 0%, #ab472a 46%, #873320 100%);
-      border-color: rgb(148 79 56 / 96%);
+      background: var(--yd-tray-roll-hover);
+      border-color: var(--yd-tray-primary-button-border-hover);
       box-shadow: var(--yd-button-hover-shadow);
-      color: #fff7ef;
+      color: var(--yd-tray-primary-button-ink-hover);
       outline: none;
       transform: translateY(-1px);
     }
 
     &:disabled:hover,
     &:disabled:focus-visible {
-      background:
-        radial-gradient(circle at 50% 24%, rgb(255 224 199 / 12%), transparent 38%),
-        linear-gradient(180deg, #b24a2c 0%, #9b3f27 46%, #7a2e1c 100%);
-      border-color: rgb(126 63 46 / 88%);
-      box-shadow:
-        inset 0 1px 0 rgb(255 223 197 / 22%),
-        inset 0 -8px 14px rgb(65 17 11 / 24%),
-        0 1px 0 rgb(255 239 225 / 22%);
-      color: #fff1e4;
+      background: var(--yd-tray-roll);
+      border-color: var(--yd-tray-primary-button-border);
+      box-shadow: var(--yd-tray-roll-shadow);
+      color: var(--yd-tray-primary-button-ink);
       transform: none;
     }
   }
@@ -230,7 +214,7 @@
   }
 
   &:not(:last-child) {
-    border-bottom: 1px solid rgb(207 194 171 / 78%);
+    border-bottom: 1px solid var(--yd-roll-pool-divider);
   }
 
   &__content {

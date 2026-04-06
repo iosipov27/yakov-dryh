@@ -21,16 +21,9 @@
 .yakov-dryh-dice-tray-card {
   display: grid;
   gap: 0.85rem;
-  background:
-    linear-gradient(180deg, rgb(155 63 39 / 8%) 0%, rgb(155 63 39 / 0%) 18%),
-    linear-gradient(180deg, rgb(255 255 255 / 22%) 0%, rgb(255 255 255 / 0%) 14%),
-    radial-gradient(circle at 20% 12%, rgb(255 255 255 / 18%), transparent 26%),
-    radial-gradient(circle at 82% 24%, rgb(206 169 132 / 12%), transparent 24%),
-    linear-gradient(180deg, var(--yd-chat-paper-strong) 0%, var(--yd-chat-paper) 100%);
+  background: var(--yd-chat-card-surface);
   border: 1px solid var(--yd-tray-panel-edge);
-  box-shadow:
-    inset 0 1px 0 rgb(255 255 255 / 34%),
-    0 10px 26px rgb(40 28 19 / 10%);
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 34%), 0 10px 26px rgb(18 20 22 / 10%);
   color: var(--yd-chat-ink);
   isolation: isolate;
   overflow: hidden;
@@ -42,10 +35,7 @@
   }
 
   &::before {
-    background:
-      radial-gradient(circle at 18% 16%, rgb(255 255 255 / 26%), transparent 28%),
-      linear-gradient(180deg, rgb(255 248 238 / 72%) 0%, rgb(214 193 170 / 46%) 100%),
-      url(../assets/paper.jpg) center / 560px auto repeat;
+    background: var(--yd-chat-card-paper-overlay);
     background-blend-mode: screen, soft-light, multiply;
     content: "";
     inset: -0.35rem;
@@ -57,7 +47,7 @@
   }
 
   &::after {
-    border: 1px solid rgb(133 99 74 / 16%);
+    border: 1px solid var(--yd-chat-card-frame);
     content: "";
     inset: 0.38rem;
     pointer-events: none;
@@ -71,16 +61,10 @@
 }
 
 .yakov-dryh-dice-tray {
-  background:
-    linear-gradient(180deg, rgb(155 63 39 / 8%) 0%, rgb(155 63 39 / 0%) 16%),
-    linear-gradient(180deg, rgb(255 255 255 / 24%) 0%, rgb(255 255 255 / 0%) 18%),
-    linear-gradient(180deg, var(--yd-tray-bg-soft) 0%, var(--yd-tray-bg) 100%);
+  background: var(--yd-tray-shell-surface);
   border: 1px solid var(--yd-tray-frame);
   border-radius: 0.3rem;
-  box-shadow:
-    inset 0 1px 0 rgb(255 255 255 / 34%),
-    inset 0 0 0 1px var(--yd-tray-frame-soft),
-    0 18px 40px rgb(32 22 17 / 18%);
+  box-shadow: var(--yd-tray-shell-shadow);
   color: var(--yd-tray-text);
   isolation: isolate;
   overflow: hidden;
@@ -88,11 +72,7 @@
   position: relative;
 
   &::before {
-    background:
-      linear-gradient(180deg, rgb(33 21 16 / 58%) 0%, rgb(20 12 10 / 36%) 100%),
-      radial-gradient(circle at 18% 16%, rgb(255 255 255 / 26%), transparent 28%),
-      linear-gradient(180deg, rgb(255 248 238 / 72%) 0%, rgb(214 193 170 / 46%) 100%),
-      url(../assets/paper.jpg) center / 560px auto repeat;
+    background: var(--yd-tray-paper-overlay);
     background-blend-mode: multiply, screen, soft-light, multiply;
     content: "";
     inset: -0.35rem;
@@ -104,7 +84,7 @@
   }
 
   &::after {
-    border: 1px solid rgb(124 92 68 / 22%);
+    border: 1px solid var(--yd-tray-frame-line);
     content: "";
     inset: 0.32rem;
     pointer-events: none;
@@ -128,11 +108,8 @@
 
   &__panel-header {
     align-items: flex-start;
-    background:
-      linear-gradient(180deg, rgb(255 255 255 / 16%) 0%, rgb(255 255 255 / 0%) 100%);
-    box-shadow:
-      inset 0 -1px 0 rgb(255 255 255 / 26%),
-      0 1px 0 rgb(124 92 68 / 12%);
+    background: var(--yd-tray-panel-header-surface);
+    box-shadow: var(--yd-tray-panel-header-shadow);
     display: flex;
     gap: 0.75rem;
     justify-content: space-between;
@@ -185,17 +162,11 @@
     --yd-tray-pool-accent: var(--yd-tray-discipline-accent);
     --yd-tray-pool-panel: var(--yd-tray-discipline-panel);
 
-    background:
-      linear-gradient(180deg, rgb(255 255 255 / 18%) 0%, rgb(255 255 255 / 0%) 44%),
-      radial-gradient(circle at 88% 22%, rgb(255 255 255 / 18%), transparent 28%),
-      linear-gradient(135deg, color-mix(in srgb, var(--yd-tray-pool-panel) 94%, #fff 6%) 0%, var(--yd-tray-pool-panel) 100%);
+    background: var(--yd-tray-pool-surface);
     border: 1px solid var(--yd-tray-panel-edge);
     border-left: 3px solid var(--yd-tray-pool-accent);
     border-radius: 0.22rem;
-    box-shadow:
-      inset 0 1px 0 var(--yd-tray-panel-highlight),
-      inset 0 -12px 20px rgb(0 0 0 / 4%),
-      0 1px 0 rgb(255 255 255 / 22%);
+    box-shadow: var(--yd-tray-pool-shadow);
     overflow: hidden;
     padding: 0.72rem 0.68rem;
     position: relative;
@@ -267,10 +238,10 @@
 
     .yakov-dryh-button {
       background: var(--yd-tray-roll);
-      border: 1px solid rgb(126 63 46 / 88%);
+      border: 1px solid var(--yd-tray-primary-button-border);
       border-radius: 0.24rem;
       box-shadow: var(--yd-tray-roll-shadow);
-      color: #fff1e4;
+      color: var(--yd-tray-primary-button-ink);
       font-family: var(--yd-sheet-display-font);
       font-size: 1rem;
       font-weight: 700;
@@ -282,22 +253,22 @@
       text-transform: uppercase;
       pointer-events: auto;
       position: relative;
-      text-shadow: 0 1px 0 rgb(54 15 12 / 36%);
+      text-shadow: var(--yd-tray-primary-button-text-shadow);
       z-index: 4;
 
       &:hover,
       &:focus-visible {
         background: var(--yd-tray-roll-hover);
-        border-color: rgb(148 79 56 / 96%);
+        border-color: var(--yd-tray-primary-button-border-hover);
         box-shadow: var(--yd-button-hover-shadow);
-        color: #fff7ef;
+        color: var(--yd-tray-primary-button-ink-hover);
         outline: none;
       }
 
       &:disabled:hover,
       &:disabled:focus-visible {
         background: var(--yd-tray-roll);
-        border-color: rgb(126 63 46 / 88%);
+        border-color: var(--yd-tray-primary-button-border);
       }
     }
   }
@@ -310,12 +281,10 @@
   }
 
   .yakov-dryh-button {
-    background: linear-gradient(180deg, #f6eee1 0%, #ecdfc9 100%);
-    border: 1px solid rgb(162 136 107 / 52%);
+    background: var(--yd-tray-secondary-button-surface);
+    border: 1px solid var(--yd-tray-secondary-button-border);
     border-radius: 0.24rem;
-    box-shadow:
-      inset 0 1px 0 rgb(255 255 255 / 34%),
-      0 1px 0 rgb(255 255 255 / 35%);
+    box-shadow: var(--yd-tray-secondary-button-shadow);
     color: var(--yd-chat-ink);
     transition:
       background 140ms ease,
@@ -325,8 +294,8 @@
 
     &:hover,
     &:focus-visible {
-      background: linear-gradient(180deg, #fbf4e8 0%, #efe1cb 100%);
-      border-color: rgb(176 146 114 / 66%);
+      background: var(--yd-tray-secondary-button-surface-hover);
+      border-color: var(--yd-tray-secondary-button-border-hover);
       box-shadow: var(--yd-button-hover-shadow);
       outline: none;
       transform: translateY(-1px);
@@ -334,14 +303,14 @@
 
     &:disabled:hover,
     &:disabled:focus-visible {
-      background: linear-gradient(180deg, #f6eee1 0%, #ecdfc9 100%);
-      border-color: rgb(162 136 107 / 52%);
+      background: var(--yd-tray-secondary-button-surface);
+      border-color: var(--yd-tray-secondary-button-border);
       transform: none;
     }
 
     &--secondary {
-      background: linear-gradient(180deg, #f6eee1 0%, #ecdfc9 100%);
-      border-color: rgb(162 136 107 / 52%);
+      background: var(--yd-tray-secondary-button-surface);
+      border-color: var(--yd-tray-secondary-button-border);
       color: var(--yd-chat-ink);
     }
   }
@@ -349,49 +318,43 @@
   .yakov-dryh-dice-tray__actions {
     .yakov-dryh-button {
       background: var(--yd-tray-roll);
-      border-color: rgb(126 63 46 / 88%);
+      border-color: var(--yd-tray-primary-button-border);
       box-shadow: var(--yd-tray-roll-shadow);
-      color: #fff1e4;
+      color: var(--yd-tray-primary-button-ink);
       font-family: var(--yd-sheet-display-font);
       font-weight: 700;
       letter-spacing: 0.03em;
-      text-shadow: 0 1px 0 rgb(54 15 12 / 36%);
+      text-shadow: var(--yd-tray-primary-button-text-shadow);
 
       &:hover,
       &:focus-visible {
         background: var(--yd-tray-roll-hover);
-        border-color: rgb(148 79 56 / 96%);
+        border-color: var(--yd-tray-primary-button-border-hover);
         box-shadow: var(--yd-button-hover-shadow);
-        color: #fff7ef;
+        color: var(--yd-tray-primary-button-ink-hover);
       }
 
       &:disabled {
         background: var(--yd-tray-roll);
-        border-color: rgb(126 63 46 / 88%);
-        color: #fff1e4;
+        border-color: var(--yd-tray-primary-button-border);
+        color: var(--yd-tray-primary-button-ink);
       }
 
       &:disabled:hover,
       &:disabled:focus-visible {
         background: var(--yd-tray-roll);
-        border-color: rgb(126 63 46 / 88%);
-        color: #fff1e4;
+        border-color: var(--yd-tray-primary-button-border);
+        color: var(--yd-tray-primary-button-ink);
       }
     }
   }
 }
 
 .yakov-dryh-resource-tracker {
-  background:
-    radial-gradient(circle at top, rgb(255 218 173 / 8%) 0%, transparent 42%),
-    radial-gradient(circle at bottom, rgb(0 0 0 / 22%) 0%, transparent 46%),
-    linear-gradient(180deg, var(--yd-resource-surface-soft) 0%, var(--yd-resource-surface) 100%);
+  background: var(--yd-resource-tracker-surface);
   border: 1px solid var(--yd-resource-frame-edge);
   border-radius: 0.4rem;
-  box-shadow:
-    inset 0 1px 0 rgb(255 234 214 / 9%),
-    inset 0 0 0 1px rgb(255 214 181 / 4%),
-    0 18px 42px rgb(0 0 0 / 42%);
+  box-shadow: var(--yd-resource-tracker-shadow);
   color: var(--yd-resource-ink);
   display: grid;
   gap: 0.62rem;
@@ -408,20 +371,15 @@
   }
 
   &::before {
-    border: 1px solid rgb(184 146 115 / 35%);
+    border: 1px solid rgb(140 148 156 / 35%);
     border-radius: 0.18rem;
-    box-shadow:
-      inset 0 0 0 1px rgb(0 0 0 / 24%),
-      inset 0 12px 20px rgb(255 220 176 / 3%),
-      inset 0 -12px 18px rgb(0 0 0 / 18%);
+    box-shadow: var(--yd-resource-tracker-outer-frame);
   }
 
   &::after {
     border-radius: 0.18rem;
     inset: 0.38rem;
-    box-shadow:
-      0 0 0 1px rgb(255 220 186 / 4%),
-      inset 0 0 0 1px rgb(98 67 58 / 68%);
+    box-shadow: var(--yd-resource-tracker-inner-frame);
   }
 
   &__header {
@@ -500,13 +458,11 @@
     width: 100%;
 
     &::before {
-      background:
-        linear-gradient(180deg, rgb(255 228 197 / 7%) 0%, rgb(0 0 0 / 32%) 100%),
-        linear-gradient(180deg, #281818 0%, #1a1012 100%);
-      border: 1px solid rgb(117 82 65 / 74%);
+      background: var(--yd-resource-rail-surface);
+      border: 1px solid var(--yd-resource-rail-border);
       border-radius: 0.24rem;
       box-shadow:
-        inset 0 1px 0 rgb(255 221 183 / 8%),
+        inset 0 1px 0 rgb(255 255 255 / 8%),
         inset 0 -4px 10px rgb(0 0 0 / 20%);
       content: "";
       height: 0.72rem;
@@ -520,15 +476,10 @@
   }
 
   &__adjuster {
-    background:
-      linear-gradient(180deg, rgb(255 220 182 / 6%) 0%, rgb(0 0 0 / 18%) 100%),
-      linear-gradient(180deg, var(--yd-resource-button) 0%, #231618 100%);
+    background: var(--yd-resource-adjuster-surface);
     border: 1px solid var(--yd-resource-button-edge);
     border-radius: 0.16rem;
-    box-shadow:
-      inset 0 1px 0 rgb(255 233 204 / 10%),
-      inset 0 -6px 10px rgb(0 0 0 / 18%),
-      0 6px 14px rgb(0 0 0 / 24%);
+    box-shadow: var(--yd-resource-adjuster-shadow);
     color: var(--yd-resource-ink);
     font-family: var(--yd-sheet-display-font);
     font-size: 0.62rem;
@@ -538,15 +489,13 @@
     min-width: 0.86rem;
     padding: 0;
     position: relative;
-    text-shadow: 0 1px 0 rgb(0 0 0 / 32%);
+    text-shadow: var(--yd-resource-adjuster-text-shadow);
     z-index: 2;
 
     &:hover,
     &:focus-visible {
-      background:
-        linear-gradient(180deg, rgb(255 220 182 / 9%) 0%, rgb(0 0 0 / 14%) 100%),
-        linear-gradient(180deg, var(--yd-resource-button-hover) 0%, #2a1b1d 100%);
-      border-color: color-mix(in srgb, var(--yd-resource-button-edge) 70%, #b8916d);
+      background: var(--yd-resource-adjuster-surface-hover);
+      border-color: var(--yd-resource-adjuster-border-hover);
       box-shadow: var(--yd-button-hover-shadow);
       outline: none;
       transform: translateY(-1px);
@@ -554,9 +503,7 @@
 
     &:disabled:hover,
     &:disabled:focus-visible {
-      background:
-        linear-gradient(180deg, rgb(255 220 182 / 6%) 0%, rgb(0 0 0 / 18%) 100%),
-        linear-gradient(180deg, var(--yd-resource-button) 0%, #231618 100%);
+      background: var(--yd-resource-adjuster-surface);
       border-color: var(--yd-resource-button-edge);
       transform: none;
     }
@@ -574,15 +521,10 @@
 
   &__coin {
     align-items: center;
-    background:
-      radial-gradient(circle at 32% 26%, rgb(255 255 255 / 18%) 0%, transparent 28%),
-      linear-gradient(180deg, rgb(255 236 212 / 7%) 0%, rgb(0 0 0 / 14%) 100%),
-      var(--yd-resource-pool-image) center / contain no-repeat;
+    background: var(--yd-resource-coin-surface);
     border: 0;
     border-radius: 999px;
-    box-shadow:
-      0 10px 20px rgb(0 0 0 / 28%),
-      0 0 0 1px rgb(255 255 255 / 5%);
+    box-shadow: var(--yd-resource-coin-shadow);
     display: grid;
     height: 3.18rem;
     overflow: hidden;
@@ -592,15 +534,13 @@
   }
 
   &__value {
-    color: #fff1df;
+    color: var(--yd-resource-value-ink);
     font-family: var(--yd-sheet-display-font);
     font-size: 1.68rem;
     font-weight: 700;
     line-height: 1;
     position: relative;
-    text-shadow:
-      0 1px 0 rgb(34 16 10 / 80%),
-      0 4px 14px rgb(0 0 0 / 30%);
+    text-shadow: var(--yd-resource-value-shadow);
     z-index: 1;
   }
 
@@ -638,13 +578,11 @@
   }
 
   &__scene-button {
-    background:
-      linear-gradient(180deg, rgb(255 223 188 / 10%) 0%, rgb(0 0 0 / 20%) 100%),
-      linear-gradient(180deg, var(--yd-resource-scene) 0%, #3f2724 100%);
-    border: 1px solid color-mix(in srgb, var(--yd-resource-button-edge) 80%, #a27452);
+    background: var(--yd-resource-scene-surface);
+    border: 1px solid var(--yd-resource-scene-border);
     border-radius: 0.2rem;
     box-shadow:
-      inset 0 1px 0 rgb(255 232 204 / 14%),
+      inset 0 1px 0 rgb(255 255 255 / 14%),
       inset 0 -6px 12px rgb(0 0 0 / 18%),
       0 8px 18px rgb(0 0 0 / 22%);
     color: var(--yd-resource-ink);
@@ -660,18 +598,14 @@
 
     &:hover,
     &:focus-visible {
-      background:
-        linear-gradient(180deg, rgb(255 223 188 / 14%) 0%, rgb(0 0 0 / 16%) 100%),
-        linear-gradient(180deg, var(--yd-resource-scene-hover) 0%, #4f302b 100%);
+      background: var(--yd-resource-scene-surface-hover);
       box-shadow: var(--yd-button-hover-shadow);
       outline: none;
     }
 
     &:disabled:hover,
     &:disabled:focus-visible {
-      background:
-        linear-gradient(180deg, rgb(255 223 188 / 10%) 0%, rgb(0 0 0 / 20%) 100%),
-        linear-gradient(180deg, var(--yd-resource-scene) 0%, #3f2724 100%);
+      background: var(--yd-resource-scene-surface);
     }
   }
 

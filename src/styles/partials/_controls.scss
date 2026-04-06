@@ -42,16 +42,7 @@
     input,
     textarea,
     select {
-      background:
-        linear-gradient(180deg, rgb(255 255 255 / 15%) 0%, rgb(255 255 255 / 0%) 22%),
-        radial-gradient(circle at 16% 18%, rgb(255 255 255 / 14%), transparent 30%),
-        linear-gradient(180deg, rgb(217 214 210 / 82%) 0%, rgb(198 194 189 / 76%) 100%),
-        linear-gradient(
-          180deg,
-          var(--yd-sheet-input-paper) 0%,
-          var(--yd-sheet-input-paper-soft) 100%
-        ),
-        url("../assets/paper.jpg") center / 560px auto repeat;
+      background: var(--yd-sheet-input-surface);
       background-blend-mode: screen, soft-light, saturation, multiply, normal;
       border: 1px solid var(--yd-sheet-input-border);
       border-radius: 0.12rem;
@@ -64,16 +55,12 @@
 
       &:focus {
         border-color: color-mix(in srgb, var(--yd-sheet-input-paper-line) 55%, #fff);
-        box-shadow:
-          inset 0 1px 0 rgb(255 255 255 / 42%),
-          inset 0 -12px 18px rgb(78 58 43 / 7%),
-          0 0 0 1px rgb(0 0 0 / 8%),
-          0 0 0 2px rgb(248 237 220 / 12%);
+        box-shadow: var(--yd-sheet-input-focus-shadow);
         outline: none;
       }
 
       &::placeholder {
-        color: color-mix(in srgb, var(--yd-sheet-input-ink) 62%, #7d6e63);
+        color: var(--yd-sheet-input-placeholder);
         opacity: 1;
       }
     }
@@ -146,12 +133,10 @@
 
 .yakov-dryh-sheet {
   .yakov-dryh-button {
-    background: linear-gradient(180deg, var(--yd-sheet-button-bg) 0%, #e4d3bb 100%);
-    border: 1px solid rgb(78 60 44 / 18%);
+    background: var(--yd-sheet-button-surface);
+    border: 1px solid var(--yd-sheet-button-border);
     border-radius: 0.12rem;
-    box-shadow:
-      inset 0 1px 0 rgb(255 255 255 / 35%),
-      0 6px 18px rgb(0 0 0 / 10%);
+    box-shadow: var(--yd-sheet-button-shadow);
     color: var(--yd-sheet-button-ink);
     font-family: var(--yd-sheet-body-font);
     font-size: 0.92rem;
@@ -165,7 +150,7 @@
 
     &:hover,
     &:focus-visible {
-      background: linear-gradient(180deg, var(--yd-sheet-button-bg-hover) 0%, #ead9c2 100%);
+      background: var(--yd-sheet-button-surface-hover);
       box-shadow: var(--yd-button-hover-shadow);
       outline: none;
       transform: translateY(-1px);
@@ -173,16 +158,14 @@
 
     &:disabled:hover,
     &:disabled:focus-visible {
-      background: linear-gradient(180deg, var(--yd-sheet-button-bg) 0%, #e4d3bb 100%);
-      box-shadow:
-        inset 0 1px 0 rgb(255 255 255 / 35%),
-        0 6px 18px rgb(0 0 0 / 10%);
+      background: var(--yd-sheet-button-surface);
+      box-shadow: var(--yd-sheet-button-shadow);
       transform: none;
     }
 
     &--secondary {
-      background: linear-gradient(180deg, var(--yd-sheet-button-bg) 0%, #e4d3bb 100%);
-      border-color: rgb(78 60 44 / 18%);
+      background: var(--yd-sheet-button-surface);
+      border-color: var(--yd-sheet-button-border);
       color: var(--yd-sheet-button-ink);
     }
 
