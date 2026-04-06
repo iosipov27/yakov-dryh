@@ -133,10 +133,10 @@
   --yd-chat-card-frame: rgb(255 248 236 / 8%);
   --yd-chat-panel: #181b1f;
   --yd-chat-panel-strong: #20252a;
-  --yd-chat-ink: #eef2f4;
+  --yd-chat-ink: #bfbfbf;
   --yd-chat-muted: rgb(190 198 204 / 76%);
   --yd-chat-success-bg: rgb(70 86 77 / 40%);
-  --yd-chat-success-ink: #eff6f1;
+  --yd-chat-success-ink: #6c9177;
   --yd-chat-failure-bg: rgb(107 45 51 / 42%);
   --yd-chat-failure-ink: #fbf0f2;
   --yd-chat-accent: #b4bcc4;
@@ -2435,16 +2435,20 @@ h6 {
   z-index: 1;
 }
 .yakov-dryh-chat-card.yakov-dryh-roll-card::before {
-  background: var(--yd-chat-card-paper-overlay);
-  background-blend-mode: screen, soft-light, multiply;
+  background: var(--yd-chat-card-face-overlay);
+  background-blend-mode: normal, soft-light, normal;
   content: "";
   inset: -0.35rem;
-  opacity: 1;
+  opacity: 0.92;
   pointer-events: none;
   position: absolute;
-  /* transform: scale(0.5); */
   z-index: 0;
-  filter: blur(1.6px) saturate(0.3) brightness(1.06) contrast(0.8);
+  filter: blur(2.8px) saturate(0.48) brightness(0.74) contrast(0.9);
+  transform: scale(1.04);
+  transform-origin: center;
+}
+.yakov-dryh-chat-card.yakov-dryh-roll-card::after {
+  content: none;
 }
 .yakov-dryh-chat-card::after {
   border: 1px solid var(--yd-chat-card-frame);
@@ -2470,7 +2474,7 @@ h6 {
   padding-bottom: 0.65rem;
 }
 .chat-message:has(.yakov-dryh-chat-card) .message-sender {
-  color: var(--yd-chat-message-ink);
+  color: var(--yd-text-tertiary);
   font-family: var(--yd-sheet-display-font);
   font-size: 1.08rem;
   font-weight: 700;
@@ -3326,7 +3330,7 @@ h6 {
   padding-bottom: 0.65rem;
 }
 .yakov-dryh-roll-card .yakov-dryh-header h3 {
-  color: var(--yd-chat-ink);
+  color: var(--yd-text-tertiary);
   font-family: var(--yd-sheet-display-font);
   font-size: 1.5rem;
   font-weight: 700;
@@ -3370,6 +3374,7 @@ h6 {
 }
 .yakov-dryh-roll-card__dominant {
   font-size: 1.02rem;
+  color: var(--yd-text-light);
 }
 .yakov-dryh-roll-card__dominant strong {
   color: var(--yd-chat-ink);
@@ -3401,7 +3406,7 @@ h6 {
 }
 .yakov-dryh-roll-card .yakov-dryh-button:not(.yakov-dryh-button--compact) {
   min-height: 2rem;
-  padding: 0.5rem 0.8rem;
+  width: 100%;
 }
 .yakov-dryh-roll-card .yakov-dryh-button:hover, .yakov-dryh-roll-card .yakov-dryh-button:focus-visible {
   outline: none;
@@ -3427,32 +3432,36 @@ h6 {
   border-color: var(--yd-chat-secondary-button-border);
   box-shadow: var(--yd-chat-secondary-button-shadow);
 }
-.yakov-dryh-roll-card__finalize-button {
+.yakov-dryh-roll-card .yakov-dryh-button--despair {
   background: var(--yd-cta-surface);
   border: 1px solid var(--yd-cta-border);
+  border-radius: 0.12rem;
   box-shadow: var(--yd-cta-shadow);
   color: var(--yd-cta-ink);
-  font-family: var(--yd-sheet-display-font);
-  font-size: 1.04rem;
-  font-weight: 700;
-  letter-spacing: 0.01em;
-  padding-inline: 0.95rem;
+  font-family: var(--yd-sheet-body-font);
+  font-size: 0.92rem;
+  font-weight: 500;
+  min-height: 2.4rem;
+  opacity: 0.78;
+  padding: 0.5rem 0.8rem;
   text-shadow: var(--yd-cta-text-shadow);
-  transition: transform 140ms ease, box-shadow 140ms ease, background 140ms ease, border-color 140ms ease, color 140ms ease;
+  transition: transform 140ms ease, box-shadow 140ms ease, background 140ms ease, opacity 140ms ease;
 }
-.yakov-dryh-roll-card__finalize-button:hover, .yakov-dryh-roll-card__finalize-button:focus-visible {
+.yakov-dryh-roll-card .yakov-dryh-button--despair:hover, .yakov-dryh-roll-card .yakov-dryh-button--despair:focus-visible {
   background: var(--yd-cta-surface-hover);
   border-color: var(--yd-cta-border-hover);
-  box-shadow: var(--yd-button-hover-shadow);
+  box-shadow: var(--yd-cta-shadow), var(--yd-button-hover-shadow);
   color: var(--yd-cta-ink-hover);
+  opacity: 0.9;
   outline: none;
   transform: translateY(-1px);
 }
-.yakov-dryh-roll-card__finalize-button:disabled:hover, .yakov-dryh-roll-card__finalize-button:disabled:focus-visible {
+.yakov-dryh-roll-card .yakov-dryh-button--despair:disabled, .yakov-dryh-roll-card .yakov-dryh-button--despair:disabled:hover, .yakov-dryh-roll-card .yakov-dryh-button--despair:disabled:focus-visible {
   background: var(--yd-cta-surface);
   border-color: var(--yd-cta-border);
   box-shadow: var(--yd-cta-shadow);
   color: var(--yd-cta-ink);
+  opacity: 0.45;
   transform: none;
 }
 
@@ -3461,7 +3470,7 @@ h6 {
   display: flex;
   gap: 0.75rem;
   justify-content: space-between;
-  padding: 0.5rem 1rem;
+  padding: 0.5rem;
   position: relative;
 }
 .yakov-dryh-roll-pool::before {
@@ -3579,7 +3588,7 @@ h6 {
   font-size: 1.05rem;
 }
 .yakov-dryh-roll-pool--exhaustion::before {
-  background: var(--yd-exhaustion);
+  background: none;
 }
 .yakov-dryh-roll-pool--exhaustion .yakov-dryh-roll-pool__die-face {
   background: var(--yd-exhaustion);
@@ -3589,7 +3598,7 @@ h6 {
   background: rgba(255, 250, 244, 0.98);
 }
 .yakov-dryh-roll-pool--madness::before {
-  background: var(--yd-madness);
+  background: none;
 }
 .yakov-dryh-roll-pool--madness .yakov-dryh-roll-pool__die-face {
   background: var(--yd-madness);
@@ -3599,7 +3608,7 @@ h6 {
   background: rgba(255, 250, 244, 0.98);
 }
 .yakov-dryh-roll-pool--pain::before {
-  background: var(--yd-pain);
+  background: none;
 }
 .yakov-dryh-roll-pool--pain .yakov-dryh-roll-pool__die-face {
   background: var(--yd-pain);
@@ -3612,7 +3621,7 @@ h6 {
   color: var(--yd-success-pain);
 }
 .yakov-dryh-roll-pool--discipline::before {
-  background: var(--yd-chat-accent);
+  background: none;
 }
 
 .yakov-dryh-dice-tray,
@@ -4038,52 +4047,39 @@ h6 {
 .yakov-dryh-resource-tracker__controls {
   align-items: center;
   display: flex;
+  gap: 0.12rem;
   justify-content: center;
   min-height: 3.72rem;
   position: relative;
   width: 100%;
 }
-.yakov-dryh-resource-tracker__controls::before {
-  background: var(--yd-resource-rail-surface);
-  border: 1px solid var(--yd-resource-rail-border);
-  border-radius: 0.24rem;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), inset 0 -4px 10px rgba(0, 0, 0, 0.2);
-  content: "";
-  height: 0.72rem;
-  left: 0.95rem;
-  position: absolute;
-  right: 0.95rem;
-  top: 50%;
-  transform: translateY(-50%);
-  z-index: 0;
-}
 .yakov-dryh-resource-tracker__adjuster {
-  background: var(--yd-resource-adjuster-surface);
-  border: 1px solid var(--yd-resource-button-edge);
-  border-radius: 0.16rem;
-  box-shadow: var(--yd-resource-adjuster-shadow);
-  color: var(--yd-resource-ink);
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  color: var(--yd-resource-muted);
   font-family: var(--yd-sheet-display-font);
-  font-size: 0.62rem;
+  font-size: 1.18rem;
   font-weight: 700;
-  height: 0.86rem;
+  height: auto;
   line-height: 1;
-  min-width: 0.86rem;
+  min-width: 0.7rem;
   padding: 0;
   position: relative;
-  text-shadow: var(--yd-resource-adjuster-text-shadow);
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.72);
   z-index: 2;
 }
 .yakov-dryh-resource-tracker__adjuster:hover, .yakov-dryh-resource-tracker__adjuster:focus-visible {
-  background: var(--yd-resource-adjuster-surface-hover);
-  border-color: var(--yd-resource-adjuster-border-hover);
-  box-shadow: var(--yd-button-hover-shadow);
+  background: transparent;
+  box-shadow: none;
+  color: var(--yd-resource-value-ink);
   outline: none;
   transform: translateY(-1px);
 }
 .yakov-dryh-resource-tracker__adjuster:disabled:hover, .yakov-dryh-resource-tracker__adjuster:disabled:focus-visible {
-  background: var(--yd-resource-adjuster-surface);
-  border-color: var(--yd-resource-button-edge);
+  background: transparent;
+  box-shadow: none;
   transform: none;
 }
 .yakov-dryh-resource-tracker__coin-wrap {

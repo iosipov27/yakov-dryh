@@ -29,16 +29,21 @@
     }
 
     &::before {
-      background: var(--yd-chat-card-paper-overlay);
-      background-blend-mode: screen, soft-light, multiply;
+      background: var(--yd-chat-card-face-overlay);
+      background-blend-mode: normal, soft-light, normal;
       content: "";
       inset: -0.35rem;
-      opacity: 1;
+      opacity: 0.92;
       pointer-events: none;
       position: absolute;
-      /* transform: scale(0.5); */
       z-index: 0;
-      filter: blur(1.6px) saturate(0.3) brightness(1.06) contrast(0.8);
+      filter: blur(2.8px) saturate(0.48) brightness(0.74) contrast(0.9);
+      transform: scale(1.04);
+      transform-origin: center;
+    }
+
+    &::after {
+      content: none;
     }
   }
 
@@ -68,7 +73,7 @@
   }
 
   .message-sender {
-    color: var(--yd-chat-message-ink);
+    color: var(--yd-text-tertiary);
     font-family: var(--yd-sheet-display-font);
     font-size: 1.08rem;
     font-weight: 700;

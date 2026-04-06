@@ -20,7 +20,7 @@
     padding-bottom: 0.65rem;
 
     h3 {
-      color: var(--yd-chat-ink);
+      color: var(--yd-text-tertiary);
       font-family: var(--yd-sheet-display-font);
       font-size: 1.5rem;
       font-weight: 700;
@@ -76,7 +76,7 @@
 
   &__dominant {
     font-size: 1.02rem;
-
+    color: var(--yd-text-light);
     strong {
       color: var(--yd-chat-ink);
       margin-right: 0.2rem;
@@ -118,7 +118,7 @@
 
     &:not(.yakov-dryh-button--compact) {
       min-height: 2rem;
-      padding: 0.5rem 0.8rem;
+      width: 100%;
     }
 
     &:hover,
@@ -153,43 +153,47 @@
         box-shadow: var(--yd-chat-secondary-button-shadow);
       }
     }
-  }
 
-  &__finalize-button {
-    background: var(--yd-cta-surface);
-    border: 1px solid var(--yd-cta-border);
-    box-shadow: var(--yd-cta-shadow);
-    color: var(--yd-cta-ink);
-    font-family: var(--yd-sheet-display-font);
-    font-size: 1.04rem;
-    font-weight: 700;
-    letter-spacing: 0.01em;
-    padding-inline: 0.95rem;
-    text-shadow: var(--yd-cta-text-shadow);
-    transition:
-      transform 140ms ease,
-      box-shadow 140ms ease,
-      background 140ms ease,
-      border-color 140ms ease,
-      color 140ms ease;
-
-    &:hover,
-    &:focus-visible {
-      background: var(--yd-cta-surface-hover);
-      border-color: var(--yd-cta-border-hover);
-      box-shadow: var(--yd-button-hover-shadow);
-      color: var(--yd-cta-ink-hover);
-      outline: none;
-      transform: translateY(-1px);
-    }
-
-    &:disabled:hover,
-    &:disabled:focus-visible {
+    &--despair {
       background: var(--yd-cta-surface);
-      border-color: var(--yd-cta-border);
+      border: 1px solid var(--yd-cta-border);
+      border-radius: 0.12rem;
       box-shadow: var(--yd-cta-shadow);
       color: var(--yd-cta-ink);
-      transform: none;
+      font-family: var(--yd-sheet-body-font);
+      font-size: 0.92rem;
+      font-weight: 500;
+      min-height: 2.4rem;
+      opacity: 0.78;
+      padding: 0.5rem 0.8rem;
+      text-shadow: var(--yd-cta-text-shadow);
+      transition:
+        transform 140ms ease,
+        box-shadow 140ms ease,
+        background 140ms ease,
+        opacity 140ms ease;
+
+      &:hover,
+      &:focus-visible {
+        background: var(--yd-cta-surface-hover);
+        border-color: var(--yd-cta-border-hover);
+        box-shadow: var(--yd-cta-shadow), var(--yd-button-hover-shadow);
+        color: var(--yd-cta-ink-hover);
+        opacity: 0.9;
+        outline: none;
+        transform: translateY(-1px);
+      }
+
+      &:disabled,
+      &:disabled:hover,
+      &:disabled:focus-visible {
+        background: var(--yd-cta-surface);
+        border-color: var(--yd-cta-border);
+        box-shadow: var(--yd-cta-shadow);
+        color: var(--yd-cta-ink);
+        opacity: 0.45;
+        transform: none;
+      }
     }
   }
 }
@@ -199,7 +203,7 @@
   display: flex;
   gap: 0.75rem;
   justify-content: space-between;
-  padding: 0.5rem 1rem;
+  padding: 0.5rem;
   position: relative;
 
   &::before {
@@ -341,7 +345,7 @@
 
   &--exhaustion {
     &::before {
-      background: var(--yd-exhaustion);
+       background: none;
     }
 
     .yakov-dryh-roll-pool__die-face {
@@ -358,7 +362,7 @@
 
   &--madness {
     &::before {
-      background: var(--yd-madness);
+       background: none;
     }
 
     .yakov-dryh-roll-pool__die-face {
@@ -375,7 +379,7 @@
 
   &--pain {
     &::before {
-      background: var(--yd-pain);
+       background: none;
     }
 
     .yakov-dryh-roll-pool__die-face {
@@ -396,7 +400,7 @@
 
   &--discipline {
     &::before {
-      background: var(--yd-chat-accent);
+      background: none;
     }
   }
 }
