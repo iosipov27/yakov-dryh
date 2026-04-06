@@ -47,8 +47,7 @@ export class YakovDryhCharacterSheet extends BaseSheet {
     },
     position: {
       height: "auto" as const,
-      width: 775,
-      minWidth: 775
+      width: 800
     },
     tag: "form",
     window: {
@@ -130,6 +129,31 @@ export class YakovDryhCharacterSheet extends BaseSheet {
     this.boundRoot = root;
   }
 
+  private async safeActorUpdate(
+    patch: Record<string, unknown>
+  ): Promise<foundry.documents.BaseActor | null> {
+    const actor = this.actor;
+    if (!actor) return null;
+
+    const validRe = /\.(png|jpe?g|gif|webp|svg)$/i;
+    if (!actor.img || !validRe.test(String(actor.img))) {
+      try {
+        // Ensure actor has a valid img before applying other updates to avoid validation errors
+        // Use a neutral placeholder available in Foundry
+        // eslint-disable-next-line @typescript-eslint/await-thenable
+        await actor.update({ img: "icons/svg/mystery-man.svg" } as Record<
+          string,
+          unknown
+        >);
+      } catch (err) {
+        // Ignore — we'll still attempt the requested update
+        console.warn("Failed to sanitize actor.img before update:", err);
+      }
+    }
+
+    return actor.update(patch as Record<string, unknown>);
+  }
+
   private handleRootClick(event: MouseEvent): void {
     const target = event.target;
 
@@ -155,7 +179,10 @@ export class YakovDryhCharacterSheet extends BaseSheet {
         current: this.actor.img ?? "",
         callback: async (path: string) => {
           try {
-            await this.actor?.update({ img: path } as Record<string, unknown>);
+            await this.safeActorUpdate({ img: path } as Record<
+              string,
+              unknown
+            >);
           } catch (err) {
             console.error(err);
           }
@@ -317,9 +344,7 @@ export class YakovDryhCharacterSheet extends BaseSheet {
     }
 
     try {
-      await actor.update({
-        [`system.${field}`]: nextValue
-      } as Record<string, unknown>);
+      await this.safeActorUpdate({ [`system.${field}`]: nextValue } as Record<string, unknown>);
     } catch (error) {
       this.poolEditValues = restoredEditValues;
       throw error;
@@ -347,7 +372,7 @@ export class YakovDryhCharacterSheet extends BaseSheet {
       return;
     }
 
-    await actor.update({
+    await this.safeActorUpdate({
       "system.responses.slots": currentData.responses.slots.map(
         (slot, index) =>
           index === slotIndex
@@ -385,7 +410,7 @@ export class YakovDryhCharacterSheet extends BaseSheet {
       return;
     }
 
-    await actor.update({
+    await this.safeActorUpdate({
       "system.responses.slots": updatedResponses.slots,
       "system.responses.max": DRYH_RESPONSE_MAX
     } as Record<string, unknown>);
@@ -434,7 +459,7 @@ export class YakovDryhCharacterSheet extends BaseSheet {
     this.responseEditSlots = null;
 
     try {
-      await actor.update({
+      await this.safeActorUpdate({
         "system.responses.slots": updatedResponses.slots,
         "system.responses.max": DRYH_RESPONSE_MAX
       } as Record<string, unknown>);
@@ -486,8 +511,6 @@ export class YakovDryhCharacterSheet extends BaseSheet {
       return;
     }
 
-    await this.actor.update({
-      "system.scars": parseLineList(value)
-    } as Record<string, unknown>);
+    await this.safeActorUpdate({ "system.scars": parseLineList(value) } as Record<string, unknown>);
   }
 }

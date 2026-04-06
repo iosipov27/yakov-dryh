@@ -362,14 +362,13 @@
     &__checkbox {
       appearance: none;
       background: #3b333f;
-      border: 1px solid rgb(255 255 255 / 10%);
       border-radius: 0.16rem;
       box-shadow:
         inset 0 1px 0 rgb(255 255 255 / 6%),
         0 1px 4px rgb(0 0 0 / 16%);
-      height: 1.25rem;
+      height: 1rem;
       position: relative;
-      width: 1.25rem;
+      width: 1rem;
 
       &::after {
         border-bottom: 2px solid rgb(23 17 19 / 78%);
