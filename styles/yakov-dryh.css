@@ -2237,25 +2237,6 @@ h6 {
   position: absolute;
 }
 
-.yakov-dryh-sheet-shell {
-  background: radial-gradient(circle at top left, rgba(255, 241, 221, 0.05), transparent 28%), radial-gradient(circle at 84% 26%, rgba(178, 104, 66, 0.1), transparent 28%), radial-gradient(circle at 50% 100%, rgba(228, 188, 144, 0.05), transparent 30%), linear-gradient(180deg, rgba(45, 28, 23, 0.98) 0%, rgba(20, 12, 10, 0.99) 100%);
-  border: 1px solid var(--yd-sheet-border);
-  border-radius: 0.35rem;
-  box-shadow: var(--yd-sheet-shadow);
-  color: var(--yd-sheet-ink);
-  font-family: var(--yd-sheet-body-font);
-  padding: 1.3rem 1.35rem 1.4rem;
-  position: relative;
-}
-.yakov-dryh-sheet-shell::after {
-  border: 1px solid rgba(255, 255, 255, 0.03);
-  border-radius: inherit;
-  content: "";
-  inset: 0.35rem;
-  pointer-events: none;
-  position: absolute;
-}
-
 .yakov-dryh-sheet .window-header {
   background: linear-gradient(180deg, rgba(49, 40, 37, 0.99) 0%, rgba(28, 24, 23, 0.99) 100%);
   border-bottom: 1px solid var(--yd-sheet-divider);
@@ -2284,8 +2265,40 @@ h6 {
   outline: none;
 }
 .yakov-dryh-sheet .window-content {
-  background: radial-gradient(circle at top center, rgba(255, 238, 216, 0.04), transparent 24%), radial-gradient(circle at 85% 18%, rgba(186, 116, 74, 0.08), transparent 22%), linear-gradient(180deg, var(--yd-sheet-bg-soft) 0%, var(--yd-sheet-bg) 100%);
+  background: radial-gradient(circle at 50% 46%, rgba(196, 141, 99, 0.05), transparent 32%), radial-gradient(circle at 50% 52%, transparent 42%, rgba(15, 8, 7, 0.2) 100%), radial-gradient(circle at top left, rgba(255, 241, 221, 0.05), transparent 28%), radial-gradient(circle at 84% 26%, rgba(178, 104, 66, 0.1), transparent 28%), radial-gradient(circle at 50% 100%, rgba(228, 188, 144, 0.05), transparent 30%), linear-gradient(180deg, rgba(45, 28, 23, 0.98) 0%, rgba(20, 12, 10, 0.99) 100%);
+  border-radius: 0 0 0.35rem 0.35rem;
+  color: var(--yd-sheet-ink);
+  font-family: var(--yd-sheet-body-font);
+  isolation: isolate;
+  overflow: hidden;
   padding: 0;
+  position: relative;
+}
+.yakov-dryh-sheet .window-content > * {
+  position: relative;
+  z-index: 1;
+}
+.yakov-dryh-sheet .window-content::before {
+  background: linear-gradient(180deg, rgba(167, 134, 114, 0.82) 0%, rgba(85, 69, 62, 0.78) 100%), url(../assets/bg.jpg) center/440px 440px repeat;
+  background-blend-mode: overlay, normal;
+  content: "";
+  inset: 0;
+  filter: blur(1.1px) saturate(0.42) brightness(0.86);
+  opacity: 0.9;
+  pointer-events: none;
+  position: absolute;
+  transform: scale(1.025);
+  transform-origin: center;
+  z-index: 0;
+}
+.yakov-dryh-sheet .window-content::after {
+  border: 1px solid rgba(255, 255, 255, 0.03);
+  border-radius: inherit;
+  content: "";
+  inset: 0.35rem;
+  pointer-events: none;
+  position: absolute;
+  z-index: 2;
 }
 
 .yakov-dryh-dialog .window-header h1 {

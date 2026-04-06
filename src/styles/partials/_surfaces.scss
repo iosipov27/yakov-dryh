@@ -35,30 +35,6 @@
   }
 }
 
-.yakov-dryh-sheet-shell {
-  background:
-    radial-gradient(circle at top left, rgb(255 241 221 / 5%), transparent 28%),
-    radial-gradient(circle at 84% 26%, rgb(178 104 66 / 10%), transparent 28%),
-    radial-gradient(circle at 50% 100%, rgb(228 188 144 / 5%), transparent 30%),
-    linear-gradient(180deg, rgb(45 28 23 / 98%) 0%, rgb(20 12 10 / 99%) 100%);
-  border: 1px solid var(--yd-sheet-border);
-  border-radius: 0.35rem;
-  box-shadow: var(--yd-sheet-shadow);
-  color: var(--yd-sheet-ink);
-  font-family: var(--yd-sheet-body-font);
-  padding: 1.3rem 1.35rem 1.4rem;
-  position: relative;
-
-  &::after {
-    border: 1px solid rgb(255 255 255 / 3%);
-    border-radius: inherit;
-    content: "";
-    inset: 0.35rem;
-    pointer-events: none;
-    position: absolute;
-  }
-}
-
 .yakov-dryh-sheet {
   .window-header {
     background: linear-gradient(180deg, rgb(49 40 37 / 99%) 0%, rgb(28 24 23 / 99%) 100%);
@@ -99,10 +75,49 @@
 
   .window-content {
     background:
-      radial-gradient(circle at top center, rgb(255 238 216 / 4%), transparent 24%),
-      radial-gradient(circle at 85% 18%, rgb(186 116 74 / 8%), transparent 22%),
-      linear-gradient(180deg, var(--yd-sheet-bg-soft) 0%, var(--yd-sheet-bg) 100%);
+      radial-gradient(circle at 50% 46%, rgb(196 141 99 / 5%), transparent 32%),
+      radial-gradient(circle at 50% 52%, transparent 42%, rgb(15 8 7 / 20%) 100%),
+      radial-gradient(circle at top left, rgb(255 241 221 / 5%), transparent 28%),
+      radial-gradient(circle at 84% 26%, rgb(178 104 66 / 10%), transparent 28%),
+      radial-gradient(circle at 50% 100%, rgb(228 188 144 / 5%), transparent 30%),
+      linear-gradient(180deg, rgb(45 28 23 / 98%) 0%, rgb(20 12 10 / 99%) 100%);
+    border-radius: 0 0 0.35rem 0.35rem;
+    color: var(--yd-sheet-ink);
+    font-family: var(--yd-sheet-body-font);
+    isolation: isolate;
+    overflow: hidden;
     padding: 0;
+    position: relative;
+
+    > * {
+      position: relative;
+      z-index: 1;
+    }
+
+    &::before {
+      background: linear-gradient(180deg, rgb(167 134 114 / 82%) 0%, rgb(85 69 62 / 78%) 100%), url(../assets/bg.jpg) center / 440px 440px repeat;
+      background-blend-mode: overlay, normal;
+      content: "";
+      inset: 0;
+      filter: blur(1.1px) saturate(0.42) brightness(0.86);
+      opacity: 0.9;
+      pointer-events: none;
+      position: absolute;
+      transform: scale(1.025);
+      transform-origin: center;
+      z-index: 0;
+
+    }
+
+    &::after {
+      border: 1px solid rgb(255 255 255 / 3%);
+      border-radius: inherit;
+      content: "";
+      inset: 0.35rem;
+      pointer-events: none;
+      position: absolute;
+      z-index: 2;
+    }
   }
 }
 
