@@ -170,15 +170,18 @@
     }
 
     &--despair {
-      background: var(--yd-tray-roll);
-      border-color: color-mix(in srgb, var(--yd-resource-despair-edge) 50%, #000);
-      color: var(--yd-text-light);
-      box-shadow: var(--yd-tray-roll-shadow);
+      background: var(--yd-cta-surface);
+      border-color: var(--yd-cta-border);
+      color: var(--yd-cta-ink);
+      box-shadow: var(--yd-cta-shadow);
+      text-shadow: var(--yd-cta-text-shadow);
 
       &:hover,
       &:focus-visible {
-        background: var(--yd-tray-roll-hover);
-        box-shadow: var(--yd-tray-roll-shadow), var(--yd-button-hover-shadow);
+        background: var(--yd-cta-surface-hover);
+        border-color: var(--yd-cta-border-hover);
+        box-shadow: var(--yd-cta-shadow), var(--yd-button-hover-shadow);
+        color: var(--yd-cta-ink-hover);
         transform: translateY(-1px);
       }
     }

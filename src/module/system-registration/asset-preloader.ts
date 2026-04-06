@@ -11,6 +11,7 @@ export const SYSTEM_ASSET_SOURCE_PATHS: Record<
     "assets/paper.jpg",
     "assets/coin_hope.png",
     "assets/coin_despair.png",
+    "assets/button_red.png",
     "assets/six-sided-dice3.svg"
   ],
   warm: ["assets/six-sided-dice.svg", "assets/six-sided-dice2.svg"],
