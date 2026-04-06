@@ -145,6 +145,25 @@ export class YakovDryhCharacterSheet extends BaseSheet {
     }
 
     event.preventDefault();
+    // Avatar change handler: open FilePicker and update actor image
+    if (actionElement.dataset.yakovDryhAction === "avatar-change") {
+      if (!this.actor || !this.actor.isOwner) return;
+
+      const picker = new FilePicker({
+        type: "image",
+        current: this.actor.img ?? "",
+        callback: async (path: string) => {
+          try {
+            await this.actor?.update({ img: path } as Record<string, unknown>);
+          } catch (err) {
+            console.error(err);
+          }
+        }
+      });
+
+      picker.render(true);
+      return;
+    }
 
     if (actionElement.dataset.yakovDryhAction === "add-pool-to-tray") {
       void this.addActorPoolToTray();

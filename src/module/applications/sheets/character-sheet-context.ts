@@ -57,22 +57,33 @@ export function createCharacterSheetContext(input: {
     "Flight"
   );
   const liveResponses = actorData.responses;
-  const responseEditorData = createResponseEditorData(responseEditSlots, liveResponses);
-  const configuredResponseCount = responseEditorData.slots.filter((slot) => slot.type !== "").length;
+  const responseEditorData = createResponseEditorData(
+    responseEditSlots,
+    liveResponses
+  );
+  const configuredResponseCount = responseEditorData.slots.filter(
+    (slot) => slot.type !== ""
+  ).length;
   const hasCompleteResponses = hasCompleteResponseConfiguration(liveResponses);
   const isEditingResponses = responseEditSlots !== null;
-  const isPlayMode = !isEditingResponses && configuredResponseCount === DRYH_RESPONSE_MAX;
-  const responseRemaining = Math.max(DRYH_RESPONSE_MAX - configuredResponseCount, 0);
+  const isPlayMode =
+    !isEditingResponses && configuredResponseCount === DRYH_RESPONSE_MAX;
+  const responseRemaining = Math.max(
+    DRYH_RESPONSE_MAX - configuredResponseCount,
+    0
+  );
   const disciplineIsEditMode = poolEditValues.discipline !== undefined;
   const disciplineValue = poolEditValues.discipline ?? actorData.discipline;
   const exhaustionIsEditMode = poolEditValues.exhaustion !== undefined;
   const exhaustionValue = poolEditValues.exhaustion ?? actorData.exhaustion;
   const madnessIsEditMode = poolEditValues.madnessPermanent !== undefined;
-  const madnessValue = poolEditValues.madnessPermanent ?? actorData.madnessPermanent;
+  const madnessValue =
+    poolEditValues.madnessPermanent ?? actorData.madnessPermanent;
 
   return {
     actorData,
     actorName: actor?.name ?? "",
+    actorImg: actor?.img ?? "",
     actorType,
     actorTypeLabel: localizeActorType(actorType),
     canAddPoolToTray: hasCompleteResponses,
@@ -115,8 +126,10 @@ export function createCharacterSheetContext(input: {
       flightLabel
     }),
     responseCanAddMore: configuredResponseCount < DRYH_RESPONSE_MAX,
-    responseCanSave: isEditingResponses && configuredResponseCount === DRYH_RESPONSE_MAX,
-    responseIsAllocationMode: !isEditingResponses && configuredResponseCount < DRYH_RESPONSE_MAX,
+    responseCanSave:
+      isEditingResponses && configuredResponseCount === DRYH_RESPONSE_MAX,
+    responseIsAllocationMode:
+      !isEditingResponses && configuredResponseCount < DRYH_RESPONSE_MAX,
     responseIsEditMode: isEditingResponses,
     responseIsPlayMode: isPlayMode,
     responseMax: DRYH_RESPONSE_MAX,

@@ -1,40 +1,80 @@
 <div
   class="yakov-dryh-sheet-shell__column yakov-dryh-sheet-shell__column--story"
 >
-  <label class="yakov-dryh-field">
-    <span>{{localize "YAKOV_DRYH.SHEETS.Actor.Character.Fields.Name"}}</span>
-    <input type="text" name="name" value="{{actorName}}" />
-  </label>
+  <div class="yakov-dryh-story-header">
+    <div class="yakov-dryh-story-fields">
+      <div class="yakov-dryh-name-row">
+        <div class="yakov-dryh-name-concept">
+          <label class="yakov-dryh-field">
+            <span>{{localize
+                "YAKOV_DRYH.SHEETS.Actor.Character.Fields.Name"
+              }}</span>
+            <input type="text" name="name" value="{{actorName}}" />
+          </label>
 
-  <label class="yakov-dryh-field">
-    <span>{{localize "YAKOV_DRYH.SHEETS.Actor.Character.Fields.Concept"}}</span>
-    <input type="text" name="system.concept" value="{{actorData.concept}}" />
-  </label>
+          <label class="yakov-dryh-field">
+            <span>{{localize
+                "YAKOV_DRYH.SHEETS.Actor.Character.Fields.Concept"
+              }}</span>
+            <input
+              type="text"
+              name="system.concept"
+              value="{{actorData.concept}}"
+            />
+          </label>
+        </div>
 
-  <label class="yakov-dryh-field">
-    <span>{{localize
-        "YAKOV_DRYH.SHEETS.Actor.Character.Fields.ExhaustionTalent"
-      }}</span>
-    <input
-      type="text"
-      name="system.talents.exhaustion"
-      value="{{actorData.talents.exhaustion}}"
-    />
-  </label>
+        <div class="yakov-dryh-avatar-block">
+          <button
+            type="button"
+            class="yakov-dryh-avatar-btn"
+            data-yakov-dryh-action="avatar-change"
+            data-action="editImage"
+            data-edit="img"
+            aria-label="{{localize
+              'YAKOV_DRYH.SHEETS.Actor.Character.Actions.ChangeAvatar'
+            }}"
+          >
+            {{#if actorImg}}
+              <img src="{{actorImg}}" alt="{{actorName}}" />
+            {{else}}
+              <img src="icons/svg/mystery-man.svg" alt="{{actorName}}" />
+            {{/if}}
+            <span class="yakov-dryh-avatar-overlay">{{localize
+                "YAKOV_DRYH.SHEETS.Actor.Character.Actions.ChangeAvatar"
+              }}</span>
+          </button>
+        </div>
+      </div>
 
-  <label class="yakov-dryh-field">
-    <span>{{localize
-        "YAKOV_DRYH.SHEETS.Actor.Character.Fields.MadnessTalent"
-      }}</span>
-    <input
-      type="text"
-      name="system.talents.madness"
-      value="{{actorData.talents.madness}}"
-    />
-  </label>
+      <label class="yakov-dryh-field">
+        <span>{{localize
+            "YAKOV_DRYH.SHEETS.Actor.Character.Fields.ExhaustionTalent"
+          }}</span>
+        <input
+          type="text"
+          name="system.talents.exhaustion"
+          value="{{actorData.talents.exhaustion}}"
+        />
+      </label>
 
-  <label class="yakov-dryh-field">
-    <span>{{localize "YAKOV_DRYH.SHEETS.Actor.Character.Fields.Scars"}}</span>
-    <textarea data-yakov-dryh-field="scars">{{scarsText}}</textarea>
-  </label>
+      <label class="yakov-dryh-field">
+        <span>{{localize
+            "YAKOV_DRYH.SHEETS.Actor.Character.Fields.MadnessTalent"
+          }}</span>
+        <input
+          type="text"
+          name="system.talents.madness"
+          value="{{actorData.talents.madness}}"
+        />
+      </label>
+
+      <label class="yakov-dryh-field">
+        <span>{{localize
+            "YAKOV_DRYH.SHEETS.Actor.Character.Fields.Scars"
+          }}</span>
+        <textarea data-yakov-dryh-field="scars">{{scarsText}}</textarea>
+      </label>
+    </div>
+  </div>
 </div>

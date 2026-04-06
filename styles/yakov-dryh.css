@@ -2329,13 +2329,80 @@ h6 {
   background: #cfe7d7;
 }
 
+/* Story column avatar layout: fields (70%) + avatar (30%) */
+.yakov-dryh-sheet-shell__column--story {
+  padding: 1rem 0 1rem 1rem;
+}
+.yakov-dryh-sheet-shell__column--story .yakov-dryh-story-header {
+  display: block;
+}
+.yakov-dryh-sheet-shell__column--story .yakov-dryh-story-fields {
+  display: grid;
+  gap: 0.75rem;
+}
+.yakov-dryh-sheet-shell__column--story .yakov-dryh-story-fields .yakov-dryh-name-row {
+  display: grid;
+  grid-template-columns: 64% 36%;
+  gap: 1rem;
+  align-items: start;
+}
+.yakov-dryh-sheet-shell__column--story .yakov-dryh-story-fields .yakov-dryh-name-row .yakov-dryh-name-concept {
+  display: grid;
+  gap: 0.5rem;
+}
+.yakov-dryh-sheet-shell__column--story .yakov-dryh-story-fields .yakov-dryh-name-row .yakov-dryh-avatar-block {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.yakov-dryh-sheet-shell__column--story .yakov-dryh-story-fields .yakov-dryh-name-row .yakov-dryh-avatar-block .yakov-dryh-avatar-btn {
+  background: transparent;
+  padding: 0;
+  width: 100%;
+  height: auto;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+}
+.yakov-dryh-sheet-shell__column--story .yakov-dryh-story-fields .yakov-dryh-name-row .yakov-dryh-avatar-block .yakov-dryh-avatar-btn img {
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  aspect-ratio: 1/1;
+}
+.yakov-dryh-sheet-shell__column--story .yakov-dryh-story-fields .yakov-dryh-name-row .yakov-dryh-avatar-block .yakov-dryh-avatar-btn .yakov-dryh-avatar-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255, 255, 255, 0.9);
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0) 40%, rgba(0, 0, 0, 0.45));
+  font-size: 0.8rem;
+  opacity: 0;
+  transition: opacity 160ms ease;
+  pointer-events: none;
+}
+.yakov-dryh-sheet-shell__column--story .yakov-dryh-story-fields .yakov-dryh-name-row .yakov-dryh-avatar-block .yakov-dryh-avatar-btn:hover .yakov-dryh-avatar-overlay, .yakov-dryh-sheet-shell__column--story .yakov-dryh-story-fields .yakov-dryh-name-row .yakov-dryh-avatar-block .yakov-dryh-avatar-btn:focus-visible .yakov-dryh-avatar-overlay {
+  opacity: 1;
+}
+.yakov-dryh-sheet-shell__column--story .yakov-dryh-story-fields {
+  /* Responsive: stack name row and avatar on narrow screens */
+}
+@media (max-width: 640px) {
+  .yakov-dryh-sheet-shell__column--story .yakov-dryh-story-fields .yakov-dryh-name-row {
+    grid-template-columns: 1fr;
+  }
+}
+
 .yakov-dryh-sheet-shell {
   display: grid;
   gap: 1.15rem;
 }
 .yakov-dryh-sheet-shell__columns {
   display: grid;
-  gap: 1.5rem;
+  gap: 1rem;
   grid-template-columns: minmax(0, 1.3fr) minmax(290px, 0.9fr);
 }
 .yakov-dryh-sheet-shell__column {
