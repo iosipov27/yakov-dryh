@@ -344,7 +344,10 @@ export class YakovDryhCharacterSheet extends BaseSheet {
     }
 
     try {
-      await this.safeActorUpdate({ [`system.${field}`]: nextValue } as Record<string, unknown>);
+      await this.safeActorUpdate({ [`system.${field}`]: nextValue } as Record<
+        string,
+        unknown
+      >);
     } catch (error) {
       this.poolEditValues = restoredEditValues;
       throw error;
@@ -511,6 +514,8 @@ export class YakovDryhCharacterSheet extends BaseSheet {
       return;
     }
 
-    await this.safeActorUpdate({ "system.scars": parseLineList(value) } as Record<string, unknown>);
+    await this.safeActorUpdate({
+      "system.scars": parseLineList(value)
+    } as Record<string, unknown>);
   }
 }

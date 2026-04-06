@@ -2775,6 +2775,17 @@ h6 {
   border-color: rgba(78, 60, 44, 0.18);
   color: var(--yd-sheet-button-ink);
 }
+.yakov-dryh-sheet .yakov-dryh-button--despair {
+  background: var(--yd-tray-roll);
+  border-color: color-mix(in srgb, var(--yd-resource-despair-edge) 50%, #000);
+  color: var(--yd-text-light);
+  box-shadow: var(--yd-tray-roll-shadow);
+}
+.yakov-dryh-sheet .yakov-dryh-button--despair:hover, .yakov-dryh-sheet .yakov-dryh-button--despair:focus-visible {
+  background: var(--yd-tray-roll-hover);
+  box-shadow: var(--yd-tray-roll-shadow), var(--yd-button-hover-shadow);
+  transform: translateY(-1px);
+}
 .yakov-dryh-sheet .yakov-dryh-button--flat {
   background: rgba(255, 255, 255, 0.04);
   border-color: rgba(255, 255, 255, 0.12);

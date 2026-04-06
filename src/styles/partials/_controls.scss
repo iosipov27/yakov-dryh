@@ -170,6 +170,20 @@
       color: var(--yd-sheet-button-ink);
     }
 
+    &--despair {
+      background: var(--yd-tray-roll);
+      border-color: color-mix(in srgb, var(--yd-resource-despair-edge) 50%, #000);
+      color: var(--yd-text-light);
+      box-shadow: var(--yd-tray-roll-shadow);
+
+      &:hover,
+      &:focus-visible {
+        background: var(--yd-tray-roll-hover);
+        box-shadow: var(--yd-tray-roll-shadow), var(--yd-button-hover-shadow);
+        transform: translateY(-1px);
+      }
+    }
+
     &--flat {
       background: rgb(255 255 255 / 4%);
       border-color: rgb(255 255 255 / 12%);
