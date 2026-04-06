@@ -94,6 +94,9 @@ describe("dice tray card presentation", () => {
     const madnessPool = observerContext.poolSummaries.find(
       (summary) => summary.key === "madness"
     );
+    const disciplinePool = observerContext.poolSummaries.find(
+      (summary) => summary.key === "discipline"
+    );
     const painPoolForObserver = observerContext.poolSummaries.find(
       (summary) => summary.key === "pain"
     );
@@ -101,10 +104,13 @@ describe("dice tray card presentation", () => {
       (summary) => summary.key === "pain"
     );
 
+    expect(disciplinePool?.showControls).toBe(false);
     expect(madnessPool?.controls.canIncrease).toBe(false);
     expect(madnessPool?.controls.canDecrease).toBe(false);
+    expect(madnessPool?.showControls).toBe(true);
     expect(painPoolForObserver?.controls.canIncrease).toBe(false);
     expect(painPoolForObserver?.controls.canDecrease).toBe(false);
+    expect(painPoolForObserver?.showControls).toBe(true);
     expect(painPoolForGm?.controls.canIncrease).toBe(true);
     expect(painPoolForGm?.controls.canDecrease).toBe(false);
   });

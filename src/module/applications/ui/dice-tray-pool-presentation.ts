@@ -13,6 +13,10 @@ export interface DiceTrayPoolPipPresentation {
   tooltip: string | null;
 }
 
+export function shouldShowDiceTrayPoolControls(pool: string): boolean {
+  return pool !== "discipline";
+}
+
 interface CreateDiceTrayPoolPipsInput {
   pipCount: number;
   poolLabel: string;

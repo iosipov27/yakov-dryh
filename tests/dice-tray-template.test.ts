@@ -71,6 +71,7 @@ describe("dice tray template", () => {
           key: "discipline",
           label: "Discipline",
           pips: [{ filled: true, hidden: false, removable: false, tooltip: null }],
+          showControls: false,
           trackClass: null
         },
         {
@@ -84,6 +85,7 @@ describe("dice tray template", () => {
           key: "pain",
           label: "Pain",
           pips: [{ filled: true, hidden: false, removable: false, tooltip: null }],
+          showControls: true,
           trackClass: "yakov-dryh-pip-track--pain"
         }
       ],
@@ -93,7 +95,7 @@ describe("dice tray template", () => {
     });
 
     expect(html).not.toContain("yakov-dryh-dice-tray__palette");
-    expect(html.match(/data-yakov-dryh-tray-pool="discipline"/g)).toHaveLength(2);
+    expect(html).not.toContain('data-yakov-dryh-tray-pool="discipline"');
     expect(html.match(/data-yakov-dryh-tray-pool="pain"/g)).toHaveLength(2);
     expect(html).toContain('data-yakov-dryh-tray-delta="-1"');
     expect(html).toContain('data-yakov-dryh-tray-delta="1"');

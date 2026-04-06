@@ -21,7 +21,8 @@ import {
 import {
   type DiceTrayPoolControlsPresentation,
   createDiceTrayPoolPips,
-  type DiceTrayPoolPipPresentation
+  type DiceTrayPoolPipPresentation,
+  shouldShowDiceTrayPoolControls
 } from "./dice-tray-pool-presentation.js";
 import { isSharedPoolSettingChange } from "./setting-change.js";
 
@@ -39,6 +40,7 @@ interface DiceTrayPoolSummary {
   key: YakovDryhDiceTrayPool;
   label: string;
   pips: DiceTrayPoolPipPresentation[];
+  showControls: boolean;
   trackClass: string | null;
 }
 
@@ -546,6 +548,7 @@ function createPoolSummaries(
 
   return (["discipline", "exhaustion", "madness", "pain"] as YakovDryhDiceTrayPool[]).map(
     (key) => {
+      const showControls = shouldShowDiceTrayPoolControls(key);
       const removable =
         key === "pain"
           ? permissions.isGm && canDecreaseDiceTrayPool(state, key)
@@ -578,6 +581,7 @@ function createPoolSummaries(
         key,
         label: formatPool(key),
         pips,
+        showControls,
         trackClass: getPoolTrackClass(key)
       };
     }

@@ -118,33 +118,35 @@
       <div class="yakov-dryh-dice-tray__pools">
         {{#each poolSummaries}}
           <section class="yakov-dryh-card-panel yakov-dryh-dice-tray__pool yakov-dryh-dice-tray__pool--{{key}}">
-            <div class="yakov-dryh-dice-picker">
+              <div class="yakov-dryh-dice-picker">
               <div class="yakov-dryh-dice-picker__header">
                 <span>{{label}}</span>
-                <div class="yakov-dryh-inline-actions yakov-dryh-dice-tray__pool-controls">
-                  <button
-                    class="yakov-dryh-button yakov-dryh-button--secondary yakov-dryh-button--compact"
-                    type="button"
-                    data-yakov-dryh-tray-pool="{{key}}"
-                    data-yakov-dryh-tray-delta="-1"
-                    title="{{controls.decreaseLabel}}"
-                    aria-label="{{controls.decreaseLabel}}"
-                    {{#unless controls.canDecrease}}disabled{{/unless}}
-                  >
-                    -
-                  </button>
-                  <button
-                    class="yakov-dryh-button yakov-dryh-button--compact"
-                    type="button"
-                    data-yakov-dryh-tray-pool="{{key}}"
-                    data-yakov-dryh-tray-delta="1"
-                    title="{{controls.increaseLabel}}"
-                    aria-label="{{controls.increaseLabel}}"
-                    {{#unless controls.canIncrease}}disabled{{/unless}}
-                  >
-                    +
-                  </button>
-                </div>
+                {{#if showControls}}
+                  <div class="yakov-dryh-inline-actions yakov-dryh-dice-tray__pool-controls">
+                    <button
+                      class="yakov-dryh-button yakov-dryh-button--secondary yakov-dryh-button--compact"
+                      type="button"
+                      data-yakov-dryh-tray-pool="{{key}}"
+                      data-yakov-dryh-tray-delta="-1"
+                      title="{{controls.decreaseLabel}}"
+                      aria-label="{{controls.decreaseLabel}}"
+                      {{#unless controls.canDecrease}}disabled{{/unless}}
+                    >
+                      -
+                    </button>
+                    <button
+                      class="yakov-dryh-button yakov-dryh-button--compact"
+                      type="button"
+                      data-yakov-dryh-tray-pool="{{key}}"
+                      data-yakov-dryh-tray-delta="1"
+                      title="{{controls.increaseLabel}}"
+                      aria-label="{{controls.increaseLabel}}"
+                      {{#unless controls.canIncrease}}disabled{{/unless}}
+                    >
+                      +
+                    </button>
+                  </div>
+                {{/if}}
               </div>
               <div class="yakov-dryh-pip-track yakov-dryh-dice-tray__track mt065{{#if trackClass}} {{trackClass}}{{/if}}">
                 {{#if empty}}
