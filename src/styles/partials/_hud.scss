@@ -35,28 +35,21 @@
   }
 
   &::before {
-    background: var(--yd-chat-card-paper-overlay);
-    background-blend-mode: screen, soft-light, multiply;
+    background: var(--yd-chat-card-face-overlay);
+    background-blend-mode: normal, soft-light, normal;
     content: "";
     inset: -0.35rem;
-    opacity: 1;
+    opacity: 0.92;
     pointer-events: none;
     position: absolute;
     z-index: 0;
-    filter: blur(1.6px) saturate(0.3) brightness(1.06) contrast(0.8);
+    filter: blur(2.8px) saturate(0.48) brightness(0.74) contrast(0.9);
+    transform: scale(1.04);
+    transform-origin: center;
   }
 
   &::after {
-    border: 1px solid var(--yd-chat-card-frame);
-    content: "";
-    inset: 0.38rem;
-    pointer-events: none;
-    position: absolute;
-    z-index: 2;
-  }
-
-  &.yakov-dryh-chat-card::after {
-    display: block;
+    content: none;
   }
 }
 
@@ -346,6 +339,43 @@
         border-color: var(--yd-cta-border);
         color: var(--yd-cta-ink);
       }
+    }
+  }
+}
+
+.yakov-dryh-dice-tray-card {
+  .yakov-dryh-copy {
+    color: var(--yd-chat-muted);
+  }
+
+  .yakov-dryh-button {
+    background: var(--yd-chat-secondary-button-surface);
+    border-color: var(--yd-chat-secondary-button-border);
+    box-shadow: var(--yd-chat-secondary-button-shadow);
+    color: var(--yd-chat-ink);
+
+    &:hover,
+    &:focus-visible {
+      background: var(--yd-chat-secondary-button-surface-hover);
+      border-color: var(--yd-chat-secondary-button-border-hover);
+      color: var(--yd-chat-ink);
+    }
+
+    &:disabled:hover,
+    &:disabled:focus-visible {
+      background: var(--yd-chat-secondary-button-surface);
+      border-color: var(--yd-chat-secondary-button-border);
+      box-shadow: var(--yd-chat-secondary-button-shadow);
+    }
+  }
+
+  .yakov-dryh-dice-tray__pool {
+    background: var(--yd-chat-tray-pool-surface);
+    border-color: var(--yd-chat-tray-panel-edge);
+    box-shadow: var(--yd-chat-tray-pool-shadow);
+
+    .yakov-dryh-dice-picker__header span {
+      color: color-mix(in srgb, var(--yd-tray-pool-accent) 46%, var(--yd-chat-ink));
     }
   }
 }

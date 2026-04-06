@@ -133,24 +133,24 @@
     }
 
     &--secondary {
-      background: var(--yd-tray-secondary-button-surface);
-      border: 1px solid var(--yd-tray-secondary-button-border);
-      box-shadow: var(--yd-tray-secondary-button-shadow);
+      background: var(--yd-chat-secondary-button-surface);
+      border: 1px solid var(--yd-chat-secondary-button-border);
+      box-shadow: var(--yd-chat-secondary-button-shadow);
       color: var(--yd-chat-ink);
 
       &:hover,
       &:focus-visible {
-        background: var(--yd-tray-secondary-button-surface-hover);
-        border-color: var(--yd-tray-secondary-button-border-hover);
+        background: var(--yd-chat-secondary-button-surface-hover);
+        border-color: var(--yd-chat-secondary-button-border-hover);
         box-shadow: var(--yd-button-hover-shadow);
         color: var(--yd-chat-ink);
       }
 
       &:disabled:hover,
       &:disabled:focus-visible {
-        background: var(--yd-tray-secondary-button-surface);
-        border-color: var(--yd-tray-secondary-button-border);
-        box-shadow: var(--yd-tray-secondary-button-shadow);
+        background: var(--yd-chat-secondary-button-surface);
+        border-color: var(--yd-chat-secondary-button-border);
+        box-shadow: var(--yd-chat-secondary-button-shadow);
       }
     }
   }

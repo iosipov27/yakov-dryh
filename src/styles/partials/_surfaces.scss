@@ -52,6 +52,52 @@
   }
 }
 
+.chat-message:has(.yakov-dryh-chat-card) {
+  background: var(--yd-chat-message-surface);
+  border: 1px solid var(--yd-chat-message-border);
+  border-radius: 0.2rem;
+  box-shadow: 0 16px 34px rgb(0 0 0 / 28%);
+  color: var(--yd-chat-message-ink);
+
+  .message-header {
+    align-items: center;
+    border-bottom: 1px solid var(--yd-chat-message-divider);
+    color: inherit;
+    margin-bottom: 0.8rem;
+    padding-bottom: 0.65rem;
+  }
+
+  .message-sender {
+    color: var(--yd-chat-message-ink);
+    font-family: var(--yd-sheet-display-font);
+    font-size: 1.08rem;
+    font-weight: 700;
+  }
+
+  .message-metadata,
+  .message-timestamp,
+  .flavor-text,
+  .whisper-to {
+    color: var(--yd-chat-message-muted);
+  }
+
+  .message-delete,
+  .message-header button,
+  .message-header a {
+    color: var(--yd-chat-message-muted);
+
+    &:hover,
+    &:focus-visible {
+      color: var(--yd-chat-message-ink);
+    }
+  }
+
+  .message-content {
+    background: transparent;
+    color: inherit;
+  }
+}
+
 .yakov-dryh-sheet {
   .window-header {
     background: var(--yd-sheet-window-header-surface);
