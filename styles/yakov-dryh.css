@@ -2238,7 +2238,7 @@ h6 {
 }
 
 .yakov-dryh-sheet .window-header {
-  background: linear-gradient(180deg, rgba(49, 40, 37, 0.99) 0%, rgba(28, 24, 23, 0.99) 100%);
+  background: linear-gradient(180deg, rgba(33, 25, 23, 0.99) 0%, rgba(22, 18, 17, 0.99) 100%);
   border-bottom: 1px solid var(--yd-sheet-divider);
   color: var(--yd-sheet-muted-strong);
   font-family: var(--yd-sheet-body-font);
@@ -2851,8 +2851,8 @@ h6 {
 .yakov-dryh-sheet .yakov-dryh-response-line__label {
   color: var(--yd-sheet-muted-strong);
   font-family: var(--yd-sheet-body-font);
-  font-size: 0.98rem;
-  font-weight: 700;
+  font-size: 1rem;
+  font-weight: 500;
 }
 .yakov-dryh-sheet .yakov-dryh-response-line__checkboxes {
   gap: 0.7rem;

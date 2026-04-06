@@ -1,3 +1,4 @@
+import { preloadSystemAssets } from "./asset-preloader.js";
 import { renderHopeDespairTracker } from "../applications/ui/hope-despair-tracker.js";
 import { registerChatHooks } from "../chat/index.js";
 import { registerDocumentClasses } from "./documents.js";
@@ -15,6 +16,7 @@ export function registerSystem(): void {
   });
 
   Hooks.once("ready", () => {
+    void preloadSystemAssets();
     void renderHopeDespairTracker();
   });
 }
