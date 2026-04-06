@@ -97,26 +97,6 @@ export class YakovDryhCharacterSheet extends BaseSheet {
     this.bindRootListeners(root);
   }
 
-  protected async _updateObject(
-    event: Event,
-    formData: Record<string, unknown>
-  ): Promise<any> {
-    const validRe = /\.(png|jpe?g|gif|webp|svg)$/i;
-
-    // If the submitted form contains an `img` value that is empty or invalid,
-    // drop it from the patch so Foundry's actor validation does not fail.
-    if (Object.prototype.hasOwnProperty.call(formData, "img")) {
-      const imgVal = (formData as any).img;
-      if (!imgVal || !validRe.test(String(imgVal))) {
-        delete (formData as any).img;
-      }
-    }
-
-    // Delegate to safeActorUpdate which will ensure the actor has a valid image
-    // before applying the provided patch.
-    return this.safeActorUpdate(formData as Record<string, unknown>);
-  }
-
   private async addActorPoolToTray(): Promise<void> {
     if (!this.actor) {
       return;
@@ -156,18 +136,10 @@ export class YakovDryhCharacterSheet extends BaseSheet {
     if (!actor) return null;
 
     const validRe = /\.(png|jpe?g|gif|webp|svg)$/i;
-    // Sanitize any `img` value provided in the patch so we never attempt to set an invalid path.
-    if (Object.prototype.hasOwnProperty.call(patch, "img")) {
-      const patchImg = (patch as any).img;
-      if (!patchImg || !validRe.test(String(patchImg))) {
-        // Remove invalid img from the patch to avoid validation failure.
-        delete (patch as any).img;
-      }
-    }
-
-    // Ensure the current actor image is valid prior to applying other updates.
     if (!actor.img || !validRe.test(String(actor.img))) {
       try {
+        // Ensure actor has a valid img before applying other updates to avoid validation errors
+        // Use a neutral placeholder available in Foundry
         // eslint-disable-next-line @typescript-eslint/await-thenable
         await actor.update({ img: "icons/svg/mystery-man.svg" } as Record<
           string,
