@@ -91,21 +91,22 @@ describe("dice tray card presentation", () => {
       isGm: true,
       state
     });
+    const madnessPool = observerContext.poolSummaries.find(
+      (summary) => summary.key === "madness"
+    );
+    const painPoolForObserver = observerContext.poolSummaries.find(
+      (summary) => summary.key === "pain"
+    );
+    const painPoolForGm = gmContext.poolSummaries.find(
+      (summary) => summary.key === "pain"
+    );
 
-    expect(
-      observerContext.paletteButtons.find((button) => button.key === "madness")?.disabled
-    ).toBe(true);
-    expect(
-      observerContext.paletteButtons.find((button) => button.key === "pain")?.disabled
-    ).toBe(true);
-    expect(
-      gmContext.paletteButtons.find((button) => button.key === "pain")?.disabled
-    ).toBe(false);
-    expect(observerContext.paletteButtons.map((button) => button.key)).toEqual([
-      "exhaustion",
-      "madness",
-      "pain"
-    ]);
+    expect(madnessPool?.controls.canIncrease).toBe(false);
+    expect(madnessPool?.controls.canDecrease).toBe(false);
+    expect(painPoolForObserver?.controls.canIncrease).toBe(false);
+    expect(painPoolForObserver?.controls.canDecrease).toBe(false);
+    expect(painPoolForGm?.controls.canIncrease).toBe(true);
+    expect(painPoolForGm?.controls.canDecrease).toBe(false);
   });
 
   it("renders fixed tray slots and hides the unused ones", () => {
@@ -138,7 +139,9 @@ describe("dice tray card presentation", () => {
     expect(exhaustion).toBeDefined();
     expect(exhaustion?.pips).toHaveLength(20);
     expect(exhaustion?.pips.slice(0, 3).every((pip) => pip.hidden === false)).toBe(true);
-    expect(exhaustion?.pips[2]?.removable).toBe(true);
+    expect(exhaustion?.pips[2]?.removable).toBe(false);
+    expect(exhaustion?.controls.canDecrease).toBe(true);
+    expect(exhaustion?.controls.canIncrease).toBe(false);
     expect(exhaustion?.pips.slice(3).every((pip) => pip.hidden === true)).toBe(true);
   });
 });

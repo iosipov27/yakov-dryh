@@ -18,8 +18,8 @@ import {
   type YakovDryhDiceTrayPool,
   type YakovDryhDiceTrayState
 } from "./dice-tray-state.js";
-import { ADDABLE_DICE_TRAY_POOLS } from "./dice-tray-rules.js";
 import {
+  type DiceTrayPoolControlsPresentation,
   createDiceTrayPoolPips,
   type DiceTrayPoolPipPresentation
 } from "./dice-tray-pool-presentation.js";
@@ -34,18 +34,12 @@ interface SettingDocumentLike {
 }
 
 interface DiceTrayPoolSummary {
+  controls: DiceTrayPoolControlsPresentation;
   empty: boolean;
   key: YakovDryhDiceTrayPool;
   label: string;
   pips: DiceTrayPoolPipPresentation[];
   trackClass: string | null;
-}
-
-interface DiceTrayPaletteButton {
-  disabled: boolean;
-  key: YakovDryhDiceTrayPool;
-  label: string;
-  modifierClass: string;
 }
 
 interface DiceTrayContext extends Record<string, unknown> {
@@ -57,7 +51,6 @@ interface DiceTrayContext extends Record<string, unknown> {
   hasPendingHope: boolean;
   hope: number;
   pendingHope: number;
-  paletteButtons: DiceTrayPaletteButton[];
   poolSummaries: DiceTrayPoolSummary[];
   showReadOnly: boolean;
   statusLabel: string;
@@ -152,7 +145,6 @@ export class YakovDryhDiceTray extends BaseApplication {
       hasPendingHope: sharedPools.pendingHope > 0,
       hope: sharedPools.hope,
       pendingHope: sharedPools.pendingHope,
-      paletteButtons: createPaletteButtons(trayState, { isActorOwner, isGm }),
       poolSummaries: createPoolSummaries(trayState, { isActorOwner, isGm }),
       showReadOnly: !isGm,
       statusLabel: getStatusLabel(trayState),
@@ -563,10 +555,25 @@ function createPoolSummaries(
         pipCount,
         poolLabel: formatPool(key),
         removeActionLabel: localize("YAKOV_DRYH.UI.Actions.RemoveDie", "Remove 1 die"),
-        removable
+        removable: false
       });
 
       return {
+        controls: {
+          canDecrease: removable,
+          canIncrease:
+            key === "pain"
+              ? permissions.isGm && canIncreaseDiceTrayPool(state, key)
+              : canEditPlayerPools && canIncreaseDiceTrayPool(state, key),
+          decreaseLabel: `${localize(
+            "YAKOV_DRYH.UI.Actions.RemoveDie",
+            "Remove 1 die"
+          )} (${formatPool(key)})`,
+          increaseLabel: `${localize(
+            "YAKOV_DRYH.UI.Actions.AddDie",
+            "Add 1 die"
+          )} (${formatPool(key)})`
+        },
         empty: pipCount === 0,
         key,
         label: formatPool(key),
@@ -574,28 +581,6 @@ function createPoolSummaries(
         trackClass: getPoolTrackClass(key)
       };
     }
-  );
-}
-
-function createPaletteButtons(
-  state: YakovDryhDiceTrayState,
-  permissions: {
-    isActorOwner: boolean;
-    isGm: boolean;
-  }
-): DiceTrayPaletteButton[] {
-  const canEditPlayerPools = permissions.isActorOwner || permissions.isGm;
-
-  return ADDABLE_DICE_TRAY_POOLS.map(
-    (key) => ({
-      disabled:
-        key === "pain"
-          ? !permissions.isGm || !canIncreaseDiceTrayPool(state, key)
-          : !canEditPlayerPools || !canIncreaseDiceTrayPool(state, key),
-      key,
-      label: `${localize("YAKOV_DRYH.UI.Actions.AddDie", "Add 1 die")} (${formatPool(key)})`,
-      modifierClass: `yakov-dryh-dice-tray__palette-button--${key}`
-    })
   );
 }
 

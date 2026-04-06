@@ -1,5 +1,12 @@
 export const DICE_TRAY_RENDER_SLOT_COUNT = 20;
 
+export interface DiceTrayPoolControlsPresentation {
+  canDecrease: boolean;
+  canIncrease: boolean;
+  decreaseLabel: string;
+  increaseLabel: string;
+}
+
 export interface DiceTrayPoolPipPresentation {
   hidden: boolean;
   removable: boolean;
