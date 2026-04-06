@@ -2711,7 +2711,10 @@ h6 {
 }
 
 .yakov-dryh-sheet {
-  min-width: 700px;
+  min-width: 48rem;
+  max-width: 49rem;
+  max-height: 46rem;
+  min-height: 37.5rem;
 }
 .yakov-dryh-sheet .yakov-dryh-sheet-shell__columns {
   margin-top: 0.15rem;
