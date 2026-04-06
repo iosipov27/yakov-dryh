@@ -9,6 +9,7 @@
   --yd-muted: #868d94;
   --yd-text-light: #f4f6f7;
   --yd-text-secondary: #b9c0c5;
+  --yd-text-tertiary: #5f6062;
   --yd-success-player: #7b848b;
   --yd-success-pain: #555c63;
   --yd-exhaustion: #111111;
@@ -49,8 +50,8 @@
   --yd-sheet-muted-strong: #eef2f4;
   --yd-sheet-input-bg: #727b81;
   --yd-sheet-input-bg-strong: #848d93;
-  --yd-sheet-input-border: #8a9299;
-  --yd-sheet-input-ink: #272c31;
+  --yd-sheet-input-border: #797979;
+  --yd-sheet-input-ink: var(--yd-sheet-ink);
   --yd-sheet-input-paper: #919aa0;
   --yd-sheet-input-paper-soft: #798388;
   --yd-sheet-input-paper-line: rgb(96 103 109 / 34%);
@@ -2467,7 +2468,7 @@ h6 {
   background-blend-mode: overlay, normal;
   content: "";
   inset: 0;
-  filter: blur(0.15px) saturate(0.42) brightness(0.86);
+  filter: blur(0.05px) saturate(0.6) brightness(1);
   opacity: 0.9;
   pointer-events: none;
   position: absolute;
@@ -2548,6 +2549,7 @@ h6 {
   height: auto;
   position: relative;
   overflow: hidden;
+  border: 1px solid var(--yd-sheet-border);
   cursor: pointer;
 }
 .yakov-dryh-sheet-shell__column--story .yakov-dryh-story-fields .yakov-dryh-name-row .yakov-dryh-avatar-block .yakov-dryh-avatar-btn img {
@@ -2556,6 +2558,7 @@ h6 {
   height: auto;
   object-fit: cover;
   aspect-ratio: 1/1;
+  filter: grayscale(1);
 }
 .yakov-dryh-sheet-shell__column--story .yakov-dryh-story-fields .yakov-dryh-name-row .yakov-dryh-avatar-block .yakov-dryh-avatar-btn .yakov-dryh-avatar-overlay {
   position: absolute;
@@ -2854,15 +2857,14 @@ h6 {
   gap: 0.5rem;
 }
 .yakov-dryh-sheet .yakov-dryh-field > span {
-  color: var(--yd-sheet-muted-strong);
+  color: var(--yd-text-tertiary);
   font-family: var(--yd-sheet-body-font);
   font-size: 0.9rem;
 }
 .yakov-dryh-sheet .yakov-dryh-field input,
 .yakov-dryh-sheet .yakov-dryh-field textarea,
 .yakov-dryh-sheet .yakov-dryh-field select {
-  background: var(--yd-sheet-input-surface);
-  background-blend-mode: normal, screen, soft-light, saturation, multiply, soft-light;
+  background: none;
   border: 1px solid var(--yd-sheet-input-border);
   border-radius: 0.12rem;
   box-shadow: var(--yd-sheet-input-shadow);
@@ -2955,7 +2957,7 @@ h6 {
   font-weight: 500;
   min-height: 2.4rem;
   padding: 0.5rem 0.8rem;
-  transition: transform 140ms ease, box-shadow 140ms ease, background 140ms ease;
+  transition: transform 140ms ease, box-shadow 140ms ease, background 140ms ease, opacity 140ms ease;
 }
 .yakov-dryh-sheet .yakov-dryh-button:hover, .yakov-dryh-sheet .yakov-dryh-button:focus-visible {
   background: var(--yd-sheet-button-surface-hover);
@@ -2978,6 +2980,7 @@ h6 {
   border-color: var(--yd-cta-border);
   color: var(--yd-cta-ink);
   box-shadow: var(--yd-cta-shadow);
+  opacity: 0.78;
   text-shadow: var(--yd-cta-text-shadow);
 }
 .yakov-dryh-sheet .yakov-dryh-button--despair:hover, .yakov-dryh-sheet .yakov-dryh-button--despair:focus-visible {
@@ -2985,7 +2988,11 @@ h6 {
   border-color: var(--yd-cta-border-hover);
   box-shadow: var(--yd-cta-shadow), var(--yd-button-hover-shadow);
   color: var(--yd-cta-ink-hover);
+  opacity: 0.9;
   transform: translateY(-1px);
+}
+.yakov-dryh-sheet .yakov-dryh-button--despair:disabled, .yakov-dryh-sheet .yakov-dryh-button--despair:disabled:hover, .yakov-dryh-sheet .yakov-dryh-button--despair:disabled:focus-visible {
+  opacity: 0.45;
 }
 .yakov-dryh-sheet .yakov-dryh-button--flat {
   background: rgba(255, 255, 255, 0.04);

@@ -10,6 +10,7 @@
   --yd-muted: #868d94;
   --yd-text-light: #f4f6f7;
   --yd-text-secondary: #b9c0c5;
+  --yd-text-tertiary: #5f6062;
 
   --yd-success-player: #7b848b;
   --yd-success-pain: #555c63;
@@ -55,8 +56,8 @@
   --yd-sheet-muted-strong: #eef2f4;
   --yd-sheet-input-bg: #727b81;
   --yd-sheet-input-bg-strong: #848d93;
-  --yd-sheet-input-border: #8a9299;
-  --yd-sheet-input-ink: #272c31;
+  --yd-sheet-input-border: #797979;
+  --yd-sheet-input-ink: var(--yd-sheet-ink);
   --yd-sheet-input-paper: #919aa0;
   --yd-sheet-input-paper-soft: #798388;
   --yd-sheet-input-paper-line: rgb(96 103 109 / 34%);

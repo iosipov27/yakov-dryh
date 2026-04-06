@@ -110,7 +110,7 @@
       background-blend-mode: overlay, normal;
       content: "";
       inset: 0;
-      filter: blur(0.15px) saturate(0.42) brightness(0.86);
+      filter: blur(0.05px) saturate(0.6) brightness(1);
       opacity: 0.9;
       pointer-events: none;
       position: absolute;
@@ -207,6 +207,7 @@
           height: auto;
           position: relative;
           overflow: hidden;
+          border: 1px solid var(--yd-sheet-border);
           cursor: pointer;
 
           img {
@@ -215,6 +216,7 @@
             height: auto;
             object-fit: cover;
             aspect-ratio: 1 / 1;
+            filter: grayscale(1);
           }
 
           .yakov-dryh-avatar-overlay {
