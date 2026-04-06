@@ -4,26 +4,6 @@
   <div class="yakov-dryh-story-header">
     <div class="yakov-dryh-story-fields">
       <div class="yakov-dryh-name-row">
-        <div class="yakov-dryh-name-concept">
-          <label class="yakov-dryh-field">
-            <span>{{localize
-                "YAKOV_DRYH.SHEETS.Actor.Character.Fields.Name"
-              }}</span>
-            <input type="text" name="name" value="{{actorName}}" />
-          </label>
-
-          <label class="yakov-dryh-field">
-            <span>{{localize
-                "YAKOV_DRYH.SHEETS.Actor.Character.Fields.Concept"
-              }}</span>
-            <input
-              type="text"
-              name="system.concept"
-              value="{{actorData.concept}}"
-            />
-          </label>
-        </div>
-
         <div class="yakov-dryh-avatar-block">
           <button
             type="button"
@@ -44,6 +24,26 @@
                 "YAKOV_DRYH.SHEETS.Actor.Character.Actions.ChangeAvatar"
               }}</span>
           </button>
+        </div>
+
+        <div class="yakov-dryh-name-concept">
+          <label class="yakov-dryh-field">
+            <span>{{localize
+                "YAKOV_DRYH.SHEETS.Actor.Character.Fields.Name"
+              }}</span>
+            <input type="text" name="name" value="{{actorName}}" />
+          </label>
+
+          <label class="yakov-dryh-field">
+            <span>{{localize
+                "YAKOV_DRYH.SHEETS.Actor.Character.Fields.Concept"
+              }}</span>
+            <input
+              type="text"
+              name="system.concept"
+              value="{{actorData.concept}}"
+            />
+          </label>
         </div>
       </div>
 

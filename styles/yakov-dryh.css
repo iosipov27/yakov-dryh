@@ -2342,7 +2342,7 @@ h6 {
 }
 .yakov-dryh-sheet-shell__column--story .yakov-dryh-story-fields .yakov-dryh-name-row {
   display: grid;
-  grid-template-columns: 64% 36%;
+  grid-template-columns: 30% 70%;
   gap: 1rem;
   align-items: start;
 }
