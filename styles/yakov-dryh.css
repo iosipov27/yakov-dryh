@@ -2226,8 +2226,26 @@ h6 {
   box-shadow: var(--yd-chat-shadow);
   color: var(--yd-chat-ink);
   font-family: var(--yd-sheet-body-font);
+  isolation: isolate;
+  overflow: hidden;
   padding: 1rem 1rem 1.1rem;
   position: relative;
+}
+.yakov-dryh-chat-card.yakov-dryh-roll-card > * {
+  position: relative;
+  z-index: 1;
+}
+.yakov-dryh-chat-card.yakov-dryh-roll-card::before {
+  background: radial-gradient(circle at 18% 16%, rgba(255, 255, 255, 0.26), transparent 28%), linear-gradient(180deg, rgba(255, 248, 238, 0.72) 0%, rgba(214, 193, 170, 0.46) 100%), url(../assets/paper.jpg) center/560px auto repeat;
+  background-blend-mode: screen, soft-light, multiply;
+  content: "";
+  inset: -0.35rem;
+  opacity: 1;
+  pointer-events: none;
+  position: absolute;
+  /* transform: scale(0.5); */
+  z-index: 0;
+  filter: blur(1.6px) saturate(0.3) brightness(1.06) contrast(0.8);
 }
 .yakov-dryh-chat-card::after {
   border: 1px solid rgba(255, 255, 255, 0.22);
@@ -2235,6 +2253,7 @@ h6 {
   inset: 0.35rem;
   pointer-events: none;
   position: absolute;
+  z-index: 2;
 }
 
 .yakov-dryh-sheet .window-header {
@@ -3177,7 +3196,7 @@ h6 {
   display: flex;
   gap: 0.75rem;
   justify-content: space-between;
-  padding: 1rem 0.95rem 0.95rem 1.1rem;
+  padding: 0.5rem 1rem;
   position: relative;
 }
 .yakov-dryh-roll-pool::before {
@@ -3356,11 +3375,24 @@ h6 {
   gap: 0.85rem;
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.22) 0%, rgba(255, 255, 255, 0) 14%), radial-gradient(circle at 20% 12%, rgba(255, 255, 255, 0.18), transparent 26%), radial-gradient(circle at 82% 24%, rgba(206, 169, 132, 0.12), transparent 24%), linear-gradient(180deg, var(--yd-chat-paper-strong) 0%, var(--yd-chat-paper) 100%);
   color: var(--yd-chat-ink);
+  isolation: isolate;
+  overflow: hidden;
   position: relative;
 }
 .yakov-dryh-dice-tray-card > * {
   position: relative;
   z-index: 1;
+}
+.yakov-dryh-dice-tray-card::before {
+  background: radial-gradient(circle at 18% 16%, rgba(255, 255, 255, 0.26), transparent 28%), linear-gradient(180deg, rgba(255, 248, 238, 0.72) 0%, rgba(214, 193, 170, 0.46) 100%), url(../assets/paper.jpg) center/560px auto repeat;
+  background-blend-mode: screen, soft-light, multiply;
+  content: "";
+  inset: -0.35rem;
+  opacity: 1;
+  pointer-events: none;
+  position: absolute;
+  z-index: 0;
+  filter: blur(1.6px) saturate(0.3) brightness(1.06) contrast(0.8);
 }
 .yakov-dryh-dice-tray-card.yakov-dryh-chat-card::after {
   display: none;
@@ -3372,8 +3404,21 @@ h6 {
   border-radius: 0.3rem;
   box-shadow: 0 16px 34px rgba(48, 35, 25, 0.16);
   color: var(--yd-tray-text);
+  isolation: isolate;
+  overflow: hidden;
   padding: 0.8rem;
   position: relative;
+}
+.yakov-dryh-dice-tray::before {
+  background: linear-gradient(180deg, rgba(33, 21, 16, 0.58) 0%, rgba(20, 12, 10, 0.36) 100%), radial-gradient(circle at 18% 16%, rgba(255, 255, 255, 0.26), transparent 28%), linear-gradient(180deg, rgba(255, 248, 238, 0.72) 0%, rgba(214, 193, 170, 0.46) 100%), url(../assets/paper.jpg) center/560px auto repeat;
+  background-blend-mode: multiply, screen, soft-light, multiply;
+  content: "";
+  inset: -0.35rem;
+  opacity: 1;
+  pointer-events: none;
+  position: absolute;
+  z-index: 0;
+  filter: blur(1.6px) saturate(0.3) brightness(1.06) contrast(0.8);
 }
 .yakov-dryh-dice-tray__shell {
   display: grid;
