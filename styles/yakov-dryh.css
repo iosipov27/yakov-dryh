@@ -3757,14 +3757,23 @@ h6 {
   --yd-resource-accent: var(--yd-resource-hope);
   --yd-resource-accent-bright: var(--yd-resource-hope-bright);
   --yd-resource-accent-edge: var(--yd-resource-hope-edge);
+  --yd-resource-pool-image: url("../assets/coin_hope.png");
   display: grid;
   justify-items: center;
   min-width: 0;
+  overflow: hidden;
+  padding: 0.34rem 0.24rem 0.22rem;
+  position: relative;
+}
+.yakov-dryh-resource-tracker__pool > * {
+  position: relative;
+  z-index: 1;
 }
 .yakov-dryh-resource-tracker__pool--despair {
   --yd-resource-accent: var(--yd-resource-despair);
   --yd-resource-accent-bright: var(--yd-resource-despair-bright);
   --yd-resource-accent-edge: var(--yd-resource-despair-edge);
+  --yd-resource-pool-image: url("../assets/coin_despair.png");
 }
 .yakov-dryh-resource-tracker__controls {
   align-items: center;
@@ -3791,15 +3800,15 @@ h6 {
 .yakov-dryh-resource-tracker__adjuster {
   background: linear-gradient(180deg, rgba(255, 220, 182, 0.06) 0%, rgba(0, 0, 0, 0.18) 100%), linear-gradient(180deg, var(--yd-resource-button) 0%, #231618 100%);
   border: 1px solid var(--yd-resource-button-edge);
-  border-radius: 0.24rem;
+  border-radius: 0.16rem;
   box-shadow: inset 0 1px 0 rgba(255, 233, 204, 0.1), inset 0 -6px 10px rgba(0, 0, 0, 0.18), 0 6px 14px rgba(0, 0, 0, 0.24);
   color: var(--yd-resource-ink);
   font-family: var(--yd-sheet-display-font);
-  font-size: 1.12rem;
+  font-size: 0.62rem;
   font-weight: 700;
-  height: 1.72rem;
+  height: 0.86rem;
   line-height: 1;
-  min-width: 1.72rem;
+  min-width: 0.86rem;
   padding: 0;
   position: relative;
   text-shadow: 0 1px 0 rgba(0, 0, 0, 0.32);
@@ -3828,31 +3837,16 @@ h6 {
 }
 .yakov-dryh-resource-tracker__coin {
   align-items: center;
-  background: radial-gradient(circle at 30% 28%, rgba(255, 249, 226, 0.52) 0%, transparent 24%), linear-gradient(145deg, color-mix(in srgb, var(--yd-resource-accent-bright) 84%, #fff 16%) 0%, var(--yd-resource-accent) 42%, var(--yd-resource-accent-edge) 100%);
-  border: 2px solid var(--yd-resource-accent-edge);
+  background: radial-gradient(circle at 32% 26%, rgba(255, 255, 255, 0.18) 0%, transparent 28%), linear-gradient(180deg, rgba(255, 236, 212, 0.07) 0%, rgba(0, 0, 0, 0.14) 100%), var(--yd-resource-pool-image) center/contain no-repeat;
+  border: 0;
   border-radius: 999px;
-  box-shadow: inset 0 1px 0 rgba(255, 248, 232, 0.24), inset 0 -8px 16px rgba(0, 0, 0, 0.22), 0 10px 20px rgba(0, 0, 0, 0.28);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.28), 0 0 0 1px rgba(255, 255, 255, 0.05);
   display: grid;
   height: 3.18rem;
   overflow: hidden;
   place-items: center;
   position: relative;
   width: 3.18rem;
-}
-.yakov-dryh-resource-tracker__coin::before, .yakov-dryh-resource-tracker__coin::after {
-  border-radius: 999px;
-  content: "";
-  position: absolute;
-}
-.yakov-dryh-resource-tracker__coin::before {
-  background: repeating-conic-gradient(from -3deg, rgba(255, 255, 255, 0.12) 0 8deg, rgba(0, 0, 0, 0.14) 8deg 11deg);
-  inset: 0.22rem;
-  opacity: 0.66;
-}
-.yakov-dryh-resource-tracker__coin::after {
-  border: 1px solid color-mix(in srgb, var(--yd-resource-accent-bright) 38%, #281717);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.22), inset 0 -8px 12px rgba(0, 0, 0, 0.18);
-  inset: 0.46rem;
 }
 .yakov-dryh-resource-tracker__value {
   color: #fff1df;

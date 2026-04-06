@@ -15,15 +15,16 @@
       aria-label="{{localize "YAKOV_DRYH.RESOURCES.Hope"}}"
     >
       <div class="yakov-dryh-resource-tracker__controls">
-        <button
-          class="yakov-dryh-button yakov-dryh-button--secondary yakov-dryh-resource-tracker__adjuster"
-          type="button"
-          data-yakov-dryh-resource-pool="hope"
-          data-yakov-dryh-resource-delta="-1"
-          {{#unless canEdit}}disabled{{/unless}}
-        >
-          -
-        </button>
+        {{#if canEdit}}
+          <button
+            class="yakov-dryh-button yakov-dryh-button--secondary yakov-dryh-resource-tracker__adjuster"
+            type="button"
+            data-yakov-dryh-resource-pool="hope"
+            data-yakov-dryh-resource-delta="-1"
+          >
+            -
+          </button>
+        {{/if}}
 
         <div class="yakov-dryh-resource-tracker__coin-wrap">
           <div class="yakov-dryh-resource-tracker__coin">
@@ -41,15 +42,16 @@
           </div>
         </div>
 
-        <button
-          class="yakov-dryh-button yakov-dryh-resource-tracker__adjuster"
-          type="button"
-          data-yakov-dryh-resource-pool="hope"
-          data-yakov-dryh-resource-delta="1"
-          {{#unless canEdit}}disabled{{/unless}}
-        >
-          +
-        </button>
+        {{#if canEdit}}
+          <button
+            class="yakov-dryh-button yakov-dryh-resource-tracker__adjuster"
+            type="button"
+            data-yakov-dryh-resource-pool="hope"
+            data-yakov-dryh-resource-delta="1"
+          >
+            +
+          </button>
+        {{/if}}
       </div>
     </section>
 
@@ -58,15 +60,16 @@
       aria-label="{{localize "YAKOV_DRYH.RESOURCES.Despair"}}"
     >
       <div class="yakov-dryh-resource-tracker__controls">
-        <button
-          class="yakov-dryh-button yakov-dryh-button--secondary yakov-dryh-resource-tracker__adjuster"
-          type="button"
-          data-yakov-dryh-resource-pool="despair"
-          data-yakov-dryh-resource-delta="-1"
-          {{#unless canEdit}}disabled{{/unless}}
-        >
-          -
-        </button>
+        {{#if canEdit}}
+          <button
+            class="yakov-dryh-button yakov-dryh-button--secondary yakov-dryh-resource-tracker__adjuster"
+            type="button"
+            data-yakov-dryh-resource-pool="despair"
+            data-yakov-dryh-resource-delta="-1"
+          >
+            -
+          </button>
+        {{/if}}
 
         <div class="yakov-dryh-resource-tracker__coin-wrap">
           <div class="yakov-dryh-resource-tracker__coin">
@@ -79,29 +82,32 @@
           </div>
         </div>
 
-        <button
-          class="yakov-dryh-button yakov-dryh-resource-tracker__adjuster"
-          type="button"
-          data-yakov-dryh-resource-pool="despair"
-          data-yakov-dryh-resource-delta="1"
-          {{#unless canEdit}}disabled{{/unless}}
-        >
-          +
-        </button>
+        {{#if canEdit}}
+          <button
+            class="yakov-dryh-button yakov-dryh-resource-tracker__adjuster"
+            type="button"
+            data-yakov-dryh-resource-pool="despair"
+            data-yakov-dryh-resource-delta="1"
+          >
+            +
+          </button>
+        {{/if}}
       </div>
     </section>
   </div>
 
-  <footer class="yakov-dryh-resource-tracker__footer">
-    <button
-      class="yakov-dryh-button yakov-dryh-button--secondary yakov-dryh-resource-tracker__scene-button"
-      type="button"
-      data-yakov-dryh-resource-action="end-scene"
-      {{#unless hasPendingHope}}disabled{{/unless}}
-    >
-      {{localize "YAKOV_DRYH.RESOURCES.EndScene"}}
-    </button>
-  </footer>
+  {{#if canEdit}}
+    <footer class="yakov-dryh-resource-tracker__footer">
+      <button
+        class="yakov-dryh-button yakov-dryh-button--secondary yakov-dryh-resource-tracker__scene-button"
+        type="button"
+        data-yakov-dryh-resource-action="end-scene"
+        {{#unless hasPendingHope}}disabled{{/unless}}
+      >
+        {{localize "YAKOV_DRYH.RESOURCES.EndScene"}}
+      </button>
+    </footer>
+  {{/if}}
 
   {{#unless canEdit}}
     <p class="yakov-dryh-copy yakov-dryh-resource-tracker__read-only m0">

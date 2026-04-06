@@ -44,7 +44,7 @@ describe("hope despair tracker template", () => {
     ).toBeNull();
   });
 
-  it("disables hope and despair adjusters for non-gm users", () => {
+  it("hides hope and despair adjusters for non-gm users", () => {
     const html = renderTemplate({
       canEdit: false,
       despair: 3,
@@ -53,9 +53,9 @@ describe("hope despair tracker template", () => {
       pendingHope: 1
     });
 
-    expect(
-      html.match(/<button[\s\S]*?data-yakov-dryh-resource-pool="(?:hope|despair)"[\s\S]*?disabled[\s\S]*?>/g)
-    ).toHaveLength(4);
+    expect(html).not.toContain('data-yakov-dryh-resource-pool="hope"');
+    expect(html).not.toContain('data-yakov-dryh-resource-pool="despair"');
+    expect(html).not.toContain("yakov-dryh-resource-tracker__scene-button");
     expect(html).toContain("Only the GM can change shared pools.");
   });
 });
