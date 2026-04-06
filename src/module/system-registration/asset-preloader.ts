@@ -6,7 +6,13 @@ export const SYSTEM_ASSET_SOURCE_PATHS: Record<
   SystemAssetPreloadGroup,
   readonly string[]
 > = {
-  critical: ["assets/bg.jpg", "assets/six-sided-dice3.svg"],
+  critical: [
+    "assets/bg.jpg",
+    "assets/paper.jpg",
+    "assets/coin_hope.png",
+    "assets/coin_despair.png",
+    "assets/six-sided-dice3.svg"
+  ],
   warm: ["assets/six-sided-dice.svg", "assets/six-sided-dice2.svg"],
   lazy: []
 } as const;

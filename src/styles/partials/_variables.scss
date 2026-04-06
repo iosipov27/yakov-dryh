@@ -97,7 +97,7 @@
   --yd-chat-panel-strong: #ebe3d6;
   --yd-chat-ink: #2f2622;
   --yd-chat-muted: #6f6357;
-  --yd-chat-success-bg: #e1ebe0;
+  --yd-chat-success-bg: #abc3a8;
   --yd-chat-success-ink: #525e54;
   --yd-chat-failure-bg: #eadbd5;
   --yd-chat-failure-ink: #8a3840;
@@ -108,8 +108,12 @@
     0 1px 3px rgb(0 0 0 / 12%);
   --yd-tray-bg: #e3d9ca;
   --yd-tray-bg-soft: #f4ede1;
+  --yd-tray-frame: #7b5d4a;
+  --yd-tray-frame-soft: rgb(189 155 124 / 16%);
   --yd-tray-panel: #e9dfd1;
   --yd-tray-panel-strong: #f6efe4;
+  --yd-tray-panel-edge: rgb(125 92 66 / 36%);
+  --yd-tray-panel-highlight: rgb(255 250 242 / 46%);
   --yd-tray-surface: rgb(255 255 255 / 16%);
   --yd-tray-surface-shadow: rgb(220 206 188 / 42%);
   --yd-tray-border: rgb(176 152 124 / 34%);
@@ -132,6 +136,14 @@
     inset 0 1px 0 rgb(255 223 197 / 22%),
     inset 0 -8px 14px rgb(65 17 11 / 24%),
     0 1px 0 rgb(255 239 225 / 22%);
+  --yd-tray-discipline-accent: #8e6b49;
+  --yd-tray-discipline-panel: #e7ddd2;
+  --yd-tray-exhaustion-accent: #4f4239;
+  --yd-tray-exhaustion-panel: #d9d0c6;
+  --yd-tray-madness-accent: #9a5547;
+  --yd-tray-madness-panel: #ddd1ca;
+  --yd-tray-pain-accent: #6d5948;
+  --yd-tray-pain-panel: #d8cdbf;
   --yd-tray-madness-glow:
     drop-shadow(0 0 6px rgb(179 58 58 / 40%))
     drop-shadow(0 0 10px rgb(179 58 58 / 18%));

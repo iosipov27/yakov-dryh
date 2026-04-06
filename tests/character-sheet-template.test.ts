@@ -45,5 +45,6 @@ describe("character sheet story column template", () => {
     expect(html).toContain('data-yakov-dryh-action="avatar-change"');
     expect(html).not.toContain('data-edit="img"');
     expect(html).not.toContain('data-action="editImage"');
+    expect(html).not.toContain("yakov-dryh-avatar-overlay");
   });
 });

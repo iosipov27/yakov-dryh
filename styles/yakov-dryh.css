@@ -91,7 +91,7 @@
   --yd-chat-panel-strong: #ebe3d6;
   --yd-chat-ink: #2f2622;
   --yd-chat-muted: #6f6357;
-  --yd-chat-success-bg: #e1ebe0;
+  --yd-chat-success-bg: #abc3a8;
   --yd-chat-success-ink: #525e54;
   --yd-chat-failure-bg: #eadbd5;
   --yd-chat-failure-ink: #8a3840;
@@ -102,8 +102,12 @@
     0 1px 3px rgb(0 0 0 / 12%);
   --yd-tray-bg: #e3d9ca;
   --yd-tray-bg-soft: #f4ede1;
+  --yd-tray-frame: #7b5d4a;
+  --yd-tray-frame-soft: rgb(189 155 124 / 16%);
   --yd-tray-panel: #e9dfd1;
   --yd-tray-panel-strong: #f6efe4;
+  --yd-tray-panel-edge: rgb(125 92 66 / 36%);
+  --yd-tray-panel-highlight: rgb(255 250 242 / 46%);
   --yd-tray-surface: rgb(255 255 255 / 16%);
   --yd-tray-surface-shadow: rgb(220 206 188 / 42%);
   --yd-tray-border: rgb(176 152 124 / 34%);
@@ -126,6 +130,14 @@
     inset 0 1px 0 rgb(255 223 197 / 22%),
     inset 0 -8px 14px rgb(65 17 11 / 24%),
     0 1px 0 rgb(255 239 225 / 22%);
+  --yd-tray-discipline-accent: #8e6b49;
+  --yd-tray-discipline-panel: #e7ddd2;
+  --yd-tray-exhaustion-accent: #4f4239;
+  --yd-tray-exhaustion-panel: #d9d0c6;
+  --yd-tray-madness-accent: #9a5547;
+  --yd-tray-madness-panel: #ddd1ca;
+  --yd-tray-pain-accent: #6d5948;
+  --yd-tray-pain-panel: #d8cdbf;
   --yd-tray-madness-glow:
     drop-shadow(0 0 6px rgb(179 58 58 / 40%))
     drop-shadow(0 0 10px rgb(179 58 58 / 18%));
@@ -2369,6 +2381,8 @@ h6 {
 .yakov-dryh-sheet-shell__column--story .yakov-dryh-story-fields .yakov-dryh-name-row {
   display: grid;
   grid-template-columns: 30% 66%;
+  border-bottom: 1px solid var(--yd-sheet-divider);
+  padding-bottom: 1rem;
   gap: 1rem;
   align-items: start;
 }
@@ -2467,6 +2481,9 @@ h6 {
   font-weight: 500;
 }
 
+.yakov-dryh-sheet {
+  min-width: 700px;
+}
 .yakov-dryh-sheet .yakov-dryh-sheet-shell__columns {
   margin-top: 0.15rem;
 }
@@ -2683,7 +2700,7 @@ h6 {
   padding: 0.65rem 0.8rem;
 }
 .yakov-dryh-field textarea {
-  min-height: 10rem;
+  min-height: 8rem;
   resize: vertical;
 }
 
@@ -2724,7 +2741,7 @@ h6 {
 }
 .yakov-dryh-sheet .yakov-dryh-field textarea {
   line-height: 1.45;
-  min-height: 10.2rem;
+  min-height: 8rem;
 }
 
 .yakov-dryh-inline-actions {
@@ -3389,7 +3406,9 @@ h6 {
 .yakov-dryh-dice-tray-card {
   display: grid;
   gap: 0.85rem;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.22) 0%, rgba(255, 255, 255, 0) 14%), radial-gradient(circle at 20% 12%, rgba(255, 255, 255, 0.18), transparent 26%), radial-gradient(circle at 82% 24%, rgba(206, 169, 132, 0.12), transparent 24%), linear-gradient(180deg, var(--yd-chat-paper-strong) 0%, var(--yd-chat-paper) 100%);
+  background: linear-gradient(180deg, rgba(155, 63, 39, 0.08) 0%, rgba(155, 63, 39, 0) 18%), linear-gradient(180deg, rgba(255, 255, 255, 0.22) 0%, rgba(255, 255, 255, 0) 14%), radial-gradient(circle at 20% 12%, rgba(255, 255, 255, 0.18), transparent 26%), radial-gradient(circle at 82% 24%, rgba(206, 169, 132, 0.12), transparent 24%), linear-gradient(180deg, var(--yd-chat-paper-strong) 0%, var(--yd-chat-paper) 100%);
+  border: 1px solid var(--yd-tray-panel-edge);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.34), 0 10px 26px rgba(40, 28, 19, 0.1);
   color: var(--yd-chat-ink);
   isolation: isolate;
   overflow: hidden;
@@ -3410,15 +3429,23 @@ h6 {
   z-index: 0;
   filter: blur(1.6px) saturate(0.3) brightness(1.06) contrast(0.8);
 }
+.yakov-dryh-dice-tray-card::after {
+  border: 1px solid rgba(133, 99, 74, 0.16);
+  content: "";
+  inset: 0.38rem;
+  pointer-events: none;
+  position: absolute;
+  z-index: 2;
+}
 .yakov-dryh-dice-tray-card.yakov-dryh-chat-card::after {
-  display: none;
+  display: block;
 }
 
 .yakov-dryh-dice-tray {
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.24) 0%, rgba(255, 255, 255, 0) 18%), linear-gradient(180deg, var(--yd-tray-bg-soft) 0%, var(--yd-tray-bg) 100%);
-  border: 1px solid var(--yd-tray-border);
+  background: linear-gradient(180deg, rgba(155, 63, 39, 0.08) 0%, rgba(155, 63, 39, 0) 16%), linear-gradient(180deg, rgba(255, 255, 255, 0.24) 0%, rgba(255, 255, 255, 0) 18%), linear-gradient(180deg, var(--yd-tray-bg-soft) 0%, var(--yd-tray-bg) 100%);
+  border: 1px solid var(--yd-tray-frame);
   border-radius: 0.3rem;
-  box-shadow: 0 16px 34px rgba(48, 35, 25, 0.16);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.34), inset 0 0 0 1px var(--yd-tray-frame-soft), 0 18px 40px rgba(32, 22, 17, 0.18);
   color: var(--yd-tray-text);
   isolation: isolate;
   overflow: hidden;
@@ -3436,6 +3463,14 @@ h6 {
   z-index: 0;
   filter: blur(1.6px) saturate(0.3) brightness(1.06) contrast(0.8);
 }
+.yakov-dryh-dice-tray::after {
+  border: 1px solid rgba(124, 92, 68, 0.22);
+  content: "";
+  inset: 0.32rem;
+  pointer-events: none;
+  position: absolute;
+  z-index: 1;
+}
 .yakov-dryh-dice-tray__shell {
   display: grid;
   gap: 0.9rem;
@@ -3450,24 +3485,31 @@ h6 {
 }
 .yakov-dryh-dice-tray__panel-header {
   align-items: flex-start;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.16) 0%, rgba(255, 255, 255, 0) 100%);
+  box-shadow: inset 0 -1px 0 rgba(255, 255, 255, 0.26), 0 1px 0 rgba(124, 92, 68, 0.12);
   display: flex;
   gap: 0.75rem;
   justify-content: space-between;
-  padding-bottom: 0.8rem;
+  padding: 0.2rem 0 0.95rem;
   border-bottom: 1px solid var(--yd-tray-line);
+  position: relative;
 }
 .yakov-dryh-dice-tray__panel-header .yakov-dryh-eyebrow {
   color: color-mix(in srgb, var(--yd-tray-roll-accent) 88%, var(--yd-tray-text));
-  letter-spacing: 0.06em;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.22);
+  font-size: 0.78rem;
+  opacity: 0.9;
   font-weight: 700;
-  font-size: 1rem;
 }
 .yakov-dryh-dice-tray__panel-header h3 {
-  color: var(--yd-tray-text);
+  color: color-mix(in srgb, var(--yd-tray-roll-accent) 74%, var(--yd-tray-text));
   font-family: var(--yd-sheet-display-font);
   font-size: 1.8rem;
   font-weight: 700;
   line-height: 1;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.22);
 }
 .yakov-dryh-dice-tray__status {
   color: var(--yd-tray-muted);
@@ -3485,39 +3527,66 @@ h6 {
 }
 .yakov-dryh-dice-tray__pools {
   display: grid;
+  gap: 0.7rem;
 }
 .yakov-dryh-dice-tray__pool {
-  border-bottom: 1px solid var(--yd-tray-line);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.34), 0 1px 0 rgba(255, 255, 255, 0.26);
-  padding: 0.6rem;
+  --yd-tray-pool-accent: var(--yd-tray-discipline-accent);
+  --yd-tray-pool-panel: var(--yd-tray-discipline-panel);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.18) 0%, rgba(255, 255, 255, 0) 44%), radial-gradient(circle at 88% 22%, rgba(255, 255, 255, 0.18), transparent 28%), linear-gradient(135deg, color-mix(in srgb, var(--yd-tray-pool-panel) 94%, #fff 6%) 0%, var(--yd-tray-pool-panel) 100%);
+  border: 1px solid var(--yd-tray-panel-edge);
+  border-left: 3px solid var(--yd-tray-pool-accent);
+  border-radius: 0.22rem;
+  box-shadow: inset 0 1px 0 var(--yd-tray-panel-highlight), inset 0 -12px 20px rgba(0, 0, 0, 0.04), 0 1px 0 rgba(255, 255, 255, 0.22);
+  overflow: hidden;
+  padding: 0.72rem 0.68rem;
+  position: relative;
+}
+.yakov-dryh-dice-tray__pool:last-child {
+  margin-bottom: 0;
 }
 .yakov-dryh-dice-tray__pool .yakov-dryh-dice-picker__header span {
-  color: var(--yd-tray-text);
+  color: color-mix(in srgb, var(--yd-tray-pool-accent) 52%, var(--yd-tray-text));
   font-family: var(--yd-sheet-display-font);
-  font-size: 1rem;
+  font-size: 0.98rem;
   font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
 }
 .yakov-dryh-dice-tray__pool .yakov-dryh-pip-track--madness .yakov-dryh-pip--filled {
   filter: var(--yd-tray-madness-glow);
 }
-.yakov-dryh-dice-tray__pool--discipline, .yakov-dryh-dice-tray__pool--madness {
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.18) 0%, rgba(255, 255, 255, 0) 38%), #d9cec3;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.24), 0 1px 0 rgba(255, 255, 255, 0.2);
+.yakov-dryh-dice-tray__pool--discipline {
+  --yd-tray-pool-accent: var(--yd-tray-discipline-accent);
+  --yd-tray-pool-panel: var(--yd-tray-discipline-panel);
+}
+.yakov-dryh-dice-tray__pool--exhaustion {
+  --yd-tray-pool-accent: var(--yd-tray-exhaustion-accent);
+  --yd-tray-pool-panel: var(--yd-tray-exhaustion-panel);
+}
+.yakov-dryh-dice-tray__pool--madness {
+  --yd-tray-pool-accent: var(--yd-tray-madness-accent);
+  --yd-tray-pool-panel: var(--yd-tray-madness-panel);
+}
+.yakov-dryh-dice-tray__pool--pain {
+  --yd-tray-pool-accent: var(--yd-tray-pain-accent);
+  --yd-tray-pool-panel: var(--yd-tray-pain-panel);
 }
 .yakov-dryh-dice-tray__track {
   min-height: 2rem;
 }
 .yakov-dryh-dice-tray__palette {
+  border-top: 1px solid var(--yd-tray-line);
   display: grid;
   gap: 0.65rem;
-  padding-top: 0.75rem;
+  padding-top: 0.9rem;
+  position: relative;
 }
 .yakov-dryh-dice-tray__palette-label {
   color: color-mix(in srgb, var(--yd-tray-roll-accent) 90%, var(--yd-tray-text));
   font-family: var(--yd-sheet-display-font);
-  font-size: 1rem;
+  font-size: 0.98rem;
   font-weight: 700;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.08em;
   opacity: 1;
   text-transform: uppercase;
 }
@@ -3530,15 +3599,17 @@ h6 {
 }
 .yakov-dryh-dice-tray__palette-button {
   align-items: center;
-  background: var(--yd-tray-tile);
-  border: 1px solid rgba(142, 112, 84, 0.72);
+  --yd-tray-palette-accent: var(--yd-tray-discipline-accent);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.34) 0%, rgba(255, 255, 255, 0) 42%), var(--yd-tray-tile);
+  border: 1px solid var(--yd-tray-tile-border);
   border-radius: 0.25rem;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.48), 0 6px 14px rgba(83, 57, 31, 0.14);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.48), inset 0 -6px 10px rgba(121, 90, 65, 0.08), 0 6px 14px rgba(83, 57, 31, 0.14);
   cursor: pointer;
   display: inline-flex;
   justify-content: center;
   min-height: 2.5rem;
   min-width: 2.5rem;
+  overflow: hidden;
   padding: 0rem;
   pointer-events: auto;
   position: relative;
@@ -3570,14 +3641,36 @@ h6 {
 .yakov-dryh-dice-tray__palette-button .yakov-dryh-pip {
   background-color: var(--yd-pip-discipline);
   filter: drop-shadow(0 1px 1px rgba(47, 38, 34, 0.18)) drop-shadow(0 0 1px rgba(47, 38, 34, 0.22));
+  position: relative;
+  z-index: 1;
+}
+.yakov-dryh-dice-tray__palette-button::after {
+  border-radius: 999px;
+  content: "";
+  height: 0.18rem;
+  inset: auto 0.34rem 0.24rem;
+  opacity: 0.84;
+  position: absolute;
+}
+.yakov-dryh-dice-tray__palette-button--discipline {
+  --yd-tray-palette-accent: var(--yd-tray-discipline-accent);
+}
+.yakov-dryh-dice-tray__palette-button--exhaustion {
+  --yd-tray-palette-accent: var(--yd-tray-exhaustion-accent);
 }
 .yakov-dryh-dice-tray__palette-button--exhaustion .yakov-dryh-pip {
   background-color: var(--yd-exhaustion);
   filter: drop-shadow(0 0 1px rgba(255, 255, 255, 0.34)) drop-shadow(0 0 1px var(--yd-pip-shadow));
 }
+.yakov-dryh-dice-tray__palette-button--madness {
+  --yd-tray-palette-accent: var(--yd-tray-madness-accent);
+}
 .yakov-dryh-dice-tray__palette-button--madness .yakov-dryh-pip {
   background-color: var(--yd-madness);
   filter: var(--yd-tray-madness-glow);
+}
+.yakov-dryh-dice-tray__palette-button--pain {
+  --yd-tray-palette-accent: var(--yd-tray-pain-accent);
 }
 .yakov-dryh-dice-tray__palette-button--pain .yakov-dryh-pip {
   background-color: var(--yd-pain);
