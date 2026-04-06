@@ -47,7 +47,7 @@ export class YakovDryhCharacterSheet extends BaseSheet {
     },
     position: {
       height: "auto" as const,
-      width: 800
+      width: 790
     },
     tag: "form",
     window: {

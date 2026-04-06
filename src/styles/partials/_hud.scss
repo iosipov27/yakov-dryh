@@ -151,7 +151,6 @@
     padding: 0.6rem;
 
     &:last-child {
-      border-bottom: 0;
     }
 
     .yakov-dryh-dice-picker__header span {
@@ -181,7 +180,6 @@
   }
 
   &__palette {
-    border-top: 1px solid var(--yd-tray-line);
     display: grid;
     gap: 0.65rem;
     padding-top: 0.75rem;
