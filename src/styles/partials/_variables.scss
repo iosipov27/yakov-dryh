@@ -53,18 +53,19 @@
   --yd-sheet-ink: #edf1f3;
   --yd-sheet-muted: #aab2b9;
   --yd-sheet-muted-strong: #eef2f4;
-  --yd-sheet-input-bg: #c6ccd0;
-  --yd-sheet-input-bg-strong: #d7dde1;
+  --yd-sheet-input-bg: #727b81;
+  --yd-sheet-input-bg-strong: #848d93;
   --yd-sheet-input-border: #8a9299;
   --yd-sheet-input-ink: #272c31;
-  --yd-sheet-input-paper: #dfe4e7;
-  --yd-sheet-input-paper-soft: #c6ccd1;
+  --yd-sheet-input-paper: #919aa0;
+  --yd-sheet-input-paper-soft: #798388;
   --yd-sheet-input-paper-line: rgb(96 103 109 / 34%);
   --yd-sheet-input-surface:
-    linear-gradient(180deg, rgb(255 255 255 / 15%) 0%, rgb(255 255 255 / 0%) 22%),
-    radial-gradient(circle at 16% 18%, rgb(255 255 255 / 14%), transparent 30%),
-    linear-gradient(180deg, rgb(217 214 210 / 82%) 0%, rgb(198 194 189 / 76%) 100%),
-    linear-gradient(180deg, var(--yd-sheet-input-paper) 0%, var(--yd-sheet-input-paper-soft) 100%),
+    linear-gradient(180deg, rgb(160 167 173 / 34%) 0%, rgb(146 153 159 / 18%) 100%),
+    linear-gradient(180deg, rgb(255 255 255 / 8%) 0%, rgb(255 255 255 / 0%) 20%),
+    radial-gradient(circle at 16% 18%, rgb(255 255 255 / 8%), transparent 28%),
+    linear-gradient(180deg, rgb(106 113 119 / 70%) 0%, rgb(86 93 99 / 66%) 100%),
+    linear-gradient(180deg, rgb(135 142 148 / 50%) 0%, rgb(114 121 127 / 48%) 100%),
     url("../assets/paper.jpg") center / 560px auto repeat;
   --yd-sheet-input-shadow:
     inset 0 1px 0 rgb(255 255 255 / 42%),
@@ -86,19 +87,19 @@
   --yd-sheet-button-shadow:
     inset 0 1px 0 rgb(255 255 255 / 35%),
     0 6px 18px rgb(0 0 0 / 10%);
-  --yd-sheet-card: #adb4ba;
-  --yd-sheet-card-mid: #444a50;
-  --yd-sheet-card-edge: #383d42;
+    --yd-sheet-card: #a7a7a7;
+    --yd-sheet-card-mid: #6b6b6b;
+    --yd-sheet-card-edge: #373737;
   --yd-sheet-card-glow: rgb(255 255 255 / 26%);
   --yd-sheet-card-highlight: rgb(245 247 248 / 24%);
-  --yd-sheet-card-exhaustion: #9ea6ad;
-  --yd-sheet-card-exhaustion-mid: #a7afb6;
-  --yd-sheet-card-exhaustion-edge: #7f878f;
-  --yd-sheet-card-exhaustion-glow: rgb(234 238 241 / 24%);
-  --yd-sheet-card-madness: #9aa2a8;
-  --yd-sheet-card-madness-mid: #a3abb1;
-  --yd-sheet-card-madness-edge: #7a838a;
-  --yd-sheet-card-madness-glow: rgb(232 236 239 / 26%);
+  --yd-sheet-card-exhaustion: rgb(158 166 173 / 30%);
+  --yd-sheet-card-exhaustion-mid: rgb(167 175 182 / 30%);
+  --yd-sheet-card-exhaustion-edge: rgb(127 135 143 / 30%);
+  --yd-sheet-card-exhaustion-glow: rgb(255 255 255 / 17%);
+  --yd-sheet-card-madness: rgb(154 162 168 / 30%);
+  --yd-sheet-card-madness-mid: rgb(163 171 177 / 30%);
+  --yd-sheet-card-madness-edge: rgb(122 131 138 / 30%);
+  --yd-sheet-card-madness-glow: rgb(232 236 239 / 18%);
   --yd-sheet-shadow: 0 20px 48px rgb(0 0 0 / 38%);
   --yd-sheet-resource-card-shadow:
     inset 0 1px 0 var(--yd-sheet-card-highlight),
@@ -297,12 +298,7 @@
   --yd-sheet-window-header-control-hover-bg: rgb(255 255 255 / 7%);
   --yd-sheet-window-header-control-hover-ink: #f8fafb;
   --yd-sheet-window-surface:
-    radial-gradient(circle at 50% 46%, rgb(150 157 164 / 5%), transparent 32%),
-    radial-gradient(circle at 50% 52%, transparent 42%, rgb(7 8 9 / 24%) 100%),
-    radial-gradient(circle at top left, rgb(255 255 255 / 6%), transparent 28%),
-    radial-gradient(circle at 84% 26%, rgb(116 123 130 / 9%), transparent 28%),
-    radial-gradient(circle at 50% 100%, rgb(181 187 193 / 5%), transparent 30%),
-    linear-gradient(180deg, rgb(28 31 34 / 98%) 0%, rgb(8 9 10 / 99%) 100%);
+radial-gradient(circle at 50% 46%, rgb(150 157 164 / 5%), transparent 32%), radial-gradient(circle at 50% 52%, transparent 42%, rgb(7 8 9 / 24%) 100%), radial-gradient(circle at top left, rgb(255 255 255 / 6%), transparent 28%), radial-gradient(circle at 84% 26%, rgb(116 123 130 / 9%), transparent 28%), radial-gradient(circle at 50% 100%, rgb(181 187 193 / 5%), transparent 30%), linear-gradient(180deg, rgb(0 0 0 / 98%) 0%, rgb(0 0 0 / 99%) 100%);
   --yd-sheet-window-backdrop:
     linear-gradient(180deg, rgb(202 208 213 / 44%) 0%, rgb(66 72 78 / 54%) 100%),
     url(../assets/bg2.jpg) center / cover no-repeat;

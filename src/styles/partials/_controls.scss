@@ -43,7 +43,7 @@
     textarea,
     select {
       background: var(--yd-sheet-input-surface);
-      background-blend-mode: screen, soft-light, saturation, multiply, normal;
+      background-blend-mode: normal, screen, soft-light, saturation, multiply, soft-light;
       border: 1px solid var(--yd-sheet-input-border);
       border-radius: 0.12rem;
       box-shadow: var(--yd-sheet-input-shadow);
