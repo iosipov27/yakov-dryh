@@ -22,14 +22,14 @@
     h3 {
       color: var(--yd-text-tertiary);
       font-family: var(--yd-sheet-display-font);
-      font-size: 1.5rem;
+      font-size: var(--yd-font-size-5xl);
       font-weight: 700;
       line-height: 1;
     }
   }
 
   &__arrow {
-    font-size: 0.5rem;
+    font-size: var(--yd-font-size-3xs);
   }
 
   &__pools {
@@ -57,7 +57,7 @@
   }
 
   &__summary {
-    font-size: 1.02rem;
+    font-size: var(--yd-font-size-base);
 
     strong {
       color: inherit;
@@ -75,7 +75,7 @@
   }
 
   &__dominant {
-    font-size: 1.02rem;
+    font-size: var(--yd-font-size-base);
     color: var(--yd-text-light);
     strong {
       color: var(--yd-chat-ink);
@@ -88,7 +88,7 @@
 
     strong {
       display: block;
-      font-size: 1rem;
+      font-size: var(--yd-font-size-base);
       letter-spacing: 0.02em;
       text-transform: uppercase;
     }
@@ -99,7 +99,7 @@
 
     strong {
       display: block;
-      font-size: 1.5rem;
+      font-size: var(--yd-font-size-5xl);
       letter-spacing: 0.04em;
       line-height: 1;
       text-transform: uppercase;
@@ -108,7 +108,7 @@
 
   .yakov-dryh-button {
     border-radius: 0.14rem;
-    font-size: 0.96rem;
+    font-size: var(--yd-font-size-base);
     transition:
       transform 140ms ease,
       box-shadow 140ms ease,
@@ -161,7 +161,7 @@
       box-shadow: var(--yd-cta-shadow);
       color: var(--yd-cta-ink);
       font-family: var(--yd-sheet-body-font);
-      font-size: 0.92rem;
+      font-size: var(--yd-font-size-2xl);
       font-weight: 500;
       min-height: 2.4rem;
       opacity: 0.78;
@@ -235,7 +235,7 @@
 
     strong {
       color: var(--yd-chat-ink);
-      font-size: 1rem;
+      font-size: var(--yd-font-size-base);
     }
   }
 
@@ -255,7 +255,7 @@
 
     .yakov-dryh-button {
       min-height: 1.5rem;
-      font-size: 0.75rem;
+      font-size: var(--yd-font-size-sm);
     }
   }
 
@@ -340,7 +340,7 @@
 
   &__successes-count {
     color: var(--yd-success-player);
-    font-size: 1.05rem;
+    font-size: var(--yd-font-size-base);
   }
 
   &--exhaustion {

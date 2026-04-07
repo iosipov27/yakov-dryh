@@ -13,25 +13,58 @@ h6 {
 }
 
 h1 {
-  font-size: 2rem;
+  font-size: var(--yd-font-size-9xl);
 }
 
 h2 {
-  font-size: 1.6rem;
+  font-size: var(--yd-font-size-6xl);
 }
 
 h3 {
-  font-size: 1.3rem;
+  font-size: var(--yd-font-size-3xl);
 }
 
 h4 {
-  font-size: 1.1rem;
+  font-size: var(--yd-font-size-xl);
 }
 
 h5 {
-  font-size: 1rem;
+  font-size: var(--yd-font-size-base);
 }
 
 h6 {
-  font-size: 0.9rem;
+  font-size: var(--yd-font-size-lg);
+}
+
+:where(
+  .yakov-dryh-sheet,
+  .yakov-dryh-dialog,
+  .yakov-dryh-dialog-shell,
+  .yakov-dryh-chat-card,
+  .chat-message:has(.yakov-dryh-chat-card),
+  .yakov-dryh-dice-tray,
+  .yakov-dryh-dice-tray-card,
+  .yakov-dryh-hope-despair-tracker,
+  .yakov-dryh-resource-tracker
+) :where(
+  a,
+  b,
+  blockquote,
+  button,
+  dd,
+  dt,
+  em,
+  figcaption,
+  i,
+  input,
+  label,
+  li,
+  p,
+  select,
+  small,
+  span,
+  strong,
+  textarea
+) {
+  font-size: var(--yd-font-size-base);
 }

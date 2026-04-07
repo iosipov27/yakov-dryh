@@ -64,7 +64,7 @@
 
   .yakov-dryh-eyebrow {
     color: var(--yd-sheet-muted);
-    font-size: 0.72rem;
+    font-size: var(--yd-font-size-xs);
     font-weight: 700;
     letter-spacing: 0.18em;
     text-transform: uppercase;
@@ -175,12 +175,12 @@
   }
 
   h3 {
-    font-size: 2.05rem;
+    font-size: var(--yd-font-size-9xl);
     line-height: 0.95;
   }
 
   h4 {
-    font-size: 0.96rem;
+    font-size: var(--yd-font-size-base);
     letter-spacing: 0.01em;
     text-transform: uppercase;
   }

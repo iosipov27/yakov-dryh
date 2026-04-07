@@ -68,7 +68,7 @@
     }
 
     &__header h3 {
-      font-size: 1.04rem;
+      font-size: var(--yd-font-size-base);
     }
 
     &__controls {
@@ -81,7 +81,7 @@
     }
 
     &__value {
-      font-size: 1.44rem;
+      font-size: var(--yd-font-size-4xl);
     }
 
     &__scene-button {

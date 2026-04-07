@@ -342,9 +342,25 @@ radial-gradient(circle at 50% 46%, rgb(150 157 164 / 5%), transparent 32%), radi
   --yd-status-draft-bg: #e4e7e9;
   --yd-status-review-bg: #e7eaed;
   --yd-status-resolved-bg: #d2d8dc;
-  --yd-roll-detail-surface: rgb(255 255 255 / 4%);
+  --yd-roll-detail-surface: rgb(255 255 255 / 14%);
   --yd-roll-detail-accent: color-mix(in srgb, var(--yd-chat-accent) 62%, #64181f);
   --yd-roll-pool-divider: rgb(255 248 236 / 10%);
+  --yd-font-size-3xs: 0.5rem;
+  --yd-font-size-2xs: 0.6rem;
+  --yd-font-size-xs: 0.7rem;
+  --yd-font-size-sm: 0.75rem;
+  --yd-font-size-md: 0.8rem;
+  --yd-font-size-lg: 0.9rem;
+  --yd-font-size-base: 1rem;
+  --yd-font-size-xl: 1.1rem;
+  --yd-font-size-2xl: 1.2rem;
+  --yd-font-size-3xl: 1.3rem;
+  --yd-font-size-4xl: 1.4rem;
+  --yd-font-size-5xl: 1.5rem;
+  --yd-font-size-6xl: 1.6rem;
+  --yd-font-size-7xl: 1.7rem;
+  --yd-font-size-8xl: 1.8rem;
+  --yd-font-size-9xl: 2rem;
   --yd-sheet-display-font:
     "EB Garamond",
     "Baskerville Old Face",

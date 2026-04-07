@@ -336,9 +336,25 @@
   --yd-status-draft-bg: #e4e7e9;
   --yd-status-review-bg: #e7eaed;
   --yd-status-resolved-bg: #d2d8dc;
-  --yd-roll-detail-surface: rgb(255 255 255 / 4%);
+  --yd-roll-detail-surface: rgb(255 255 255 / 14%);
   --yd-roll-detail-accent: color-mix(in srgb, var(--yd-chat-accent) 62%, #64181f);
   --yd-roll-pool-divider: rgb(255 248 236 / 10%);
+  --yd-font-size-3xs: 0.5rem;
+  --yd-font-size-2xs: 0.6rem;
+  --yd-font-size-xs: 0.7rem;
+  --yd-font-size-sm: 0.75rem;
+  --yd-font-size-md: 0.8rem;
+  --yd-font-size-lg: 0.9rem;
+  --yd-font-size-base: 1rem;
+  --yd-font-size-xl: 1.1rem;
+  --yd-font-size-2xl: 1.2rem;
+  --yd-font-size-3xl: 1.3rem;
+  --yd-font-size-4xl: 1.4rem;
+  --yd-font-size-5xl: 1.5rem;
+  --yd-font-size-6xl: 1.6rem;
+  --yd-font-size-7xl: 1.7rem;
+  --yd-font-size-8xl: 1.8rem;
+  --yd-font-size-9xl: 2rem;
   --yd-sheet-display-font:
     "EB Garamond",
     "Baskerville Old Face",
@@ -367,27 +383,56 @@ h6 {
 }
 
 h1 {
-  font-size: 2rem;
+  font-size: var(--yd-font-size-9xl);
 }
 
 h2 {
-  font-size: 1.6rem;
+  font-size: var(--yd-font-size-6xl);
 }
 
 h3 {
-  font-size: 1.3rem;
+  font-size: var(--yd-font-size-3xl);
 }
 
 h4 {
-  font-size: 1.1rem;
+  font-size: var(--yd-font-size-xl);
 }
 
 h5 {
-  font-size: 1rem;
+  font-size: var(--yd-font-size-base);
 }
 
 h6 {
-  font-size: 0.9rem;
+  font-size: var(--yd-font-size-lg);
+}
+
+:where(.yakov-dryh-sheet,
+.yakov-dryh-dialog,
+.yakov-dryh-dialog-shell,
+.yakov-dryh-chat-card,
+.chat-message:has(.yakov-dryh-chat-card),
+.yakov-dryh-dice-tray,
+.yakov-dryh-dice-tray-card,
+.yakov-dryh-hope-despair-tracker,
+.yakov-dryh-resource-tracker) :where(a,
+b,
+blockquote,
+button,
+dd,
+dt,
+em,
+figcaption,
+i,
+input,
+label,
+li,
+p,
+select,
+small,
+span,
+strong,
+textarea) {
+  font-size: var(--yd-font-size-base);
 }
 
 .m0 {
@@ -2477,7 +2522,7 @@ h6 {
 .chat-message:has(.yakov-dryh-chat-card) .message-sender {
   color: var(--yd-text-tertiary);
   font-family: var(--yd-sheet-display-font);
-  font-size: 1.08rem;
+  font-size: var(--yd-font-size-xl);
   font-weight: 700;
 }
 .chat-message:has(.yakov-dryh-chat-card) .message-metadata,
@@ -2513,7 +2558,7 @@ h6 {
 .yakov-dryh-sheet .window-header h1 {
   color: var(--yd-sheet-muted-strong);
   font-family: var(--yd-sheet-display-font);
-  font-size: 1rem;
+  font-size: var(--yd-font-size-base);
   font-weight: 700;
   letter-spacing: 0.01em;
   margin: 0;
@@ -2568,13 +2613,13 @@ h6 {
 }
 
 .yakov-dryh-dialog .window-header h1 {
-  font-size: 1rem;
+  font-size: var(--yd-font-size-base);
 }
 
 .yakov-dryh-status {
   align-self: flex-start;
   border-radius: var(--yd-border-radius);
-  font-size: 0.75rem;
+  font-size: var(--yd-font-size-sm);
   font-weight: 700;
   padding: 0.45rem 0.75rem;
   text-transform: uppercase;
@@ -2649,7 +2694,7 @@ h6 {
   justify-content: center;
   color: rgba(255, 255, 255, 0.9);
   background: linear-gradient(180deg, rgba(0, 0, 0, 0) 40%, rgba(0, 0, 0, 0.45));
-  font-size: 0.8rem;
+  font-size: var(--yd-font-size-md);
   opacity: 0;
   transition: opacity 160ms ease;
   pointer-events: none;
@@ -2722,7 +2767,7 @@ h6 {
 }
 .yakov-dryh-sheet .yakov-dryh-eyebrow {
   color: var(--yd-sheet-muted);
-  font-size: 0.72rem;
+  font-size: var(--yd-font-size-xs);
   font-weight: 700;
   letter-spacing: 0.18em;
   text-transform: uppercase;
@@ -2814,11 +2859,11 @@ h6 {
   font-weight: 700;
 }
 .yakov-dryh-sheet h3 {
-  font-size: 2.05rem;
+  font-size: var(--yd-font-size-9xl);
   line-height: 0.95;
 }
 .yakov-dryh-sheet h4 {
-  font-size: 0.96rem;
+  font-size: var(--yd-font-size-base);
   letter-spacing: 0.01em;
   text-transform: uppercase;
 }
@@ -2919,12 +2964,13 @@ h6 {
   gap: 0.35rem;
 }
 .yakov-dryh-field > span {
-  font-size: 0.75rem;
+  font-size: var(--yd-font-size-sm);
   font-weight: 500;
 }
 .yakov-dryh-field input,
 .yakov-dryh-field textarea,
 .yakov-dryh-field select {
+  font-size: var(--yd-font-size-base);
   background: rgba(255, 255, 255, 0.88);
   border: 1px solid var(--yd-border);
   border-radius: var(--yd-border-radius);
@@ -2943,7 +2989,7 @@ h6 {
 .yakov-dryh-sheet .yakov-dryh-field > span {
   color: var(--yd-text-tertiary);
   font-family: var(--yd-sheet-body-font);
-  font-size: 0.9rem;
+  font-size: var(--yd-font-size-lg);
 }
 .yakov-dryh-sheet .yakov-dryh-field input,
 .yakov-dryh-sheet .yakov-dryh-field textarea,
@@ -3006,6 +3052,7 @@ h6 {
   color: var(--yd-text-light);
   cursor: pointer;
   font-weight: 500;
+  font-size: var(--yd-font-size-base);
   min-width: 4rem;
   padding: 0 0.5rem;
 }
@@ -3037,7 +3084,7 @@ h6 {
   box-shadow: var(--yd-sheet-button-shadow);
   color: var(--yd-sheet-button-ink);
   font-family: var(--yd-sheet-body-font);
-  font-size: 0.92rem;
+  font-size: var(--yd-font-size-lg);
   font-weight: 500;
   min-height: 2.4rem;
   padding: 0.5rem 0.8rem;
@@ -3060,6 +3107,7 @@ h6 {
   color: var(--yd-sheet-button-ink);
 }
 .yakov-dryh-sheet .yakov-dryh-button--despair {
+  font-size: var(--yd-font-size-2xl);
   background: var(--yd-cta-surface);
   border-color: var(--yd-cta-border);
   color: var(--yd-cta-ink);
@@ -3132,7 +3180,7 @@ h6 {
 }
 .yakov-dryh-dice-picker__value {
   color: var(--yd-muted);
-  font-size: 0.8rem;
+  font-size: var(--yd-font-size-md);
   font-weight: 700;
   letter-spacing: 0.06em;
   text-transform: uppercase;
@@ -3171,7 +3219,7 @@ h6 {
   box-shadow: 0 8px 16px rgba(25, 16, 10, 0.22);
   color: #fff;
   display: inline-flex;
-  font-size: 0.62rem;
+  font-size: var(--yd-font-size-2xs);
   height: 1.05rem;
   justify-content: center;
   opacity: 0;
@@ -3221,7 +3269,7 @@ h6 {
 .yakov-dryh-sheet .yakov-dryh-response-line__label {
   color: var(--yd-sheet-muted-strong);
   font-family: var(--yd-sheet-body-font);
-  font-size: 1rem;
+  font-size: var(--yd-font-size-base);
   font-weight: 500;
 }
 .yakov-dryh-sheet .yakov-dryh-response-line__checkboxes {
@@ -3336,12 +3384,12 @@ h6 {
 .yakov-dryh-roll-card .yakov-dryh-header h3 {
   color: var(--yd-text-tertiary);
   font-family: var(--yd-sheet-display-font);
-  font-size: 1.5rem;
+  font-size: var(--yd-font-size-5xl);
   font-weight: 700;
   line-height: 1;
 }
 .yakov-dryh-roll-card__arrow {
-  font-size: 0.5rem;
+  font-size: var(--yd-font-size-3xs);
 }
 .yakov-dryh-roll-card__pools {
   display: grid;
@@ -3363,7 +3411,7 @@ h6 {
   padding: 0.2rem 0.5rem;
 }
 .yakov-dryh-roll-card__summary {
-  font-size: 1.02rem;
+  font-size: var(--yd-font-size-base);
 }
 .yakov-dryh-roll-card__summary strong {
   color: inherit;
@@ -3377,7 +3425,7 @@ h6 {
   color: var(--yd-chat-failure-ink);
 }
 .yakov-dryh-roll-card__dominant {
-  font-size: 1.02rem;
+  font-size: var(--yd-font-size-base);
   color: var(--yd-text-light);
 }
 .yakov-dryh-roll-card__dominant strong {
@@ -3389,7 +3437,7 @@ h6 {
 }
 .yakov-dryh-roll-card__snap-effect strong {
   display: block;
-  font-size: 1rem;
+  font-size: var(--yd-font-size-base);
   letter-spacing: 0.02em;
   text-transform: uppercase;
 }
@@ -3398,14 +3446,14 @@ h6 {
 }
 .yakov-dryh-roll-card__crash-alert strong {
   display: block;
-  font-size: 1.5rem;
+  font-size: var(--yd-font-size-5xl);
   letter-spacing: 0.04em;
   line-height: 1;
   text-transform: uppercase;
 }
 .yakov-dryh-roll-card .yakov-dryh-button {
   border-radius: 0.14rem;
-  font-size: 0.96rem;
+  font-size: var(--yd-font-size-base);
   transition: transform 140ms ease, box-shadow 140ms ease, background 140ms ease, border-color 140ms ease, color 140ms ease;
 }
 .yakov-dryh-roll-card .yakov-dryh-button:not(.yakov-dryh-button--compact) {
@@ -3443,7 +3491,7 @@ h6 {
   box-shadow: var(--yd-cta-shadow);
   color: var(--yd-cta-ink);
   font-family: var(--yd-sheet-body-font);
-  font-size: 0.92rem;
+  font-size: var(--yd-font-size-2xl);
   font-weight: 500;
   min-height: 2.4rem;
   opacity: 0.78;
@@ -3503,7 +3551,7 @@ h6 {
 }
 .yakov-dryh-roll-pool__header strong {
   color: var(--yd-chat-ink);
-  font-size: 1rem;
+  font-size: var(--yd-font-size-base);
 }
 .yakov-dryh-roll-pool__result {
   align-items: center;
@@ -3520,7 +3568,7 @@ h6 {
 }
 .yakov-dryh-roll-pool__adjustments .yakov-dryh-button {
   min-height: 1.5rem;
-  font-size: 0.75rem;
+  font-size: var(--yd-font-size-sm);
 }
 .yakov-dryh-roll-pool__dice {
   align-items: center;
@@ -3589,7 +3637,7 @@ h6 {
 }
 .yakov-dryh-roll-pool__successes-count {
   color: var(--yd-success-player);
-  font-size: 1.05rem;
+  font-size: var(--yd-font-size-base);
 }
 .yakov-dryh-roll-pool--exhaustion::before {
   background: none;
@@ -3738,14 +3786,14 @@ h6 {
   letter-spacing: 0.14em;
   text-transform: uppercase;
   text-shadow: 0 1px 0 rgba(255, 255, 255, 0.22);
-  font-size: 0.78rem;
+  font-size: var(--yd-font-size-md);
   opacity: 0.9;
   font-weight: 700;
 }
 .yakov-dryh-dice-tray__panel-header h3 {
   color: color-mix(in srgb, var(--yd-tray-roll-accent) 74%, var(--yd-tray-text));
   font-family: var(--yd-sheet-display-font);
-  font-size: 1.8rem;
+  font-size: var(--yd-font-size-8xl);
   font-weight: 700;
   line-height: 1;
   text-shadow: 0 1px 0 rgba(255, 255, 255, 0.22);
@@ -3786,7 +3834,7 @@ h6 {
 .yakov-dryh-dice-tray__pool .yakov-dryh-dice-picker__header span {
   color: color-mix(in srgb, var(--yd-tray-pool-accent) 52%, var(--yd-tray-text));
   font-family: var(--yd-sheet-display-font);
-  font-size: 0.98rem;
+  font-size: var(--yd-font-size-base);
   font-weight: 700;
   letter-spacing: 0.03em;
   text-transform: uppercase;
@@ -3841,7 +3889,7 @@ h6 {
   box-shadow: var(--yd-cta-shadow);
   color: var(--yd-cta-ink);
   font-family: var(--yd-sheet-display-font);
-  font-size: 1rem;
+  font-size: var(--yd-font-size-base);
   font-weight: 700;
   justify-content: center;
   letter-spacing: 0.03em;
@@ -4005,7 +4053,7 @@ h6 {
 .yakov-dryh-resource-tracker__header h3 {
   color: var(--yd-resource-ink);
   font-family: var(--yd-sheet-display-font);
-  font-size: clamp(1.14rem, 2vw, 1.36rem);
+  font-size: var(--yd-font-size-3xl);
   font-weight: 700;
   letter-spacing: 0.04em;
   line-height: 1;
@@ -4064,7 +4112,7 @@ h6 {
   box-shadow: none;
   color: var(--yd-resource-muted);
   font-family: var(--yd-sheet-display-font);
-  font-size: 1.18rem;
+  font-size: var(--yd-font-size-2xl);
   font-weight: 700;
   height: auto;
   line-height: 1;
@@ -4111,7 +4159,7 @@ h6 {
 .yakov-dryh-resource-tracker__value {
   color: var(--yd-resource-value-ink);
   font-family: var(--yd-sheet-display-font);
-  font-size: 1.68rem;
+  font-size: var(--yd-font-size-7xl);
   font-weight: 700;
   line-height: 1;
   position: relative;
@@ -4128,7 +4176,7 @@ h6 {
 .yakov-dryh-resource-tracker__caption {
   color: var(--yd-resource-ink);
   font-family: var(--yd-sheet-display-font);
-  font-size: 0.69rem;
+  font-size: var(--yd-font-size-xs);
   font-weight: 700;
   letter-spacing: 0.045em;
   line-height: 1;
@@ -4136,7 +4184,7 @@ h6 {
 }
 .yakov-dryh-resource-tracker__note {
   color: var(--yd-resource-muted);
-  font-size: 0.6rem;
+  font-size: var(--yd-font-size-2xs);
   font-weight: 600;
   letter-spacing: 0.06em;
   text-transform: uppercase;
@@ -4154,7 +4202,7 @@ h6 {
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.14), inset 0 -6px 12px rgba(0, 0, 0, 0.18), 0 8px 18px rgba(0, 0, 0, 0.22);
   color: var(--yd-resource-ink);
   font-family: var(--yd-sheet-display-font);
-  font-size: 0.8rem;
+  font-size: var(--yd-font-size-md);
   font-weight: 700;
   letter-spacing: 0.05em;
   min-height: 1.64rem;
@@ -4233,7 +4281,7 @@ h6 {
     grid-template-columns: 1fr;
   }
   .yakov-dryh-resource-tracker__header h3 {
-    font-size: 1.04rem;
+    font-size: var(--yd-font-size-base);
   }
   .yakov-dryh-resource-tracker__controls {
     min-height: 3.34rem;
@@ -4243,7 +4291,7 @@ h6 {
     width: 2.82rem;
   }
   .yakov-dryh-resource-tracker__value {
-    font-size: 1.44rem;
+    font-size: var(--yd-font-size-4xl);
   }
   .yakov-dryh-resource-tracker__scene-button {
     min-width: 0;

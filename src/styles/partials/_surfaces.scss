@@ -72,7 +72,7 @@
   .message-sender {
     color: var(--yd-text-tertiary);
     font-family: var(--yd-sheet-display-font);
-    font-size: 1.08rem;
+    font-size: var(--yd-font-size-xl);
     font-weight: 700;
   }
 
@@ -111,7 +111,7 @@
     h1 {
       color: var(--yd-sheet-muted-strong);
       font-family: var(--yd-sheet-display-font);
-      font-size: 1rem;
+      font-size: var(--yd-font-size-base);
       font-weight: 700;
       letter-spacing: 0.01em;
       margin: 0;
@@ -183,7 +183,7 @@
 .yakov-dryh-dialog {
   .window-header {
     h1 {
-      font-size: 1rem;
+      font-size: var(--yd-font-size-base);
     }
   }
 }
@@ -191,7 +191,7 @@
 .yakov-dryh-status {
   align-self: flex-start;
   border-radius: var(--yd-border-radius);
-  font-size: 0.75rem;
+  font-size: var(--yd-font-size-sm);
   font-weight: 700;
   padding: 0.45rem 0.75rem;
   text-transform: uppercase;
@@ -275,7 +275,7 @@
             justify-content: center;
             color: rgba(255, 255, 255, 0.9);
             background: linear-gradient(180deg, rgba(0,0,0,0.0) 40%, rgba(0,0,0,0.45));
-            font-size: 0.8rem;
+            font-size: var(--yd-font-size-md);
             opacity: 0;
             transition: opacity 160ms ease;
             pointer-events: none;

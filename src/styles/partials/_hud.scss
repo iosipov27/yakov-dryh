@@ -115,7 +115,7 @@
       letter-spacing: 0.14em;
       text-transform: uppercase;
       text-shadow: 0 1px 0 rgb(255 255 255 / 22%);
-      font-size: 0.78rem;
+      font-size: var(--yd-font-size-md);
       opacity: 0.9;
       font-weight: 700;
     }
@@ -123,7 +123,7 @@
     h3 {
       color: color-mix(in srgb, var(--yd-tray-roll-accent) 74%, var(--yd-tray-text));
       font-family: var(--yd-sheet-display-font);
-      font-size: 1.8rem;
+      font-size: var(--yd-font-size-8xl);
       font-weight: 700;
       line-height: 1;
       text-shadow: 0 1px 0 rgb(255 255 255 / 22%);
@@ -171,7 +171,7 @@
     .yakov-dryh-dice-picker__header span {
       color: color-mix(in srgb, var(--yd-tray-pool-accent) 52%, var(--yd-tray-text));
       font-family: var(--yd-sheet-display-font);
-      font-size: 0.98rem;
+      font-size: var(--yd-font-size-base);
       font-weight: 700;
       letter-spacing: 0.03em;
       text-transform: uppercase;
@@ -236,7 +236,7 @@
       box-shadow: var(--yd-cta-shadow);
       color: var(--yd-cta-ink);
       font-family: var(--yd-sheet-display-font);
-      font-size: 1rem;
+      font-size: var(--yd-font-size-base);
       font-weight: 700;
       justify-content: center;
       letter-spacing: 0.03em;
@@ -427,7 +427,7 @@
     h3 {
       color: var(--yd-resource-ink);
       font-family: var(--yd-sheet-display-font);
-      font-size: clamp(1.14rem, 2vw, 1.36rem);
+      font-size: var(--yd-font-size-3xl);
       font-weight: 700;
       letter-spacing: 0.04em;
       line-height: 1;
@@ -496,7 +496,7 @@
     box-shadow: none;
     color: var(--yd-resource-muted);
     font-family: var(--yd-sheet-display-font);
-    font-size: 1.18rem;
+    font-size: var(--yd-font-size-2xl);
     font-weight: 700;
     height: auto;
     line-height: 1;
@@ -550,7 +550,7 @@
   &__value {
     color: var(--yd-resource-value-ink);
     font-family: var(--yd-sheet-display-font);
-    font-size: 1.68rem;
+    font-size: var(--yd-font-size-7xl);
     font-weight: 700;
     line-height: 1;
     position: relative;
@@ -569,7 +569,7 @@
   &__caption {
     color: var(--yd-resource-ink);
     font-family: var(--yd-sheet-display-font);
-    font-size: 0.69rem;
+    font-size: var(--yd-font-size-xs);
     font-weight: 700;
     letter-spacing: 0.045em;
     line-height: 1;
@@ -578,7 +578,7 @@
 
   &__note {
     color: var(--yd-resource-muted);
-    font-size: 0.6rem;
+    font-size: var(--yd-font-size-2xs);
     font-weight: 600;
     letter-spacing: 0.06em;
     text-transform: uppercase;
@@ -601,7 +601,7 @@
       0 8px 18px rgb(0 0 0 / 22%);
     color: var(--yd-resource-ink);
     font-family: var(--yd-sheet-display-font);
-    font-size: 0.8rem;
+    font-size: var(--yd-font-size-md);
     font-weight: 700;
     letter-spacing: 0.05em;
     min-height: 1.64rem;

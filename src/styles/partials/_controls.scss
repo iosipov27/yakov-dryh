@@ -8,13 +8,14 @@
   gap: 0.35rem;
 
   > span {
-    font-size: 0.75rem;
+    font-size: var(--yd-font-size-sm);
     font-weight: 500;
   }
 
   input,
   textarea,
   select {
+    font-size: var(--yd-font-size-base);
     background: rgb(255 255 255 / 88%);
     border: 1px solid var(--yd-border);
     border-radius: var(--yd-border-radius);
@@ -36,7 +37,7 @@
     > span {
       color: var(--yd-text-tertiary);
       font-family: var(--yd-sheet-body-font);
-      font-size: 0.9rem;
+      font-size: var(--yd-font-size-lg);
     }
 
     input,
@@ -102,6 +103,7 @@
   color: var(--yd-text-light);
   cursor: pointer;
   font-weight: 500;
+  font-size: var(--yd-font-size-base);
   min-width: 4rem;
   padding: 0 0.5rem;
 
@@ -116,7 +118,7 @@
       color: var(--yd-ink-dark);
   }
 
-    &--flat {
+  &--flat {
       border: 1px solid var(--yd-border);
       background: transparent;
       color: var(--yd-text-light);
@@ -138,7 +140,7 @@
     box-shadow: var(--yd-sheet-button-shadow);
     color: var(--yd-sheet-button-ink);
     font-family: var(--yd-sheet-body-font);
-    font-size: 0.92rem;
+    font-size: var(--yd-font-size-lg);
     font-weight: 500;
     min-height: 2.4rem;
     padding: 0.5rem 0.8rem;
@@ -170,6 +172,7 @@
     }
 
     &--despair {
+      font-size: var(--yd-font-size-2xl);
       background: var(--yd-cta-surface);
       border-color: var(--yd-cta-border);
       color: var(--yd-cta-ink);
@@ -264,7 +267,7 @@
 
   &__value {
     color: var(--yd-muted);
-    font-size: 0.8rem;
+    font-size: var(--yd-font-size-md);
     font-weight: 700;
     letter-spacing: 0.06em;
     text-transform: uppercase;
@@ -314,7 +317,7 @@
     box-shadow: 0 8px 16px rgb(25 16 10 / 22%);
     color: #fff;
     display: inline-flex;
-    font-size: 0.62rem;
+    font-size: var(--yd-font-size-2xs);
     height: 1.05rem;
     justify-content: center;
     opacity: 0;
@@ -375,7 +378,7 @@
     &__label {
       color: var(--yd-sheet-muted-strong);
       font-family: var(--yd-sheet-body-font);
-      font-size: 1rem;
+      font-size: var(--yd-font-size-base);
       font-weight: 500;
     }
 
