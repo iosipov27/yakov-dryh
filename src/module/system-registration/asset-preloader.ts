@@ -8,10 +8,8 @@ export const SYSTEM_ASSET_SOURCE_PATHS: Record<
 > = {
   critical: [
     "assets/bg.jpg",
+    "assets/bg3.jpg",
     "assets/face.jpg",
-    "assets/paper.jpg",
-    "assets/coin_hope.png",
-    "assets/coin_despair.png",
     "assets/button_red.png",
     "assets/six-sided-dice3.svg"
   ],

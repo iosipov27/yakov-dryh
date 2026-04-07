@@ -16,9 +16,8 @@ describe("asset preloader", () => {
   it("creates system-scoped asset URLs for each preload group", () => {
     expect(getSystemAssetSources("critical")).toEqual([
       "systems/yakov-dryh/assets/bg.jpg",
-      "systems/yakov-dryh/assets/paper.jpg",
-      "systems/yakov-dryh/assets/coin_hope.png",
-      "systems/yakov-dryh/assets/coin_despair.png",
+      "systems/yakov-dryh/assets/bg3.jpg",
+      "systems/yakov-dryh/assets/face.jpg",
       "systems/yakov-dryh/assets/button_red.png",
       "systems/yakov-dryh/assets/six-sided-dice3.svg"
     ]);
