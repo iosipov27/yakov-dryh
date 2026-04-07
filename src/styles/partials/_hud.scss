@@ -375,7 +375,7 @@
     box-shadow: var(--yd-chat-tray-pool-shadow);
 
     .yakov-dryh-dice-picker__header span {
-      color: color-mix(in srgb, var(--yd-tray-pool-accent) 46%, var(--yd-chat-ink));
+      color: var(--yd-chat-ink);
     }
   }
 }
