@@ -45,6 +45,7 @@
   --yd-sheet-bg-soft: #181a1d;
   --yd-sheet-border: rgb(206 212 218 / 16%);
   --yd-sheet-divider: rgb(206 212 218 / 12%);
+  --yd-sheet-ink-accent: #fff;
   --yd-sheet-ink: #edf1f3;
   --yd-sheet-muted: #aab2b9;
   --yd-sheet-muted-strong: #eef2f4;
@@ -3436,14 +3437,15 @@ textarea) {
   color: var(--yd-chat-ink);
   margin-right: 0.2rem;
 }
-.yakov-dryh-roll-card__snap-effect {
-  color: var(--yd-madness);
-}
 .yakov-dryh-roll-card__snap-effect strong {
   display: block;
-  font-size: var(--yd-font-size-base);
+  color: var(--yd-sheet-ink-accent);
+  font-size: var(--yd-font-size-2xl);
   letter-spacing: 0.02em;
   text-transform: uppercase;
+}
+.yakov-dryh-roll-card__snap-effect p {
+  color: var(--yd-sheet-ink);
 }
 .yakov-dryh-roll-card__crash-alert {
   color: var(--yd-madness);

@@ -84,13 +84,16 @@
   }
 
   &__snap-effect {
-    color: var(--yd-madness);
-
     strong {
       display: block;
-      font-size: var(--yd-font-size-base);
+      color: var(--yd-sheet-ink-accent);
+      font-size: var(--yd-font-size-2xl);
       letter-spacing: 0.02em;
       text-transform: uppercase;
+    }
+
+    p {
+      color: var(--yd-sheet-ink);
     }
   }
 
