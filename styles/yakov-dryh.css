@@ -340,15 +340,16 @@
   --yd-roll-detail-accent: color-mix(in srgb, var(--yd-chat-accent) 62%, #64181f);
   --yd-roll-pool-divider: rgb(255 248 236 / 10%);
   --yd-sheet-display-font:
+    "EB Garamond",
     "Baskerville Old Face",
     "Palatino Linotype",
     "Book Antiqua",
     Georgia,
     serif;
   --yd-sheet-body-font:
-    "Trebuchet MS",
-    "Gill Sans",
-    sans-serif;
+    "EB Garamond",
+    Georgia,
+    serif;
 }
 
 h1,
@@ -2414,7 +2415,7 @@ h6 {
   border: 1px solid var(--yd-border);
   border-radius: var(--yd-border-radius);
   color: var(--yd-ink);
-  font-family: "Trebuchet MS", "Gill Sans", sans-serif;
+  font-family: var(--yd-sheet-body-font);
   padding: 1rem;
 }
 

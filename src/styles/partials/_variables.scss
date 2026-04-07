@@ -346,13 +346,14 @@ radial-gradient(circle at 50% 46%, rgb(150 157 164 / 5%), transparent 32%), radi
   --yd-roll-detail-accent: color-mix(in srgb, var(--yd-chat-accent) 62%, #64181f);
   --yd-roll-pool-divider: rgb(255 248 236 / 10%);
   --yd-sheet-display-font:
+    "EB Garamond",
     "Baskerville Old Face",
     "Palatino Linotype",
     "Book Antiqua",
     Georgia,
     serif;
   --yd-sheet-body-font:
-    "Trebuchet MS",
-    "Gill Sans",
-    sans-serif;
+    "EB Garamond",
+    Georgia,
+    serif;
 }
