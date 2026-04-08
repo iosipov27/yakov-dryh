@@ -28,7 +28,6 @@ When working on UI or applications, use ApplicationV2 and its ecosystem as the p
 - Repository name: `yakov-dryh`
 - Project type: Foundry VTT system targeting a `Data/systems/` workspace
 - Current status: repository initialized, package scaffold not created yet
-- Reference application: `example/app-example-main`
 - Architecture reference: `docs/architecture.md`
 
 Before changing chat, dice tray, character sheet, or shared-pool flows, read `docs/architecture.md` for the current subsystem map and data flow.
@@ -80,11 +79,10 @@ If a pushed tag did not create release assets, check the `Release` workflow run 
 
 ---
 
-## DRYH Rules Reference
+## DRYH Rules Notes
 
-Use `example/rules/Don't Rest Your Head AID rules.pdf` as a compact gameplay reference when checking DRYH mechanics.
-
-The aid sheet used here is `v2.2` from `miniver.itch.io`.
+Use the project-authored notes below when checking DRYH mechanics.
+Do not add original third-party rules documents or reference applications to this repository.
 
 ### Conflict Rolls
 
@@ -145,7 +143,7 @@ The aid sheet used here is `v2.2` from `miniver.itch.io`.
     - the roll must get at least that much Exhaustion in successes
   - To do the impossible:
     - the player must add `+1 Exhaustion`
-    - the aid sheet states: `Get +1 Success / Exhaustion`
+    - the implementation note is to add one success per Exhaustion die
 - Madness talents:
   - the player must add Madness dice
   - more Madness dice allow more powerful effects
@@ -336,44 +334,6 @@ Use this section as the current checklist for development progress against the a
 
 ---
 
-## Reference Application Strategy
-
-The reference app is the main architecture source.
-
-Key rule:
-
-- Analyze it for patterns
-- Adapt patterns to this system
-- Do NOT copy code blindly
-
----
-
-## Reference Application Summary
-
-- `system.json` loads runtime bundle and styles
-- `app-example.mjs` is the composition root
-- Code split into:
-  - applications
-  - data
-  - documents
-  - dice
-  - canvas
-  - enrichers
-  - helpers
-  - systemRegistration
-- Static content:
-  - templates
-  - lang
-  - assets
-  - styles
-  - packs
-- Tooling:
-  - Rollup
-  - Gulp
-  - tools/\*.mjs
-
----
-
 ## Agent Goal
 
 Help build and maintain the system with:
@@ -500,14 +460,14 @@ When implementing new functionality:
 
 1. Check official Foundry API docs
 2. Check ApplicationV2 patterns
-3. Check reference project (`example/app-example-main`)
+3. Check the current project architecture and nearby code
 4. Then implement
 
 Priority order:
 
 1. Official API
 2. ApplicationV2 patterns
-3. Reference project
+3. Current project architecture
 4. Custom implementation
 
 ---
@@ -521,14 +481,14 @@ flowchart LR
     user["Player / GM"]
     dev["Developer"]
     foundry["Foundry VTT host"]
-    dh["app-example reference system"]
+    yd["yakov-dryh system"]
     data["World data, settings, compendia, assets"]
 
     user -->|"uses sheets, chat, canvas, sidebar"| foundry
-    foundry -->|"loads manifest, bundle, templates, styles"| dh
-    dh -->|"registers documents, UI, hooks, dice, sockets"| foundry
-    dh <-->|"reads and writes game state"| data
-    dev -->|"edits source and runs npm scripts"| dh
+    foundry -->|"loads manifest, bundle, templates, styles"| yd
+    yd -->|"registers documents, UI, hooks, dice, sockets"| foundry
+    yd <-->|"reads and writes game state"| data
+    dev -->|"edits source and runs npm scripts"| yd
 ```
 
 ### Level 2: Containers
@@ -537,9 +497,9 @@ flowchart LR
 flowchart LR
     foundry["Foundry core platform"]
     manifest["Manifest and static resources\nsystem.json, templates, lang, assets, packs, styles"]
-    runtime["Runtime bundle\nbuild/app-example.js"]
-    source["Source code\napp-example.mjs and module/**"]
-    tooling["Build and dev tooling\nrollup, gulp, tools/*.mjs"]
+    runtime["Runtime bundle\nscripts/main.js"]
+    source["Source code\nsrc/main.ts and src/module/**"]
+    tooling["Build and dev tooling\nTypeScript, Sass, npm scripts"]
     data["Foundry storage\nworld settings, documents, compendia, sockets"]
 
     foundry -->|"reads manifest and loads runtime"| manifest
@@ -555,7 +515,7 @@ flowchart LR
 
 ```mermaid
 flowchart LR
-    entry["Composition root\napp-example.mjs"]
+    entry["Composition root\nsrc/main.ts"]
     reg["System registration\nmodule/systemRegistration"]
     ui["UI and sheets\nmodule/applications plus templates"]
     docs["Documents and collections\nmodule/documents"]
@@ -590,7 +550,7 @@ flowchart LR
 - Put custom roll logic, chat enrichers, and roll helpers in dedicated dice and enricher modules.
 - Keep socket handlers, migrations, settings registration, and template preload logic in a separate system registration area.
 - Keep build configuration separate from runtime logic. Rollup, Gulp, and setup scripts should not absorb gameplay rules.
-- When building this repository, use the reference system's separation of runtime, content, and tooling as the default architecture.
+- When building this repository, preserve the current separation of runtime, content, and tooling.
 
 ## Expected Structure
 

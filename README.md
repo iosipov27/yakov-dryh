@@ -113,4 +113,3 @@ npx vitest run
 - Official API: https://foundryvtt.com/api/
 - `ApplicationV2`: https://foundryvtt.com/api/classes/foundry.applications.api.ApplicationV2.html
 - System development guide: https://foundryvtt.com/article/system-development/
-- Local architecture reference: `example/app-example-main`
