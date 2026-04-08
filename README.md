@@ -1,6 +1,10 @@
 # yakov-dryh
 
-Minimal Foundry VTT system scaffold for `Data/systems/yakov-dryh`, built around Foundry V13 APIs and an ApplicationV2-first architecture.
+Minimal Foundry VTT system for `Data/systems/yakov-dryh`.
+
+## Screenshot
+
+![DRYH screenshot](docs/screen_dryh.png)
 
 ## Installation
 
@@ -12,53 +16,15 @@ https://github.com/iosipov27/yakov-dryh/releases/latest/download/system.json
 
 Foundry will download the packaged system from the latest GitHub Release asset declared in `system.json`.
 
-## Current Scope
+## Current Features
 
-- `system.json` manifest with a runtime bundle, stylesheet, localization, and a seeded `character` Actor subtype
-- `src/main.ts` composition root
-- `src/module/applications` for ApplicationV2 and sheet classes
-- `src/module/data` for system-facing document type constants and future data model scaffolding
-- `src/module/documents` for custom document classes
-- `src/module/system-registration` for Foundry init-time registration work
-- `templates/`, `styles/`, and `lang/` for static package resources
-
-## Chat Flow Overview
-
-```mermaid
-flowchart TD
-    Sheet["Character Sheet\nAdd Pool"] --> TrayOpen["openDryhDiceTrayForActor()"]
-    TrayOpen --> TrayState["Dice Tray State Store\nlocal in-memory state"]
-    TrayState --> TrayCard["Chat Dice Tray Card"]
-    TrayState --> TrayUI["Floating Dice Tray UI"]
-
-    TrayCard -->|"Roll"| TrayRoll["rollDryhDiceTray()"]
-    TrayUI -->|"Roll"| TrayRoll
-
-    TrayRoll --> InitialRoll["createDryhInitialRollMessage()"]
-    InitialRoll --> InitialCard["Initial Roll Card"]
-
-    InitialCard -->|"Player action"| PlayerAction["applyDryhRollPlayerAction()"]
-    InitialCard -->|"GM action"| GmAction["applyDryhRollGmAction()"]
-    InitialCard -->|"Finalize"| Finalize["finalizeDryhRoll()"]
-
-    PlayerAction --> InitialCard
-    GmAction --> InitialCard
-    Finalize --> FinalCard["Final Roll Card"]
-
-    FinalCard -->|"Dominant resolution"| Dominant["resolveDryhRollDominantAction()"]
-    FinalCard -->|"Failure resolution"| Failure["resolveDryhRollFailureAction()"]
-    FinalCard -->|"Crash resolution"| Crash["resolveDryhRollCrashAction()"]
-
-    Dominant --> Actor["Actor document updates"]
-    Failure --> Actor
-    Crash --> Actor
-    Finalize --> SharedPools["Shared Hope / Despair updates"]
-```
-
-Notes:
-
-- The dice tray state is client-local and no longer persisted through `game.settings` on every `+/-`.
-- The chat dice tray card sync is debounced, while roll resolution still persists through Foundry documents and chat messages.
+- Character sheet with name, concept, Discipline, Exhaustion, Madness, Responses, Talents, and Scars.
+- Dice Tray flow that loads a character pool from the sheet and rolls Discipline, Exhaustion, Madness, and Pain together.
+- Pre-roll and post-roll options for adding Exhaustion, plus Hope spending to improve a roll.
+- GM controls for Pain dice and a post-roll `+6` or `-6` intervention.
+- Automatic success counting, dominant pool calculation, and chat result cards.
+- Resolution support for Discipline, Madness, Exhaustion, Pain, failure outcomes, Snap, and Crash.
+- Shared Hope and Despair pools with a visible tracker and pending Hope that unlocks next scene.
 
 ## Development
 
@@ -101,12 +67,6 @@ Run tests:
 ```bash
 npx vitest run
 ```
-
-## Foundry Notes
-
-- The current document scaffold registers a custom `Actor` class and a default Actor sheet for the `character` subtype.
-- The `documentTypes.Actor.character` manifest entry makes that subtype valid to the Foundry server.
-- The `data` layer is intentionally light right now. A natural next step is adding `TypeDataModel` classes and pairing them with `CONFIG.Actor.dataModels`.
 
 ## Reference Material
 
