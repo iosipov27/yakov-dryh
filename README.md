@@ -4,7 +4,7 @@ Minimal Foundry VTT system for `Data/systems/yakov-dryh`.
 
 ## Screenshot
 
-![DRYH screenshot](docs/screen_dryh.png)
+![DRYH screenshot](docs/screen_dryh2.png)
 
 ## Installation
 
