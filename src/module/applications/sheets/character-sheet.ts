@@ -53,7 +53,7 @@ export class YakovDryhCharacterSheet extends BaseSheet {
     window: {
       icon: "fa-solid fa-address-card",
       resizable: true,
-      title: "Yakov Dryh Character Sheet"
+      title: "Don't Rest Your Head Character Sheet"
     }
   };
 

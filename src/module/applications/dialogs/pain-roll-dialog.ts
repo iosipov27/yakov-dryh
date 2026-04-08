@@ -30,7 +30,7 @@ export class YakovDryhPainRollDialog extends BaseApplication {
     window: {
       icon: "fa-solid fa-dice-d6",
       resizable: false,
-      title: "Yakov Dryh Pain Roll"
+      title: "Don't Rest Your Head Pain Roll"
     }
   };
 

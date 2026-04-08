@@ -1,5 +1,5 @@
 export const SYSTEM_ID = "yakov-dryh";
-export const SYSTEM_TITLE = "Yakov Dryh";
+export const SYSTEM_TITLE = "Don't Rest Your Head";
 export const SYSTEM_PATH = `systems/${SYSTEM_ID}`;
 
 export const TEMPLATE_PATHS = {

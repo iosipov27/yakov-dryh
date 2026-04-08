@@ -57,7 +57,7 @@ export class YakovDryhRollDialog extends BaseApplication {
     window: {
       icon: "fa-solid fa-dice-d6",
       resizable: false,
-      title: "Yakov Dryh Roll"
+      title: "Don't Rest Your Head Roll"
     }
   };
 

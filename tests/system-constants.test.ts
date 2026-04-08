@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { SYSTEM_ID, TEMPLATE_PATHS } from "../src/module/constants.ts";
+import { SYSTEM_ID, SYSTEM_TITLE, TEMPLATE_PATHS } from "../src/module/constants.ts";
 import {
   DRYH_EXHAUSTION_MAX,
   DRYH_RESPONSE_MAX,
@@ -13,6 +13,10 @@ describe("system scaffold constants", () => {
   it("uses the manifest system id in template paths", () => {
     expect(SYSTEM_ID).toBe("yakov-dryh");
     expect(TEMPLATE_PATHS.characterSheet).toContain(`systems/${SYSTEM_ID}/templates`);
+  });
+
+  it("uses the public game title as the display name", () => {
+    expect(SYSTEM_TITLE).toBe("Don't Rest Your Head");
   });
 
   it("provides a default character actor scaffold", () => {

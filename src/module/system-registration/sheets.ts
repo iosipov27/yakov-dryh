@@ -10,6 +10,6 @@ export function registerApplicationSheets(): void {
     makeDefault: true,
     label:
       game.i18n?.localize("YAKOV_DRYH.SHEETS.Actor.Character.Label") ??
-      "Yakov Dryh Character Sheet"
+      "Don't Rest Your Head Character Sheet"
   });
 }
