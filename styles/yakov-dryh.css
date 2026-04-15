@@ -4144,7 +4144,6 @@ textarea) {
   display: grid;
   gap: 0.28rem;
   justify-items: center;
-  min-width: 3.9rem;
   position: relative;
   z-index: 1;
 }
@@ -4155,11 +4154,11 @@ textarea) {
   border-radius: 999px;
   box-shadow: var(--yd-resource-coin-shadow);
   display: grid;
-  height: 3.18rem;
+  height: 2rem;
   overflow: hidden;
   place-items: center;
   position: relative;
-  width: 3.18rem;
+  width: 2rem;
 }
 .yakov-dryh-resource-tracker__value {
   color: var(--yd-resource-value-ink);
