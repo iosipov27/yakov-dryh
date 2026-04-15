@@ -48,3 +48,22 @@ After a release, prefer checking these public URLs:
 
 If a pushed tag did not create release assets, check the `Release` workflow run in
 GitHub Actions before changing manifest URLs.
+
+## Foundry Add Version Form
+
+After every successful release, include a table in the final response with the
+values to enter in Foundry's `Add Version` form.
+
+Use this exact shape:
+
+| Field | Value |
+| --- | --- |
+| Version Number | `<version>` |
+| Package Manifest URL | `https://github.com/iosipov27/yakov-dryh/releases/download/v<version>/system.json` |
+| Release Notes URL | `https://github.com/iosipov27/yakov-dryh/releases/tag/v<version>` |
+| Minimum Core Version | `<system.json compatibility.minimum>` |
+| Verified Core Version | `<system.json compatibility.verified>` |
+| Maximum Core Version | leave empty |
+
+Use the tag-specific package manifest URL for the released version, not the
+`latest` URL, so the Foundry package entry points at the exact release asset.
