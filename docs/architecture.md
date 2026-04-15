@@ -393,6 +393,81 @@ These are the areas most likely to need care during refactors:
 - response configuration and response-check side effects
 - shared Hope / pending Hope / Despair interactions after finalization
 
+## C4 Reference
+
+### Level 1: System Context
+
+```mermaid
+flowchart LR
+    user["Player / GM"]
+    dev["Developer"]
+    foundry["Foundry VTT host"]
+    yd["yakov-dryh system"]
+    data["World data, settings, compendia, assets"]
+
+    user -->|"uses sheets, chat, canvas, sidebar"| foundry
+    foundry -->|"loads manifest, bundle, templates, styles"| yd
+    yd -->|"registers documents, UI, hooks, dice, settings"| foundry
+    yd <-->|"reads and writes game state"| data
+    dev -->|"edits source and runs npm scripts"| yd
+```
+
+### Level 2: Containers
+
+```mermaid
+flowchart LR
+    foundry["Foundry core platform"]
+    manifest["Manifest and static resources\nsystem.json, templates, lang, assets, packs, styles"]
+    runtime["Runtime bundle\nscripts/main.js"]
+    source["Source code\nsrc/main.ts and src/module/**"]
+    tooling["Build and dev tooling\nTypeScript, Sass, npm scripts"]
+    data["Foundry storage\nworld settings, documents, compendia"]
+
+    foundry -->|"reads manifest and loads runtime"| manifest
+    manifest -->|"declares bundle and styles"| runtime
+    runtime -->|"uses APIs and hook lifecycle"| foundry
+    runtime <-->|"persists state and sync events"| data
+    source -->|"compiled and watched by"| tooling
+    tooling -->|"produces"| runtime
+    tooling -->|"produces or updates"| manifest
+```
+
+### Level 3: Components Inside The Runtime Bundle
+
+```mermaid
+flowchart LR
+    entry["Composition root\nsrc/main.ts"]
+    reg["System registration\nsrc/module/system-registration"]
+    ui["UI and sheets\nsrc/module/applications plus templates"]
+    chat["Chat flow\nsrc/module/chat"]
+    docs["Documents and collections\nsrc/module/documents"]
+    models["Domain models and actor data\nsrc/module/data"]
+    dice["Roll helpers\nsrc/module/dice"]
+    resources["Shared resources\nsrc/module/resources"]
+    utils["Reusable helpers\nsrc/module/utils"]
+    content["Static content\nlang, packs, assets, styles"]
+
+    entry --> reg
+    entry --> ui
+    entry --> chat
+    entry --> docs
+    entry --> models
+    entry --> dice
+    entry --> resources
+    reg --> ui
+    reg --> docs
+    reg --> resources
+    ui --> docs
+    ui --> models
+    ui --> chat
+    chat --> dice
+    chat --> models
+    chat --> resources
+    docs --> models
+    models --> utils
+    content --> ui
+```
+
 ## Recommended Reading Order
 
 If you are new to the project, read files in this order:
