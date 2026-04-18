@@ -28,6 +28,7 @@
       "character": {}
     }
   },
+  "socket": true,
   "esmodules": ["scripts/main.js"],
   "styles": ["styles/yakov-dryh.css"]
 }

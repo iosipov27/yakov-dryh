@@ -147,6 +147,7 @@ Primary files:
 - `src/module/chat/roll-card-service.ts`
 - `src/module/applications/dialogs/roll-dialog.ts`
 - `src/module/applications/dialogs/pain-roll-dialog.ts`
+- `src/module/system-registration/sockets.ts`
 - `src/module/dice/roll.ts`
 - `src/module/dice/index.ts`
 - `templates/chat/roll-card.hbs`
@@ -174,6 +175,7 @@ It owns:
 - chat card rendering
 - roll card flag data
 - player post-roll actions
+- player post-roll action socket requests for GM-owned updates
 - GM six-adjustment actions
 - dominant effect application
 - failure resolution
@@ -391,6 +393,8 @@ These are intentional current choices:
 - active chat tray state is mirrored in message flags for cross-client actions
 - shared pools are persisted in settings for table-wide sync
 - chat cards are structured around Foundry message flags
+- player roll actions that touch shared world data are mediated through the
+  active GM client
 - rules logic is mostly separated from ApplicationV2 classes
 - tests focus on pure helpers and service-layer logic rather than full Foundry browser integration
 

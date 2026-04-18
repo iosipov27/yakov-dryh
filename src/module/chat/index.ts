@@ -8,11 +8,11 @@ import {
   rollDryhDiceTray
 } from "./dice-tray-card-service.js";
 import {
-  applyDryhRollPlayerAction,
   applyDryhRollGmAction,
   finalizeDryhRoll,
   getDryhRollCardData,
   hasDryhRollCard,
+  requestDryhRollPlayerAction,
   resolveDryhRollCrashAction,
   resolveDryhRollDominantAction,
   resolveDryhRollFailureAction,
@@ -235,8 +235,15 @@ function activateDryhRollListeners(
 
       if (action === "spend-hope" || action === "take-post-roll-exhaustion") {
         actionElement.setAttribute("disabled", "disabled");
-        void applyDryhRollPlayerAction(message, {
+        void requestDryhRollPlayerAction(message, {
           type: action
+        }).then((handled) => {
+          if (!handled) {
+            actionElement.removeAttribute("disabled");
+          }
+        }).catch((error: unknown) => {
+          console.error(error);
+          actionElement.removeAttribute("disabled");
         });
         return;
       }

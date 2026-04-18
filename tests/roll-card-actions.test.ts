@@ -1,14 +1,21 @@
-import { describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 
 import { createRollResult } from "../src/module/dice/index.ts";
+import {
+  DRYH_ROLL_FLAG,
+  SYSTEM_ID
+} from "../src/module/constants.ts";
 import {
   canTakePostRollExhaustion,
   canSpendHopeForDiscipline,
   getAvailablePlayerRollActionTypes,
   getDisplayedFinalEffectTexts,
+  getDryhSystemSocketName,
+  isDryhRollPlayerActionSocketRequest,
   getRollDiePipIndexes,
   getVisibleRollPools,
   getRollCardPresentationState,
+  requestDryhRollPlayerAction,
   sortRollDiceForDisplay,
   type YakovDryhFinalRollCardData,
   type YakovDryhInitialRollCardData
@@ -75,6 +82,21 @@ function createFinalCard(
   };
 }
 
+function createRollCardMessage(
+  card: YakovDryhInitialRollCardData = createInitialCard()
+): ChatMessage.Implementation {
+  return {
+    getFlag: (scope: string, key: string): unknown =>
+      scope === SYSTEM_ID && key === DRYH_ROLL_FLAG ? card : null,
+    id: "message-1",
+    update: vi.fn(async () => undefined)
+  } as ChatMessage.Implementation;
+}
+
+afterEach(() => {
+  vi.restoreAllMocks();
+});
+
 describe("DRYH player post-roll action availability", () => {
   it("shows no player actions before Pain is rolled", () => {
     const card = createInitialCard({
@@ -134,6 +156,99 @@ describe("DRYH player post-roll action availability", () => {
           }
         })
       )
+    ).toBe(false);
+  });
+});
+
+describe("DRYH player post-roll action requests", () => {
+  it("routes non-GM player actions through the system socket", async () => {
+    const emit = vi.fn();
+    const message = createRollCardMessage();
+
+    globalThis.game = {
+      socket: { emit },
+      user: {
+        id: "player-1",
+        isGM: false
+      },
+      users: {
+        activeGM: { id: "gm-1" }
+      }
+    } as unknown as typeof game;
+
+    await expect(
+      requestDryhRollPlayerAction(message, {
+        type: "take-post-roll-exhaustion"
+      })
+    ).resolves.toBe(true);
+
+    expect(emit).toHaveBeenCalledWith(getDryhSystemSocketName(), {
+      action: {
+        type: "take-post-roll-exhaustion"
+      },
+      messageId: "message-1",
+      type: "roll-player-action",
+      userId: "player-1"
+    });
+    expect(message.update).not.toHaveBeenCalled();
+  });
+
+  it("keeps the button recoverable when no GM can handle the request", async () => {
+    const emit = vi.fn();
+    const warn = vi.fn();
+
+    globalThis.game = {
+      i18n: {
+        localize: (key: string) => key
+      },
+      socket: { emit },
+      user: {
+        id: "player-1",
+        isGM: false
+      },
+      users: {
+        activeGM: null
+      }
+    } as unknown as typeof game;
+    globalThis.ui = {
+      notifications: {
+        warn
+      }
+    } as unknown as typeof ui;
+
+    await expect(
+      requestDryhRollPlayerAction(createRollCardMessage(), {
+        type: "spend-hope"
+      })
+    ).resolves.toBe(false);
+
+    expect(emit).not.toHaveBeenCalled();
+    expect(warn).toHaveBeenCalledWith(
+      "A GM must be connected to handle this roll action."
+    );
+  });
+
+  it("accepts only known player-action socket payloads", () => {
+    expect(
+      isDryhRollPlayerActionSocketRequest({
+        action: {
+          type: "spend-hope"
+        },
+        messageId: "message-1",
+        type: "roll-player-action",
+        userId: "player-1"
+      })
+    ).toBe(true);
+
+    expect(
+      isDryhRollPlayerActionSocketRequest({
+        action: {
+          type: "finalize"
+        },
+        messageId: "message-1",
+        type: "roll-player-action",
+        userId: "player-1"
+      })
     ).toBe(false);
   });
 });

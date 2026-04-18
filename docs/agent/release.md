@@ -46,6 +46,9 @@ When preparing a release:
 10. Commit the release bump with `Release v<version>`.
 11. Create a git tag in the form `v<version>` on the release bump commit.
 12. Push the branch and the tag so GitHub Actions can publish the release assets.
+13. Stop after the push unless the user explicitly asks to wait for GitHub
+    Actions or validate published release assets. Do not poll GitHub release
+    URLs by default.
 
 ## Git Push Notes
 
@@ -80,7 +83,10 @@ file before finishing.
 
 ## Release Validation
 
-After a release, prefer checking these public URLs:
+Release validation is opt-in. Only wait for GitHub Actions or check public URLs
+when the user explicitly asks for validation after the push.
+
+When validation is requested, prefer checking these public URLs:
 
 - tag-specific manifest:
   - `https://github.com/iosipov27/yakov-dryh/releases/download/v<version>/system.json`

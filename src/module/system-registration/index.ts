@@ -5,6 +5,7 @@ import { registerDocumentClasses } from "./documents.js";
 import { registerFonts } from "./fonts.js";
 import { registerSettings } from "./settings.js";
 import { registerApplicationSheets } from "./sheets.js";
+import { registerSystemSocketHandlers } from "./sockets.js";
 import { preloadHandlebarsTemplates } from "./templates.js";
 
 export function registerSystem(): void {
@@ -18,6 +19,7 @@ export function registerSystem(): void {
   });
 
   Hooks.once("ready", () => {
+    registerSystemSocketHandlers();
     void preloadSystemAssets();
     void renderHopeDespairTracker();
   });

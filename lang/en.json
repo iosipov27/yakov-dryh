@@ -175,6 +175,7 @@
         "ActorUnavailable": "Actor is no longer available.",
         "ChatMessageUnavailable": "Chat message is no longer available.",
         "DespairRequired": "At least 1 Despair is required to adjust a six.",
+        "GmUnavailable": "A GM must be connected to handle this roll action.",
         "HopeRequired": "At least 1 Hope is required to improve Discipline.",
         "ResponsesNotConfigured": "Configure all 3 Responses before rolling.",
         "ResponseUnavailable": "Response is no longer available.",

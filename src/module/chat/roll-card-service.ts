@@ -140,6 +140,13 @@ export type YakovDryhPlayerRollActionType =
   | "spend-hope"
   | "take-post-roll-exhaustion";
 
+export interface YakovDryhRollPlayerActionSocketRequest {
+  action: YakovDryhPlayerRollAction;
+  messageId: string;
+  type: "roll-player-action";
+  userId: string | null;
+}
+
 interface PlayerActionButtonSummary {
   label: string;
   type: YakovDryhPlayerRollActionType;
@@ -1189,6 +1196,85 @@ export async function applyDryhRollPlayerAction(
       });
     }
   }
+}
+
+export async function requestDryhRollPlayerAction(
+  message: ChatMessage.Implementation,
+  action: YakovDryhPlayerRollAction
+): Promise<boolean> {
+  if (game.user?.isGM) {
+    return (await applyDryhRollPlayerAction(message, action)) !== null;
+  }
+
+  const messageId = message.id ?? null;
+
+  if (!messageId) {
+    return false;
+  }
+
+  if (!game.users?.activeGM) {
+    ui.notifications?.warn(
+      localize(
+        "YAKOV_DRYH.UI.Warnings.GmUnavailable",
+        "A GM must be connected to handle this roll action."
+      )
+    );
+
+    return false;
+  }
+
+  game.socket?.emit(getDryhSystemSocketName(), {
+    action,
+    messageId,
+    type: "roll-player-action",
+    userId: game.user?.id ?? null
+  } satisfies YakovDryhRollPlayerActionSocketRequest);
+
+  return true;
+}
+
+export async function handleDryhRollPlayerActionSocketRequest(
+  request: YakovDryhRollPlayerActionSocketRequest
+): Promise<YakovDryhInitialRollCardData | null> {
+  if (!game.user?.isGM || game.users?.activeGM?.id !== game.user.id) {
+    return null;
+  }
+
+  const message = game.messages?.get(request.messageId) ?? null;
+
+  if (!message || !hasDryhRollCard(message)) {
+    return null;
+  }
+
+  return applyDryhRollPlayerAction(message, request.action);
+}
+
+export function isDryhRollPlayerActionSocketRequest(
+  value: unknown
+): value is YakovDryhRollPlayerActionSocketRequest {
+  if (!value || typeof value !== "object") {
+    return false;
+  }
+
+  const record = value as Record<string, unknown>;
+
+  if (!record.action || typeof record.action !== "object") {
+    return false;
+  }
+
+  const action = record.action as Record<string, unknown>;
+
+  return (
+    record.type === "roll-player-action" &&
+    typeof record.messageId === "string" &&
+    (typeof record.userId === "string" || record.userId === null) &&
+    (action.type === "spend-hope" ||
+      action.type === "take-post-roll-exhaustion")
+  );
+}
+
+export function getDryhSystemSocketName(): string {
+  return `system.${SYSTEM_ID}`;
 }
 
 export async function resolveDryhRollFailureAction(
