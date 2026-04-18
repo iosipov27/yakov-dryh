@@ -1,6 +1,10 @@
-# yakov-dryh
+# Don't Rest Your Head for Foundry VTT
 
-Minimal Foundry VTT system for `Data/systems/yakov-dryh`.
+A fan-made, unofficial Foundry VTT system for playing `Don't Rest Your Head`.
+
+The system focuses on the parts of play that are easiest to lose track of at
+the table: character sheets, dice pools, Hope, Despair, and chat-based roll
+resolution.
 
 ## Screenshot
 
@@ -8,68 +12,82 @@ Minimal Foundry VTT system for `Data/systems/yakov-dryh`.
 
 ## Installation
 
-Install in Foundry VTT with this manifest URL:
+Requires Foundry VTT 13.
+
+1. Open the Foundry VTT setup screen.
+2. Go to **Game Systems**.
+3. Click **Install System**.
+4. Paste this manifest URL:
 
 ```text
 https://github.com/iosipov27/yakov-dryh/releases/latest/download/system.json
 ```
 
-Foundry will download the packaged system from the latest GitHub Release asset declared in `system.json`.
+5. Install the system.
+6. Create a world using **Don't Rest Your Head (Fan-made system)**.
 
-## Current Features
+## What It Does
 
-- Character sheet with name, concept, Discipline, Exhaustion, Madness, Responses, Talents, and Scars.
-- Dice Tray flow that loads a character pool from the sheet and rolls Discipline, Exhaustion, Madness, and Pain together.
-- Pre-roll and post-roll options for adding Exhaustion, plus Hope spending to improve a roll.
-- GM controls for Pain dice and a post-roll `+6` or `-6` intervention.
-- Automatic success counting, dominant pool calculation, and chat result cards.
-- Resolution support for Discipline, Madness, Exhaustion, Pain, failure outcomes, Snap, and Crash.
-- Shared Hope and Despair pools with a visible tracker and pending Hope that unlocks next scene.
+- Provides a `Character` actor type with a custom character sheet.
+- Tracks name, concept, Discipline, Exhaustion, Madness, Responses, Talents, and
+  Scars.
+- Builds a dice pool from the character sheet.
+- Rolls Discipline, Exhaustion, Madness, and Pain together.
+- Counts successes and shows the dominant pool in chat.
+- Supports Exhaustion, Madness, Discipline, Pain, failure outcomes, Snap, and
+  Crash resolution.
+- Tracks shared Hope and GM Despair.
+- Holds newly gained Hope as pending Hope until the next scene.
 
-## Development
+## Getting Started
 
-Install dependencies:
+1. Create an actor with the `Character` type.
+2. Open the character sheet.
+3. Fill in the character's name, concept, talents, and scars.
+4. Set Discipline, Exhaustion, and Madness.
+5. Configure all three Responses as Fight or Flight.
+6. Click **Create the Pool** on the character sheet.
 
-```bash
-npm install
-```
+The dice tray loads that character's pool and creates an interactive chat card.
 
-Build the runtime bundle and stylesheet:
+## Rolling Dice
 
-```bash
-npm run build
-```
+After a character pool is created:
 
-The release workflow builds fresh `scripts/` and `styles/` assets before packaging the Foundry install zip. Local `scripts/` output is kept for development, but it is not required to stay tracked in Git.
+- The player can adjust Discipline, Exhaustion, and Madness before rolling.
+- The GM can adjust Pain.
+- Click **Roll** to create the roll result in chat.
+- The chat card shows successes, dominant pool, and available follow-up actions.
+- Players can take Exhaustion, spend Hope when available, and resolve character
+  consequences from the card.
+- The GM can roll Pain and use Despair-based interventions when available.
 
-## Release Flow
+## Hope And Despair
 
-Push a version tag such as `v0.1.0` to trigger the GitHub Actions release workflow.
+The Hope / Despair tracker is shared by the table.
 
-The workflow:
+- Hope belongs to the players as a shared pool.
+- Despair belongs to the GM.
+- Only the GM can directly change the shared Hope and Despair totals.
+- Hope gained during a roll is added as pending Hope.
+- Click **End Scene** to move pending Hope into the usable Hope pool.
 
-- installs dependencies
-- rebuilds `scripts/` and `styles/`
-- verifies that the tag version matches `system.json`
-- packages a Foundry-ready `yakov-dryh.zip`
-- publishes both `yakov-dryh.zip` and `system.json` to the GitHub Release
+## Common Issues
 
-You can also re-run the workflow manually for an existing tag from the Actions tab by providing the tag name.
+If **Create the Pool** is disabled, configure all three Responses on the
+character sheet first.
 
-Run linting:
+If the dice tray says there is no active character, open a character sheet and
+click **Create the Pool** again.
 
-```bash
-npx eslint src --ext .ts
-```
+If Hope or Despair controls are locked, check whether you are logged in as the
+GM.
 
-Run tests:
+## Credits
 
-```bash
-npx vitest run
-```
-
-## Reference Material
-
-- Official API: https://foundryvtt.com/api/
-- `ApplicationV2`: https://foundryvtt.com/api/classes/foundry.applications.api.ApplicationV2.html
-- System development guide: https://foundryvtt.com/article/system-development/
+- **jabberrrwocky** - UI feedback and playtesting.
+  Discord: `jabberrrwocky`
+  itch.io: https://dr-jabberwocky.itch.io/
+- **super8.ai** - UI feedback and playtesting.
+  Discord: `super8.ai`
+  itch.io: https://8super8.itch.io/
