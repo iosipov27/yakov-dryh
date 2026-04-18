@@ -20,7 +20,8 @@ import {
 } from "./roll-card-service.js";
 import {
   isLatestChatMessage,
-  shouldHideDryhRollAction
+  shouldHideDryhRollAction,
+  shouldHideDryhRollActionGroup
 } from "./roll-card-visibility.js";
 
 let hasRegisteredDiceTrayStateSync = false;
@@ -122,6 +123,17 @@ function activateDryhRollListeners(
     "[data-yakov-dryh-roll-action]"
   );
 
+  actionElements.forEach((actionElement) => {
+    if (
+      shouldHideDryhRollAction(actionElement.dataset.yakovDryhRollAction, {
+        isGm: game.user?.isGM ?? false
+      })
+    ) {
+      actionElement.hidden = true;
+    }
+  });
+  hideEmptyDryhRollActionGroups(html);
+
   if (!isLatestChatMessage(message)) {
     disableDryhRollActions(actionElements);
     return;
@@ -142,12 +154,7 @@ function activateDryhRollListeners(
       | "flight"
       | undefined;
 
-    if (
-      shouldHideDryhRollAction(action, {
-        isGm: game.user?.isGM ?? false
-      })
-    ) {
-      actionElement.hidden = true;
+    if (actionElement.hidden) {
       return;
     }
 
@@ -283,4 +290,16 @@ function disableDryhRollActions(actionElements: ArrayLike<HTMLElement>): void {
   for (let index = 0; index < actionElements.length; index += 1) {
     actionElements[index]?.setAttribute("disabled", "disabled");
   }
+}
+
+function hideEmptyDryhRollActionGroups(html: HTMLElement): void {
+  html
+    .querySelectorAll<HTMLElement>(".yakov-dryh-roll-card__resolution")
+    .forEach((section) => {
+      const actions = Array.from(
+        section.querySelectorAll<HTMLElement>("[data-yakov-dryh-roll-action]")
+      );
+
+      section.hidden = shouldHideDryhRollActionGroup(actions);
+    });
 }

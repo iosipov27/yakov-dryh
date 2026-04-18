@@ -26,6 +26,7 @@ import { createDefaultShadowCastingData } from "../src/module/chat/shadow-castin
 import {
   isLatestChatMessage,
   shouldHideDryhRollAction,
+  shouldHideDryhRollActionGroup,
   shouldShowPainRollWaitingMessage
 } from "../src/module/chat/roll-card-visibility.ts";
 
@@ -515,5 +516,18 @@ describe("DRYH roll-card action visibility", () => {
         isGm: false
       })
     ).toBe(false);
+  });
+
+  it("hides action groups only when every action is hidden", () => {
+    expect(shouldHideDryhRollActionGroup([{ hidden: true }])).toBe(true);
+
+    expect(
+      shouldHideDryhRollActionGroup([
+        { hidden: true },
+        { hidden: false }
+      ])
+    ).toBe(false);
+
+    expect(shouldHideDryhRollActionGroup([])).toBe(false);
   });
 });

@@ -72,13 +72,22 @@ function createDiceTrayCardHtml(): HTMLElement {
   const html = document.createElement("article");
 
   html.innerHTML = `
-    <button
-      data-yakov-dryh-tray-card-pool="pain"
-      data-yakov-dryh-tray-card-delta="1"
-      disabled
-    >
-      +
-    </button>
+    <div class="yakov-dryh-dice-tray__pool-controls">
+      <button
+        data-yakov-dryh-tray-card-pool="pain"
+        data-yakov-dryh-tray-card-delta="-1"
+        disabled
+      >
+        -
+      </button>
+      <button
+        data-yakov-dryh-tray-card-pool="pain"
+        data-yakov-dryh-tray-card-delta="1"
+        disabled
+      >
+        +
+      </button>
+    </div>
     <button
       data-yakov-dryh-tray-card-action="roll"
       disabled
@@ -140,7 +149,7 @@ describe("dice tray card service", () => {
     ).toBe(false);
   });
 
-  it("keeps pain controls disabled for non-GM users", () => {
+  it("hides GM-only pain controls for non-GM users", () => {
     globalThis.game.user = {
       isGM: false
     } as typeof game.user;
@@ -150,12 +159,16 @@ describe("dice tray card service", () => {
     const painButton = html.querySelector<HTMLButtonElement>(
       "[data-yakov-dryh-tray-card-pool='pain'][data-yakov-dryh-tray-card-delta='1']"
     );
+    const controls = html.querySelector<HTMLElement>(
+      ".yakov-dryh-dice-tray__pool-controls"
+    );
 
     painButton?.removeAttribute("disabled");
 
     applyDryhDiceTrayCardPermissions(createDiceTrayMessage(state), html);
 
-    expect(painButton?.hasAttribute("disabled")).toBe(true);
+    expect(painButton?.hidden).toBe(true);
+    expect(controls?.hidden).toBe(true);
   });
 
   it("lets the GM add pain from the chat card state stored by another client", async () => {

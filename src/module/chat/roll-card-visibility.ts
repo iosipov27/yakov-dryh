@@ -37,6 +37,12 @@ export function shouldHideDryhRollAction(
   return false;
 }
 
+export function shouldHideDryhRollActionGroup(
+  actions: readonly { hidden: boolean }[]
+): boolean {
+  return actions.length > 0 && actions.every((action) => action.hidden);
+}
+
 export function shouldShowPainRollWaitingMessage(
   action: string | undefined,
   options: DryhRollActionVisibilityOptions

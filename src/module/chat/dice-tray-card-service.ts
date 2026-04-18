@@ -420,9 +420,10 @@ export function applyDryhDiceTrayCardPermissions(
   const actor = state.actorId
     ? (game.actors?.get(state.actorId) ?? null)
     : null;
+  const isGm = game.user?.isGM ?? false;
   const context = createDiceTrayCardContext({
     isActorOwner: actor?.isOwner ?? false,
-    isGm: game.user?.isGM ?? false,
+    isGm,
     state
   });
   const poolSummaries = new Map(
@@ -440,11 +441,27 @@ export function applyDryhDiceTrayCardPermissions(
         10
       );
       const summary = pool ? poolSummaries.get(pool) : null;
+      const isGmOnlyControl = pool === "pain";
+      const shouldHideButton = isGmOnlyControl && !isGm;
       const canUseButton = delta < 0
         ? summary?.controls.canDecrease === true
         : summary?.controls.canIncrease === true;
 
+      button.hidden = shouldHideButton;
       button.toggleAttribute("disabled", !canUseButton);
+    });
+
+  html
+    .querySelectorAll<HTMLElement>(".yakov-dryh-dice-tray__pool-controls")
+    .forEach((controls) => {
+      const buttons = Array.from(
+        controls.querySelectorAll<HTMLButtonElement>(
+          "[data-yakov-dryh-tray-card-pool]"
+        )
+      );
+
+      controls.hidden =
+        buttons.length > 0 && buttons.every((button) => button.hidden);
     });
 
   html
