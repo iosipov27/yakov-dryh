@@ -2553,6 +2553,10 @@ textarea) {
   color: inherit;
 }
 
+.application.yakov-dryh-sheet {
+  background: none;
+}
+
 .yakov-dryh-sheet .window-header {
   background: var(--yd-sheet-window-header-surface);
   border-bottom: 1px solid var(--yd-sheet-divider);
@@ -2581,7 +2585,6 @@ textarea) {
   outline: none;
 }
 .yakov-dryh-sheet .window-content {
-  background: var(--yd-sheet-window-surface);
   border-radius: 0 0 0.35rem 0.35rem;
   color: var(--yd-sheet-ink);
   font-family: var(--yd-sheet-body-font);
@@ -2600,10 +2603,10 @@ textarea) {
   content: "";
   inset: 0;
   filter: blur(0.05px) saturate(0.6) brightness(1);
-  opacity: 0.9;
+  opacity: 0.7;
   pointer-events: none;
   position: absolute;
-  transform: scale(1.025);
+  transform: scale(1);
   transform-origin: center;
   z-index: 0;
 }
