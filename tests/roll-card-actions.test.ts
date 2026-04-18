@@ -261,28 +261,24 @@ describe("DRYH roll-card action visibility", () => {
   it("shows GM actions only to the GM", () => {
     expect(
       shouldHideDryhRollAction("roll-pain", {
-        isActorOwner: false,
         isGm: false
       })
     ).toBe(true);
 
     expect(
       shouldHideDryhRollAction("roll-pain", {
-        isActorOwner: false,
         isGm: true
       })
     ).toBe(false);
 
     expect(
       shouldHideDryhRollAction("resolve-crash", {
-        isActorOwner: true,
         isGm: false
       })
     ).toBe(true);
 
     expect(
       shouldHideDryhRollAction("resolve-crash", {
-        isActorOwner: false,
         isGm: true
       })
     ).toBe(false);
@@ -291,14 +287,12 @@ describe("DRYH roll-card action visibility", () => {
   it("shows a waiting message to non-GM users instead of the Pain button", () => {
     expect(
       shouldShowPainRollWaitingMessage("roll-pain", {
-        isActorOwner: true,
         isGm: false
       })
     ).toBe(true);
 
     expect(
       shouldShowPainRollWaitingMessage("roll-pain", {
-        isActorOwner: false,
         isGm: true
       })
     ).toBe(false);
@@ -307,48 +301,42 @@ describe("DRYH roll-card action visibility", () => {
   it("does not show the waiting message for other GM-only actions", () => {
     expect(
       shouldShowPainRollWaitingMessage("finalize", {
-        isActorOwner: true,
         isGm: false
       })
     ).toBe(false);
 
     expect(
       shouldShowPainRollWaitingMessage("add6", {
-        isActorOwner: false,
         isGm: false
       })
     ).toBe(false);
   });
 
-  it("shows player post-roll actions only to the actor owner", () => {
+  it("shows player post-roll actions to any user", () => {
     expect(
-      shouldHideDryhRollAction("spend-hope", {
-        isActorOwner: true,
+      shouldHideDryhRollAction("take-post-roll-exhaustion", {
         isGm: false
       })
     ).toBe(false);
 
     expect(
       shouldHideDryhRollAction("spend-hope", {
-        isActorOwner: false,
+        isGm: false
+      })
+    ).toBe(false);
+  });
+
+  it("shows dominant resolution actions to any user", () => {
+    expect(
+      shouldHideDryhRollAction("resolve-dominant", {
         isGm: true
       })
-    ).toBe(true);
-  });
-
-  it("shows dominant resolution actions only to the actor owner", () => {
-    expect(
-      shouldHideDryhRollAction("resolve-dominant", {
-        isActorOwner: true,
-        isGm: false
-      })
     ).toBe(false);
 
     expect(
       shouldHideDryhRollAction("resolve-dominant", {
-        isActorOwner: false,
         isGm: false
       })
-    ).toBe(true);
+    ).toBe(false);
   });
 });

@@ -4229,14 +4229,6 @@ textarea) {
 .yakov-dryh-resource-tracker__scene-button:disabled:hover, .yakov-dryh-resource-tracker__scene-button:disabled:focus-visible {
   background: var(--yd-resource-scene-surface);
 }
-.yakov-dryh-resource-tracker__read-only {
-  color: var(--yd-resource-muted);
-  letter-spacing: 0.04em;
-  line-height: 1.35;
-  position: relative;
-  text-align: center;
-  z-index: 1;
-}
 
 @media (max-width: 760px) {
   .yakov-dryh-header {

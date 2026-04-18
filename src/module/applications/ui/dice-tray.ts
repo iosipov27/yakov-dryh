@@ -54,7 +54,6 @@ interface DiceTrayContext extends Record<string, unknown> {
   hope: number;
   pendingHope: number;
   poolSummaries: DiceTrayPoolSummary[];
-  showReadOnly: boolean;
   statusLabel: string;
   trayTitle: string;
 }
@@ -148,7 +147,6 @@ export class YakovDryhDiceTray extends BaseApplication {
       hope: sharedPools.hope,
       pendingHope: sharedPools.pendingHope,
       poolSummaries: createPoolSummaries(trayState, { isActorOwner, isGm }),
-      showReadOnly: !isGm,
       statusLabel: getStatusLabel(trayState),
       trayTitle: hasActor
         ? trayState.actorName

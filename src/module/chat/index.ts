@@ -122,10 +122,6 @@ function activateDryhRollListeners(
   }
 
   const card = getDryhRollCardData(message);
-  const actor = card.actorId
-    ? game.actors?.get(card.actorId) ?? null
-    : null;
-  const canUseActorOwnerActions = actor?.isOwner ?? false;
 
   actionElements.forEach((actionElement) => {
     const action = actionElement.dataset.yakovDryhRollAction;
@@ -142,7 +138,6 @@ function activateDryhRollListeners(
 
     if (
       shouldHideDryhRollAction(action, {
-        isActorOwner: canUseActorOwnerActions,
         isGm: game.user?.isGM ?? false
       })
     ) {

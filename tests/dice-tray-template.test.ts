@@ -10,7 +10,6 @@ const localizations: Record<string, string> = {
   "YAKOV_DRYH.RESOURCES.EndScene": "End Scene",
   "YAKOV_DRYH.RESOURCES.Hope": "Hope",
   "YAKOV_DRYH.RESOURCES.NextScene": "next scene",
-  "YAKOV_DRYH.RESOURCES.ReadOnly": "Only the GM can change shared pools.",
   "YAKOV_DRYH.RESOURCES.Title": "Hope / Despair",
   "YAKOV_DRYH.TRAY.EmptyState": "Load a character to build a pool.",
   "YAKOV_DRYH.TRAY.Roll": "Roll"
@@ -38,7 +37,6 @@ describe("dice tray template", () => {
       hope: 2,
       pendingHope: 1,
       poolSummaries: [],
-      showReadOnly: true,
       statusLabel: "",
       trayTitle: "No active character"
     });
@@ -46,7 +44,7 @@ describe("dice tray template", () => {
     expect(
       html.match(/<button[\s\S]*?data-yakov-dryh-resource-pool="(?:hope|despair)"[\s\S]*?disabled[\s\S]*?>/g)
     ).toHaveLength(4);
-    expect(html).toContain("Only the GM can change shared pools.");
+    expect(html).not.toContain("YAKOV_DRYH.RESOURCES.ReadOnly");
   });
 
   it("renders always-visible header adjusters and no add-die palette", () => {
@@ -89,7 +87,6 @@ describe("dice tray template", () => {
           trackClass: "yakov-dryh-pip-track--pain"
         }
       ],
-      showReadOnly: false,
       statusLabel: "",
       trayTitle: "Samewere"
     });

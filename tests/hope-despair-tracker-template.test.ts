@@ -10,7 +10,6 @@ const localizations: Record<string, string> = {
   "YAKOV_DRYH.RESOURCES.EndScene": "End Scene",
   "YAKOV_DRYH.RESOURCES.Hope": "Hope",
   "YAKOV_DRYH.RESOURCES.NextScene": "next scene",
-  "YAKOV_DRYH.RESOURCES.ReadOnly": "Only the GM can change shared pools.",
   "YAKOV_DRYH.RESOURCES.Title": "Hope / Despair"
 };
 
@@ -56,6 +55,6 @@ describe("hope despair tracker template", () => {
     expect(html).not.toContain('data-yakov-dryh-resource-pool="hope"');
     expect(html).not.toContain('data-yakov-dryh-resource-pool="despair"');
     expect(html).not.toContain("yakov-dryh-resource-tracker__scene-button");
-    expect(html).toContain("Only the GM can change shared pools.");
+    expect(html).not.toContain("YAKOV_DRYH.RESOURCES.ReadOnly");
   });
 });
