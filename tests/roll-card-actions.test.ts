@@ -27,6 +27,7 @@ import {
   isLatestChatMessage,
   shouldHideDryhRollAction,
   shouldHideDryhRollActionGroup,
+  shouldRerenderDryhRollForSharedPoolChange,
   shouldShowPainRollWaitingMessage
 } from "../src/module/chat/roll-card-visibility.ts";
 
@@ -529,5 +530,36 @@ describe("DRYH roll-card action visibility", () => {
     ).toBe(false);
 
     expect(shouldHideDryhRollActionGroup([])).toBe(false);
+  });
+
+  it("rerenders shared-pool roll cards only on the active GM client", () => {
+    expect(
+      shouldRerenderDryhRollForSharedPoolChange(createInitialCard(), {
+        isActiveGm: false
+      })
+    ).toBe(false);
+
+    expect(
+      shouldRerenderDryhRollForSharedPoolChange(createInitialCard(), {
+        isActiveGm: true
+      })
+    ).toBe(true);
+
+    expect(
+      shouldRerenderDryhRollForSharedPoolChange(createFinalCard(), {
+        isActiveGm: true
+      })
+    ).toBe(false);
+
+    expect(
+      shouldRerenderDryhRollForSharedPoolChange(
+        createInitialCard({
+          finalized: true
+        }),
+        {
+          isActiveGm: true
+        }
+      )
+    ).toBe(false);
   });
 });

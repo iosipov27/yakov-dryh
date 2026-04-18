@@ -1,5 +1,5 @@
 import { subscribeToDiceTrayStateChanges } from "../applications/ui/dice-tray-state.js";
-import { DRYH_SETTINGS, SYSTEM_ID } from "../constants.js";
+import { isSharedPoolSettingChange } from "../applications/ui/setting-change.js";
 import {
   adjustDryhDiceTrayPool,
   applyDryhDiceTrayCardPermissions,
@@ -21,7 +21,8 @@ import {
 import {
   isLatestChatMessage,
   shouldHideDryhRollAction,
-  shouldHideDryhRollActionGroup
+  shouldHideDryhRollActionGroup,
+  shouldRerenderDryhRollForSharedPoolChange
 } from "./roll-card-visibility.js";
 
 let hasRegisteredDiceTrayStateSync = false;
@@ -45,11 +46,14 @@ export function registerChatHooks(): void {
   });
 
   Hooks.on("updateSetting", (setting: { key?: string }) => {
-    if (
-      setting.key !== `${SYSTEM_ID}.${DRYH_SETTINGS.gmDespair}` &&
-      setting.key !== `${SYSTEM_ID}.${DRYH_SETTINGS.sharedHope}` &&
-      setting.key !== `${SYSTEM_ID}.${DRYH_SETTINGS.pendingHope}`
-    ) {
+    if (!isSharedPoolSettingChange(setting)) {
+      return;
+    }
+
+    const isActiveGm =
+      (game.user?.isGM ?? false) && game.users?.activeGM?.id === game.user?.id;
+
+    if (!isActiveGm) {
       return;
     }
 
@@ -63,7 +67,11 @@ export function registerChatHooks(): void {
 
     const card = getDryhRollCardData(latestMessage);
 
-    if (card.stage !== "initial" || card.finalized) {
+    if (
+      !shouldRerenderDryhRollForSharedPoolChange(card, {
+        isActiveGm
+      })
+    ) {
       return;
     }
 

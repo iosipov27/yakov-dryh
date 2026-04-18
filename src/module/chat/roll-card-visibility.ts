@@ -2,8 +2,17 @@ export interface DryhRollActionVisibilityOptions {
   isGm: boolean;
 }
 
+export interface DryhRollSharedPoolRerenderOptions {
+  isActiveGm: boolean;
+}
+
 interface ChatMessageLike {
   id?: string | null;
+}
+
+interface RollCardLike {
+  finalized?: boolean;
+  stage: string;
 }
 
 export function isLatestChatMessage(
@@ -41,6 +50,13 @@ export function shouldHideDryhRollActionGroup(
   actions: readonly { hidden: boolean }[]
 ): boolean {
   return actions.length > 0 && actions.every((action) => action.hidden);
+}
+
+export function shouldRerenderDryhRollForSharedPoolChange(
+  card: RollCardLike,
+  options: DryhRollSharedPoolRerenderOptions
+): boolean {
+  return options.isActiveGm && card.stage === "initial" && card.finalized !== true;
 }
 
 export function shouldShowPainRollWaitingMessage(
