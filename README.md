@@ -8,7 +8,7 @@ resolution.
 
 ## Screenshot
 
-![DRYH screenshot](docs/screen_dryh2.png)
+![DRYH screenshot](docs/screen_dryh3.png)
 
 ## Installation
 
