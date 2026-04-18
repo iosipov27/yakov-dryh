@@ -11,10 +11,12 @@ import {
   getAvailablePlayerRollActionTypes,
   getDisplayedFinalEffectTexts,
   getDryhSystemSocketName,
+  isDryhRollDominantResolutionSocketRequest,
   isDryhRollPlayerActionSocketRequest,
   getRollDiePipIndexes,
   getVisibleRollPools,
   getRollCardPresentationState,
+  requestDryhRollDominantResolutionAction,
   requestDryhRollPlayerAction,
   sortRollDiceForDisplay,
   type YakovDryhFinalRollCardData,
@@ -247,6 +249,66 @@ describe("DRYH player post-roll action requests", () => {
         },
         messageId: "message-1",
         type: "roll-player-action",
+        userId: "player-1"
+      })
+    ).toBe(false);
+  });
+
+  it("routes non-GM dominant resolution actions through the system socket", async () => {
+    const emit = vi.fn();
+    const message = createRollCardMessage();
+
+    globalThis.game = {
+      socket: { emit },
+      user: {
+        id: "player-1",
+        isGM: false
+      },
+      users: {
+        activeGM: { id: "gm-1" }
+      }
+    } as unknown as typeof game;
+
+    await expect(
+      requestDryhRollDominantResolutionAction(message, {
+        responseType: "flight",
+        type: "check-response"
+      })
+    ).resolves.toBe(true);
+
+    expect(emit).toHaveBeenCalledWith(getDryhSystemSocketName(), {
+      action: {
+        responseType: "flight",
+        type: "check-response"
+      },
+      messageId: "message-1",
+      type: "roll-dominant-resolution",
+      userId: "player-1"
+    });
+    expect(message.update).not.toHaveBeenCalled();
+  });
+
+  it("accepts only known dominant-resolution socket payloads", () => {
+    expect(
+      isDryhRollDominantResolutionSocketRequest({
+        action: {
+          responseType: "flight",
+          type: "check-response"
+        },
+        messageId: "message-1",
+        type: "roll-dominant-resolution",
+        userId: "player-1"
+      })
+    ).toBe(true);
+
+    expect(
+      isDryhRollDominantResolutionSocketRequest({
+        action: {
+          responseType: "flight",
+          type: "finalize"
+        },
+        messageId: "message-1",
+        type: "roll-dominant-resolution",
         userId: "player-1"
       })
     ).toBe(false);

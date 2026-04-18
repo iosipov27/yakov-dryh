@@ -147,6 +147,13 @@ export interface YakovDryhRollPlayerActionSocketRequest {
   userId: string | null;
 }
 
+export interface YakovDryhRollDominantResolutionSocketRequest {
+  action: YakovDryhDominantResolutionAction;
+  messageId: string;
+  type: "roll-dominant-resolution";
+  userId: string | null;
+}
+
 interface PlayerActionButtonSummary {
   label: string;
   type: YakovDryhPlayerRollActionType;
@@ -1249,6 +1256,57 @@ export async function handleDryhRollPlayerActionSocketRequest(
   return applyDryhRollPlayerAction(message, request.action);
 }
 
+export async function requestDryhRollDominantResolutionAction(
+  message: ChatMessage.Implementation,
+  action: YakovDryhDominantResolutionAction
+): Promise<boolean> {
+  if (game.user?.isGM) {
+    return (await resolveDryhRollDominantAction(message, action)) !== null;
+  }
+
+  const messageId = message.id ?? null;
+
+  if (!messageId) {
+    return false;
+  }
+
+  if (!game.users?.activeGM) {
+    ui.notifications?.warn(
+      localize(
+        "YAKOV_DRYH.UI.Warnings.GmUnavailable",
+        "A GM must be connected to handle this roll action."
+      )
+    );
+
+    return false;
+  }
+
+  game.socket?.emit(getDryhSystemSocketName(), {
+    action,
+    messageId,
+    type: "roll-dominant-resolution",
+    userId: game.user?.id ?? null
+  } satisfies YakovDryhRollDominantResolutionSocketRequest);
+
+  return true;
+}
+
+export async function handleDryhRollDominantResolutionSocketRequest(
+  request: YakovDryhRollDominantResolutionSocketRequest
+): Promise<YakovDryhFinalRollCardData | null> {
+  if (!game.user?.isGM || game.users?.activeGM?.id !== game.user.id) {
+    return null;
+  }
+
+  const message = game.messages?.get(request.messageId) ?? null;
+
+  if (!message || !hasDryhRollCard(message)) {
+    return null;
+  }
+
+  return resolveDryhRollDominantAction(message, request.action);
+}
+
 export function isDryhRollPlayerActionSocketRequest(
   value: unknown
 ): value is YakovDryhRollPlayerActionSocketRequest {
@@ -1258,23 +1316,69 @@ export function isDryhRollPlayerActionSocketRequest(
 
   const record = value as Record<string, unknown>;
 
-  if (!record.action || typeof record.action !== "object") {
-    return false;
-  }
-
-  const action = record.action as Record<string, unknown>;
-
   return (
     record.type === "roll-player-action" &&
     typeof record.messageId === "string" &&
     (typeof record.userId === "string" || record.userId === null) &&
-    (action.type === "spend-hope" ||
-      action.type === "take-post-roll-exhaustion")
+    isDryhPlayerRollAction(record.action)
+  );
+}
+
+export function isDryhRollDominantResolutionSocketRequest(
+  value: unknown
+): value is YakovDryhRollDominantResolutionSocketRequest {
+  if (!value || typeof value !== "object") {
+    return false;
+  }
+
+  const record = value as Record<string, unknown>;
+
+  return (
+    record.type === "roll-dominant-resolution" &&
+    typeof record.messageId === "string" &&
+    (typeof record.userId === "string" || record.userId === null) &&
+    isDryhDominantResolutionAction(record.action)
   );
 }
 
 export function getDryhSystemSocketName(): string {
   return `system.${SYSTEM_ID}`;
+}
+
+function isDryhPlayerRollAction(
+  value: unknown
+): value is YakovDryhPlayerRollAction {
+  if (!value || typeof value !== "object") {
+    return false;
+  }
+
+  const action = value as Record<string, unknown>;
+
+  return (
+    action.type === "spend-hope" ||
+    action.type === "take-post-roll-exhaustion"
+  );
+}
+
+function isDryhDominantResolutionAction(
+  value: unknown
+): value is YakovDryhDominantResolutionAction {
+  if (!value || typeof value !== "object") {
+    return false;
+  }
+
+  const action = value as Record<string, unknown>;
+  const hasValidResponseType =
+    action.responseType === null ||
+    action.responseType === "fight" ||
+    action.responseType === "flight";
+
+  return (
+    hasValidResponseType &&
+    (action.type === "check-response" ||
+      action.type === "remove-exhaustion" ||
+      action.type === "uncheck-response")
+  );
 }
 
 export async function resolveDryhRollFailureAction(

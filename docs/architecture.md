@@ -175,7 +175,7 @@ It owns:
 - chat card rendering
 - roll card flag data
 - player post-roll actions
-- player post-roll action socket requests for GM-owned updates
+- player-facing roll action socket requests for GM-owned updates
 - GM six-adjustment actions
 - dominant effect application
 - failure resolution

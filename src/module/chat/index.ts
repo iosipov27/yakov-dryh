@@ -12,9 +12,9 @@ import {
   finalizeDryhRoll,
   getDryhRollCardData,
   hasDryhRollCard,
+  requestDryhRollDominantResolutionAction,
   requestDryhRollPlayerAction,
   resolveDryhRollCrashAction,
-  resolveDryhRollDominantAction,
   resolveDryhRollFailureAction,
   rerenderDryhRollMessage
 } from "./roll-card-service.js";
@@ -199,13 +199,15 @@ function activateDryhRollListeners(
           return;
         }
 
-        html
-          .querySelectorAll<HTMLElement>("[data-yakov-dryh-roll-action='resolve-dominant']")
+        const dominantActionElements = html
+          .querySelectorAll<HTMLElement>("[data-yakov-dryh-roll-action='resolve-dominant']");
+
+        dominantActionElements
           .forEach((element) => element.setAttribute("disabled", "disabled"));
 
         const dominantAction = actionElement.dataset.dominantAction;
 
-        void resolveDryhRollDominantAction(message, {
+        void requestDryhRollDominantResolutionAction(message, {
           responseType:
             dominantAction === "uncheck-response" || dominantAction === "check-response"
               ? (responseType ?? null)
@@ -214,6 +216,15 @@ function activateDryhRollListeners(
             dominantAction === "uncheck-response" || dominantAction === "check-response"
               ? dominantAction
               : "remove-exhaustion"
+        }).then((handled) => {
+          if (!handled) {
+            dominantActionElements
+              .forEach((element) => element.removeAttribute("disabled"));
+          }
+        }).catch((error: unknown) => {
+          console.error(error);
+          dominantActionElements
+            .forEach((element) => element.removeAttribute("disabled"));
         });
       });
 
