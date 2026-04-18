@@ -9,6 +9,7 @@ import {
 } from "./dice-tray-card-service.js";
 import {
   applyDryhRollGmAction,
+  canUserControlDryhRollActorActions,
   finalizeDryhRoll,
   getDryhRollCardData,
   hasDryhRollCard,
@@ -130,10 +131,16 @@ function activateDryhRollListeners(
   const actionElements = html.querySelectorAll<HTMLElement>(
     "[data-yakov-dryh-roll-action]"
   );
+  const card = getDryhRollCardData(message);
+  const canUseActorActions = canUserControlDryhRollActorActions(
+    card,
+    game.user
+  );
 
   actionElements.forEach((actionElement) => {
     if (
       shouldHideDryhRollAction(actionElement.dataset.yakovDryhRollAction, {
+        canUseActorActions,
         isGm: game.user?.isGM ?? false
       })
     ) {
@@ -146,8 +153,6 @@ function activateDryhRollListeners(
     disableDryhRollActions(actionElements);
     return;
   }
-
-  const card = getDryhRollCardData(message);
 
   actionElements.forEach((actionElement) => {
     const action = actionElement.dataset.yakovDryhRollAction;

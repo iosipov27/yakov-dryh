@@ -73,8 +73,8 @@ The system hides controls that are not useful for the current user.
   Despair on `+6 / -6`, finalizing a roll, or resolving GM-only failure and
   Crash outcomes.
 - The GM sees the GM-only controls when the current roll state allows them.
-- Player-facing follow-up buttons appear only when they are available for that
-  roll.
+- Player-facing follow-up buttons appear only for the acting character's owner
+  or the GM, and only when they are available for that roll.
 - Older roll cards remain in chat for reference, but only the latest active roll
   card is interactive.
 

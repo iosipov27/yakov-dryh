@@ -951,6 +951,24 @@ export function getDryhRollCardData(
   return card;
 }
 
+export function getDryhRollCardActor(
+  card: YakovDryhRollCardData
+): Actor.Implementation | null {
+  return card.actorId ? (game.actors?.get(card.actorId) ?? null) : null;
+}
+
+export function canUserControlDryhRollActorActions(
+  card: YakovDryhRollCardData,
+  user: User.Implementation | null | undefined,
+  actor: Actor.Implementation | null = getDryhRollCardActor(card)
+): boolean {
+  if (user?.isGM) {
+    return true;
+  }
+
+  return Boolean(user && actor?.testUserPermission(user, "OWNER"));
+}
+
 export async function createDryhInitialRollMessage(
   input: CreateInitialRollMessageInput
 ): Promise<ChatMessage.Implementation> {
@@ -1253,6 +1271,16 @@ export async function handleDryhRollPlayerActionSocketRequest(
     return null;
   }
 
+  const card = getDryhRollCardData(message);
+  const actor = await resolveActor(card.actorUuid, card.actorId);
+  const requestingUser = request.userId
+    ? (game.users?.get(request.userId) ?? null)
+    : null;
+
+  if (!canUserControlDryhRollActorActions(card, requestingUser, actor)) {
+    return null;
+  }
+
   return applyDryhRollPlayerAction(message, request.action);
 }
 
@@ -1301,6 +1329,16 @@ export async function handleDryhRollDominantResolutionSocketRequest(
   const message = game.messages?.get(request.messageId) ?? null;
 
   if (!message || !hasDryhRollCard(message)) {
+    return null;
+  }
+
+  const card = getDryhRollCardData(message);
+  const actor = await resolveActor(card.actorUuid, card.actorId);
+  const requestingUser = request.userId
+    ? (game.users?.get(request.userId) ?? null)
+    : null;
+
+  if (!canUserControlDryhRollActorActions(card, requestingUser, actor)) {
     return null;
   }
 

@@ -6,11 +6,14 @@ import {
   SYSTEM_ID
 } from "../src/module/constants.ts";
 import {
+  canUserControlDryhRollActorActions,
   canTakePostRollExhaustion,
   canSpendHopeForDiscipline,
   getAvailablePlayerRollActionTypes,
   getDisplayedFinalEffectTexts,
   getDryhSystemSocketName,
+  handleDryhRollDominantResolutionSocketRequest,
+  handleDryhRollPlayerActionSocketRequest,
   isDryhRollDominantResolutionSocketRequest,
   isDryhRollPlayerActionSocketRequest,
   getRollDiePipIndexes,
@@ -19,6 +22,7 @@ import {
   requestDryhRollDominantResolutionAction,
   requestDryhRollPlayerAction,
   sortRollDiceForDisplay,
+  type YakovDryhRollCardData,
   type YakovDryhFinalRollCardData,
   type YakovDryhInitialRollCardData
 } from "../src/module/chat/roll-card-service.ts";
@@ -87,7 +91,7 @@ function createFinalCard(
 }
 
 function createRollCardMessage(
-  card: YakovDryhInitialRollCardData = createInitialCard()
+  card: YakovDryhRollCardData = createInitialCard()
 ): ChatMessage.Implementation {
   return {
     getFlag: (scope: string, key: string): unknown =>
@@ -161,6 +165,36 @@ describe("DRYH player post-roll action availability", () => {
         })
       )
     ).toBe(false);
+  });
+
+  it("allows only the actor owner or the GM to use actor roll actions", () => {
+    const owner = { id: "player-1", isGM: false } as User.Implementation;
+    const otherPlayer = { id: "player-2", isGM: false } as User.Implementation;
+    const gm = { id: "gm-1", isGM: true } as User.Implementation;
+    const actor = {
+      testUserPermission: vi.fn(
+        (user: User.Implementation) => user.id === "player-1"
+      )
+    } as unknown as Actor.Implementation;
+
+    expect(
+      canUserControlDryhRollActorActions(createInitialCard(), owner, actor)
+    ).toBe(true);
+    expect(
+      canUserControlDryhRollActorActions(createInitialCard(), otherPlayer, actor)
+    ).toBe(false);
+    expect(
+      canUserControlDryhRollActorActions(createInitialCard(), gm, actor)
+    ).toBe(true);
+    expect(
+      canUserControlDryhRollActorActions(createInitialCard(), owner, null)
+    ).toBe(false);
+    expect(
+      canUserControlDryhRollActorActions(createFinalCard(), owner, actor)
+    ).toBe(true);
+    expect(
+      canUserControlDryhRollActorActions(createFinalCard(), gm, actor)
+    ).toBe(true);
   });
 });
 
@@ -256,6 +290,48 @@ describe("DRYH player post-roll action requests", () => {
     ).toBe(false);
   });
 
+  it("ignores player-action socket requests from users who do not own the actor", async () => {
+    const message = createRollCardMessage();
+    const actor = {
+      testUserPermission: vi.fn(() => false),
+      update: vi.fn(async () => undefined)
+    };
+
+    globalThis.game = {
+      actors: {
+        get: vi.fn(() => actor)
+      },
+      messages: {
+        get: vi.fn(() => message)
+      },
+      user: {
+        id: "gm-1",
+        isGM: true
+      },
+      users: {
+        activeGM: { id: "gm-1" },
+        get: vi.fn(() => ({
+          id: "player-2",
+          isGM: false
+        }))
+      }
+    } as unknown as typeof game;
+
+    await expect(
+      handleDryhRollPlayerActionSocketRequest({
+        action: {
+          type: "take-post-roll-exhaustion"
+        },
+        messageId: "message-1",
+        type: "roll-player-action",
+        userId: "player-2"
+      })
+    ).resolves.toBeNull();
+
+    expect(actor.update).not.toHaveBeenCalled();
+    expect(message.update).not.toHaveBeenCalled();
+  });
+
   it("routes non-GM dominant resolution actions through the system socket", async () => {
     const emit = vi.fn();
     const message = createRollCardMessage();
@@ -314,6 +390,49 @@ describe("DRYH player post-roll action requests", () => {
         userId: "player-1"
       })
     ).toBe(false);
+  });
+
+  it("ignores dominant-resolution socket requests from users who do not own the actor", async () => {
+    const message = createRollCardMessage(createFinalCard());
+    const actor = {
+      testUserPermission: vi.fn(() => false),
+      update: vi.fn(async () => undefined)
+    };
+
+    globalThis.game = {
+      actors: {
+        get: vi.fn(() => actor)
+      },
+      messages: {
+        get: vi.fn(() => message)
+      },
+      user: {
+        id: "gm-1",
+        isGM: true
+      },
+      users: {
+        activeGM: { id: "gm-1" },
+        get: vi.fn(() => ({
+          id: "player-2",
+          isGM: false
+        }))
+      }
+    } as unknown as typeof game;
+
+    await expect(
+      handleDryhRollDominantResolutionSocketRequest({
+        action: {
+          responseType: null,
+          type: "remove-exhaustion"
+        },
+        messageId: "message-1",
+        type: "roll-dominant-resolution",
+        userId: "player-2"
+      })
+    ).resolves.toBeNull();
+
+    expect(actor.update).not.toHaveBeenCalled();
+    expect(message.update).not.toHaveBeenCalled();
   });
 });
 
@@ -491,32 +610,50 @@ describe("DRYH roll-card action visibility", () => {
     ).toBe(false);
   });
 
-  it("shows player post-roll actions to any user", () => {
+  it("shows player post-roll actions only to actor owners and the GM", () => {
     expect(
       shouldHideDryhRollAction("take-post-roll-exhaustion", {
+        canUseActorActions: false,
+        isGm: false
+      })
+    ).toBe(true);
+
+    expect(
+      shouldHideDryhRollAction("spend-hope", {
+        canUseActorActions: true,
         isGm: false
       })
     ).toBe(false);
 
     expect(
-      shouldHideDryhRollAction("spend-hope", {
-        isGm: false
+      shouldHideDryhRollAction("take-post-roll-exhaustion", {
+        canUseActorActions: true,
+        isGm: true
       })
     ).toBe(false);
   });
 
-  it("shows dominant resolution actions to any user", () => {
+  it("shows dominant resolution actions only to actor owners and the GM", () => {
     expect(
       shouldHideDryhRollAction("resolve-dominant", {
+        canUseActorActions: true,
         isGm: true
       })
     ).toBe(false);
 
     expect(
       shouldHideDryhRollAction("resolve-dominant", {
+        canUseActorActions: true,
         isGm: false
       })
     ).toBe(false);
+
+    expect(
+      shouldHideDryhRollAction("resolve-dominant", {
+        canUseActorActions: false,
+        isGm: false
+      })
+    ).toBe(true);
   });
 
   it("hides action groups only when every action is hidden", () => {

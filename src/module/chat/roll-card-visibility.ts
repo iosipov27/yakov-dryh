@@ -1,4 +1,5 @@
 export interface DryhRollActionVisibilityOptions {
+  canUseActorActions?: boolean;
   isGm: boolean;
 }
 
@@ -32,6 +33,14 @@ export function shouldHideDryhRollAction(
   action: string | undefined,
   options: DryhRollActionVisibilityOptions
 ): boolean {
+  const isActorAction =
+    action === "spend-hope" ||
+    action === "take-post-roll-exhaustion" ||
+    action === "resolve-dominant";
+  if (isActorAction && options.canUseActorActions === false) {
+    return true;
+  }
+
   const isGmAction =
     action === "roll-pain" ||
     action === "finalize" ||
