@@ -8,7 +8,7 @@ resolution.
 
 ## Screenshot
 
-![DRYH screenshot](docs/screen_dryh3.png)
+![DRYH screenshot](docs/screen_dryh4.png)
 
 ## Installation
 
@@ -24,7 +24,7 @@ https://github.com/iosipov27/yakov-dryh/releases/latest/download/system.json
 ```
 
 5. Install the system.
-6. Create a world using **Don't Rest Your Head (Fan-made system)**.
+6. Create a world using **Don't Rest Your Head**.
 
 ## What It Does
 
@@ -61,6 +61,22 @@ After a character pool is created:
 - Players can take Exhaustion, spend Hope when available, and resolve character
   consequences from the card.
 - The GM can roll Pain and use Despair-based interventions when available.
+
+## Interface Visibility
+
+The system hides controls that are not useful for the current user.
+
+- Players see their character pool controls, but do not see the Pain `+ / -`
+  controls in the dice tray chat card.
+- The GM sees and controls Pain in the dice tray chat card.
+- Players do not see GM-only roll controls such as rolling Pain, spending
+  Despair on `+6 / -6`, finalizing a roll, or resolving GM-only failure and
+  Crash outcomes.
+- The GM sees the GM-only controls when the current roll state allows them.
+- Player-facing follow-up buttons appear only when they are available for that
+  roll.
+- Older roll cards remain in chat for reference, but only the latest active roll
+  card is interactive.
 
 ## Hope And Despair
 
