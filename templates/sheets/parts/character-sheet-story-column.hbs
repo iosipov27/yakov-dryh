@@ -33,11 +33,11 @@
             <span>{{localize
                 "YAKOV_DRYH.SHEETS.Actor.Character.Fields.Concept"
               }}</span>
-            <input
-              type="text"
+            <textarea
+              class="yakov-dryh-field__textarea yakov-dryh-field__textarea--concept"
               name="system.concept"
-              value="{{actorData.concept}}"
-            />
+              rows="2"
+            >{{actorData.concept}}</textarea>
           </label>
         </div>
       </div>
@@ -46,22 +46,22 @@
         <span>{{localize
             "YAKOV_DRYH.SHEETS.Actor.Character.Fields.ExhaustionTalent"
           }}</span>
-        <input
-          type="text"
+        <textarea
+          class="yakov-dryh-field__textarea yakov-dryh-field__textarea--talent"
           name="system.talents.exhaustion"
-          value="{{actorData.talents.exhaustion}}"
-        />
+          rows="2"
+        >{{actorData.talents.exhaustion}}</textarea>
       </label>
 
       <label class="yakov-dryh-field">
         <span>{{localize
             "YAKOV_DRYH.SHEETS.Actor.Character.Fields.MadnessTalent"
           }}</span>
-        <input
-          type="text"
+        <textarea
+          class="yakov-dryh-field__textarea yakov-dryh-field__textarea--talent"
           name="system.talents.madness"
-          value="{{actorData.talents.madness}}"
-        />
+          rows="2"
+        >{{actorData.talents.madness}}</textarea>
       </label>
 
       <label class="yakov-dryh-field">

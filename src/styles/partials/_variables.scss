@@ -57,7 +57,7 @@
   --yd-sheet-muted-strong: #eef2f4;
   --yd-sheet-input-bg: #727b81;
   --yd-sheet-input-bg-strong: #848d93;
-  --yd-sheet-input-border: #797979;
+  --yd-sheet-input-border: #3b3b3c;
   --yd-sheet-input-ink: var(--yd-sheet-ink);
   --yd-sheet-input-paper: #919aa0;
   --yd-sheet-input-paper-soft: #798388;
@@ -337,7 +337,7 @@
   --yd-sheet-window-header-control-hover-bg: rgb(255 255 255 / 7%);
   --yd-sheet-window-header-control-hover-ink: #f8fafb;
   --yd-sheet-window-surface:
-radial-gradient(circle at 50% 46%, rgb(150 157 164 / 5%), transparent 32%), radial-gradient(circle at 50% 52%, transparent 42%, rgb(7 8 9 / 24%) 100%), radial-gradient(circle at top left, rgb(255 255 255 / 6%), transparent 28%), radial-gradient(circle at 84% 26%, rgb(116 123 130 / 9%), transparent 28%), radial-gradient(circle at 50% 100%, rgb(181 187 193 / 5%), transparent 30%), linear-gradient(180deg, rgb(0 0 0 / 98%) 0%, rgb(0 0 0 / 99%) 100%);
+radial-gradient(circle at 50% 46%, rgb(150 157 164 / 5%), transparent 32%), radial-gradient(circle at 50% 52%, transparent 42%, rgb(7 8 9 / 24%) 100%), radial-gradient(circle at top left, rgb(255 255 255 / 6%), transparent 28%), radial-gradient(circle at 84% 26%, rgb(116 123 130 / 9%), transparent 28%), radial-gradient(circle at 50% 100%, rgb(181 187 193 / 5%), transparent 30%), linear-gradient(180deg, rgb(18 20 22 / 98%) 0%, rgb(11 12 13 / 99%) 100%);
   --yd-sheet-window-backdrop:
     linear-gradient(180deg, rgb(202 208 213 / 44%) 0%, rgb(66 72 78 / 54%) 100%),
     url(../assets/bg3.jpg) center / cover no-repeat;

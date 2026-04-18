@@ -47,4 +47,49 @@ describe("character sheet story column template", () => {
     expect(html).not.toContain('data-action="editImage"');
     expect(html).not.toContain("yakov-dryh-avatar-overlay");
   });
+
+  it("renders concept as a fixed two-line textarea", () => {
+    const html = renderTemplate({
+      actorData: {
+        concept: "Sleepless detective",
+        talents: {
+          exhaustion: "",
+          madness: ""
+        }
+      },
+      actorImg: "icons/svg/mystery-man.svg",
+      actorName: "Soeniel",
+      scarsText: ""
+    });
+
+    expect(html).toContain('name="system.concept"');
+    expect(html).toContain('rows="2"');
+    expect(html).toContain(
+      'class="yakov-dryh-field__textarea yakov-dryh-field__textarea--concept"'
+    );
+    expect(html).toContain(">Sleepless detective</textarea>");
+  });
+
+  it("renders talents as fixed two-line textareas", () => {
+    const html = renderTemplate({
+      actorData: {
+        concept: "",
+        talents: {
+          exhaustion: "Talent to make weapons",
+          madness: "Talent to be stupid"
+        }
+      },
+      actorImg: "icons/svg/mystery-man.svg",
+      actorName: "Soeniel",
+      scarsText: ""
+    });
+
+    expect(html).toContain('name="system.talents.exhaustion"');
+    expect(html).toContain('name="system.talents.madness"');
+    expect(html).toContain(
+      'class="yakov-dryh-field__textarea yakov-dryh-field__textarea--talent"'
+    );
+    expect(html).toContain(">Talent to make weapons</textarea>");
+    expect(html).toContain(">Talent to be stupid</textarea>");
+  });
 });

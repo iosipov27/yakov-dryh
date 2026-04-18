@@ -46,7 +46,6 @@
       background: none;
       border: 1px solid var(--yd-sheet-input-border);
       border-radius: 0.12rem;
-      box-shadow: var(--yd-sheet-input-shadow);
       color: var(--yd-sheet-input-ink);
       font-family: var(--yd-sheet-body-font);
       line-height: 1.35;
@@ -67,7 +66,12 @@
 
     textarea {
       line-height: 1.45;
-      min-height: 8rem;
+      min-height: 2rem;
+    }
+
+    > textarea.yakov-dryh-field__textarea--concept,
+    > textarea.yakov-dryh-field__textarea--talent {
+      resize: none;
     }
   }
 }
