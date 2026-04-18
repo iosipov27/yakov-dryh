@@ -106,7 +106,9 @@ There are two tray surfaces:
 - floating tray window
 - chat dice tray card
 
-Both are fed by the same tray state store.
+The floating tray is fed by the local tray state store. The active chat dice
+tray card also stores a normalized state snapshot in its message flag so GM and
+player clients can interact with the same pool values.
 
 State ownership:
 
@@ -114,19 +116,24 @@ State ownership:
 
 Important current rule:
 
-- dice tray state is client-local in memory
-- it is not persisted through `game.settings` on every `+/-`
+- floating tray state is client-local in memory
+- active chat tray state is mirrored into the dice tray card message flag
+- tray state is not persisted through `game.settings` on every `+/-`
 
 That means:
 
 - `+/-` actions are cheap local state updates
 - the tray state store emits changes to listeners
-- the chat tray card can still sync through Foundry chat message updates when needed
-- roll execution reads from the tray state store, not from saved chat HTML
+- the chat tray card syncs through Foundry chat message updates when needed
+- chat card permissions are recalculated per rendering client, not trusted from
+  the stored HTML
+- roll execution reads structured tray state, either from the active chat card
+  flag or from the local tray state store, not from saved chat HTML
 
 Key functions:
 
 - `createDefaultDiceTrayState()`
+- `adjustDiceTrayStatePool()`
 - `loadActorIntoDiceTray()`
 - `adjustDiceTrayPool()`
 - `getDiceTrayState()`
@@ -151,8 +158,8 @@ The roll pipeline:
 1. player opens tray from the sheet
 2. tray state is initialized from actor data
 3. tray chat card is created or updated
-4. player and GM adjust pools
-5. roll is executed from tray state
+4. player and GM adjust pools through the shared chat card state
+5. roll is executed from structured tray state
 6. an initial roll card is created in chat
 7. player and GM post-roll actions can modify the result
 8. finalization creates a final roll card
@@ -234,9 +241,11 @@ Relevant files:
 
 Owned only in memory:
 
-- dice tray pools before a roll
 - sheet edit drafts for pools
 - sheet response edit draft
+
+Dice tray pool drafts are local while editing the floating tray, then mirrored
+into the active chat card flag once a card exists.
 
 Relevant files:
 
@@ -348,6 +357,7 @@ Look at:
 - `src/module/chat/dice-tray-card-service.ts`
 - `src/module/chat/index.ts`
 - `tests/dice-tray-state.test.ts`
+- `tests/dice-tray-card-service.test.ts`
 - `tests/dice-tray-card-presentation.test.ts`
 
 ### If you change roll result behavior
@@ -377,7 +387,8 @@ Look at:
 
 These are intentional current choices:
 
-- tray state is local for speed
+- floating tray state is local for speed
+- active chat tray state is mirrored in message flags for cross-client actions
 - shared pools are persisted in settings for table-wide sync
 - chat cards are structured around Foundry message flags
 - rules logic is mostly separated from ApplicationV2 classes

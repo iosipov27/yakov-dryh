@@ -2,6 +2,7 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 
 import {
   adjustDiceTrayPool,
+  adjustDiceTrayStatePool,
   canDecreaseDiceTrayPool,
   canIncreaseDiceTrayPool,
   createDefaultDiceTrayState,
@@ -237,6 +238,32 @@ describe("dice tray state", () => {
 
     expect(getDiceTrayState()).toEqual(state);
     expect(settingsSet).not.toHaveBeenCalled();
+  });
+
+  it("adjusts an explicit tray state without reading local client memory", () => {
+    const state = normalizeDiceTrayState({
+      actorId: "actor-1",
+      actorName: "Samewere",
+      actorUuid: "Actor.actor-1",
+      basePools: {
+        discipline: 2,
+        exhaustion: 2,
+        madness: 3,
+        pain: 0
+      },
+      confirmed: false,
+      pools: {
+        discipline: 2,
+        exhaustion: 2,
+        madness: 3,
+        pain: 0
+      }
+    });
+
+    const nextState = adjustDiceTrayStatePool(state, "pain", 1);
+
+    expect(nextState?.pools.pain).toBe(1);
+    expect(getDiceTrayState()).toEqual(createDefaultDiceTrayState());
   });
 
   it("emits debounced sync updates when tray pools change locally", async () => {

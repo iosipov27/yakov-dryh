@@ -2,9 +2,10 @@ import { subscribeToDiceTrayStateChanges } from "../applications/ui/dice-tray-st
 import { DRYH_SETTINGS, SYSTEM_ID } from "../constants.js";
 import {
   adjustDryhDiceTrayPool,
+  applyDryhDiceTrayCardPermissions,
   hasDryhDiceTrayCard,
   requestActiveDryhDiceTrayMessageSync,
-  rollDryhDiceTray,
+  rollDryhDiceTray
 } from "./dice-tray-card-service.js";
 import {
   applyDryhRollPlayerAction,
@@ -34,7 +35,7 @@ export function registerChatHooks(): void {
 
   Hooks.on("renderChatMessageHTML", (message, html) => {
     if (hasDryhDiceTrayCard(message)) {
-      activateDryhDiceTrayListeners(html);
+      activateDryhDiceTrayListeners(message, html);
     }
 
     if (hasDryhRollCard(message)) {
@@ -69,7 +70,12 @@ export function registerChatHooks(): void {
   });
 }
 
-function activateDryhDiceTrayListeners(html: HTMLElement): void {
+function activateDryhDiceTrayListeners(
+  message: ChatMessage.Implementation,
+  html: HTMLElement
+): void {
+  applyDryhDiceTrayCardPermissions(message, html);
+
   const actionElements = html.querySelectorAll<HTMLElement>(
     [
       "[data-yakov-dryh-tray-card-action]",
@@ -85,7 +91,7 @@ function activateDryhDiceTrayListeners(html: HTMLElement): void {
 
       if (trayAction === "roll") {
         actionElement.setAttribute("disabled", "disabled");
-        void rollDryhDiceTray();
+        void rollDryhDiceTray(message);
         return;
       }
 
@@ -102,7 +108,7 @@ function activateDryhDiceTrayListeners(html: HTMLElement): void {
 
       if (trayPool && Number.isFinite(trayDelta)) {
         actionElement.setAttribute("disabled", "disabled");
-        void adjustDryhDiceTrayPool(trayPool, trayDelta);
+        void adjustDryhDiceTrayPool(message, trayPool, trayDelta);
       }
     });
   });

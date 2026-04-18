@@ -182,17 +182,31 @@ export async function adjustDiceTrayPool(
   pool: YakovDryhDiceTrayPool,
   delta: number
 ): Promise<YakovDryhDiceTrayState | null> {
-  const state = getDiceTrayState();
+  const nextState = adjustDiceTrayStatePool(getDiceTrayState(), pool, delta);
 
-  if (!canAdjustDiceTrayPool(state, pool, delta)) {
+  if (!nextState) {
     return null;
   }
 
-  return setDiceTrayState({
-    ...state,
+  return setDiceTrayState(nextState);
+}
+
+export function adjustDiceTrayStatePool(
+  state: YakovDryhDiceTrayState,
+  pool: YakovDryhDiceTrayPool,
+  delta: number
+): YakovDryhDiceTrayState | null {
+  const normalizedState = normalizeDiceTrayState(state);
+
+  if (!canAdjustDiceTrayPool(normalizedState, pool, delta)) {
+    return null;
+  }
+
+  return normalizeDiceTrayState({
+    ...normalizedState,
     pools: {
-      ...state.pools,
-      [pool]: state.pools[pool] + Math.trunc(delta)
+      ...normalizedState.pools,
+      [pool]: normalizedState.pools[pool] + Math.trunc(delta)
     }
   });
 }
