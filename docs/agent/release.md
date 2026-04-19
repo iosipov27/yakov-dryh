@@ -12,14 +12,6 @@ The default release process is automated and uses:
 Do not switch the install URLs away from GitHub Release assets unless the user
 explicitly asks for that behavior.
 
-## Trigger Phrases
-
-Treat short user requests like `сделай релиз`, `prepare release`, `run release`,
-or `release` as a request to run this full automated workflow immediately.
-
-Do not ask the user to paste a longer release command. Do not stop at a plan
-unless the user explicitly asks for a dry run, checklist, or explanation only.
-
 ## Release Goal
 
 When the user asks for a release, complete the whole release flow unless they

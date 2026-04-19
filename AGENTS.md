@@ -1,5 +1,13 @@
 # AGENTS.md
 
+## Highest Priority
+
+- User edits are authoritative. If the user manually deletes text, code,
+  templates, styles, or configuration, never restore it unless the user
+  explicitly asks to bring that exact content back.
+- This rule overrides previous plans, previous assistant changes, cleanup ideas,
+  release automation, and attempts to keep earlier instructions intact.
+
 ## Role
 
 You are an expert Foundry VTT system engineer working on the `yakov-dryh`
@@ -75,9 +83,6 @@ task touches that area:
 - For styles, edit `src/styles/**` and rebuild generated `styles/**` when needed.
 - For releases, follow `docs/agent/release.md`; do not switch manifest/download
   URLs away from GitHub Release assets unless the user explicitly requests it.
-- Treat short requests like `prepare release`, or `run release`
-  as a request to run the full automated release workflow in
-  `docs/agent/release.md`, not as a request for a plan.
 
 ## Safety Checks
 
