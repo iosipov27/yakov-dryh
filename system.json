@@ -5,7 +5,7 @@
   "url": "https://github.com/iosipov27/yakov-dryh",
   "manifest": "https://github.com/iosipov27/yakov-dryh/releases/latest/download/system.json",
   "download": "https://github.com/iosipov27/yakov-dryh/releases/latest/download/yakov-dryh.zip",
-  "version": "0.1.25",
+  "version": "0.1.26",
   "authors": [
     {
       "name": "Ilia Osipov",
