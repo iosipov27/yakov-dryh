@@ -2972,8 +2972,25 @@ textarea) {
   gap: 0.35rem;
 }
 .yakov-dryh-field > span {
+  align-items: center;
+  display: inline-flex;
   font-size: var(--yd-font-size-sm);
+  gap: 0.35rem;
   font-weight: 500;
+}
+.yakov-dryh-field__info-icon {
+  align-items: center;
+  color: color-mix(in srgb, currentColor 72%, transparent);
+  cursor: help;
+  display: inline-flex;
+  font-size: 0.82em;
+  height: 1em;
+  justify-content: center;
+  line-height: 1;
+  width: 1em;
+}
+.yakov-dryh-field__info-icon:hover {
+  color: currentColor;
 }
 .yakov-dryh-field input,
 .yakov-dryh-field textarea,

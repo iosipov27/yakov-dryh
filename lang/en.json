@@ -143,6 +143,11 @@
             "Scars": "Scars",
             "SelectResponse": "Select a Response"
           },
+          "Tooltips": {
+            "ExhaustionTalent": "Exhaustion Talents = do normal things insanely well.<br>Use &rarr; requires (or adds) Exhaustion.<br><br>Minor &rarr; minimum successes = Exhaustion dice.<br>Major &rarr; +Exhaustion dice to successes (and +1 Exhaustion).<br><br>Higher Exhaustion = stronger performance.",
+            "MadnessTalent": "Madness Talents = do the impossible (supernatural).<br>Use &rarr; include Madness dice in the roll.<br>More dice = stronger / deeper effect.<br>GM sets cost and difficulty (Pain dice).<br>Break the rules of reality.",
+            "Scars": "Scars = important past experiences.<br>Recall &rarr; reroll one dice pool (mark it).<br>Transform &rarr; cross out for a strong bonus (permanent).<br>Marked scars reset each session.<br>Crossed scars are gone forever."
+          },
           "Label": "Don't Rest Your Head Character Sheet",
           "Prompts": {
             "EditResponses": "Edit Responses?",
