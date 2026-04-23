@@ -19,6 +19,7 @@ import {
   createResponseEditorData,
   normalizeResponseType
 } from "./character-sheet-response-helpers.js";
+import { normalizeCharacterSheetSubmitData } from "./character-sheet-submit-helpers.js";
 import type {
   EditableSheetPoolDrafts,
   EditableSheetPoolField
@@ -95,6 +96,49 @@ export class YakovDryhCharacterSheet extends BaseSheet {
     }
 
     this.bindRootListeners(root);
+  }
+
+  protected _prepareSubmitData(
+    event: SubmitEvent,
+    form: HTMLFormElement,
+    formData: any,
+    updateData?: unknown
+  ): object {
+    const submitData = this._processFormData(event, form, formData) as Record<
+      string,
+      unknown
+    >;
+
+    if (updateData) {
+      foundry.utils.mergeObject(submitData, updateData, {
+        performDeletions: true
+      });
+      foundry.utils.mergeObject(submitData, updateData, {
+        performDeletions: false
+      });
+    }
+
+    const normalizedSubmit = normalizeCharacterSheetSubmitData({
+      currentName: this.actor?.name,
+      submitData
+    });
+
+    if (normalizedSubmit.shouldWarnEmptyName) {
+      ui.notifications?.warn(
+        localize(
+          "YAKOV_DRYH.UI.Warnings.CharacterNameRequired",
+          "Character name cannot be empty."
+        )
+      );
+    }
+
+    this.document.validate({
+      changes: normalizedSubmit.submitData,
+      clean: true,
+      fallback: false
+    });
+
+    return normalizedSubmit.submitData;
   }
 
   private async addActorPoolToTray(): Promise<void> {

@@ -6,7 +6,8 @@ explain a release for this Foundry system.
 The default release process is automated and uses:
 
 - git commits and tags for version history
-- GitHub CLI (`gh`) from WSL for release creation and release notes
+- WSL / Ubuntu commands for all local release work
+- GitHub CLI (`gh`) from WSL / Ubuntu for release creation and release notes
 - the repository GitHub Actions release workflow for packaged release assets
 
 Do not switch the install URLs away from GitHub Release assets unless the user
@@ -59,6 +60,66 @@ release.
 - Local build output in `scripts/` can be ignored by Git as long as the release
   workflow rebuilds it before packaging.
 
+## WSL-Only Toolchain Policy
+
+Run all release commands from Ubuntu / WSL using Linux-native tools. Do not use
+Windows executables or shims during release work unless the user explicitly asks
+for a Windows fallback.
+
+Do not use these during a normal release:
+
+- `cmd.exe`
+- `powershell.exe`
+- `node.exe`
+- `npm.cmd`
+- `npx.cmd`
+- Windows Git from `C:\Program Files\Git`
+- Node, npm, or npx resolved from `/mnt/c/Program Files/nodejs`
+- package manager shims from `/mnt/c/Users/.../AppData/Roaming/npm`
+
+Before editing release versions, confirm the local toolchain is WSL-native:
+
+```bash
+command -v node
+command -v npm
+command -v npx
+command -v git
+command -v gh
+node -p "process.platform + ' ' + process.version"
+npm -v
+```
+
+The `node -p` command must print `linux ...`. `node`, `npm`, and `npx` should
+resolve under WSL paths such as `/usr/bin`, `/usr/local/bin`, or
+`/home/<user>/.nvm/...`, not under `/mnt/c/...`.
+
+Use Node 20 in WSL to match the GitHub Actions release workflow. If WSL-native
+Node is missing, stop and ask the user to install it, for example with `nvm`.
+If Node was just installed with `nvm` but `command -v node` still fails, open a
+new WSL shell or source the shell profile, for example `source ~/.bashrc`, before
+continuing. After installing or changing Node, rebuild dependencies from WSL:
+
+```bash
+rm -rf node_modules
+npm ci
+```
+
+Treat `node_modules` as platform-specific. Do not run Windows `npm install` or
+Windows `npm ci` in this checkout for release preparation, because that can
+create mixed Linux / Windows shims and optional native dependencies.
+
+Common signs of a mixed toolchain are:
+
+- `sass` is not recognized as an internal or external command
+- `/usr/bin/env: 'node': No such file or directory`
+- missing `rolldown`, `vite`, or `vitest` optional native bindings
+- `node -p "process.platform"` reports `win32`
+- `command -v npm` or `command -v npx` points into `/mnt/c/...`
+
+If any of these happen, do not switch to Windows commands. Stop, restore the
+WSL-native toolchain, run `rm -rf node_modules && npm ci`, then restart the
+release checks from the beginning.
+
 ## Automated Release Checklist
 
 Follow this checklist in order.
@@ -67,26 +128,36 @@ Follow this checklist in order.
    `git status --short --branch`.
    Note any uncommitted user changes. Do not overwrite or revert them. If they
    would ship in the release, say so clearly.
-2. Confirm GitHub CLI is available and authenticated:
+2. Confirm the WSL-only toolchain from "WSL-Only Toolchain Policy":
+   `command -v node npm npx git gh`,
+   `node -p "process.platform + ' ' + process.version"`, and `npm -v`.
+   If `node` reports anything other than `linux`, or if `node`, `npm`, or `npx`
+   resolves under `/mnt/c/...`, stop and fix the WSL environment before
+   releasing.
+3. Confirm GitHub CLI is available and authenticated:
    `command -v gh` and `gh auth status`.
    If `gh` is missing or not authenticated, stop and ask the user to install or
    log in with `gh auth login`.
-3. Fetch current remote state:
+4. If `node_modules` is missing or may have been installed by Windows npm, reset
+   dependencies from WSL:
+   `rm -rf node_modules && npm ci`.
+   Do not run Windows `npm install` to repair missing shims.
+5. Fetch current remote state:
    `git fetch --tags --prune origin`.
    If SSH fetch fails, use the HTTPS remote checks from "Git Push Notes" without
    changing `origin`.
-4. Confirm the release branch:
+6. Confirm the release branch:
    `git status --short --branch` and `git rev-parse --abbrev-ref HEAD`.
    The normal release branch is `main`. Do not release from another branch unless
    the user explicitly asks.
-5. Find the latest release tag:
+7. Find the latest release tag:
    `git tag --list 'v*' --sort=-v:refname | head`.
-6. Analyze commits and files changed since the latest tag:
+8. Analyze commits and files changed since the latest tag:
    `git log --date=short --format='%h %ad %s' <last-tag>..HEAD`
    and `git diff --name-status <last-tag>..HEAD`.
    If there are no commits since the latest tag, stop unless the user explicitly
    asks to reissue the release.
-7. Suggest the next semver version:
+9. Suggest the next semver version:
    - patch for fixes, docs, styles, build changes, and small behavior changes
    - minor for new user-visible features, new sheets, new gameplay flows, or
      meaningful Foundry behavior changes
@@ -94,33 +165,33 @@ Follow this checklist in order.
      migration-heavy schema changes
    For pre-`1.0.0` releases, prefer `0.x.y` patch/minor bumps unless the user
    explicitly asks for `1.0.0`.
-8. Generate release notes before editing versions. Use commits and changed files
+10. Generate release notes before editing versions. Use commits and changed files
    since the latest tag as the source of truth. Do not invent changes.
-9. Update versions:
+11. Update versions:
    - `system.json` `version`
    - `package.json` `version`
    - `package-lock.json` root versions when present
    Keep all three versions identical.
    Prefer `npm version <version> --no-git-tag-version` for `package.json` and
    `package-lock.json`, then update `system.json` with structured JSON editing.
-10. Run `npm run build`.
-11. If the release includes runtime, template, style, helper, rules, or test
+12. Run `npm run build`.
+13. If the release includes runtime, template, style, helper, rules, or test
     changes, run `npx vitest run`.
-12. If release behavior changed, update `README.md` release or install
+14. If release behavior changed, update `README.md` release or install
     instructions.
-13. Review changed files:
+15. Review changed files:
     `git status --short` and `git diff -- system.json package.json package-lock.json`.
     Check for obvious path, manifest, template, generated-output, or version
     mistakes.
-14. Commit user-facing/docs changes separately when practical.
-15. Commit the release bump with:
+16. Commit user-facing/docs changes separately when practical.
+17. Commit the release bump with:
     `git commit -m "Release v<version>"`.
-16. Create the release tag on the release bump commit:
+18. Create the release tag on the release bump commit:
     `git tag -a v<version> -m "Release v<version>"`.
-17. Push `main`.
-18. Push the tag so GitHub Actions can publish release assets.
-19. Create or update the GitHub release with `gh`.
-20. Return the final release details listed in "Final Response".
+19. Push `main`.
+20. Push the tag so GitHub Actions can publish release assets.
+21. Create or update the GitHub release with `gh`.
+22. Return the final release details listed in "Final Response".
 
 ## Release Notes
 
@@ -209,8 +280,8 @@ fallback.
 
 ## Git Push Notes
 
-This repository is often used from WSL in a Windows Foundry data directory.
-Before assuming GitHub is unavailable, check both WSL and Windows Git paths.
+This repository is used from WSL in a Windows Foundry data directory, but release
+pushes must still use WSL-native Git and SSH / HTTPS credentials.
 
 Known working release push pattern:
 
@@ -221,24 +292,11 @@ Known working release push pattern:
 2. If WSL SSH fails with `Permission denied (publickey)`, check whether
    `~/.ssh` inside WSL actually contains a usable private key. In this workspace
    WSL may have only `known_hosts`.
-3. Check whether Windows has the key at `/mnt/c/Users/iosip/.ssh/id_ed25519`.
-   Do not assume OpenSSH can use it directly from `/mnt/c`; Windows-mounted keys
-   may appear as mode `0777`, which SSH rejects as "UNPROTECTED PRIVATE KEY
-   FILE".
-4. Do not permanently copy private keys into the repository or commit them. If
-   testing a Windows key from WSL is necessary, copy it to a temporary file with
-   mode `600`, use it for that command only, and delete it immediately.
-5. If the Windows key still is not accepted by GitHub, try Windows Git from the
-   same checkout. Windows Git can use the Windows credential and SSH setup even
-   when WSL cannot:
-
-```bash
-cmd.exe /c "cd /d C:\Users\iosip\AppData\Local\FoundryVTT\Data\systems\yakov-dryh && git push --atomic origin main refs/tags/v<version>"
-```
-
-Avoid Windows shell redirection like `2>NUL` from WSL unless needed; it can
-create a stray `NUL` file in the checkout. If that happens, remove the untracked
-file before finishing.
+3. Fix WSL Git authentication directly, for example by logging in with `gh auth
+   login`, configuring HTTPS credentials through `gh`, or adding a WSL-readable
+   SSH key to `~/.ssh` with correct permissions.
+4. Do not permanently copy private keys into the repository or commit them.
+5. Do not fall back to Windows Git from this checkout during release work.
 
 If SSH fetch fails, check remote refs over HTTPS without changing `origin`:
 

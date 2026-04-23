@@ -157,17 +157,17 @@
             "Talents": "Talents"
           },
           "Actions": {
-          "AddResponse": "Add Response",
-          "AddPool": "Create the Pool",
-          "AddExhaustion": "+ Exhaustion",
-          "Cancel": "Cancel",
-          "CreateChatCard": "Create interactive chat card",
-          "Edit": "Edit",
-          "EditResponses": "Edit Responses",
-          "Roll": "Roll",
-          "Save": "Save",
-          "SaveResponses": "Save"
-        }
+            "AddResponse": "Add Response",
+            "AddPool": "Create the Pool",
+            "AddExhaustion": "+ Exhaustion",
+            "Cancel": "Cancel",
+            "CreateChatCard": "Create interactive chat card",
+            "Edit": "Edit",
+            "EditResponses": "Edit Responses",
+            "Roll": "Roll",
+            "Save": "Save",
+            "SaveResponses": "Save"
+          }
         }
       }
     },
@@ -179,6 +179,7 @@
       "Warnings": {
         "ActorUnavailable": "Actor is no longer available.",
         "ChatMessageUnavailable": "Chat message is no longer available.",
+        "CharacterNameRequired": "Character name cannot be empty.",
         "DespairRequired": "At least 1 Despair is required to adjust a six.",
         "GmUnavailable": "A GM must be connected to handle this roll action.",
         "HopeRequired": "At least 1 Hope is required to improve Discipline.",
