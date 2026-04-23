@@ -5,7 +5,7 @@
   "url": "https://github.com/iosipov27/yakov-dryh",
   "manifest": "https://github.com/iosipov27/yakov-dryh/releases/latest/download/system.json",
   "download": "https://github.com/iosipov27/yakov-dryh/releases/latest/download/yakov-dryh.zip",
-  "version": "0.1.28",
+  "version": "0.1.29",
   "authors": [
     {
       "name": "Ilia Osipov",
@@ -29,6 +29,10 @@
     }
   },
   "socket": true,
-  "esmodules": ["scripts/main.js"],
-  "styles": ["styles/yakov-dryh.css"]
+  "esmodules": [
+    "scripts/main.js"
+  ],
+  "styles": [
+    "styles/yakov-dryh.css"
+  ]
 }
